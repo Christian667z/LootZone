@@ -786,33 +786,21 @@
             }
 
             catalogGrid.innerHTML = filtered.map(p => {
-                const minPrice = p.denoms && p.denoms.length > 0 ? p.denoms[0].eur : p.price;
-                const minHtg = p.denoms && p.denoms.length > 0 ? p.denoms[0].htg : Math.round(p.price * 135);
-                const shortDesc = p.desc.length > 72 ? p.desc.substring(0, 72) + '…' : p.desc;
+                const discountHtml = p.discount ? `<span class="card-discount">${p.discount}</span>` : '';
+                const salesText = p.sales ? (p.sales.includes('Sold') || p.sales.includes('Vendu') ? p.sales : `${p.sales} Sold`) : '10k+ Sold';
                 return `
                 <div class="premium-game-card" style="cursor:pointer;" onclick="window.location.href='topup.html?id=${p.id}'">
                     <div class="card-image-wrapper">
                         <img src="${p.img}" alt="${p.name}" loading="lazy">
+                        ${discountHtml}
                     </div>
                     <div class="card-details">
                         <h3 class="card-title">${p.name}</h3>
-                        <p class="card-subtitle">${shortDesc}</p>
                         <div class="card-footer-stats">
-                            <span class="rating">
-                                <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
-                                </svg>
-                                ${p.rating.toFixed(1)}
-                            </span>
-                            <span class="divider">•</span>
-                            <span class="sales-volume">${p.sales} Vendu</span>
-                        </div>
-                        <div class="card-purchase-row" style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;border-top:1px solid #eef0f2;padding-top:14px;">
-                            <div>
-                                <div style="font-size:0.68rem;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">À partir de</div>
-                                <span style="font-size:1.1rem;font-weight:900;color:#00b67a;">$${minPrice.toFixed(2)}</span>
-                                <div style="font-size:0.72rem;color:#9ca3af;font-weight:600;margin-top:1px;">${minHtg.toLocaleString()} HTG</div>
-                            </div>
+                            <span class="card-star">★</span>
+                            <span class="card-rating">${(p.rating || 5.0).toFixed(1)}</span>
+                            <span class="card-divider">|</span>
+                            <span class="card-sold">${salesText}</span>
                         </div>
                     </div>
                 </div>

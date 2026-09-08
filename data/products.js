@@ -79,10 +79,110 @@
 const products = [
 
     // ════════════════════════════════════════════════════════════════════════
-    //  JEUX DE CRÉDIT MOBILE
-    //  Pour ajouter un jeu mobile, copie un bloc ci-dessous et modifie-le.
-    //  N'oublie pas de mettre l'image dans  img/
+    //  JEUX DE CRÉDIT MOBILE & POPULAIRES
     // ════════════════════════════════════════════════════════════════════════
+
+    {
+        id: 21,
+        name: "FC 26 Coins",
+        category: "jeux",
+        img: "img/fc_26.jpg",
+        desc: "Achetez des FC 26 Coins pour composer votre Ultimate Team de rêve. Livraison rapide et sécurisée garantie.",
+        discount: "", rating: 5.0, sales: "100k+ Sold", recommended: true, date: "2026-09-01", price: 4.99,
+        needsServer: false, serverOptions: [],
+        idLabel: "ID EA Account", idPlaceholder: "Ex: my_ea_account",
+        denoms: [
+            { label: "100k Coins", eur: 4.99, htg: 675 },
+            { label: "500k Coins", eur: 19.99, htg: 2700 },
+            { label: "1M Coins", eur: 34.99, htg: 4725 },
+            { label: "2M Coins", eur: 64.99, htg: 8775 },
+        ]
+    },
+
+    {
+        id: 22,
+        name: "The Show 26",
+        category: "jeux",
+        img: "img/the_show_26.jpg",
+        desc: "Achetez vos Stubs et crédits MLB The Show 26 pour débloquer les meilleurs packs et joueurs de baseball.",
+        discount: "-8%", rating: 5.0, sales: "13.5k Sold", recommended: true, date: "2026-09-01", price: 5.49,
+        needsServer: false, serverOptions: [],
+        idLabel: "PSN / Xbox ID", idPlaceholder: "Ex: mlb_gamer_id",
+        denoms: [
+            { label: "11,000 Stubs", eur: 5.49, htg: 740 },
+            { label: "24,000 Stubs", eur: 11.99, htg: 1620 },
+            { label: "67,500 Stubs", eur: 27.99, htg: 3780 },
+            { label: "150,000 Stubs", eur: 54.99, htg: 7425 },
+        ]
+    },
+
+    {
+        id: 23,
+        name: "Dofus Kamas",
+        category: "jeux",
+        img: "img/dofus_kamas.jpg",
+        desc: "Achetez des Kamas Dofus au meilleur taux pour tous les serveurs officiels et retro. Livraison instantanée.",
+        discount: "-8%", rating: 5.0, sales: "9.9k Sold", recommended: true, date: "2026-09-01", price: 3.99,
+        needsServer: true, serverOptions: ["Draconiros", "Imagiro", "Ourygron", "Talkasha", "Retro Boune"],
+        idLabel: "Nom du personnage", idPlaceholder: "Ex: Iop-Guerrier",
+        denoms: [
+            { label: "1 Million Kamas", eur: 3.99, htg: 540 },
+            { label: "5 Millions Kamas", eur: 18.99, htg: 2560 },
+            { label: "10 Millions Kamas", eur: 35.99, htg: 4860 },
+            { label: "25 Millions Kamas", eur: 84.99, htg: 11470 },
+        ]
+    },
+
+    {
+        id: 24,
+        name: "Madden NFL 27 Coins",
+        category: "jeux",
+        img: "img/madden_nfl_27.jpg",
+        desc: "Rechargez vos Madden NFL 27 Coins (MUT). Bâtissez votre équipe All-Pro ultime rapidement et en toute sécurité.",
+        discount: "-8%", rating: 5.0, sales: "145 Sold", recommended: true, date: "2026-09-01", price: 6.99,
+        needsServer: false, serverOptions: [],
+        idLabel: "EA / Console ID", idPlaceholder: "Ex: nfl_mut_champ",
+        denoms: [
+            { label: "100k MUT Coins", eur: 6.99, htg: 945 },
+            { label: "250k MUT Coins", eur: 15.99, htg: 2160 },
+            { label: "500k MUT Coins", eur: 29.99, htg: 4050 },
+            { label: "1M MUT Coins", eur: 54.99, htg: 7425 },
+        ]
+    },
+
+    {
+        id: 25,
+        name: "Madden NFL 26 Coins",
+        category: "jeux",
+        img: "img/madden_nfl_26.jpg",
+        desc: "Achetez des Madden NFL 26 Coins MUT au prix le plus bas. Service garanti et livraison ultra-rapide.",
+        discount: "-8%", rating: 5.0, sales: "3k Sold", recommended: true, date: "2026-09-01", price: 4.49,
+        needsServer: false, serverOptions: [],
+        idLabel: "EA / Console ID", idPlaceholder: "Ex: nfl_champ_26",
+        denoms: [
+            { label: "100k MUT Coins", eur: 4.49, htg: 605 },
+            { label: "250k MUT Coins", eur: 10.99, htg: 1485 },
+            { label: "500k MUT Coins", eur: 19.99, htg: 2700 },
+            { label: "1M MUT Coins", eur: 36.99, htg: 4995 },
+        ]
+    },
+
+    {
+        id: 26,
+        name: "College Football 27",
+        category: "jeux",
+        img: "img/college_football_27.jpg",
+        desc: "Achetez des College Football 27 Coins pour recruter les meilleures stars universitaires et dominer la saison.",
+        discount: "-8%", rating: 5.0, sales: "288 Sold", recommended: true, date: "2026-09-01", price: 5.99,
+        needsServer: false, serverOptions: [],
+        idLabel: "EA / Console ID", idPlaceholder: "Ex: cfb_quarterback",
+        denoms: [
+            { label: "100k CFB Coins", eur: 5.99, htg: 810 },
+            { label: "250k CFB Coins", eur: 13.99, htg: 1890 },
+            { label: "500k CFB Coins", eur: 24.99, htg: 3375 },
+            { label: "1M CFB Coins", eur: 46.99, htg: 6345 },
+        ]
+    },
 
     {
         id: 1,
