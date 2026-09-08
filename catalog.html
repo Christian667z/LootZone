@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asta-Shops | Catalogue des produits numériques</title>
-    <meta name="description" content="Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
-    <meta property="og:title" content="Asta-Shops | Catalogue des produits numériques">
-    <meta property="og:description" content="Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
+    <title>LootZone | Catalogue des produits numériques</title>
+    <meta name="description" content="LootZone - Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
+    <meta property="og:title" content="LootZone | Catalogue des produits numériques">
+    <meta property="og:description" content="LootZone - Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,59 +17,9 @@
 
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-bar-container">
-            <div class="top-bar-left">
-                <span class="promo-badge">PROMO</span>
-                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
-            </div>
-            <div class="top-bar-right">
-                <a href="#" class="top-bar-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="top-icon">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    Aide & Support
-                </a>
-                <span class="top-bar-separator">|</span>
-                <div class="top-bar-dropdown">
-                    <span class="dropdown-trigger currency-lang-trigger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="top-icon">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                        </svg>
-                        FR | HTG ▾
-                    </span>
-                </div>
-                <span class="top-bar-separator">|</span>
-                <div class="top-bar-auth" id="topBarAuth">
-                    <a href="#" class="auth-link login-btn">Connexion</a>
-                    <span class="top-bar-separator" style="opacity:0.5;">|</span>
-                    <a href="#" class="auth-link register-btn">S'inscrire</a>
-                </div>
-                <div class="top-bar-user" id="topBarUser" style="display:none">
-                    <div class="user-avatar-small" id="userAvatarEl">?</div>
-                    <span id="userNameEl"></span>
-                    <span class="role-badge-small" id="userRoleEl"></span>
-                    <span style="opacity:0.5">▾</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <header class="navbar">
-        <a href="index.html" class="logo">
-            <span class="logo-box">AS</span>
-            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        <a href="index.html" class="logo" id="headerLogoLink" aria-label="LootZone">
+            <img src="LootZone_img-removebg-preview.png" alt="LootZone" class="logo-img" id="headerLogoImg">
         </a>
 
         <nav class="nav-container">
@@ -139,9 +89,6 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
-                <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
-                <li><a href="index.html#flash-section">Ventes Flash ⚡</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
@@ -173,6 +120,13 @@
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </a>
 
+            <a href="#" class="nav-icon auth-link login-btn" id="navAccountBtn" aria-label="Mon compte" title="Mon compte">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+
             <a href="#" class="whatsapp-btn" aria-label="WhatsApp">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="#25D366"
@@ -193,14 +147,6 @@
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
-
-            <a href="#" class="nav-icon" aria-label="Twitter">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
-                    </path>
-                </svg>
-            </a>
         </div>
     </header>
 
@@ -533,12 +479,8 @@
             <div class="footer-columns">
                 <!-- Column 1: Brand Info -->
                 <div class="footer-col brand-col">
-                    <div class="logo" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
-                        <span class="logo-box"
-                            style="background-color: #000000; border: 1px solid #252b36; color: #ffffff; font-weight: 900; padding: 4px 8px; border-radius: 6px; font-size: 1rem;">AS</span>
-                        <span class="logo-text"
-                            style="font-weight: 900; font-size: 1.2rem; color: #ffffff; letter-spacing: 0.5px;">ASTA-<span
-                                class="text-green" style="color: #00b67a;">SHOPS</span></span>
+                    <div class="logo" style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="LootZone_img-removebg-preview.png" alt="LootZone" style="height: 40px; width: auto; object-fit: contain;">
                     </div>
                     <p class="brand-desc">
                         La plateforme de recharge de référence. Obtenez vos crédits de jeux, cartes cadeaux et
@@ -899,6 +841,8 @@
             const cartBtns = document.querySelectorAll('.cart-btn');
 
             let activeDiscount = 0; // % reduction
+            let activeDiscountType = 'percent';
+            let activeCouponCode = null;
 
             function saveCart() {
                 localStorage.setItem('asta_cart', JSON.stringify(cart));
@@ -1119,11 +1063,6 @@
                     if (e.target === cartDrawerOverlay) closeCart();
                 });
             }
-
-
-            let activeDiscount = 0;
-            let activeDiscountType = 'percent';
-            let activeCouponCode = null;
 
             // Promo coupon
             if (applyCouponBtn) {
@@ -2346,6 +2285,7 @@
         document.getElementById('pomOverlay').addEventListener('click', function (e) {
             if (e.target === this) closePOM();
         });
+    </script>
     <script src="js/maintenance-check.js"></script>
 </body>
 

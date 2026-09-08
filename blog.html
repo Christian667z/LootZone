@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | Asta-Shops – Actualités, Guides & Astuces Gaming</title>
+    <title>Blog | LootZone – Actualités, Guides & Astuces Gaming</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -622,62 +622,10 @@
 
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-bar-container">
-            <div class="top-bar-left">
-                <span class="promo-badge">PROMO</span>
-                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
-            </div>
-            <div class="top-bar-right">
-                <a href="contact.html" class="top-bar-link">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="top-icon">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    Aide &amp; Support
-                </a>
-                <span class="top-bar-separator">|</span>
-                <div class="currency-selector" id="currencySelectorBtn" style="cursor: pointer;">
-                    <span class="currency-flag">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="top-icon">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                        </svg>
-                        FR | HTG ▾
-                    </span>
-                </div>
-                <span class="top-bar-separator">|</span>
-                <div class="top-bar-auth" id="topBarAuth">
-                    <a href="Dashboard/admin-login.html" class="auth-link login-btn">Connexion</a>
-                    <a href="Dashboard/admin-login.html" class="auth-link register-btn">S'inscrire</a>
-                </div>
-                <div class="user-profile-badge" id="topBarUser" style="display: none; align-items: center; gap: 8px;">
-                    <div class="user-avatar" id="userAvatarEl"
-                        style="width: 26px; height: 26px; border-radius: 50%; background: #00b67a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">
-                    </div>
-                    <span class="user-name" id="userNameEl"
-                        style="font-weight: 600; font-size: 0.82rem; color: #fff;"></span>
-                    <span class="user-role-tag" id="userRoleEl"
-                        style="background: rgba(0,182,122,0.2); color: #00b67a; border: 1px solid #00b67a; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Navigation Bar -->
     <header class="navbar">
-        <a href="index.html" class="logo" style="text-decoration:none;">
-            <span class="logo-box">AS</span>
-            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        <a href="index.html" class="logo" id="headerLogoLink" aria-label="LootZone" style="text-decoration:none;">
+            <img src="LootZone_img-removebg-preview.png" alt="LootZone" class="logo-img" id="headerLogoImg">
         </a>
 
         <nav class="nav-container">
@@ -711,8 +659,6 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
-                <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
                 <li><a href="blog.html" class="active">Blog</a></li>
                 <li><a href="paiement-manuel.html">Paiement Manuel</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -747,6 +693,13 @@
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
                 <span class="cart-badge">0</span>
+            </a>
+
+            <a href="#" class="nav-icon auth-link login-btn" id="navAccountBtn" aria-label="Mon compte" title="Mon compte">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
             </a>
 
             <a href="https://wa.me/50946966290" target="_blank" class="whatsapp-btn" aria-label="WhatsApp">
@@ -1033,9 +986,8 @@
 
             <div class="footer-columns">
                 <div class="footer-col brand-col">
-                    <a href="index.html" class="footer-logo" style="text-decoration:none;color:inherit;">
-                        <span class="logo-box" style="background-color:#000000;border:1px solid #252b36;color:#fff;font-weight:900;padding:4px 8px;border-radius:6px;font-size:0.85rem;">AS</span>
-                        <span style="font-weight:900;font-size:1.1rem;">ASTA-<span class="text-green" style="color:#00b67a;">SHOPS</span></span>
+                    <a href="index.html" class="footer-logo" style="text-decoration:none;color:inherit;" aria-label="LootZone">
+                        <img src="LootZone_img-removebg-preview.png" alt="LootZone" style="height: 38px; width: auto; object-fit: contain; margin-bottom: 10px;">
                     </a>
                     <p class="footer-desc">Votre destination #1 pour les produits numériques : crédits de jeux, cartes cadeaux et clés de jeux. Rapide, sécurisé, instantané.</p>
                     <div class="social-links">

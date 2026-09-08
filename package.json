@@ -7,7 +7,8 @@
   "scripts": {
     "build": "echo 'Build complete'",
     "start": "node data/server.js",
-    "dev": "node data/server.js"
+    "dev": "node data/server.js",
+    "lint": "node --check data/server.js"
   },
   "keywords": ["asta-shops", "ecommerce", "digital-products"],
   "author": "Asta-Shops",

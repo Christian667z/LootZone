@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asta-Shops | Vos produits numériques en quelques clics</title>
-    <meta name="description" content="Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
-    <meta property="og:title" content="Asta-Shops | Vos produits numériques en quelques clics">
-    <meta property="og:description" content="Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
+    <title>LootZone | Vos produits numériques en quelques clics</title>
+    <meta name="description" content="LootZone - Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
+    <meta property="og:title" content="LootZone | Vos produits numériques en quelques clics">
+    <meta property="og:description" content="LootZone - Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,58 +17,9 @@
 
 <body>
 
-    <div class="top-bar">
-        <div class="top-bar-container">
-            <div class="top-bar-left">
-                <span class="promo-badge">PROMO</span>
-                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
-            </div>
-            <div class="top-bar-right">
-                <a href="#" class="top-bar-link" id="aideSupportBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="top-icon">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
-                    Aide & Support
-                </a>
-                <span class="top-bar-separator">|</span>
-                <div class="top-bar-dropdown">
-                    <span class="dropdown-trigger currency-lang-trigger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="top-icon">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                        </svg>
-                        FR | HTG ▾
-                    </span>
-                </div>
-                <span class="top-bar-separator">|</span>
-                <div class="top-bar-auth" id="topBarAuth">
-                    <a href="#" class="auth-link login-btn">Connexion</a>
-                    <span class="top-bar-separator" style="opacity:0.5;">|</span>
-                    <a href="#" class="auth-link register-btn">S'inscrire</a>
-                </div>
-                <div class="top-bar-user" id="topBarUser" style="display:none">
-                    <div class="user-avatar-small" id="userAvatarEl">?</div>
-                    <span id="userNameEl"></span>
-                    <span class="role-badge-small" id="userRoleEl"></span>
-                    <span style="opacity:0.5">▾</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <header class="navbar">
-        <a href="index.html" class="logo">
-            <span class="logo-box">AS</span>
-            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        <a href="index.html" class="logo" id="headerLogoLink" aria-label="LootZone">
+            <img src="LootZone_img-removebg-preview.png" alt="LootZone" class="logo-img" id="headerLogoImg">
         </a>
 
         <nav class="nav-container">
@@ -138,9 +89,6 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
-                <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
-                <li><a href="#flash-section">Ventes Flash ⚡</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
@@ -172,6 +120,13 @@
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </a>
 
+            <a href="#" class="nav-icon auth-link login-btn" id="navAccountBtn" aria-label="Mon compte" title="Mon compte">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+
             <a href="#" class="whatsapp-btn" aria-label="WhatsApp">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path fill="#25D366"
@@ -194,12 +149,19 @@
     <main class="hero-section">
         <div class="hero-container">
             <div class="hero-content">
+                <div class="hero-tag">
+                    <span class="tag-pulse"></span>
+                    Recharge 100% Instantanée &amp; Prix Réduits
+                </div>
                 <h1 class="hero-title">Obtenez vos Cartes et<br>Crédits en Quelques Clics !</h1>
                 <p class="hero-subtitle">
                     Achetez vos produits numériques préférés, comme des cartes Apple, des crédits Free Fire, et des UC
                     PUBG, en toute simplicité. Rapide, sécurisé, et instantané.
                 </p>
-                <a href="#shop-products" class="btn-main">Explorer les Produits &darr;</a>
+                <div class="hero-buttons-wrap">
+                    <a href="#shop-products" class="btn-main">Explorer les Produits &darr;</a>
+                    <a href="catalog.html?cat=jeux" class="btn-secondary-electric">Recharger un Jeu &rarr;</a>
+                </div>
             </div>
 
             <div class="hero-images">
@@ -210,25 +172,55 @@
         </div>
     </main>
 
-    <section class="flash-section">
-        <div class="section-container">
-            <div class="flash-header">
-                <div class="flash-header-left">
-                    <span class="flash-icon">⚡</span>
-                    <h2 class="flash-title">Ventes Flash</h2>
-                    <div class="flash-timer">
-                        <span class="timer-block" id="flash-hours">02</span>
-                        <span class="timer-separator">:</span>
-                        <span class="timer-block" id="flash-minutes">45</span>
-                        <span class="timer-separator">:</span>
-                        <span class="timer-block" id="flash-seconds">12</span>
-                    </div>
+    <div class="lootbar-trust-strip">
+        <div class="trust-strip-container">
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <div class="trust-texts">
+                    <span class="trust-title">Livraison Express</span>
+                    <span class="trust-desc">Recharge directe en moins de 3 min</span>
                 </div>
             </div>
-
-            <div class="flash-grid" id="flash-grid"></div>
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <div class="trust-texts">
+                    <span class="trust-title">Paiements Sécurisés</span>
+                    <span class="trust-desc">Moncash, Natcash &amp; Cartes</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <div class="trust-texts">
+                    <span class="trust-title">Garantie 100% Officiel</span>
+                    <span class="trust-desc">Partenaires et codes certifiés</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="trust-texts">
+                    <span class="trust-title">Assistance 24/7</span>
+                    <span class="trust-desc">Support WhatsApp réactif</span>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
 
     <section class="products-section" id="shop-products">
         <div class="section-container">
@@ -858,12 +850,8 @@
             <div class="footer-columns">
                 <!-- Column 1: Brand Info -->
                 <div class="footer-col brand-col">
-                    <div class="logo" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
-                        <span class="logo-box"
-                            style="background-color: #000000; border: 1px solid #252b36; color: #ffffff; font-weight: 900; padding: 4px 8px; border-radius: 6px; font-size: 1rem;">AS</span>
-                        <span class="logo-text"
-                            style="font-weight: 900; font-size: 1.2rem; color: #ffffff; letter-spacing: 0.5px;">ASTA-<span
-                                class="text-green" style="color: #00b67a;">SHOPS</span></span>
+                    <div class="logo" style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="LootZone_img-removebg-preview.png" alt="LootZone" style="height: 40px; width: auto; object-fit: contain;">
                     </div>
                     <p class="brand-desc">
                         La plateforme de recharge de référence. Obtenez vos crédits de jeux, cartes cadeaux et
@@ -952,107 +940,6 @@
     </footer>
 
     <script>
-        // ── Ventes Flash : minuteur + rotation des produits ──────────────────
-        document.addEventListener('DOMContentLoaded', () => {
-            const FLASH_DURATION = 3 * 3600; // 3h par lot
-            const KEY_END   = 'asta_flash_end';
-            const KEY_BATCH = 'asta_flash_batch';
-
-            // ── 3 lots de produits flash ──────────────────────────────────────────
-            const FLASH_BATCHES = [
-                [
-                    { id:'f1', name:'Free Fire - 1080 Diamants',       price:'$9.99',  sold:80, img:'img/free fire.png' },
-                    { id:'f2', name:'PUBG Mobile - 660 UC',             price:'$8.49',  sold:45, img:'img/PUBG Mobile.png' },
-                    { id:'f3', name:'Carte Apple App Store $25',        price:'$22.50', sold:90, img:'img/Apple Card.jpeg' },
-                    { id:'f4', name:'Carte PlayStation Network $50',    price:'$39.99', sold:60, img:'img/Play Station Network.jpeg' }
-                ],
-                [
-                    { id:'f5', name:'Roblox - 800 Robux',              price:'$9.99',  sold:70, img:'img/Roblox.png' },
-                    { id:'f6', name:'COD Mobile - 880 CP',              price:'$8.99',  sold:55, img:'img/Call of Duty Mobile.png' },
-                    { id:'f7', name:'Carte Steam $20',                  price:'$18.50', sold:85, img:'img/steam card.png' },
-                    { id:'f8', name:'Google Play $15',                  price:'$13.99', sold:40, img:'img/Google Play.png' }
-                ],
-                [
-                    { id:'f9',  name:'FC Mobile - 2200 FC Points',     price:'$19.99', sold:75, img:'img/FC Mobile.png' },
-                    { id:'f10', name:'Carte Xbox Game Pass $30',        price:'$27.50', sold:50, img:'img/Xbox.png' },
-                    { id:'f11', name:'Free Fire - 2180 Diamants',       price:'$34.99', sold:65, img:'img/free fire.png' },
-                    { id:'f12', name:'PUBG Mobile - 1800 UC',           price:'$24.99', sold:30, img:'img/PUBG Mobile.png' }
-                ]
-            ];
-
-            // ── Rendu d'un lot de cartes ──────────────────────────────────────────
-            function renderBatch(batchIdx) {
-                const grid = document.getElementById('flash-grid');
-                if (!grid) return;
-                const batch = FLASH_BATCHES[batchIdx % FLASH_BATCHES.length];
-                grid.innerHTML = batch.map(p => `
-                    <a class="flash-card" href="catalog.html?cat=flash">
-                        <div class="flash-img-wrapper">
-                            <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.opacity='0'">
-                        </div>
-                        <div class="flash-body">
-                            <h3 class="flash-prod-title">${p.name}</h3>
-                            <div class="flash-prices">
-                                <span class="flash-curr-price">${p.price}</span>
-                            </div>
-                            <div class="flash-progress-wrapper">
-                                <div class="progress-bar-bg">
-                                    <div class="progress-bar-fill" style="width:${p.sold}%"></div>
-                                </div>
-                                <span class="progress-text">${p.sold}% Vendu</span>
-                            </div>
-                        </div>
-                    </a>`).join('');
-            }
-
-            // ── Rotation animée lors du changement de lot ─────────────────────────
-            function rotateBatch() {
-                const grid = document.getElementById('flash-grid');
-                if (!grid) return;
-                grid.querySelectorAll('.flash-card').forEach(c => c.classList.add('fading'));
-                setTimeout(() => {
-                    const next = (parseInt(sessionStorage.getItem(KEY_BATCH) || '0') + 1) % FLASH_BATCHES.length;
-                    sessionStorage.setItem(KEY_BATCH, next);
-                    renderBatch(next);
-                }, 380);
-            }
-
-            // ── Timer ─────────────────────────────────────────────────────────────
-            let endTime = parseInt(sessionStorage.getItem(KEY_END), 10);
-            if (!endTime || endTime <= Date.now()) {
-                endTime = Date.now() + FLASH_DURATION * 1000;
-                sessionStorage.setItem(KEY_END, endTime);
-            }
-
-            const hoursEl   = document.getElementById('flash-hours');
-            const minutesEl = document.getElementById('flash-minutes');
-            const secondsEl = document.getElementById('flash-seconds');
-            let rotated = false;
-
-            function updateTimer() {
-                let remaining = Math.floor((endTime - Date.now()) / 1000);
-                if (remaining <= 0) {
-                    if (!rotated) { rotated = true; rotateBatch(); }
-                    endTime = Date.now() + FLASH_DURATION * 1000;
-                    sessionStorage.setItem(KEY_END, endTime);
-                    remaining = FLASH_DURATION;
-                    rotated = false;
-                }
-                const hrs  = Math.floor(remaining / 3600);
-                const mins = Math.floor((remaining % 3600) / 60);
-                const secs = remaining % 60;
-                if (hoursEl)   hoursEl.textContent   = String(hrs).padStart(2, '0');
-                if (minutesEl) minutesEl.textContent = String(mins).padStart(2, '0');
-                if (secondsEl) secondsEl.textContent = String(secs).padStart(2, '0');
-            }
-
-            // Rendu initial
-            const currentBatch = parseInt(sessionStorage.getItem(KEY_BATCH) || '0');
-            renderBatch(currentBatch);
-            updateTimer();
-            setInterval(updateTimer, 1000);
-        });
-
         // Fonction "Tout" pour afficher/masquer les lignes superflues
         function toggleProducts(gridId, btnId) {
             const grid = document.getElementById(gridId);
@@ -1199,6 +1086,8 @@
             const cartBtns = document.querySelectorAll('.cart-btn');
 
             let activeDiscount = 0; // % reduction
+            let activeDiscountType = 'percent';
+            let activeCouponCode = null;
 
             function saveCart() {
                 localStorage.setItem('asta_cart', JSON.stringify(cart));
@@ -1419,11 +1308,6 @@
                     if (e.target === cartDrawerOverlay) closeCart();
                 });
             }
-
-
-            let activeDiscount = 0;
-            let activeDiscountType = 'percent';
-            let activeCouponCode = null;
 
             // Promo coupon
             if (applyCouponBtn) {
@@ -2194,6 +2078,7 @@
                 btn.disabled = false; btn.textContent = 'Créer mon compte';
             }
         }
+    </script>
     <script src="js/maintenance-check.js"></script>
 </body>
 

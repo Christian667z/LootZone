@@ -333,6 +333,49 @@ function showClientToast(title, body) {
   setTimeout(() => { t.style.animation = 'slideInToast .3s ease reverse'; setTimeout(() => t.remove(), 300); }, 5000);
 }
 
+function updateNavAccount(user, profile) {
+  const btn = document.getElementById('navAccountBtn');
+  if (!btn) return;
+  if (user) {
+    btn.href = 'profile.html';
+    btn.setAttribute('aria-label', 'Mon profil');
+    btn.title = 'Mon profil';
+    btn.classList.remove('login-btn');
+    btn.onclick = null;
+    const avatarUrl = profile?.avatar_url || profile?.avatar;
+    if (avatarUrl) {
+      btn.innerHTML = `<img src="${escHtml(avatarUrl)}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #a855f7;box-shadow:0 0 8px rgba(168,85,247,0.4);">`;
+    } else {
+      const displayName = ((profile?.prenom || '') + ' ' + (profile?.nom || '')).trim() || user?.email?.split('@')[0] || 'U';
+      const initial = displayName.charAt(0).toUpperCase();
+      btn.innerHTML = `<span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg, #a855f7, #7c3aed);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;box-shadow:0 0 8px rgba(168,85,247,0.4);">${initial}</span>`;
+    }
+  } else {
+    btn.href = '#';
+    btn.setAttribute('aria-label', 'Mon compte');
+    btn.title = 'Mon compte';
+    btn.classList.add('login-btn');
+    btn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    `;
+    btn.onclick = (e) => {
+      e.preventDefault();
+      if (window.openAuth) {
+        window.openAuth('login');
+      } else {
+        const modal = document.getElementById('authModal');
+        if (modal) {
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+    };
+  }
+}
+
 // ─── Mise à jour boutons mobile nav ──────────────────────────────────────────
 function updateMobileNav(isLoggedIn) {
   const mobileLogin = document.querySelector('.nav-links .login-btn')?.parentElement;
@@ -381,10 +424,12 @@ window.AstaAuth = {
 
     if (user && profile) {
       updateTopBar(user, profile);
+      updateNavAccount(user, profile);
       updateMobileNav(true);
       if (user.email) startClientNotifications(user.email);
     } else {
       renderLoggedOutTopBar();
+      updateNavAccount(null, null);
       updateMobileNav(false);
     }
 
@@ -394,6 +439,7 @@ window.AstaAuth = {
         if (event === 'SIGNED_IN' && session?.user) {
           const profile = await fetchProfile(session.user.id);
           updateTopBar(session.user, profile);
+          updateNavAccount(session.user, profile);
           updateMobileNav(true);
           startClientNotifications(session.user.email);
           if (session.access_token) refreshDropdownWallet(session.access_token);
@@ -406,6 +452,7 @@ window.AstaAuth = {
             localStorage.removeItem('asta_wallet_balance');
           } catch (_) {}
           renderLoggedOutTopBar();
+          updateNavAccount(null, null);
           updateMobileNav(false);
         }
       });

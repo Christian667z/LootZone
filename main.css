@@ -1,6 +1,15 @@
 /* --- Variables globales --- */
 :root {
-    --topbar-height: 42px;
+    --topbar-height: 0px;
+    --color-primary: #00b67a;
+    --color-primary-hover: #009e6a;
+    --color-secondary: #a855f7; /* Violet électrique / Electric Purple */
+    --color-secondary-hover: #9333ea;
+    --color-secondary-light: #c084fc;
+    --color-secondary-glow: rgba(168, 85, 247, 0.4);
+    --color-secondary-gradient: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    --header-bg: #090a0f;
+    --header-border: rgba(255, 255, 255, 0.08);
 }
 
 /* --- Réinitialisation générale --- */
@@ -23,19 +32,21 @@ img {
     display: block;
 }
 
-/* --- Barre de navigation --- */
+/* --- Barre de navigation (Header Noir LootBar Style) --- */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 30px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f5f5f5;
+    background-color: #090a0f;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    gap: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(168, 85, 247, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    gap: 25px;
 }
 
 .logo {
@@ -48,20 +59,40 @@ img {
     flex-shrink: 0;
     min-width: max-content;
     text-decoration: none;
-    color: #1a1a1a;
-    margin-right: 30px;
+    color: #ffffff;
+    margin-right: 25px;
+}
+
+.logo-img {
+    height: 48px;
+    width: auto;
+    max-height: 54px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.25s ease, filter 0.25s ease;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
 }
 
 .logo-box {
-    background-color: #000000;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
     color: #ffffff;
-    padding: 5px 8px;
-    border-radius: 5px;
+    padding: 5px 9px;
+    border-radius: 6px;
     font-size: 1rem;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
 }
 
 .text-green {
     color: #00b67a;
+}
+
+.text-purple {
+    color: #a855f7;
 }
 
 .nav-container {
@@ -77,12 +108,12 @@ img {
     margin-left: auto;
 }
 
-/* --- Search Input Box dans la Navbar --- */
+/* --- Search Input Box dans la Navbar (Style LootBar) --- */
 .nav-search-box {
     display: flex;
     align-items: center;
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    background: #141622;
+    border: 1px solid #282a3e;
     border-radius: 20px;
     padding: 6px 14px;
     gap: 8px;
@@ -91,9 +122,9 @@ img {
 }
 
 .nav-search-box:focus-within {
-    background: #ffffff;
-    border-color: #00b67a;
-    box-shadow: 0 0 0 3px rgba(0, 182, 122, 0.15);
+    background: #1a1c2a;
+    border-color: #a855f7;
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
     width: 260px;
 }
 
@@ -103,12 +134,21 @@ img {
     outline: none;
     font-size: 0.85rem;
     width: 100%;
-    color: #1f2937;
+    color: #f8fafc;
+}
+
+.nav-search-box input::placeholder {
+    color: #7b8398;
 }
 
 .nav-search-box .search-icon {
-    color: #6b7280;
+    color: #8b94a8;
     flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.nav-search-box:focus-within .search-icon {
+    color: #c084fc;
 }
 
 .wishlist-badge {
@@ -117,7 +157,7 @@ img {
     right: -9px;
     min-width: 18px;
     height: 18px;
-    background: #ef4444;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
     color: #fff;
     font-size: 0.65rem;
     font-weight: 700;
@@ -127,38 +167,43 @@ img {
     justify-content: center;
     padding: 0 4px;
     line-height: 1;
-    border: 2px solid #fff;
+    border: 2px solid #090a0f;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
     pointer-events: none;
 }
 
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 25px;
+    gap: 16px;
     align-items: center;
 }
 
 .nav-links>li>a {
     text-decoration: none;
-    color: #1f2937;
+    color: #e2e8f0;
     font-weight: 500;
     font-size: 0.93rem;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    padding: 8px 0;
+    padding: 6px 12px;
+    border-radius: 8px;
 }
 
-.nav-links>li>a:hover {
-    color: #00b67a;
+.nav-links>li>a:hover,
+.nav-links>li>a.active {
+    color: #c084fc;
+    background-color: rgba(168, 85, 247, 0.12);
 }
 
 .arrow-down {
     margin-left: 4px;
     font-size: 0.8rem;
+    opacity: 0.8;
 }
 
-/* --- Mega Menu Déroulant --- */
+/* --- Mega Menu Déroulant Sombre --- */
 .dropdown {
     position: relative;
 }
@@ -168,17 +213,17 @@ img {
     top: 100%;
     left: 0;
     transform: translateY(15px);
-    background-color: #ffffff;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    background-color: #0d0f17;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 1px rgba(168, 85, 247, 0.3);
     border-radius: 16px;
     padding: 22px;
     display: flex;
     gap: 25px;
     min-width: 680px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #23263b;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
     z-index: 1100;
 }
 
@@ -201,17 +246,18 @@ img {
     align-items: center;
     gap: 12px;
     padding: 8px 12px;
-    color: #444444;
-    font-size: 0.95rem;
+    color: #e2e8f0;
+    font-size: 0.93rem;
     font-weight: 500;
     text-decoration: none;
     border-radius: 8px;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .mega-column a:hover {
-    background-color: rgba(0, 182, 122, 0.05);
-    color: #00b67a;
+    background-color: rgba(168, 85, 247, 0.14);
+    color: #c084fc;
+    transform: translateX(3px);
 }
 
 .prod-icon {
@@ -226,17 +272,20 @@ img {
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 18px;
 }
 
 .nav-icon {
-    color: #1a1a1a;
+    color: #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition: all 0.2s ease;
     position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
 }
 
 .cart-badge {
@@ -245,7 +294,7 @@ img {
     right: -9px;
     min-width: 18px;
     height: 18px;
-    background: #00b67a;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
     color: #fff;
     font-size: 0.65rem;
     font-weight: 700;
@@ -255,12 +304,14 @@ img {
     justify-content: center;
     padding: 0 4px;
     line-height: 1;
-    border: 2px solid #fff;
+    border: 2px solid #090a0f;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
     pointer-events: none;
 }
 
 .nav-icon:hover {
-    color: #00b67a;
+    color: #c084fc;
+    background-color: rgba(168, 85, 247, 0.12);
     transform: scale(1.05);
 }
 
@@ -269,10 +320,14 @@ img {
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    color: #1a1a1a;
+    color: #f1f5f9;
     font-weight: 500;
     font-size: 0.95rem;
-    transition: color 0.2s ease;
+    background: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    padding: 5px 12px;
+    border-radius: 999px;
+    transition: all 0.25s ease;
 }
 
 .whatsapp-btn svg {
@@ -281,7 +336,10 @@ img {
 }
 
 .whatsapp-btn:hover {
-    color: #25D366;
+    color: #ffffff;
+    background: rgba(37, 211, 102, 0.2);
+    border-color: #25D366;
+    box-shadow: 0 0 12px rgba(37, 211, 102, 0.35);
 }
 
 .whatsapp-btn:hover svg {
@@ -311,6 +369,38 @@ img {
     text-align: left;
 }
 
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #a855f7;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.tag-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #a855f7;
+    box-shadow: 0 0 8px #a855f7;
+    animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.8; }
+}
+
 .hero-title {
     font-size: 3rem;
     font-weight: 900;
@@ -327,11 +417,20 @@ img {
     line-height: 1.6;
 }
 
+.hero-buttons-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 .btn-main {
-    display: inline-block;
-    padding: 15px 35px;
-    font-size: 1.1rem;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    font-size: 1.05rem;
+    font-weight: 600;
     color: #ffffff;
     text-decoration: none;
     background: #00b67a;
@@ -342,7 +441,109 @@ img {
 .btn-main:hover {
     background-color: #000000;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 182, 122, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 182, 122, 0.35);
+}
+
+.btn-secondary-electric {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 30px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    border-radius: 50px;
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+    transition: all 0.25s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary-electric:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(168, 85, 247, 0.6);
+    filter: brightness(1.1);
+}
+
+/* --- Barre de Confiance & Avantages (Style LootBar) --- */
+.lootbar-trust-strip {
+    background: #090a0f;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+    padding: 24px 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.trust-strip-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    transition: all 0.25s ease;
+}
+
+.trust-item:hover {
+    background: rgba(168, 85, 247, 0.08);
+    border-color: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.18);
+    transform: translateY(-2px);
+}
+
+.trust-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(124, 58, 237, 0.3));
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c084fc;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+}
+
+.trust-texts {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.trust-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.trust-desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 992px) {
+    .trust-strip-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 580px) {
+    .trust-strip-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .hero-images {
@@ -462,25 +663,27 @@ img {
     color: #0f1115;
 }
 
-/* Style précis du Bouton "Tout" */
+/* Style précis du Bouton "Tout" (Accent Violet Électrique) */
 .btn-see-all {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    color: #00b67a;
+    color: #a855f7;
     font-weight: 700;
     font-size: 0.9rem;
-    background-color: rgba(0, 182, 122, 0.08);
+    background-color: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.25);
     padding: 8px 18px;
     border-radius: 25px;
     transition: all 0.25s ease;
-    border: none;
     cursor: pointer;
 }
 
 .btn-see-all:hover {
-    background-color: #00b67a;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
     color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.35);
 }
 
 /* Gestion du SVG flèche reçu à l'intérieur du bouton */
@@ -568,9 +771,9 @@ img {
 }
 
 .product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
-    border-color: #d0d0d0;
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12), 0 0 18px rgba(168, 85, 247, 0.25);
+    border-color: rgba(168, 85, 247, 0.45);
 }
 
 /* Image cover plein cadre */
@@ -595,18 +798,19 @@ img {
     transform: scale(1.06);
 }
 
-/* Badge reduction */
+/* Badge reduction (Style LootBar Violet Électrique) */
 .card-discount {
     position: absolute;
     top: 6px;
     right: 6px;
-    background: #ff5722;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
     color: #fff;
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 5px;
-    letter-spacing: 0.2px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.45);
     z-index: 2;
 }
 
@@ -615,13 +819,15 @@ img {
     position: absolute;
     top: 6px;
     left: 6px;
-    background: #000000;
+    background: #090a0f;
     color: #ffffff;
+    border: 1px solid rgba(168, 85, 247, 0.4);
     padding: 2px 7px;
     font-size: 0.6rem;
     font-weight: 700;
-    border-radius: 5px;
+    border-radius: 6px;
     text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     z-index: 2;
     letter-spacing: 0.4px;
 }
@@ -1675,24 +1881,13 @@ img {
 
 /* --- Top Bar (SEAGM Inspired) --- */
 .top-bar {
-    background-color: #0d0e12;
-    color: #7c8494;
-    font-size: 0.78rem;
-    padding: 0;
-    border-bottom: 1px solid #1a1d24;
-    font-family: 'Roboto', sans-serif;
-    position: sticky;
-    top: 0;
-    z-index: 1001;
-    height: var(--topbar-height);
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
+    display: none !important;
 }
 
-/* Navbar se cale sous la topbar quand elle est présente */
-.top-bar ~ .navbar {
-    top: var(--topbar-height) !important;
+/* Navbar reste fixée au sommet */
+.top-bar ~ .navbar,
+.navbar {
+    top: 0 !important;
 }
 
 .top-bar-container {
@@ -3783,7 +3978,7 @@ img {
     display: none;
     background: none;
     border: none;
-    color: #1a1a1a;
+    color: #ffffff;
     cursor: pointer;
     padding: 8px;
     z-index: 1200;
@@ -3791,7 +3986,7 @@ img {
 }
 
 .mobile-menu-toggle:hover {
-    color: #00b67a;
+    color: #c084fc;
 }
 
 @media (max-width: 992px) {
@@ -3816,7 +4011,7 @@ img {
 
     /* Navbar */
     .navbar {
-        padding: 15px 20px;
+        padding: 12px 18px;
     }
 
     .mobile-menu-toggle {
@@ -3829,8 +4024,9 @@ img {
         right: -100%;
         width: 280px;
         height: 100vh;
-        background-color: #ffffff;
-        box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+        background-color: #0c0e17;
+        border-left: 1px solid rgba(168, 85, 247, 0.25);
+        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.85);
         transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1100;
         display: flex;
@@ -3857,16 +4053,17 @@ img {
 
     .nav-links>li>a {
         font-size: 1.05rem;
-        padding: 10px 0;
+        padding: 12px 0;
         width: 100%;
-        border-bottom: 1px solid #f5f5f5;
+        color: #f1f5f9;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         justify-content: space-between;
     }
 
     .nav-actions {
         margin-left: auto;
-        margin-right: 15px;
-        gap: 15px;
+        margin-right: 12px;
+        gap: 12px;
     }
 
     /* Mega Menu sur Mobile */
@@ -3879,7 +4076,7 @@ img {
         min-width: 100%;
         box-shadow: none;
         border: none;
-        border-left: 2px solid #00b67a;
+        border-left: 2px solid #a855f7;
         border-radius: 0;
         padding: 10px 0 10px 15px;
         flex-direction: column;
