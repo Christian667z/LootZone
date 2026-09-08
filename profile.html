@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil — Asta-Shops</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css?v=2.0">
+  <style>
+    /* ═══════════════════ PAGE LAYOUT ═══════════════════ */
+    .profile-page {
+      background: #f8f9fa;
+      min-height: calc(100vh - 140px);
+    }
+
+    .profile-breadcrumb {
+      padding: 14px 40px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      font-size: .85rem;
+      color: #888;
+    }
+
+    .profile-breadcrumb a {
+      color: #00b67a;
+      text-decoration: none;
+    }
+
+    .profile-breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .profile-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+    }
+
+    /* ═══════════════════ SIDEBAR ═══════════════════ */
+    .profile-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+      border: 1px solid #f0f0f0;
+    }
+
+    .sidebar-user-header {
+      padding: 28px 20px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      position: relative;
+    }
+
+    .sidebar-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00b67a;
+      background: #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .sidebar-avatar img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00b67a;
+    }
+
+    .sidebar-vip-ring {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 900;
+      color: #fff;
+      border: 2px solid #fff;
+      font-style: normal;
+    }
+
+    .sidebar-username {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-email {
+      color: #aaa;
+      font-size: .8rem;
+      margin-bottom: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .sidebar-vip-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-pts {
+      color: #aaa;
+      font-size: .78rem;
+    }
+
+    /* ═══════════════════ ROLE BADGES ═══════════════════ */
+    .sidebar-roles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .3px;
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, .15);
+      backdrop-filter: blur(4px);
+    }
+
+    .role-badge .role-icon {
+      font-size: .82rem;
+    }
+
+    .sidebar-nav {
+      padding: 8px 0;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      color: #444;
+      font-size: .9rem;
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .sidebar-nav-item:hover {
+      background: #f0fdf9;
+      color: #00b67a;
+    }
+
+    .sidebar-nav-item.active {
+      background: #f0fdf9;
+      color: #00b67a;
+      font-weight: 600;
+      border-left: 3px solid #00b67a;
+    }
+
+    .sidebar-nav-item svg {
+      flex-shrink: 0;
+    }
+
+    .sidebar-nav-sep {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 4px 16px;
+    }
+
+    .sidebar-nav-badge {
+      margin-left: auto;
+      background: #00b67a;
+      color: #fff;
+      border-radius: 10px;
+      padding: 2px 7px;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      color: #ef4444;
+      font-size: .9rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: inherit;
+      border-top: 1px solid #f0f0f0;
+      transition: all .2s;
+    }
+
+    .sidebar-logout:hover {
+      background: #fff5f5;
+    }
+
+    /* ═══════════════════ MAIN CONTENT ═══════════════════ */
+    .profile-main {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .profile-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+      border: 1px solid #f0f0f0;
+      display: none;
+    }
+
+    .profile-section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title svg {
+      color: #00b67a;
+    }
+
+    /* ─── Avatar upload ─── */
+    .avatar-upload-area {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 28px;
+      padding: 20px;
+      background: #f8fffe;
+      border-radius: 12px;
+      border: 2px dashed #c8f0e0;
+    }
+
+    .avatar-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #666;
+      overflow: hidden;
+      border: 3px solid #00b67a;
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-upload-info h4 {
+      font-size: .95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .avatar-upload-info p {
+      font-size: .82rem;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .btn-upload {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1.5px solid #00b67a;
+      color: #00b67a;
+      background: none;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn-upload:hover {
+      background: #00b67a;
+      color: #fff;
+    }
+
+    #avatarInput {
+      display: none;
+    }
+
+    /* ─── Form ─── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1/-1;
+    }
+
+    .form-label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .form-label .req {
+      color: #00b67a;
+    }
+
+    .form-input {
+      padding: 11px 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: .9rem;
+      color: #1a1a1a;
+      outline: none;
+      transition: border .2s;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      border-color: #00b67a;
+      box-shadow: 0 0 0 3px rgba(0, 183, 122, .1);
+    }
+
+    .form-input:disabled {
+      background: #fafafa;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .form-hint {
+      font-size: .78rem;
+      color: #999;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-save {
+      padding: 11px 28px;
+      background: #00b67a;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-save:hover {
+      background: #009e6a;
+      transform: translateY(-1px);
+    }
+
+    .btn-save:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-cancel {
+      padding: 11px 22px;
+      background: #f5f5f5;
+      color: #555;
+      border: none;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .form-success {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #f0fdf9;
+      border: 1px solid #c8f0e0;
+      border-radius: 10px;
+      color: #059669;
+      font-size: .88rem;
+      margin-top: 12px;
+    }
+
+    .form-success.show {
+      display: flex;
+    }
+
+    .form-error {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      color: #dc2626;
+      font-size: .88rem;
+      margin-top: 12px;
+    }
+
+    .form-error.show {
+      display: flex;
+    }
+
+    /* ═══════════════════ VIP SECTION ═══════════════════ */
+    .vip-hero {
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vip-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 183, 122, .15) 0%, transparent 70%);
+    }
+
+    .vip-hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .vip-hero-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .vip-current-badge {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      border: 3px solid rgba(255, 255, 255, .3);
+      flex-shrink: 0;
+    }
+
+    .vip-current-info h2 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .vip-current-info p {
+      color: rgba(255, 255, 255, .7);
+      font-size: .9rem;
+    }
+
+    .vip-progress-wrap {
+      margin-bottom: 8px;
+    }
+
+    .vip-progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: .82rem;
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .vip-progress-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, .15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .vip-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .8s ease;
+      background: linear-gradient(90deg, #00b67a, #00e89d);
+    }
+
+    .vip-perks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .vip-perk {
+      background: rgba(255, 255, 255, .08);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .vip-perk-icon {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .vip-perk-label {
+      font-size: .78rem;
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .vip-perk-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #00e89d;
+    }
+
+    /* ─── VIP Tier cards ─── */
+    .vip-tiers-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 8px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vip-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .vip-tier-card {
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+      background: #111111;
+      border: 2px solid #222;
+    }
+
+    .vip-tier-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
+      border-color: #333;
+    }
+
+    .vip-tier-card.current-tier {
+      border-color: #00b67a;
+      box-shadow: 0 0 0 3px rgba(0, 183, 122, .15);
+    }
+
+    .vip-tier-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .02);
+      transform: translate(50px, -50px);
+    }
+
+    /* Bande de couleur en haut selon le niveau */
+    .vip-tier-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .tier-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .tier-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .tier-badge-pill {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .3px;
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      color: #fff;
+    }
+
+    .tier-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+      color: #fff;
+    }
+
+    .tier-pts {
+      font-size: .78rem;
+      color: #666;
+      margin-bottom: 14px;
+    }
+
+    .tier-benefits {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .tier-benefits li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .82rem;
+      color: #aaa;
+    }
+
+    .tier-benefits li::before {
+      content: '✓';
+      font-weight: 700;
+      color: #00b67a;
+    }
+
+    .tier-current-label {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #00b67a;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: .7rem;
+      font-weight: 700;
+    }
+
+    .tier-locked {
+      opacity: .5;
+    }
+
+    .tier-locked .tier-benefits li::before {
+      color: #444;
+    }
+
+    /* ─── VIP FAQ ─── */
+    .vip-faq {
+      margin-top: 8px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #f0f0f0;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      transition: color .2s;
+      list-style: none;
+    }
+
+    .faq-question:hover {
+      color: #00b67a;
+    }
+
+    .faq-arrow {
+      transition: transform .3s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-arrow {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease;
+      font-size: .87rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding-bottom: 14px;
+    }
+
+    /* ═══════════════════ COMMANDES ═══════════════════ */
+    .orders-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #aaa;
+    }
+
+    .orders-empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .orders-empty p {
+      font-size: .95rem;
+    }
+
+    /* ═══════════════════ WALLET SECTION ═══════════════════ */
+    .wallet-hero {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 60%, #0d2137 100%);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .wallet-hero::after {
+      content: '💰';
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 4rem;
+      opacity: .18;
+      pointer-events: none;
+    }
+    .wallet-hero-label {
+      color: #aaa;
+      font-size: .82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+    .wallet-hero-amount {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+    .wallet-hero-amount span {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #00b67a;
+      margin-right: 4px;
+    }
+    .wallet-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid #f0f0f0;
+      margin-bottom: 28px;
+    }
+    .wallet-tab-btn {
+      padding: 10px 22px;
+      border: none;
+      background: none;
+      font-size: .92rem;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s;
+      font-family: inherit;
+    }
+    .wallet-tab-btn.active {
+      color: #00b67a;
+      border-bottom-color: #00b67a;
+    }
+    .wallet-tab-pane { display: none; }
+    .wallet-tab-pane.active { display: block; }
+
+    .wallet-field-label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .wallet-amount-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .wallet-amount-card {
+      padding: 13px 10px;
+      border: 2px solid #e8e8e8;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: .95rem;
+      color: #333;
+      cursor: pointer;
+      transition: all .18s;
+      background: #fafafa;
+    }
+    .wallet-amount-card:hover {
+      border-color: #00b67a;
+      color: #00b67a;
+      background: #f0fdf9;
+    }
+    .wallet-amount-card.active {
+      border-color: #00b67a;
+      background: #f0fdf9;
+      color: #00b67a;
+    }
+    .wallet-custom-input {
+      display: flex;
+      align-items: center;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      transition: border-color .2s;
+    }
+    .wallet-custom-input:focus-within {
+      border-color: #00b67a;
+    }
+    .wallet-custom-prefix {
+      padding: 12px 16px;
+      background: #f5f5f5;
+      font-weight: 700;
+      color: #555;
+      font-size: 1rem;
+      border-right: 2px solid #e0e0e0;
+    }
+    .wallet-custom-input input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      font-size: .95rem;
+      font-family: inherit;
+      background: none;
+    }
+    .wallet-pay-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .wallet-pay-card {
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      padding: 16px 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: all .18s;
+      background: #fafafa;
+    }
+    .wallet-pay-card:hover {
+      border-color: #00b67a;
+      background: #f0fdf9;
+    }
+    .wallet-pay-card.active {
+      border-color: #00b67a;
+      background: #f0fdf9;
+    }
+    .wallet-pay-card img {
+      height: 32px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+    .wallet-pay-card label {
+      display: block;
+      font-size: .82rem;
+      font-weight: 700;
+      color: #444;
+    }
+    .wallet-fee-note {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: .82rem;
+      color: #92400e;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .btn-wallet-confirm {
+      width: 100%;
+      padding: 15px;
+      background: #00b67a;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-wallet-confirm:hover {
+      background: #009e6a;
+      transform: translateY(-1px);
+    }
+    .btn-wallet-confirm:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .wallet-flux-empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: #aaa;
+    }
+    .wallet-flux-empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .wallet-flux-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .wallet-flux-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .wallet-flux-icon.credit { background: #f0fdf9; }
+    .wallet-flux-icon.debit { background: #fff5f5; }
+    .wallet-flux-info { flex: 1; }
+    .wallet-flux-label { font-weight: 600; font-size: .9rem; color: #222; }
+    .wallet-flux-date { font-size: .78rem; color: #999; margin-top: 2px; }
+    .wallet-flux-amount { font-weight: 700; font-size: .95rem; }
+    .wallet-flux-amount.credit { color: #00b67a; }
+    .wallet-flux-amount.debit { color: #ef4444; }
+
+    /* Wallet balance in sidebar */
+    .sidebar-wallet-balance {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,.07);
+      border-radius: 10px;
+    }
+    .sidebar-wallet-item {
+      text-align: center;
+      cursor: pointer;
+    }
+    .sidebar-wallet-item:hover .sidebar-wallet-val { color: #00b67a; }
+    .sidebar-wallet-val {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+      display: block;
+      transition: color .2s;
+    }
+    .sidebar-wallet-lbl {
+      font-size: .68rem;
+      color: #aaa;
+      display: block;
+      margin-top: 2px;
+    }
+    .sidebar-wallet-sep {
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,.15);
+    }
+
+    /* ═══════════════════ NOT LOGGED IN ═══════════════════ */
+    .auth-required {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .auth-required-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+    }
+
+    .auth-required h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .auth-required p {
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    .btn-login-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: #00b67a;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s;
+    }
+
+    .btn-login-cta:hover {
+      background: #009e6a;
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════ RESPONSIVE ═══════════════════ */
+    @media(max-width:900px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .sidebar-card {
+        min-width: 200px;
+        flex: 1;
+      }
+
+      .vip-tiers-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .vip-perks-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:600px) {
+      .profile-container {
+        padding: 16px;
+      }
+
+      .profile-section {
+        padding: 20px;
+      }
+
+      .vip-hero {
+        padding: 20px;
+      }
+
+      .vip-perks-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════ TOP BAR ══════════════════════ -->
+  <div class="top-bar">
+    <div class="top-bar-container">
+      <div class="top-bar-left">
+        <span class="promo-badge">PROMO</span>
+        <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="contact.html" class="top-bar-link" id="aideSupportBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="top-icon">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          Aide & Support
+        </a>
+        <span class="top-bar-separator">|</span>
+        <div class="top-bar-dropdown">
+          <span class="dropdown-trigger currency-lang-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="top-icon">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            FR | HTG ▾
+          </span>
+        </div>
+        <span class="top-bar-separator">|</span>
+        <div class="top-bar-auth" id="topBarAuth">
+          <a href="#" class="auth-link login-btn">Connexion</a>
+          <span class="top-bar-separator" style="opacity:0.5;">|</span>
+          <a href="#" class="auth-link register-btn">S'inscrire</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ NAVBAR ══════════════════════ -->
+  <header class="navbar">
+    <a href="index.html" class="logo">
+      <span class="logo-box">AS</span>
+      <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+    </a>
+    <nav class="nav-container">
+      <ul class="nav-links">
+        <li><a href="catalog.html?cat=jeux">Jeux</a></li>
+        <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+        <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
+        <li><a href="index.html#flash-section">Ventes Flash ⚡</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <div class="nav-search-box">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." />
+      </div>
+
+      <a href="#" class="nav-icon wishlist-btn" id="wishlistBtn" aria-label="Favoris">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
+      </a>
+
+      <a href="#" class="nav-icon cart-btn" aria-label="Panier">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="cart-badge" id="cartBadgeCount">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════ BREADCRUMB ══════════════════════ -->
+  <div class="profile-breadcrumb">
+    <a href="index.html">Accueil</a> › <span>Mon Profil</span>
+  </div>
+
+  <!-- ══════════════════════ PAGE CONTENT ══════════════════════ -->
+  <div class="profile-page">
+    <div class="profile-container" id="profileContainer">
+
+      <!-- ─── VUE NON CONNECTÉ ─── -->
+      <div id="notLoggedIn" style="grid-column:1/-1;display:none">
+        <div class="sidebar-card">
+          <div class="auth-required">
+            <div class="auth-required-icon">🔒</div>
+            <h2>Accès réservé aux membres</h2>
+            <p>Connectez-vous pour accéder à votre profil, vos commandes et vos avantages VIP.</p>
+            <a href="index.html" class="btn-login-cta">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
+              Se connecter
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── SIDEBAR ─── -->
+      <aside class="profile-sidebar" id="sidebarSection" style="display:none">
+        <div class="sidebar-card">
+          <div class="sidebar-user-header">
+            <div class="sidebar-avatar-wrap">
+              <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+              <span class="sidebar-vip-ring" id="sidebarVipRing" style="background:#6b7280">M</span>
+            </div>
+            <div class="sidebar-username" id="sidebarName">Chargement...</div>
+            <div class="sidebar-email" id="sidebarEmail">—</div>
+            <div class="sidebar-vip-pill" id="sidebarVipPill" style="background:#6b7280">⭕ Membre</div>
+            <div class="sidebar-pts" id="sidebarPts">0 points</div>
+            <div class="sidebar-wallet-balance">
+              <div class="sidebar-wallet-item" onclick="switchTab('wallet')" title="Mon portefeuille">
+                <span class="sidebar-wallet-val" id="sidebarWalletBal">$0.00</span>
+                <span class="sidebar-wallet-lbl">Portefeuille</span>
+              </div>
+              <div class="sidebar-wallet-sep"></div>
+              <div class="sidebar-wallet-item">
+                <span class="sidebar-wallet-val" id="sidebarPtsWallet">0</span>
+                <span class="sidebar-wallet-lbl">🪙 Points</span>
+              </div>
+            </div>
+            <div class="sidebar-roles" id="sidebarRoles"></div>
+          </div>
+          <nav class="sidebar-nav">
+            <button class="sidebar-nav-item active" data-tab="profile">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Informations du compte
+            </button>
+            <button class="sidebar-nav-item" data-tab="commandes">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+              Historique des achats
+            </button>
+            <button class="sidebar-nav-item" data-tab="vip">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              Niveau VIP
+              <span class="sidebar-nav-badge" id="sidebarVipBadge">Membre</span>
+            </button>
+            <button class="sidebar-nav-item" data-tab="coupons">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+              </svg>
+              Mes coupons
+            </button>
+            <button class="sidebar-nav-item" data-tab="wallet">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2"/>
+                <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/>
+                <circle cx="17" cy="14" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+              Mon portefeuille
+            </button>
+            <div class="sidebar-nav-sep"></div>
+            <a href="Dashboard/admin-login.html" class="sidebar-nav-item" id="sidebarDashLink"
+              style="display:none;color:#f59e0b;font-weight:700;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              Dashboard Admin
+            </a>
+            <div class="sidebar-nav-sep"></div>
+            <a href="contact.html" class="sidebar-nav-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              Centre d'aide
+            </a>
+          </nav>
+          <button class="sidebar-logout" id="sidebarLogoutBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Déconnexion
+          </button>
+        </div>
+      </aside>
+
+      <!-- ─── MAIN PANELS ─── -->
+      <main class="profile-main" id="mainSection" style="display:none">
+
+        <!-- ══ PROFIL ══ -->
+        <section class="profile-section active" id="tab-profile">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Informations sur le compte
+          </h2>
+
+          <!-- Avatar -->
+          <div class="avatar-upload-area">
+            <div class="avatar-preview" id="avatarPreview">?</div>
+            <div class="avatar-upload-info">
+              <h4>Photo de profil</h4>
+              <p>JPG, PNG ou GIF · Max 2 MB</p>
+              <button class="btn-upload" onclick="document.getElementById('avatarInput').click()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                Changer la photo
+              </button>
+              <input type="file" id="avatarInput" accept="image/*">
+            </div>
+          </div>
+
+          <!-- Form -->
+          <form id="profileForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input type="text" class="form-input" id="fieldPrenom" placeholder="Votre prénom">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-input" id="fieldNom" placeholder="Votre nom">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Pseudo</label>
+                <input type="text" class="form-input" id="fieldPseudo" placeholder="Votre pseudo">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ID Utilisateur Asta (Permanent)</label>
+                <input type="text" class="form-input" id="fieldUserCode" disabled style="font-weight:800;color:#059669;letter-spacing:1px;background:#f8fafc;">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Adresse e-mail <span class="req">*</span></label>
+                <input type="email" class="form-input" id="fieldEmail" disabled>
+                <span class="form-hint">L'e-mail ne peut pas être modifié ici.</span>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Nouveau mot de passe</label>
+                <input type="password" class="form-input" id="fieldPassword" autocomplete="new-password"
+                  placeholder="Laisser vide pour ne pas changer">
+              </div>
+              <div class="form-group full" id="passwordConfirmGroup" style="display:none">
+                <label class="form-label">Confirmer le mot de passe</label>
+                <input type="password" class="form-input" id="fieldPasswordConfirm" autocomplete="new-password"
+                  placeholder="Confirmer le nouveau mot de passe">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-save" id="saveProfileBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                  <polyline points="17 21 17 13 7 13 7 21" />
+                  <polyline points="7 3 7 8 15 8" />
+                </svg>
+                Enregistrer les modifications
+              </button>
+            </div>
+            <div class="form-success" id="profileSuccess">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Profil mis à jour avec succès !
+            </div>
+            <div class="form-error" id="profileError">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              <span id="profileErrorMsg">Une erreur est survenue.</span>
+            </div>
+          </form>
+        </section>
+
+        <!-- ══ COMMANDES ══ -->
+        <section class="profile-section" id="tab-commandes">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            Historique des achats
+          </h2>
+          <div class="orders-empty" id="ordersEmpty">
+            <div class="orders-empty-icon">🛍️</div>
+            <p>Aucune commande pour l'instant.<br>Commencez à explorer notre catalogue !</p>
+            <a href="catalog.html" class="btn-login-cta" style="margin-top:20px">Voir le catalogue</a>
+          </div>
+          <div id="ordersList" style="display:none"></div>
+        </section>
+
+        <!-- ══ VIP ══ -->
+        <section class="profile-section" id="tab-vip">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            Programme de fidélité VIP
+          </h2>
+
+          <!-- VIP Hero -->
+          <div class="vip-hero" id="vipHero">
+            <div class="vip-hero-content">
+              <div class="vip-hero-top">
+                <div class="vip-current-badge" id="vipHeroBadge">⭕</div>
+                <div class="vip-current-info">
+                  <h2 id="vipHeroTitle">Membre</h2>
+                  <p id="vipHeroSub">Commencez à accumuler des points pour débloquer des avantages exclusifs</p>
+                </div>
+              </div>
+              <div class="vip-progress-wrap" id="vipProgressWrap">
+                <div class="vip-progress-label">
+                  <span id="vipProgressPts">0 pts</span>
+                  <span id="vipProgressNext">100 pts requis pour Bronze</span>
+                </div>
+                <div class="vip-progress-bar">
+                  <div class="vip-progress-fill" id="vipProgressFill" style="width:0%"></div>
+                </div>
+              </div>
+              <div class="vip-perks-grid" id="vipCurrentPerks">
+                <div class="vip-perk">
+                  <div class="vip-perk-icon">🏷️</div>
+                  <div class="vip-perk-label">Remise</div>
+                  <div class="vip-perk-value" id="vipPerkDiscount">0%</div>
+                </div>
+                <div class="vip-perk">
+                  <div class="vip-perk-icon">🪙</div>
+                  <div class="vip-perk-label">Mes points</div>
+                  <div class="vip-perk-value" id="vipPerkPts">0</div>
+                </div>
+                <div class="vip-perk">
+                  <div class="vip-perk-icon">⚡</div>
+                  <div class="vip-perk-label">Priorité</div>
+                  <div class="vip-perk-value" id="vipPerkPrio">Standard</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- All tiers -->
+          <div class="vip-tiers-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 20V10" />
+              <path d="M12 20V4" />
+              <path d="M6 20v-6" />
+            </svg>
+            Tous les niveaux
+          </div>
+          <div class="vip-tiers-grid" id="vipTiersGrid"></div>
+
+          <!-- FAQ -->
+          <div class="section-title" style="margin-top:32px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            FAQ — Programme VIP
+          </div>
+          <div class="vip-faq" id="vipFaq"></div>
+        </section>
+
+        <!-- ══ COUPONS ══ -->
+        <section class="profile-section" id="tab-coupons">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+              <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            Mes coupons
+          </h2>
+          <div class="orders-empty">
+            <div class="orders-empty-icon">🎟️</div>
+            <p>Aucun coupon disponible pour l'instant.<br>Montez en niveau VIP pour en débloquer !</p>
+          </div>
+        </section>
+
+        <!-- ══ PORTEFEUILLE ══ -->
+        <section class="profile-section" id="tab-wallet">
+          <h2 class="section-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/>
+            </svg>
+            Mon portefeuille
+          </h2>
+
+          <!-- Solde hero -->
+          <div class="wallet-hero">
+            <div>
+              <div class="wallet-hero-label">Solde disponible</div>
+              <div class="wallet-hero-amount"><span>$</span><span id="walletBalanceDisplay">0.00</span></div>
+            </div>
+          </div>
+
+          <!-- Sous-onglets -->
+          <div class="wallet-tabs">
+            <button class="wallet-tab-btn active" data-wtab="recharge">Recharge</button>
+            <button class="wallet-tab-btn" data-wtab="flux">Flux de fonds</button>
+          </div>
+
+          <!-- ── Recharge ── -->
+          <div class="wallet-tab-pane active" id="wtab-recharge">
+            <span class="wallet-field-label">Montant de la recharge</span>
+            <div class="wallet-amount-grid">
+              <div class="wallet-amount-card active" data-wamount="10">+$10</div>
+              <div class="wallet-amount-card" data-wamount="20">+$20</div>
+              <div class="wallet-amount-card" data-wamount="50">+$50</div>
+              <div class="wallet-amount-card" data-wamount="100">+$100</div>
+              <div class="wallet-amount-card" data-wamount="200">+$200</div>
+              <div class="wallet-amount-card" data-wamount="500">+$500</div>
+            </div>
+
+            <span class="wallet-field-label">Ou saisissez un montant personnalisé</span>
+            <div class="wallet-custom-input">
+              <span class="wallet-custom-prefix">$</span>
+              <input type="number" id="walletCustomAmt" placeholder="Ex: 35" min="5" step="1">
+            </div>
+
+            <span class="wallet-field-label">Méthode de recharge</span>
+            <div class="wallet-pay-grid">
+              <div class="wallet-pay-card active" data-wpay="moncash">
+                <img src="img/carte.webp" alt="Moncash" style="filter:hue-rotate(90deg)">
+                <label>Moncash</label>
+              </div>
+              <div class="wallet-pay-card" data-wpay="natcash">
+                <img src="img/carte.webp" alt="Natcash" style="filter:hue-rotate(180deg)">
+                <label>Natcash</label>
+              </div>
+              <div class="wallet-pay-card" data-wpay="card">
+                <img src="img/carte.webp" alt="Carte Bancaire">
+                <label>Carte Bancaire</label>
+              </div>
+              <div class="wallet-pay-card" data-wpay="crypto">
+                <span style="font-size:1.6rem;display:block;margin-bottom:6px;">₿</span>
+                <label>Crypto</label>
+              </div>
+            </div>
+
+            <div class="wallet-fee-note" id="walletFeeNote">
+              Les frais de traitement varient selon le moyen de paiement choisi. Le solde crédité ne peut être utilisé que pour les achats sur Asta-Shops.
+            </div>
+
+            <button class="btn-wallet-confirm" id="walletConfirmBtn">Recharger mon portefeuille</button>
+
+            <div id="walletMsg" style="display:none;margin-top:14px;padding:12px 16px;border-radius:10px;font-size:.88rem;font-weight:600;"></div>
+          </div>
+
+          <!-- ── Flux de fonds ── -->
+          <div class="wallet-tab-pane" id="wtab-flux">
+            <div id="walletFluxList">
+              <div class="wallet-flux-empty">
+                <div class="wallet-flux-empty-icon">📋</div>
+                <p>Aucune transaction pour l'instant.<br>Rechargez votre portefeuille pour commencer.</p>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ FOOTER MINI ══════════════════════ -->
+  <footer style="background:#1a1a1a;color:#aaa;text-align:center;padding:20px;font-size:.82rem;margin-top:40px;">
+    © 2026 Asta-Shops · Tous droits réservés
+    <span style="margin:0 8px">·</span>
+    <a href="#" style="color:#00b67a;text-decoration:none">Confidentialité</a>
+    <span style="margin:0 8px">·</span>
+    <a href="contact.html" style="color:#00b67a;text-decoration:none">Support</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (async () => {
+      // ── Définitions des rôles ────────────────────────────────────────────────
+      const USER_ROLES = {
+        client: { label: 'Membre', icon: '👤', color: '#6b7280', bg: 'rgba(107,114,128,.25)' },
+        partenaire: { label: 'Partenaire', icon: '🤝', color: '#0ea5e9', bg: 'rgba(14,165,233,.25)' },
+        alliance: { label: 'Partenaire Alliance', icon: '🔗', color: '#3b82f6', bg: 'rgba(59,130,246,.25)' },
+        recruteur: { label: 'Recruteur', icon: '🎯', color: '#a855f7', bg: 'rgba(168,85,247,.25)' },
+        influenceur: { label: 'Influenceur', icon: '🌟', color: '#ec4899', bg: 'rgba(236,72,153,.25)' },
+        vendeur: { label: 'Vendeur', icon: '🛒', color: '#f97316', bg: 'rgba(249,115,22,.25)' },
+        helper: { label: 'Staff', icon: '🛡️', color: '#14b8a6', bg: 'rgba(20,184,166,.25)' },
+        employe: { label: 'Asta Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+        administrateur: { label: 'Asta Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+        manager: { label: 'Asta Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+        directeur: { label: 'Directeur', icon: '👑', color: '#ef4444', bg: 'rgba(239,68,68,.25)' },
+        vip: { label: 'VIP', icon: '💎', color: '#d4a017', bg: 'rgba(212,160,23,.25)' },
+      };
+
+      function getRoleBadgeHTML(role) {
+        const r = USER_ROLES[role] || USER_ROLES['client'];
+        return `<span class="role-badge" style="background:${r.bg};border-color:${r.color}55;color:${r.color};">
+          <span class="role-icon">${r.icon}</span>${r.label}
+        </span>`;
+      }
+
+      // ── VIP data ─────────────────────────────────────────────────────────────
+      const VIP_BENEFITS = {
+        membre: ['Accès au catalogue complet', 'Support standard', 'Livraison dans les 24h'],
+        bronze: ['2% de remise sur toutes les commandes', 'Support prioritaire', 'Livraison dans les 12h', 'Badge Bronze exclusif'],
+        argent: ['5% de remise permanente', 'Support prioritaire renforcé', 'Livraison dans les 6h', 'Accès aux ventes flash'],
+        or: ['8% de remise + bonus sur gros achats', 'Gestionnaire dédié', 'Livraison express <3h', 'Produits en avant-première'],
+        platine: ['12% de remise garantie', 'Ligne directe support 24/7', 'Livraison ultra-express', 'Exclusivités Platine', 'Cadeau anniversaire'],
+        diamant: ['18% de remise maximale', 'Conseiller personnel VIP', 'Livraison instantanée', 'Produits exclusifs Diamant', 'Invitations événements privés'],
+        elite: ['25% de remise · Le meilleur tarif', 'Support Elite dédié 24/7', 'Livraison prioritaire absolue', 'Accès bêta aux nouveautés', 'Cadeaux mensuels exclusifs', 'Statut partenaire possible']
+      };
+      const PRIORITY_MAP = { membre: 'Standard', bronze: 'Élevée', argent: 'Haute', or: 'Très haute', platine: 'Premium', diamant: 'VIP', elite: 'Elite 24/7' };
+
+      const VIP_FAQ = [
+        { q: 'Quels sont les niveaux VIP Asta-Shops ?', a: 'Il existe 7 niveaux : Membre (0 pts), Bronze (100 pts), Argent (500 pts), Or (1 500 pts), Platine (5 000 pts), Diamant (15 000 pts) et Élite (50 000 pts). Chaque niveau débloque des avantages supplémentaires.' },
+        { q: 'Comment gagner des points ?', a: 'Vous gagnez 10 points par euro dépensé sur Asta-Shops. Les points sont crédités automatiquement après chaque commande livrée.' },
+        { q: 'Les remises VIP se cumulent-elles avec les promotions ?', a: 'Oui, votre remise VIP s\'applique en plus des promotions en cours sur le catalogue, pour un avantage maximum.' },
+        { q: 'Peut-on rétrograder de niveau ?', a: 'Non, une fois un niveau atteint, vous le conservez à vie sur Asta-Shops. Vos avantages acquis restent permanents.' },
+        { q: 'Comment passer au niveau supérieur rapidement ?', a: 'Chaque achat vous rapporte des points. Invitez des amis via le programme de parrainage pour gagner des points bonus et progresser plus vite.' }
+      ];
+
+      // ── DOM helpers ────────────────────────────────────────────────────────────
+      const $ = (id) => document.getElementById(id);
+      const show = (el, display = 'block') => { if (el) el.style.display = display; };
+      const hide = (el) => { if (el) el.style.display = 'none'; };
+
+      // ── Tabs ──────────────────────────────────────────────────────────────────
+      function switchTab(tab) {
+        document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
+        const section = $(`tab-${tab}`);
+        if (section) section.classList.add('active');
+        document.querySelectorAll(`.sidebar-nav-item[data-tab="${tab}"]`).forEach(b => b.classList.add('active'));
+        history.replaceState(null, '', `#${tab}`);
+      }
+      window.switchTab = switchTab;
+
+      document.querySelectorAll('.sidebar-nav-item[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      // Handle hash on load
+      const hash = location.hash.replace('#', '');
+      if (['profile', 'commandes', 'vip', 'coupons', 'wallet'].includes(hash)) switchTab(hash);
+
+      // ── Wallet sub-tabs ───────────────────────────────────────────────────────
+      document.querySelectorAll('.wallet-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.wallet-tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.wallet-tab-pane').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          const pane = document.getElementById('wtab-' + btn.dataset.wtab);
+          if (pane) pane.classList.add('active');
+        });
+      });
+
+      // ── Render VIP tiers grid ─────────────────────────────────────────────────
+      function renderVipTiers(currentPts) {
+        const grid = $('vipTiersGrid');
+        if (!grid) return;
+        const currentLevel = window.getVipLevel(currentPts);
+
+        grid.innerHTML = window.VIP_LEVELS.map(lvl => {
+          const locked = currentPts < lvl.pts && lvl.id !== 'membre';
+          const isCurrent = lvl.id === currentLevel.id;
+          const benefits = VIP_BENEFITS[lvl.id] || [];
+          return `
+          <div class="vip-tier-card ${isCurrent ? 'current-tier' : ''} ${locked ? 'tier-locked' : ''}"
+               style="--tier-color:${lvl.color};">
+            <span style="position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;background:${lvl.color};"></span>
+            ${isCurrent ? '<span class="tier-current-label">✦ Votre niveau</span>' : ''}
+            <div class="tier-card-top" style="margin-top:6px">
+              <div class="tier-icon-wrap">${lvl.icon}</div>
+              <span class="tier-badge-pill" style="color:${lvl.color};border-color:${lvl.color}22;">${lvl.badge || lvl.label}</span>
+            </div>
+            <div class="tier-name">${lvl.label}</div>
+            <div class="tier-pts">${lvl.pts === 0 ? 'Niveau de départ' : `À partir de ${lvl.pts.toLocaleString()} pts`}</div>
+            <ul class="tier-benefits">
+              ${benefits.map(b => `<li>${b}</li>`).join('')}
+              ${lvl.discount > 0 ? `<li style="color:#00b67a;font-weight:600">-${lvl.discount}% sur toutes les commandes</li>` : ''}
+            </ul>
+          </div>`;
+        }).join('');
+      }
+
+      // ── Render VIP hero ───────────────────────────────────────────────────────
+      function renderVipHero(pts) {
+        const lvl = window.getVipLevel(pts);
+        const next = window.getNextVipLevel(pts);
+        const hero = $('vipHero');
+        if (hero) hero.style.background = lvl.grad;
+
+        if ($('vipHeroBadge')) $('vipHeroBadge').textContent = lvl.icon;
+        if ($('vipHeroTitle')) $('vipHeroTitle').textContent = `Niveau ${lvl.label}`;
+        if ($('vipHeroSub')) $('vipHeroSub').textContent = next
+          ? `Plus que ${(next.pts - pts).toLocaleString()} points pour atteindre ${next.label} !`
+          : 'Vous avez atteint le niveau maximum — vous êtes Élite ! 👑';
+
+        if (next) {
+          const pct = Math.min(100, Math.round(((pts - lvl.pts) / (next.pts - lvl.pts)) * 100));
+          if ($('vipProgressPts')) $('vipProgressPts').textContent = `${pts.toLocaleString()} pts`;
+          if ($('vipProgressNext')) $('vipProgressNext').textContent = `${next.pts.toLocaleString()} pts requis pour ${next.label}`;
+          if ($('vipProgressFill')) $('vipProgressFill').style.width = `${pct}%`;
+        } else {
+          if ($('vipProgressNext')) $('vipProgressNext').textContent = '🎉 Niveau maximum atteint !';
+          if ($('vipProgressFill')) $('vipProgressFill').style.width = '100%';
+        }
+
+        if ($('vipPerkDiscount')) $('vipPerkDiscount').textContent = `${lvl.discount}%`;
+        if ($('vipPerkPts')) $('vipPerkPts').textContent = pts.toLocaleString();
+        if ($('vipPerkPrio')) $('vipPerkPrio').textContent = PRIORITY_MAP[lvl.id] || 'Standard';
+      }
+
+      // ── Render FAQ ────────────────────────────────────────────────────────────
+      function renderFaq() {
+        const faq = $('vipFaq');
+        if (!faq) return;
+        faq.innerHTML = VIP_FAQ.map((item, i) => `
+        <div class="faq-item" id="faq-${i}">
+          <div class="faq-question" onclick="toggleFaq(${i})">
+            ${item.q}
+            <svg class="faq-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+          <div class="faq-answer">${item.a}</div>
+        </div>`).join('');
+      }
+      window.toggleFaq = (i) => {
+        const item = document.getElementById(`faq-${i}`);
+        if (item) item.classList.toggle('open');
+      };
+
+      // ── Wallet — état local ────────────────────────────────────────────────────
+      let _walletBalance = 0;
+      let _walletTransactions = [];
+
+      function updateWalletDisplays(bal) {
+        if (bal !== undefined) _walletBalance = bal;
+        const v = parseFloat(_walletBalance || 0).toFixed(2);
+        if ($('walletBalanceDisplay')) $('walletBalanceDisplay').textContent = v;
+        if ($('sidebarWalletBal')) $('sidebarWalletBal').textContent = '$' + v;
+        try { localStorage.setItem('asta_wallet_balance', v); } catch(_) {}
+      }
+
+      function renderWalletFlux(txs) {
+        if (txs !== undefined) _walletTransactions = txs;
+        const list = $('walletFluxList');
+        if (!list) return;
+        if (!_walletTransactions.length) {
+          list.innerHTML = `<div class="wallet-flux-empty"><div class="wallet-flux-empty-icon">📋</div><p>Aucune transaction pour l'instant.<br>Rechargez votre portefeuille pour commencer.</p></div>`;
+          return;
+        }
+        const statutLabel = { en_attente: '⏳ En attente', valide: '✅ Validé', annule: '❌ Annulé' };
+        const methodLabel = { moncash: 'Moncash', natcash: 'Natcash', card: 'Carte bancaire', crypto: 'Crypto' };
+        list.innerHTML = _walletTransactions.map(t => {
+          const date = new Date(t.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          const isCredit = t.type === 'credit';
+          const amtColor = isCredit ? '#10b981' : '#ef4444';
+          const statutBadge = t.statut === 'en_attente'
+            ? `<span style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;padding:2px 8px;border-radius:12px;font-size:11px;margin-left:8px;">⏳ En attente</span>`
+            : t.statut === 'annule'
+            ? `<span style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;padding:2px 8px;border-radius:12px;font-size:11px;margin-left:8px;">❌ Annulé</span>`
+            : '';
+          return `<div class="wallet-flux-item">
+            <div class="wallet-flux-icon ${t.type}">${isCredit ? '⬆️' : '⬇️'}</div>
+            <div class="wallet-flux-info">
+              <div class="wallet-flux-label">${t.note || (isCredit ? 'Recharge' : 'Débit')} via ${methodLabel[t.methode] || t.methode || '—'}${statutBadge}</div>
+              <div class="wallet-flux-date">${date}</div>
+            </div>
+            <div class="wallet-flux-amount" style="color:${amtColor};font-weight:700;">${isCredit ? '+' : '-'}$${parseFloat(t.montant).toFixed(2)}</div>
+          </div>`;
+        }).join('');
+      }
+
+      async function loadWalletData(token) {
+        try {
+          const res = await fetch('/api/wallet/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          updateWalletDisplays(data.balance);
+          renderWalletFlux(data.transactions);
+        } catch (_) {}
+      }
+
+      // ── Fill sidebar ──────────────────────────────────────────────────────────
+      function fillSidebar(profile, user) {
+        const nom = profile?.prenom || profile?.nom || user?.email?.split('@')[0] || '?';
+        const pts = profile?.points || 0;
+        const lvl = window.getVipLevel(pts);
+        const init = nom.charAt(0).toUpperCase();
+
+        const avatarEl = $('sidebarAvatar');
+        if (avatarEl) {
+          avatarEl.innerHTML = profile?.avatar_url
+            ? `<img src="${profile.avatar_url}" alt="avatar">`
+            : init;
+        }
+        if ($('sidebarVipRing')) { $('sidebarVipRing').textContent = lvl.badge || lvl.label.charAt(0); $('sidebarVipRing').style.background = lvl.color; }
+        if ($('sidebarName')) $('sidebarName').textContent = `${profile?.prenom || ''} ${profile?.nom || ''}`.trim() || nom;
+        const uCode = window.getAstaUserCode ? window.getAstaUserCode(user) : 'AS8F3K';
+        if ($('sidebarEmail')) $('sidebarEmail').innerHTML = (user?.email || '—') + `<div style="font-size:11.5px;font-weight:800;color:#00b67a;margin-top:3px;">ID: ${uCode}</div>`;
+        if ($('sidebarVipPill')) { $('sidebarVipPill').textContent = `${lvl.icon} ${lvl.label}`; $('sidebarVipPill').style.background = lvl.color; }
+        if ($('sidebarPts')) $('sidebarPts').textContent = `${pts.toLocaleString()} points`;
+        if ($('sidebarPtsWallet')) $('sidebarPtsWallet').textContent = pts.toLocaleString();
+        if ($('sidebarVipBadge')) $('sidebarVipBadge').textContent = lvl.label;
+
+        // Wallet balance affiché après chargement API (loadWalletData)
+
+        // Role badge(s)
+        const rolesEl = $('sidebarRoles');
+        if (rolesEl) {
+          const role = profile?.role || 'client';
+          rolesEl.innerHTML = getRoleBadgeHTML(role);
+        }
+
+        // Lien Dashboard pour le staff
+        const isStaff = ['helper', 'employe', 'administrateur', 'manager', 'directeur'].includes(profile?.role);
+        const dashNav = $('sidebarDashLink');
+        if (dashNav) dashNav.style.display = isStaff ? 'flex' : 'none';
+
+        // Profile form
+        if ($('fieldPrenom')) $('fieldPrenom').value = profile?.prenom || '';
+        if ($('fieldNom')) $('fieldNom').value = profile?.nom || '';
+        if ($('fieldEmail')) $('fieldEmail').value = user?.email || '';
+        if ($('fieldUserCode')) $('fieldUserCode').value = uCode;
+
+        // Avatar preview
+        const prev = $('avatarPreview');
+        if (prev) {
+          prev.innerHTML = profile?.avatar_url
+            ? `<img src="${profile.avatar_url}" alt="avatar">`
+            : init;
+        }
+      }
+
+      // ── Orders ────────────────────────────────────────────────────────────────
+      async function loadOrders(session) {
+        const listEl = $('ordersList');
+        const emptyEl = $('ordersEmpty');
+        if (!listEl || !emptyEl) return;
+        try {
+          const token = session?.access_token;
+          const res = await fetch('/api/orders/me', {
+            headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+          });
+          if (!res.ok) return;
+          let _ordersBody;
+          try {
+            const _ordersText = await res.text();
+            _ordersBody = _ordersText ? JSON.parse(_ordersText) : {};
+          } catch (_) { return; }
+          const { orders } = _ordersBody;
+          if (!orders || orders.length === 0) {
+            emptyEl.style.display = '';
+            listEl.style.display = 'none';
+            return;
+          }
+          emptyEl.style.display = 'none';
+          listEl.style.display = '';
+          const statusLabel = { en_attente: '⏳ En attente', en_cours: '🔄 En cours', livree: '✅ Livrée', annulee: '❌ Annulée', risque_eleve: '⚠️ En vérification' };
+          const statusColor = { en_attente: '#f59e0b', en_cours: '#3b82f6', livree: '#10b981', annulee: '#ef4444', risque_eleve: '#f97316' };
+          listEl.innerHTML = orders.map(o => {
+            const date = new Date(o.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+            const color = statusColor[o.statut] || '#6b7280';
+            const label = statusLabel[o.statut] || o.statut;
+            return `<div style="background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
+              <div style="flex:1;min-width:160px;">
+                <div style="font-weight:700;color:#fff;font-size:15px;">${o.produit_nom || '—'}</div>
+                <div style="color:#aaa;font-size:13px;margin-top:2px;">${o.denom_label || ''}</div>
+              </div>
+              <div style="text-align:right;min-width:100px;">
+                <div style="font-weight:700;color:#00b67a;font-size:15px;">${o.eur ? o.eur.toFixed(2) + ' €' : '—'}</div>
+                <div style="color:#888;font-size:12px;">${o.methode_paiement || ''}</div>
+              </div>
+              <div style="text-align:right;min-width:110px;">
+                <span style="background:${color}22;color:${color};border:1px solid ${color}55;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">${label}</span>
+                <div style="color:#666;font-size:12px;margin-top:4px;">${date}</div>
+              </div>
+              <div style="color:#555;font-size:11px;width:100%;padding-top:6px;border-top:1px solid #2a2a4a;">Réf: <strong style="color:#888;">${o.id}</strong></div>
+            </div>`;
+          }).join('');
+        } catch (e) { }
+      }
+
+      // ── Main init ─────────────────────────────────────────────────────────────
+      renderFaq();
+
+      // Retry session up to 3 times to handle post-login redirect timing
+      let session = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        session = await window.AstaAuth.getSession();
+        if (session) break;
+        if (attempt < 2) await new Promise(r => setTimeout(r, 600));
+      }
+
+      if (!session) {
+        show($('notLoggedIn'));
+        hide($('sidebarSection'));
+        hide($('mainSection'));
+        return;
+      }
+
+      const profile = await window.AstaAuth.getProfile();
+      const pts = profile?.points || 0;
+
+      hide($('notLoggedIn'));
+      show($('sidebarSection'), 'flex');
+      show($('mainSection'));
+
+      fillSidebar(profile, session.user);
+      renderVipHero(pts);
+      renderVipTiers(pts);
+      loadOrders(session);
+
+      // ── Wallet init ───────────────────────────────────────────────────────────
+      updateWalletDisplays(0);
+      renderWalletFlux([]);
+      loadWalletData(session.access_token);
+
+      let wSelectedAmount = 10;
+      let wSelectedPay = 'moncash';
+
+      // Amount cards
+      document.querySelectorAll('.wallet-amount-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.wallet-amount-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          wSelectedAmount = parseFloat(card.dataset.wamount);
+          if ($('walletCustomAmt')) $('walletCustomAmt').value = '';
+        });
+      });
+
+      // Custom amount input clears card selection
+      $('walletCustomAmt')?.addEventListener('input', () => {
+        const val = parseFloat($('walletCustomAmt').value);
+        if (val > 0) {
+          document.querySelectorAll('.wallet-amount-card').forEach(c => c.classList.remove('active'));
+          wSelectedAmount = val;
+        } else {
+          wSelectedAmount = 10;
+          document.querySelectorAll('.wallet-amount-card[data-wamount="10"]').forEach(c => c.classList.add('active'));
+        }
+      });
+
+      // Payment cards
+      document.querySelectorAll('.wallet-pay-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.wallet-pay-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          wSelectedPay = card.dataset.wpay;
+        });
+      });
+
+      // Confirm recharge — appel API réel
+      $('walletConfirmBtn')?.addEventListener('click', async () => {
+        const msg = $('walletMsg');
+        const btn = $('walletConfirmBtn');
+        if (!wSelectedAmount || wSelectedAmount < 1) {
+          if (msg) { msg.style.display = 'block'; msg.style.background = '#fef2f2'; msg.style.color = '#dc2626'; msg.style.border = '1px solid #fecaca'; msg.textContent = 'Veuillez sélectionner un montant valide (min $1).'; }
+          return;
+        }
+        btn.disabled = true; btn.textContent = 'Traitement en cours...';
+        if (msg) msg.style.display = 'none';
+        try {
+          const res = await fetch('/api/wallet/recharge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+            body: JSON.stringify({ montant: wSelectedAmount, methode: wSelectedPay })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            if (msg) { msg.style.display = 'block'; msg.style.background = '#fef2f2'; msg.style.color = '#dc2626'; msg.style.border = '1px solid #fecaca'; msg.textContent = data.error || 'Erreur lors de la demande.'; }
+          } else {
+            // Recharger les données depuis le serveur
+            await loadWalletData(session.access_token);
+            if (msg) {
+              msg.style.display = 'block'; msg.style.background = '#f0fdf9'; msg.style.color = '#059669'; msg.style.border = '1px solid #c8f0e0';
+              msg.textContent = `✓ Demande de recharge de $${wSelectedAmount.toFixed(2)} soumise ! Elle sera créditée après vérification de votre paiement ${wSelectedPay === 'moncash' ? 'Moncash' : wSelectedPay === 'natcash' ? 'Natcash' : ''}.`;
+            }
+            setTimeout(() => { if (msg) msg.style.display = 'none'; }, 6000);
+          }
+        } catch (e) {
+          if (msg) { msg.style.display = 'block'; msg.style.background = '#fef2f2'; msg.style.color = '#dc2626'; msg.style.border = '1px solid #fecaca'; msg.textContent = 'Erreur réseau, réessayez.'; }
+        } finally {
+          btn.disabled = false; btn.textContent = 'Recharger mon portefeuille';
+        }
+      });
+
+      // ── Avatar upload ─────────────────────────────────────────────────────────
+      $('avatarInput')?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { alert('Image trop grande (max 2 MB)'); return; }
+        try {
+          const url = await window.AstaAuth.uploadAvatar(file);
+          const prev = $('avatarPreview');
+          if (prev) prev.innerHTML = `<img src="${url}" alt="avatar">`;
+          const sAv = $('sidebarAvatar');
+          if (sAv) sAv.innerHTML = `<img src="${url}" alt="avatar">`;
+        } catch (err) { alert('Erreur upload : ' + err.message); }
+      });
+
+      // ── Show/hide confirm password ────────────────────────────────────────────
+      $('fieldPassword')?.addEventListener('input', () => {
+        const group = $('passwordConfirmGroup');
+        if (group) group.style.display = $('fieldPassword').value ? 'flex' : 'none';
+      });
+
+      // ── Profile save ──────────────────────────────────────────────────────────
+      $('profileForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = $('saveProfileBtn');
+        const successEl = $('profileSuccess');
+        const errorEl = $('profileError');
+        const errorMsg = $('profileErrorMsg');
+        if (successEl) successEl.classList.remove('show');
+        if (errorEl) errorEl.classList.remove('show');
+        if (btn) { btn.disabled = true; btn.textContent = 'Enregistrement...'; }
+
+        try {
+          const updates = {
+            prenom: $('fieldPrenom')?.value?.trim() || null,
+            nom: $('fieldNom')?.value?.trim() || null,
+            birthday: $('fieldBirthday')?.value || null
+          };
+          await window.AstaAuth.updateProfile(updates);
+
+          const newPwd = $('fieldPassword')?.value;
+          if (newPwd) {
+            const confirm = $('fieldPasswordConfirm')?.value;
+            if (newPwd !== confirm) throw new Error('Les mots de passe ne correspondent pas.');
+            if (newPwd.length < 6) throw new Error('Le mot de passe doit faire au moins 6 caractères.');
+            await window.AstaAuth.updatePassword(newPwd);
+            if ($('fieldPassword')) $('fieldPassword').value = '';
+            if ($('fieldPasswordConfirm')) $('fieldPasswordConfirm').value = '';
+            if ($('passwordConfirmGroup')) $('passwordConfirmGroup').style.display = 'none';
+          }
+
+          if (successEl) successEl.classList.add('show');
+          // Refresh sidebar
+          const refreshed = await window.AstaAuth.getProfile();
+          fillSidebar(refreshed, session.user);
+        } catch (err) {
+          if (errorEl) errorEl.classList.add('show');
+          if (errorMsg) errorMsg.textContent = err.message;
+        } finally {
+          if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Enregistrer les modifications`; }
+        }
+      });
+
+      // ── Logout ────────────────────────────────────────────────────────────────
+      $('sidebarLogoutBtn')?.addEventListener('click', () => window.AstaAuth.logout());
+
+    })();
+  </script>
+  <script src="js/currency.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const globalSearch = document.getElementById('globalSearchInput');
+      if (globalSearch) {
+        globalSearch.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && globalSearch.value.trim()) {
+            window.location.href = `catalog.html?search=${encodeURIComponent(globalSearch.value.trim())}`;
+          }
+        });
+      }
+    });
+  </script>
+  <script src="js/maintenance-check.js"></script>
+</body>
+
+</html>

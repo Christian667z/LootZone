@@ -1,0 +1,30 @@
+{
+    "name": "asta-shops",
+    "version": "2.0.0",
+    "description": "Asta-Shops — Plateforme e-commerce de produits numériques",
+    "main": "data/server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node data/server.js",
+        "dev": "node data/server.js"
+    },
+    "keywords": [
+        "asta-shops",
+        "ecommerce",
+        "digital-products"
+    ],
+    "author": "Asta-Shops",
+    "license": "ISC",
+    "dependencies": {
+        "@supabase/supabase-js": "^2.108.2",
+        "cors": "^2.8.6",
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
+        "express-rate-limit": "^8.5.2",
+        "helmet": "^8.2.0",
+        "jspdf": "^4.2.1",
+        "qrcode": "^1.5.4",
+        "uuid": "^14.0.0",
+        "ws": "^8.21.0"
+    }
+}

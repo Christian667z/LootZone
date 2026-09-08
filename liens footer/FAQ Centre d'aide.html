@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ & Centre d'Aide — Asta-Shops</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../main.css?v=2.0">
+    <style>
+        .help-hero {
+            background: linear-gradient(135deg, #0b0c0f, #111827);
+            padding: 70px 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .help-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+
+        .help-hero p {
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 560px;
+            margin: 0 auto 32px;
+            line-height: 1.7;
+        }
+
+        .search-help {
+            display: flex;
+            max-width: 520px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .search-help input {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 14px 24px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-help input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .search-help button {
+            background: #00b67a;
+            border: none;
+            color: #fff;
+            padding: 14px 28px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .help-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .help-cats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .help-cat {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .help-cat:hover {
+            border-color: #00b67a;
+            box-shadow: 0 8px 24px rgba(0, 182, 122, 0.1);
+        }
+
+        .help-cat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .help-cat h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0b0c0f;
+        }
+
+        .faq-section {
+            margin-bottom: 40px;
+        }
+
+        .faq-section h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0b0c0f;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .faq-q {
+            padding: 18px 22px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #1f2937;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            transition: background 0.2s;
+        }
+
+        .faq-q:hover {
+            background: #f8f9fb;
+        }
+
+        .faq-a {
+            padding: 0 22px 18px;
+            font-size: 0.88rem;
+            color: #6b7280;
+            line-height: 1.7;
+            display: none;
+        }
+
+        .faq-item.open .faq-a {
+            display: block;
+        }
+
+        .faq-item.open .faq-q {
+            color: #00b67a;
+            background: #f0fdf9;
+        }
+
+        .faq-arrow {
+            transition: transform 0.2s;
+            font-size: 1rem;
+        }
+
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .contact-cta {
+            background: #0b0c0f;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .contact-cta h2 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .contact-cta p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        .contact-btns {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: #25D366;
+            color: #fff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+
+        .btn-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar" style="position:sticky;top:0;z-index:1000;">
+        <a href="../index.html" class="logo" style="text-decoration:none;color:inherit;">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+        <div class="nav-actions">
+            <a href="../index.html" style="text-decoration:none;color:#00b67a;font-weight:700;">← Retour à l'accueil</a>
+        </div>
+    </header>
+
+    <div class="help-hero">
+        <h1>Centre d'Aide</h1>
+        <p>Trouvez rapidement les réponses à vos questions. Notre équipe est disponible 24h/24 pour vous accompagner.
+        </p>
+        <div class="search-help">
+            <input type="text" placeholder="Rechercher dans le centre d'aide...">
+            <button>Rechercher</button>
+        </div>
+    </div>
+
+    <div class="help-content">
+        <div class="help-cats">
+            <a href="#commandes" class="help-cat">
+                <div class="help-cat-icon">🛒</div>
+                <h3>Commandes & Achats</h3>
+            </a>
+            <a href="#paiement" class="help-cat">
+                <div class="help-cat-icon">💳</div>
+                <h3>Paiement</h3>
+            </a>
+            <a href="#livraison" class="help-cat">
+                <div class="help-cat-icon">⚡</div>
+                <h3>Livraison</h3>
+            </a>
+            <a href="#compte" class="help-cat">
+                <div class="help-cat-icon">👤</div>
+                <h3>Mon Compte</h3>
+            </a>
+            <a href="#remboursement" class="help-cat">
+                <div class="help-cat-icon">🔄</div>
+                <h3>Remboursement</h3>
+            </a>
+            <a href="#securite" class="help-cat">
+                <div class="help-cat-icon">🔒</div>
+                <h3>Sécurité</h3>
+            </a>
+        </div>
+
+        <div class="faq-section" id="commandes">
+            <h2>🛒 Commandes & Achats</h2>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Comment passer une commande sur Asta-Shops ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Pour passer une commande, sélectionnez le produit souhaité dans notre catalogue,
+                    choisissez la dénomination (montant), entrez votre identifiant de jeu (UID/ID), sélectionnez votre
+                    méthode de paiement et confirmez. La livraison est instantanée après validation du paiement.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Comment trouver mon UID/ID de jeu ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">L'UID (User ID) se trouve généralement dans les paramètres de votre jeu ou sur votre
+                    profil en jeu. Pour Free Fire : Profil → votre ID s'affiche → Vous copier → le coller à l'endroit où on vous demande de mettre votre id. 
+                    Pour PUBG Mobile : Profil → votre ID s'affiche
+                    sous votre pseudo. Pour Roblox : votre URL de profil contient votre ID.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Puis-je annuler une commande après paiement ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Les commandes de produits numériques (crédits jeux, cartes cadeaux) ne peuvent
+                    généralement pas être annulées après livraison car le produit est déjà utilisable. Si votre commande
+                    est encore en cours de traitement, contactez immédiatement notre support via WhatsApp.
+                    D'autre moyens pour nous contacter sera disponible plus tard.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="paiement">
+            <h2>💳 Paiement</h2>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Quels moyens de paiement acceptez-vous ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Nous acceptons Moncash et Natcash en paiement principal. Les paiements par carte
+                    bancaire (Visa, Mastercard) et portefeuilles numériques sont également disponibles selon votre
+                    région. D'autres méthodes sont en cours d'intégration.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Mon paiement a été débité mais je n'ai pas reçu mon
+                    produit. Que faire ? <span class="faq-arrow">▾</span></div>
+                <div class="faq-a">Si votre paiement a été confirmé mais que vous n'avez pas reçu votre produit dans les
+                    30 minutes, contactez notre support via WhatsApp (ou un ticket directement dans le site) en fournissant votre numéro de commande et une
+                    capture d'écran de la confirmation de paiement. Nous réglons ce type de situation sous 24 heures
+                    maximum.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Les paiements sur Asta-Shops sont-ils sécurisés ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Oui, absolument. Toutes les transactions sur Asta-Shops sont sécurisées par un
+                    protocole SSL/TLS. Nous ne stockons aucune donnée bancaire sur nos serveurs. Chaque transaction est
+                    vérifiée et tracée pour garantir votre sécurité financière.</div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="livraison">
+            <h2>⚡ Livraison</h2>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Dans quel délai vais-je recevoir mon produit ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">La livraison est quasi-instantanée pour la majorité des produits (moins de 5 minutes
+                    après confirmation du paiement). Dans de rares cas (forte demande ou vérification manuelle), le
+                    délai peut être de 5 à 30 minutes. Vous serez notifié par e-mail.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Comment est livré mon produit ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Les crédits jeux sont crédités directement sur votre compte de jeu via votre UID. Les
+                    cartes cadeaux et clés sont envoyées par e-mail et également disponibles dans votre espace client
+                    sous "Historique des achats".</div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="remboursement">
+            <h2>🔄 Remboursements</h2>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Dans quels cas puis-je obtenir un remboursement ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Un remboursement peut être accordé si : le produit n'a pas été livré dans le délai
+                    annoncé, un code activé est défectueux ou invalide, ou si une erreur technique de notre côté est
+                    confirmée. Chaque demande est examinée individuellement par notre équipe.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q" onclick="toggleFaq(this)">Comment soumettre une demande de remboursement ? <span
+                        class="faq-arrow">▾</span></div>
+                <div class="faq-a">Contactez notre support via WhatsApp ou à support@asta-shops.com dans les 48 heures
+                    suivant votre achat. Fournissez votre numéro de commande, l'email utilisé et une description du
+                    problème. Notre équipe vous répondra sous 24 heures ouvrées.</div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="Mon Compte">
+            <h2>👤 Mon Compte </h2>
+            <div class="faq-item">
+                <div class="faq-q" onclick
+            </div>
+        </div>
+
+        <br>
+        <div class="contact-cta">
+            <h2>Vous n'avez pas trouvé votre réponse ?</h2>
+            <p>Notre équipe de support est disponible 24h/24, 7j/7 pour vous aider immédiatement.</p>
+            <div class="contact-btns">
+                <a href="https://wa.me/50930000000" class="btn-wa">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.987 0 2.12.659 4.094 1.792 5.727L2 22l4.411-1.306c1.551.936 3.364 1.47 5.293 1.47 5.515 0 9.986-4.471 9.986-9.987C21.99 6.471 17.52 2 12.004 2Z" />
+                    </svg>
+                    Contacter via WhatsApp
+                </a>
+                <a href="../contact.html" class="btn-email">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    Formulaire de contact
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFaq(el) {
+            const item = el.parentElement;
+            item.classList.toggle('open');
+        }
+    </script>
+
+    <footer class="main-footer">
+        <div class="footer-bottom" style="padding:20px 40px;text-align:center;border-top:1px solid #2a2d38;">
+            <span class="footer-copy">© 2025 Asta-Shops. Tous droits réservés.</span>
+        </div>
+    </footer>
+</body>
+
+</html>

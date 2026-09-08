@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asta-Shops | Vérification de facture</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: #161616;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 40px 36px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 18px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        .valid {
+            color: #22c55e;
+        }
+
+        .invalid {
+            color: #ef4444;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 13px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #888;
+        }
+
+        .info-val {
+            font-weight: 600;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: #22c55e;
+            border-radius: 11px;
+            font-weight: 900;
+            font-size: 16px;
+            color: #000;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 900;
+            vertical-align: middle;
+        }
+
+        .logo-text span {
+            color: #22c55e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="logo">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span>SHOPS</span></span>
+        </div>
+        <div id="result">
+            <div class="icon">🔍</div>
+            <div class="title">Vérification en cours...</div>
+        </div>
+    </div>
+    <script>
+        const token = window.location.pathname.split('/').pop();
+        fetch(`/api/invoices/verify/${token}`)
+            .then(r => r.text())
+            .then(text => {
+                let data = {};
+                try { data = text ? JSON.parse(text) : {}; } catch (_) {}
+                return data;
+            })
+            .then(data => {
+                const el = document.getElementById('result');
+                if (data.valide && data.invoice) {
+                    const inv = data.invoice;
+                    el.innerHTML = `
+            <div class="icon">✅</div>
+            <div class="title valid">Facture Authentique</div>
+            <div class="sub">Cette facture a été émise par Asta-Shops et est valide.</div>
+            <div style="text-align:left;margin-top:16px">
+              <div class="info-row"><span class="info-label">Numéro</span><span class="info-val">#${inv.numero}</span></div>
+              <div class="info-row"><span class="info-label">Client</span><span class="info-val">${inv.client_nom || '—'}</span></div>
+              <div class="info-row"><span class="info-label">Produit</span><span class="info-val">${inv.produit_nom || '—'}</span></div>
+              <div class="info-row"><span class="info-label">Dénomination</span><span class="info-val">${inv.denom_label || '—'}</span></div>
+              <div class="info-row"><span class="info-label">Montant</span><span class="info-val" style="color:#22c55e">${inv.eur}€ / ${inv.htg}HTG</span></div>
+              <div class="info-row"><span class="info-label">Méthode</span><span class="info-val">${inv.methode_paiement || '—'}</span></div>
+              <div class="info-row"><span class="info-label">Date</span><span class="info-val">${new Date(inv.created_at).toLocaleDateString('fr-FR')}</span></div>
+            </div>
+          `;
+                } else {
+                    el.innerHTML = `
+            <div class="icon">❌</div>
+            <div class="title invalid">Facture Invalide</div>
+            <div class="sub">Ce QR code ne correspond à aucune facture connue dans notre système. Cette facture pourrait être falsifiée.</div>
+          `;
+                }
+            })
+            .catch(() => {
+                document.getElementById('result').innerHTML = `<div class="icon">⚠️</div><div class="title" style="color:#f97316">Erreur de vérification</div><div class="sub">Impossible de contacter le serveur. Réessayez plus tard.</div>`;
+            });
+    </script>
+</body>
+
+</html>

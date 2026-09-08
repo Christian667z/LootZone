@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asta-Shops | Dashboard Admin</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-box">AS</div>
+            <div>
+                <div class="logo-text">ASTA-<span>SHOPS</span></div>
+                <div class="logo-sub">Admin</div>
+            </div>
+        </div>
+
+        <div class="staff-card">
+            <div class="staff-info">
+                <div class="staff-avatar" id="sidebarAvatar">D</div>
+                <div>
+                    <div class="staff-name" id="sidebarName">Chargement...</div>
+                    <div class="staff-role-badge" id="sidebarRoleBadge">—</div>
+                </div>
+            </div>
+            <div class="presence-selector">
+                <button class="presence-btn active-online" data-status="en_ligne" onclick="setPresence(this)">🟢 En
+                    ligne</button>
+                <button class="presence-btn" data-status="occupe" onclick="setPresence(this)">🟡 Occupé</button>
+                <button class="presence-btn" data-status="deconnecte" onclick="setPresence(this)">⚫ Absent</button>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-label">Navigation</div>
+
+                <div class="nav-item active" id="nav-tableau_de_bord" data-section="section-dashboard"
+                    onclick="switchSection(this)">
+                    <span class="nav-icon">📊</span><span>Tableau de bord</span>
+                </div>
+                <div class="nav-item" id="nav-catalogue_produits" data-section="section-catalogue"
+                    onclick="switchSection(this)">
+                    <span class="nav-icon">📦</span><span>Catalogue Produits</span>
+                </div>
+                <div class="nav-item" id="nav-gestion_commandes" data-section="section-orders"
+                    onclick="switchSection(this)">
+                    <span class="nav-icon">🛒</span><span>Gestion des Commandes</span>
+                    <span class="nav-badge" id="badgeOrders" style="display:none">0</span>
+                </div>
+                <div class="nav-item" id="nav-hub_partenariats" data-section="section-hub"
+                    onclick="switchSection(this)">
+                    <span class="nav-icon">🤝</span><span>Hub Partenariats</span>
+                    <span class="nav-badge" id="badgeDrafts" style="display:none">!</span>
+                </div>
+                <div class="nav-item" id="nav-moderation_equipe" data-section="section-staff"
+                    onclick="switchSection(this)">
+                    <span class="nav-icon">👥</span><span>Modération & Équipe</span>
+                </div>
+                <div class="nav-item" id="nav-configuration" data-section="section-config"
+                    onclick="switchSection(this)">
+                    <span class="nav-icon">⚙️</span><span>Configuration Système</span>
+                </div>
+                <div class="nav-item" id="nav-kpi" data-section="section-kpi" onclick="switchSection(this)"
+                    style="display:none">
+                    <span class="nav-icon">📈</span><span>Performance Staff</span>
+                </div>
+                <div class="nav-item" id="nav-logs" data-section="section-logs" onclick="switchSection(this)"
+                    style="display:none">
+                    <span class="nav-icon">🗂️</span><span>Historique Actions</span>
+                </div>
+                <div class="nav-item" id="nav-stock" data-section="section-stock" onclick="switchSection(this)">
+                    <span class="nav-icon">🔑</span><span>Stock Numérique</span>
+                </div>
+                <div class="nav-item" id="nav-coupons" data-section="section-coupons" onclick="switchSection(this)">
+                    <span class="nav-icon">🎟️</span><span>Codes Promo & Coupons</span>
+                </div>
+                <div class="nav-item" id="nav-wallet" data-section="section-wallet" onclick="switchSection(this)"
+                    style="display:none">
+                    <span class="nav-icon">💰</span><span>Portefeuille</span>
+                    <span class="nav-badge yellow" id="badgeWallet" style="display:none">0</span>
+                </div>
+                <div class="nav-item" id="nav-ventes" data-section="section-ventes" onclick="switchSection(this)"
+                    style="display:none">
+                    <span class="nav-icon">📊</span><span>Ventes Produits</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="../index.html" class="btn-back-site">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                <span>Retour au site</span>
+            </a>
+            <button class="btn-logout" onclick="logout()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                <span>Déconnexion</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-title" id="topbarTitle">Tableau de bord</span>
+            </div>
+            <div class="topbar-right">
+                <a href="/" target="_blank" class="btn-view-site" title="Voir le site public">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 8 16 12 12 16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                    Voir le site
+                </a>
+                <span class="demo-chip" id="demoChip">⚠️ MODE DÉMO</span>
+                <button class="notif-btn" onclick="switchSection(document.getElementById('nav-logs'))"
+                    title="Notifications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    <span class="notif-dot" id="notifDot" style="display:none"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="content" id="mainContent">
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: TABLEAU DE BORD ━━━━━━━━━━━━━━ -->
+            <div class="section active" id="section-dashboard">
+                <div class="section-header">
+                    <h2 class="section-title">Tableau de bord</h2>
+                    <p class="section-sub">Vue d'ensemble des performances Asta-Shops</p>
+                </div>
+
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🛒</div>
+                        <div class="stat-label">Commandes totales</div>
+                        <div class="stat-value" id="statTotal">—</div>
+                        <div class="stat-sub">Toutes périodes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-label">Livrées</div>
+                        <div class="stat-value green" id="statLivrees">—</div>
+                        <div class="stat-sub">Traitées avec succès</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-label">En attente</div>
+                        <div class="stat-value yellow" id="statAttente">—</div>
+                        <div class="stat-sub">À traiter</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-label">Risque élevé</div>
+                        <div class="stat-value red" id="statRisque">—</div>
+                        <div class="stat-sub">Vérification requise</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💶</div>
+                        <div class="stat-label">CA Total (USD)</div>
+                        <div class="stat-value green" id="statCA">—</div>
+                        <div class="stat-sub">Commandes livrées</div>
+                    </div>
+                </div>
+
+                <div id="riskAlert" class="risk-alert" style="display:none">
+                    <span>⚠️</span>
+                    <div><strong style="color:var(--red)"><span id="riskAlertCount">0</span> commande(s) à risque
+                            élevé</strong><br><span style="font-size:12px;color:var(--text3)">Ces commandes sont
+                            bloquées en attente de vérification manuelle.</span></div>
+                    <button class="btn btn-red btn-sm"
+                        onclick="switchSection(document.getElementById('nav-gestion_commandes')); filterOrders('risque_eleve')">Voir
+                        →</button>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <span class="table-card-title">📋 Dernières commandes</span>
+                        <button class="btn btn-outline btn-sm"
+                            onclick="switchSection(document.getElementById('nav-gestion_commandes'))">Tout voir</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Client</th>
+                                <th>Produit</th>
+                                <th>Montant</th>
+                                <th>Méthode</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrdersBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Chargement...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: CATALOGUE ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-catalogue">
+                <div class="section-header">
+                    <h2 class="section-title">Catalogue Produits</h2>
+                    <p class="section-sub">Gérez l'intégralité des produits numériques</p>
+                </div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="🔍 Rechercher un produit..." id="searchProd"
+                        oninput="renderProducts()">
+                    <select class="filter-select" id="filterCat" onchange="renderProducts()">
+                        <option value="">Toutes catégories</option>
+                        <option value="jeux">Jeux de crédit</option>
+                        <option value="payment-cards">Cartes de paiement</option>
+                        <option value="gift-cards">Cartes cadeaux</option>
+                        <option value="game-console">Consoles</option>
+                        <option value="game-cd-key">Clés de jeux</option>
+                        <option value="video-streaming">Streaming Vidéo</option>
+                        <option value="music">Musique</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="telco-prepaid">Recharges Mobile</option>
+                        <option value="tools">Tools</option>
+                        <option value="software">Software</option>
+                        <option value="social-app">Applications sociales</option>
+                    </select>
+                    <button class="btn btn-green" id="btnAddProduct" onclick="openProductModal()">+ Nouveau
+                        produit</button>
+                </div>
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Nom</th>
+                                <th>Catégorie</th>
+                                <th>Prix min</th>
+                                <th>Dénominations</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center;padding:30px;color:var(--text3)">Chargement...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: COMMANDES ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-orders">
+                <div class="section-header">
+                    <h2 class="section-title">Gestion des Commandes</h2>
+                    <p class="section-sub">Traitement des flux d'achats en temps réel</p>
+                </div>
+                <div
+                    style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+                    <div class="orders-filters" style="margin-bottom:0;">
+                        <button class="filter-pill active" onclick="filterOrders('')" id="pill-all">Toutes</button>
+                        <button class="filter-pill" onclick="filterOrders('en_attente')" id="pill-attente">⏳ En
+                            attente</button>
+                        <button class="filter-pill" onclick="filterOrders('en_cours')" id="pill-cours">🔄 En
+                            cours</button>
+                        <button class="filter-pill" onclick="filterOrders('livree')" id="pill-livree">✅ Livrées</button>
+                        <button class="filter-pill red" onclick="filterOrders('risque_eleve')" id="pill-risque">⚠️
+                            Risque élevé</button>
+                        <button class="filter-pill" onclick="filterOrders('annulee')" id="pill-annulee">❌
+                            Annulées</button>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-outline btn-sm" onclick="exportOrdersToCSV()"
+                            style="border-color:#10b981;color:#10b981;display:inline-flex;align-items:center;gap:5px;font-weight:600;">
+                            📊 Exporter CSV
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="exportOrdersToPDF()"
+                            style="background:linear-gradient(135deg,#0284c7,#0369a1);border:none;display:inline-flex;align-items:center;gap:5px;font-weight:600;">
+                            📄 Rapport PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Commande</th>
+                                <th>Client</th>
+                                <th>Produit</th>
+                                <th>ID Joueur</th>
+                                <th>Montant</th>
+                                <th>Méthode</th>
+                                <th>Statut</th>
+                                <th>Verrouillage</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersBody">
+                            <tr>
+                                <td colspan="9" style="text-align:center;padding:30px;color:var(--text3)">Chargement...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: HUB PARTENARIATS ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-hub">
+                <div class="section-header">
+                    <h2 class="section-title">Hub Partenariats</h2>
+                    <p class="section-sub">Canal de communication et validation des demandes</p>
+                </div>
+                <div id="draftAlert" class="draft-alert" style="display:none">
+                    <span>📝</span>
+                    <div><strong>Brouillons en attente de validation</strong><br><span
+                            style="font-size:12px;color:var(--text3)"><span id="draftCount">0</span> message(s)
+                            rédigé(s) par les Helpers nécessitent votre approbation.</span></div>
+                    <button class="btn btn-outline btn-sm" onclick="loadDraftMessages()">Voir brouillons</button>
+                </div>
+                <div class="hub-layout" id="hubLayout">
+                    <div class="hub-left">
+                        <div class="hub-left-header">Demandes entrantes</div>
+                        <div id="hubRequestList"></div>
+                    </div>
+                    <div class="hub-center" id="hubCenter">
+                        <div
+                            style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px">
+                            Sélectionnez une demande →</div>
+                    </div>
+                    <div class="hub-right" id="hubRight">
+                        <div class="hub-right-title">Informations</div>
+                        <div id="hubRightContent" style="color:var(--text3);font-size:13px">Sélectionnez une demande
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: STAFF ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-staff">
+                <div class="section-header"
+                    style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div>
+                        <h2 class="section-title">Modération & Équipe</h2>
+                        <p class="section-sub">Gestion des membres du staff et leurs droits d'accès</p>
+                    </div>
+                    <button class="btn btn-green" id="inviteStaffBtn" onclick="openInviteModal()"
+                        style="flex-shrink:0;display:none">+ Inviter un membre</button>
+                </div>
+                <div class="staff-grid" id="staffGrid">
+                    <div style="color:var(--text3);font-size:13px">Chargement...</div>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: CONFIG ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-config">
+                <div class="section-header">
+                    <h2 class="section-title">Configuration Système</h2>
+                    <p class="section-sub">Paramètres globaux de la plateforme</p>
+                </div>
+                <div class="config-grid">
+                    <div class="config-card">
+                        <div class="config-card-title">💱 Taux de change USD → HTG</div>
+                        <div class="config-card-sub">Modifie le taux global appliqué à tous les prix du site</div>
+                        <div class="taux-display" id="tauxDisplay">135</div>
+                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+                            <input type="number" id="tauxInput" value="135" min="1" step="0.5"
+                                style="width:100px;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:14px;font-family:'Roboto',sans-serif;outline:none">
+                            <span style="font-size:12px;color:var(--text3)">HTG par USD</span>
+                        </div>
+                        <button class="btn btn-green" onclick="updateTaux()">✓ Appliquer le nouveau taux</button>
+                        <div style="margin-top:10px;font-size:11px;color:var(--text3)">
+                            Exemple : 9.99 USD × <span id="tauxEx">135</span> = <span id="htgEx">1349</span> HTG
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <div class="config-card-title">🔧 Mode Maintenance</div>
+                        <div class="config-card-sub">Désactive temporairement l'accès public au catalogue</div>
+                        <div class="toggle-row">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggleMaintenance" onchange="updateMaintenance()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span id="maintenanceLabel" style="font-size:13px">Désactivé</span>
+                        </div>
+                        <p style="font-size:12px;color:var(--text3)">⚠️ Activer le mode maintenance bloquera tous les
+                            achats en cours.</p>
+                    </div>
+
+                    <div class="config-card" style="grid-column:1/-1">
+                        <div class="config-card-title">🌎 Devises Régionales — Taux de référence (vs USD)</div>
+                        <div class="config-card-sub">Taux d'affichage pour les clients de la région Amériques</div>
+                        <div id="currencyRatesGrid"
+                            style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px">
+                            <div class="currency-rate-item" data-code="HTG" data-default="135">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇭🇹 HTG — Gourde
+                                    Haïtienne</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.01" step="0.01"
+                                        placeholder="135"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">HTG/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="EUR" data-default="0.92">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇪🇺 EUR — Euro</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.001" step="0.001"
+                                        placeholder="0.92"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">EUR/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="MXN" data-default="17.5">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇲🇽 MXN — Peso
+                                    Mexicain</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.01" step="0.01"
+                                        placeholder="17.5"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">MXN/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="DOP" data-default="58.5">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇩🇴 DOP — Peso
+                                    Dominicain</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.01" step="0.01"
+                                        placeholder="58.5"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">DOP/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="COP" data-default="3900">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇨🇴 COP — Peso
+                                    Colombien</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="1" step="1" placeholder="3900"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">COP/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="BRL" data-default="5.0">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇧🇷 BRL — Real
+                                    Brésilien</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.01" step="0.01"
+                                        placeholder="5.0"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">BRL/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="ARS" data-default="900">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇦🇷 ARS — Peso
+                                    Argentin</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="1" step="1" placeholder="900"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">ARS/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="CLP" data-default="900">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇨🇱 CLP — Peso Chilien
+                                </div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="1" step="1" placeholder="900"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">CLP/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="PEN" data-default="3.7">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇵🇪 PEN — Sol Péruvien
+                                </div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.01" step="0.01"
+                                        placeholder="3.7"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">PEN/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="GTQ" data-default="7.8">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇬🇹 GTQ — Quetzal
+                                    Guatémaltèque</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.01" step="0.01"
+                                        placeholder="7.8"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">GTQ/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="CRC" data-default="520">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇨🇷 CRC — Colón Costa
+                                    Ricain</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="1" step="1" placeholder="520"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">CRC/$</span>
+                                </div>
+                            </div>
+                            <div class="currency-rate-item" data-code="PAB" data-default="1.0">
+                                <div style="font-size:11px;color:var(--text3);margin-bottom:4px">🇵🇦 PAB — Balboa
+                                    Panaméen</div>
+                                <div style="display:flex;gap:6px;align-items:center">
+                                    <input type="number" class="currency-rate-input" min="0.001" step="0.001"
+                                        placeholder="1.0"
+                                        style="width:80px;background:var(--dark4);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-size:13px;outline:none">
+                                    <span style="font-size:11px;color:var(--text3)">PAB/$</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                            <button class="btn btn-green" onclick="saveCurrencyRates()">✓ Sauvegarder les taux</button>
+                            <span style="font-size:11px;color:var(--text3)">Les taux sont enregistrés localement et
+                                utilisés pour l'affichage régional</span>
+                        </div>
+                    </div>
+
+                    <div class="config-card" style="grid-column:1/-1">
+                        <div class="config-card-title">📜 Schéma SQL Supabase</div>
+                        <div class="config-card-sub">Tables à créer dans votre projet Supabase pour activer le mode
+                            Production</div>
+                        <div
+                            style="background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:14px;font-family:monospace;font-size:11px;color:#86efac;overflow:auto;max-height:200px">
+                            profiles · site_config · products · commandes · logs_activite<br>
+                            partenariat_requests · partenariat_messages · messages_brouillons<br>
+                            stock_numerique · factures<br><br>
+                            → Exécutez <strong>data/schema.sql</strong> dans Supabase SQL Editor<br>
+                            → Ajoutez SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY dans les variables d'environnement
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: KPI ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-kpi">
+                <div class="section-header">
+                    <h2 class="section-title">📈 Performance Staff</h2>
+                    <p class="section-sub">KPI des membres de l'équipe — visible uniquement par le Directeur</p>
+                </div>
+                <div class="kpi-grid" id="kpiGrid">
+                    <div style="color:var(--text3)">Chargement...</div>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: LOGS ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-logs">
+                <div class="section-header">
+                    <h2 class="section-title">🗂️ Historique des Actions</h2>
+                    <p class="section-sub">Traçabilité complète — visible uniquement par Directeur et Manager</p>
+                </div>
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <span class="table-card-title">Journal d'activité</span>
+                        <input type="text" id="searchLog" placeholder="Filtrer par action..." class="search-input"
+                            style="width:220px" oninput="loadLogs()">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date & Heure</th>
+                                <th>Staff</th>
+                                <th>Rôle</th>
+                                <th>Action</th>
+                                <th>Ancienne valeur</th>
+                                <th>Nouvelle valeur</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Chargement...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━ SECTION: STOCK ━━━━━━━━━━━━━━ -->
+            <div class="section" id="section-stock">
+                <div class="section-header">
+                    <h2 class="section-title">🔑 Stock Numérique</h2>
+                    <p class="section-sub">Codes d'activation pré-chargés pour livraison automatique</p>
+                </div>
+                <div class="toolbar">
+                    <button class="btn btn-green" onclick="openStockModal()">+ Charger des codes</button>
+                </div>
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produit</th>
+                                <th>Dénomination</th>
+                                <th>Code</th>
+                                <th>Statut</th>
+                                <th>Vendu le</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Chargement...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- ━━━━━━━━━━━━━━ SECTION: CODES PROMO & COUPONS ━━━━━━━━━━━━━━ -->
+                <div class="section" id="section-coupons">
+                    <div class="section-header">
+                        <h2 class="section-title">🎟️ Codes Promo & Coupons</h2>
+                        <p class="section-sub">Gestion des réductions et offres promotionnelles pour la boutique</p>
+                    </div>
+                    <div class="stats-grid" style="margin-bottom:20px">
+                        <div class="stat-card">
+                            <div class="stat-icon">🎟️</div>
+                            <div class="stat-label">Total Coupons</div>
+                            <div class="stat-value" id="statCouponsTotal">0</div>
+                            <div class="stat-sub">Codes configurés</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-label">Coupons Actifs</div>
+                            <div class="stat-value green" id="statCouponsActive">0</div>
+                            <div class="stat-sub">En cours d'utilisation</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-label">Total Utilisations</div>
+                            <div class="stat-value" id="statCouponsUsage">0</div>
+                            <div class="stat-sub">Fois appliqués au panier</div>
+                        </div>
+                    </div>
+                    <div class="toolbar">
+                        <button class="btn btn-green" onclick="openCouponModal()">+ Créer un Code Promo</button>
+                        <button class="btn btn-outline" onclick="loadCoupons()">🔄 Rafraîchir</button>
+                    </div>
+                    <div class="table-card">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Code Promo</th>
+                                    <th>Type & Réduction</th>
+                                    <th>Achat Minimum</th>
+                                    <th>Utilisations</th>
+                                    <th>Expiration</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponsBody">
+                                <tr>
+                                    <td colspan="7" style="text-align:center;padding:30px;color:var(--text3)">Chargement
+                                        des coupons...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ━━━━━━━━━━━━━━ SECTION: VENTES PRODUITS ━━━━━━━━━━━━━━ -->
+                <div class="section" id="section-ventes">
+                    <div class="section-header">
+                        <h2 class="section-title">📊 Ventes Produits</h2>
+                        <p class="section-sub">Performances de vente par produit — toutes périodes</p>
+                    </div>
+                    <div class="toolbar" style="margin-bottom:16px">
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                            <button class="btn btn-outline ventes-period-btn active" data-period="day"
+                                onclick="filterVentes(this)">📅 Aujourd'hui</button>
+                            <button class="btn btn-outline ventes-period-btn" data-period="week"
+                                onclick="filterVentes(this)">📅 Cette semaine</button>
+                            <button class="btn btn-outline ventes-period-btn" data-period="month"
+                                onclick="filterVentes(this)">📅 Ce mois</button>
+                            <button class="btn btn-outline ventes-period-btn" data-period="year"
+                                onclick="filterVentes(this)">📅 Cette année</button>
+                            <button class="btn btn-outline ventes-period-btn" data-period="all"
+                                onclick="filterVentes(this)">Toutes</button>
+                        </div>
+                        <button class="btn btn-outline" onclick="loadProductSales()">🔄 Rafraîchir</button>
+                    </div>
+                    <div class="stats-grid" style="margin-bottom:20px">
+                        <div class="stat-card">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-label">Produits actifs</div>
+                            <div class="stat-value" id="ventesStatProduits">—</div>
+                            <div class="stat-sub">Dans le catalogue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🛒</div>
+                            <div class="stat-label">Ventes période</div>
+                            <div class="stat-value green" id="ventesStatVentes">—</div>
+                            <div class="stat-sub" id="ventesStatLabel">Sélectionner une période</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-label">CA période</div>
+                            <div class="stat-value green" id="ventesStatCA">—</div>
+                            <div class="stat-sub">Commandes livrées</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-label">Top produit</div>
+                            <div class="stat-value" id="ventesStatTop" style="font-size:14px">—</div>
+                            <div class="stat-sub">Plus vendu</div>
+                        </div>
+                    </div>
+                    <div class="table-card">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Catégorie</th>
+                                    <th>Ventes</th>
+                                    <th>CA ($)</th>
+                                    <th>% du total</th>
+                                    <th>Tendance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ventesBody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">
+                                        Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ━━━━━━━━━━━━━━ SECTION: PORTEFEUILLE ━━━━━━━━━━━━━━ -->
+                <div class="section" id="section-wallet">
+                    <div class="section-header">
+                        <h2 class="section-title">💰 Gestion des Portefeuilles</h2>
+                        <p class="section-sub">Validez les recharges en attente et créditez manuellement des soldes</p>
+                    </div>
+
+                    <!-- Crédit manuel -->
+                    <div class="table-card" style="margin-bottom:24px">
+                        <div class="table-card-header">
+                            <span class="table-card-title">➕ Crédit manuel</span>
+                        </div>
+                        <div
+                            style="padding:20px;display:grid;grid-template-columns:1fr 1fr auto auto;gap:12px;align-items:end">
+                            <div class="form-field" style="margin:0">
+                                <label>Email du client</label>
+                                <input type="email" id="manualEmail" placeholder="client@exemple.com"
+                                    style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);outline:none;font-size:14px">
+                            </div>
+                            <div class="form-field" style="margin:0">
+                                <label>Montant ($)</label>
+                                <input type="number" id="manualAmount" min="1" step="0.01" placeholder="Ex: 25.00"
+                                    style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);outline:none;font-size:14px">
+                            </div>
+                            <div class="form-field" style="margin:0">
+                                <label>Note interne</label>
+                                <input type="text" id="manualNote" placeholder="Raison du crédit..."
+                                    style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);outline:none;font-size:14px">
+                            </div>
+                            <button class="btn btn-green" onclick="submitManualCredit()" id="manualCreditBtn"
+                                style="white-space:nowrap">
+                                💸 Créditer
+                            </button>
+                        </div>
+                        <div id="manualCreditMsg"
+                            style="display:none;margin:0 20px 20px;padding:10px 14px;border-radius:8px;font-size:13px">
+                        </div>
+                    </div>
+
+                    <!-- Filtre statut -->
+                    <div class="toolbar" style="margin-bottom:16px">
+                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                            <button class="btn btn-outline wallet-filter-btn active" data-wstatus="en_attente"
+                                onclick="filterWalletTx(this)">⏳ En attente</button>
+                            <button class="btn btn-outline wallet-filter-btn" data-wstatus="valide"
+                                onclick="filterWalletTx(this)">✅ Validées</button>
+                            <button class="btn btn-outline wallet-filter-btn" data-wstatus="annule"
+                                onclick="filterWalletTx(this)">❌ Annulées</button>
+                            <button class="btn btn-outline wallet-filter-btn" data-wstatus="all"
+                                onclick="filterWalletTx(this)">Toutes</button>
+                        </div>
+                        <button class="btn btn-outline" onclick="loadWalletTx(currentWalletFilter)">🔄
+                            Rafraîchir</button>
+                    </div>
+
+                    <!-- Table des demandes -->
+                    <div class="table-card">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Client</th>
+                                    <th>Montant</th>
+                                    <th>Méthode</th>
+                                    <th>Statut</th>
+                                    <th>Note</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="walletTxBody">
+                                <tr>
+                                    <td colspan="7" style="text-align:center;padding:30px;color:var(--text3)">
+                                        Chargement...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div><!-- /content -->
+        </div><!-- /main -->
+
+        <!-- MODAL: PRODUIT -->
+        <div class="modal-overlay" id="productModalOverlay" onclick="if(event.target===this)closeProductModal()">
+            <div class="modal">
+                <div class="modal-header">
+                    <span class="modal-title" id="productModalTitle">Nouveau produit</span>
+                    <button class="modal-close" onclick="closeProductModal()">×</button>
+                </div>
+                <form id="productForm" onsubmit="saveProduct(event)">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Nom du produit *</label>
+                            <input type="text" id="pName" required placeholder="Ex: Free Fire">
+                        </div>
+                        <div class="form-field">
+                            <label>Catégorie *</label>
+                            <select id="pCat" required>
+                                <option value="">Choisir...</option>
+                                <option value="jeux">Jeux de crédit</option>
+                                <option value="payment-cards">Cartes de paiement</option>
+                                <option value="gift-cards">Cartes cadeaux</option>
+                                <option value="game-console">Consoles</option>
+                                <option value="game-cd-key">Clés de jeux</option>
+                                <option value="video-streaming">Streaming Vidéo</option>
+                                <option value="music">Musique</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="telco-prepaid">Recharges Mobile</option>
+                                <option value="tools">Tools</option>
+                                <option value="software">Software</option>
+                                <option value="social-app">Applications sociales</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>Description</label>
+                        <textarea id="pDesc" rows="2" placeholder="Description courte du produit..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Image (chemin)</label>
+                            <input type="text" id="pImg" placeholder="img/mon-image.png">
+                        </div>
+                        <div class="form-field">
+                            <label>Badge réduction</label>
+                            <input type="text" id="pDiscount" placeholder="-10%">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Note / 5</label>
+                            <input type="number" id="pRating" min="0" max="5" step="0.1" value="5.0">
+                        </div>
+                        <div class="form-field">
+                            <label>Ventes affichées</label>
+                            <input type="text" id="pSales" placeholder="10k+">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Label champ ID client</label>
+                            <input type="text" id="pIdLabel" placeholder="ID du joueur">
+                        </div>
+                        <div class="form-field">
+                            <label>Placeholder champ ID</label>
+                            <input type="text" id="pIdPh" placeholder="Ex: 123456789">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>
+                            <input type="checkbox" id="pRecommended"> Produit recommandé (apparaît en premier)
+                        </label>
+                    </div>
+
+                    <div class="form-field">
+                        <label>Dénominations (prix d'achat)</label>
+                        <div class="denoms-list" id="denomsList">
+                            <div class="denom-row"
+                                style="font-size:10px;font-weight:600;color:var(--text3);margin-bottom:8px">
+                                <span>Label</span><span>USD</span><span>HTG</span><span></span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm btn-add-denom" onclick="addDenom()">+
+                            Ajouter
+                            dénomination</button>
+                    </div>
+
+                    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px">
+                        <button type="button" class="btn btn-outline" onclick="closeProductModal()">Annuler</button>
+                        <button type="submit" class="btn btn-green" id="saveProductBtn">💾 Sauvegarder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL: STOCK -->
+        <div class="modal-overlay" id="stockModalOverlay" onclick="if(event.target===this)closeStockModal()">
+            <div class="modal" style="max-width:480px">
+                <div class="modal-header">
+                    <span class="modal-title">Charger des codes</span>
+                    <button class="modal-close" onclick="closeStockModal()">×</button>
+                </div>
+                <div class="form-field">
+                    <label>Produit ID</label>
+                    <input type="number" id="stockProdId" placeholder="Ex: 14">
+                </div>
+                <div class="form-field">
+                    <label>Nom du produit</label>
+                    <input type="text" id="stockProdNom" placeholder="Ex: Carte Steam">
+                </div>
+                <div class="form-field">
+                    <label>Dénomination</label>
+                    <input type="text" id="stockDenom" placeholder="Ex: Steam $5">
+                </div>
+                <div class="form-field">
+                    <label>Codes (un par ligne)</label>
+                    <textarea id="stockCodes" rows="6" placeholder="CODE-XXXX-YYYY-ZZZZ&#10;CODE-AAAA-BBBB-CCCC"
+                        style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:monospace;font-size:12px;outline:none"></textarea>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:flex-end">
+                    <button class="btn btn-outline" onclick="closeStockModal()">Annuler</button>
+                    <button class="btn btn-green" onclick="saveStock()">💾 Charger</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: INVITER UN MEMBRE STAFF -->
+        <div class="modal-overlay" id="inviteModal" onclick="if(event.target===this)closeInviteModal()">
+            <div class="modal-box" style="max-width:480px">
+                <div class="modal-title">Inviter un membre staff</div>
+                <p style="font-size:13px;color:var(--text3);margin-bottom:18px">Un email d'invitation sera envoyé. Le
+                    nouveau membre choisira son mot de passe en cliquant sur le lien.</p>
+                <div class="form-field">
+                    <label>Email *</label>
+                    <input type="email" id="inviteEmail" placeholder="membre@exemple.com"
+                        style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);outline:none;font-size:14px">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div class="form-field">
+                        <label>Prénom</label>
+                        <input type="text" id="invitePrenom" placeholder="Jean"
+                            style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);outline:none;font-size:14px">
+                    </div>
+                    <div class="form-field">
+                        <label>Nom</label>
+                        <input type="text" id="inviteNom" placeholder="Dupont"
+                            style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);outline:none;font-size:14px">
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label>Rôle attribué *</label>
+                    <select id="inviteRole"
+                        style="width:100%;background:var(--dark4);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);outline:none;font-size:14px">
+                        <option value="helper">Helper (Niveau 1)</option>
+                        <option value="employe" selected>Employé (Niveau 2)</option>
+                        <option value="administrateur">Administrateur (Niveau 3)</option>
+                        <option value="manager" id="inviteOptManager">Manager (Niveau 4)</option>
+                        <option value="directeur" id="inviteOptDirecteur">Directeur (Niveau 5)</option>
+                    </select>
+                </div>
+                <div id="inviteError"
+                    style="display:none;color:#ef4444;font-size:13px;margin:0 0 12px;padding:8px 12px;background:rgba(239,68,68,.1);border-radius:8px">
+                </div>
+                <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+                    <button class="btn btn-outline" onclick="closeInviteModal()">Annuler</button>
+                    <button class="btn btn-green" onclick="submitInvite()" id="inviteSubmitBtn">Envoyer
+                        l'invitation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: CONFIRMATION RÉVOCATION PERMISSIONS STAFF -->
+        <div class="modal-overlay" id="confirmRemoveStaffModal"
+            onclick="if(event.target===this)closeRemoveStaffModal()">
+            <div class="modal-box" style="max-width:440px;border:1px solid rgba(239,68,68,0.4)">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+                    <div
+                        style="width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,0.15);color:#ef4444;display:flex;align-items:center;justify-content:center;font-size:20px">
+                        ⚠️</div>
+                    <div>
+                        <div class="modal-title" style="margin:0;font-size:18px">Révoquer les permissions ?</div>
+                        <span style="font-size:12px;color:var(--text3)" id="removeStaffEmailText"></span>
+                    </div>
+                </div>
+                <p style="font-size:13.5px;color:#d1d5db;line-height:1.5;margin-bottom:16px">
+                    Voulez-vous vraiment retirer les droits d'accès et permissions staff de <strong
+                        id="removeStaffTargetName" style="color:#fff"></strong> ?
+                </p>
+
+                <div
+                    style="background:var(--dark4);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:20px">
+                    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none">
+                        <input type="checkbox" id="confirmRemoveCheck"
+                            style="width:18px;height:18px;margin-top:2px;accent-color:#ef4444;cursor:pointer"
+                            onchange="toggleConfirmRemoveBtn()">
+                        <span style="font-size:12.5px;color:var(--text);line-height:1.4">
+                            Je confirme vouloir révoquer les permissions staff de cet utilisateur. Son rôle sera
+                            réinitialisé en <strong>Client</strong>.
+                        </span>
+                    </label>
+                </div>
+
+                <div style="display:flex;gap:10px;justify-content:flex-end">
+                    <button class="btn btn-outline" onclick="closeRemoveStaffModal()">Annuler</button>
+                    <button class="btn btn-red" id="confirmRemoveBtn" disabled onclick="executeRemoveStaff()"
+                        style="opacity:0.5;cursor:not-allowed">🗑️ Confirmer la révocation</button>
+                </div>
+                <!-- MODAL CREATION COUPON -->
+                <div class="modal-overlay" id="modalCoupon" onclick="if(event.target===this)closeCouponModal()">
+                    <div class="modal-box" style="max-width:480px">
+                        <div class="modal-header"
+                            style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                            <h3 class="modal-title" style="margin:0" id="couponModalTitle">Créer un Code Promo</h3>
+                            <button class="modal-close"
+                                style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"
+                                onclick="closeCouponModal()">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="couponForm" onsubmit="submitCouponForm(event)">
+                                <div class="form-group" style="margin-bottom:14px">
+                                    <label class="form-label"
+                                        style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Code
+                                        Promo *</label>
+                                    <input type="text" id="couponCode" class="form-control" placeholder="EX: SUMMER20"
+                                        style="text-transform:uppercase;font-weight:700;letter-spacing:1px" required>
+                                </div>
+                                <div class="form-row" style="display:flex;gap:12px;margin-bottom:14px">
+                                    <div class="form-group" style="flex:1">
+                                        <label class="form-label"
+                                            style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Type
+                                            de réduction *</label>
+                                        <select id="couponType" class="form-control" onchange="toggleCouponTypeUnit()">
+                                            <option value="percent">Pourcentage (%)</option>
+                                            <option value="fixed">Montant Fixe ($)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="flex:1">
+                                        <label class="form-label"
+                                            style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Valeur
+                                            *</label>
+                                        <div style="position:relative">
+                                            <input type="number" id="couponValue" class="form-control" placeholder="20"
+                                                min="0.5" step="0.5" required>
+                                            <span id="couponUnitBadge"
+                                                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--green);font-weight:700">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row" style="display:flex;gap:12px;margin-bottom:14px">
+                                    <div class="form-group" style="flex:1">
+                                        <label class="form-label"
+                                            style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Montant
+                                            Min. ($)</label>
+                                        <input type="number" id="couponMinAmount" class="form-control" placeholder="0"
+                                            min="0" step="1">
+                                    </div>
+                                    <div class="form-group" style="flex:1">
+                                        <label class="form-label"
+                                            style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Limite
+                                            d'utilisations</label>
+                                        <input type="number" id="couponLimit" class="form-control"
+                                            placeholder="Illimité" min="1">
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom:20px">
+                                    <label class="form-label"
+                                        style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Date
+                                        d'expiration (Optionnel)</label>
+                                    <input type="datetime-local" id="couponExpiresAt" class="form-control">
+                                </div>
+                                <div style="display:flex;justify-content:flex-end;gap:10px">
+                                    <button type="button" class="btn btn-outline"
+                                        onclick="closeCouponModal()">Annuler</button>
+                                    <button type="submit" class="btn btn-green">Enregistrer le Coupon</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOAST CONTAINER -->
+                <div class="toast-container" id="toastContainer"></div>
+
+                <script src="dashboard.js" defer></script>
+</body>
+
+</html>

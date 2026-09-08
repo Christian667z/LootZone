@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Asta-Shops – Actualités, Guides & Astuces Gaming</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css?v=2.0">
+    <style>
+        /* ── Blog Hero & Banner (LootBar Inspired) ────────────────────────────── */
+        .blog-hero {
+            background: linear-gradient(135deg, #0b0e14 0%, #151d2a 50%, #0c1827 100%);
+            padding: 50px 20px 40px;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .blog-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0, 182, 122, 0.18) 0%, transparent 75%);
+            pointer-events: none;
+        }
+
+        .blog-hero-container {
+            max-width: 1180px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-hero-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .blog-hero h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .blog-hero h1 span {
+            color: #00b67a;
+        }
+
+        .blog-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            padding: 10px 18px;
+            width: 340px;
+            max-width: 100%;
+            transition: all 0.2s;
+            backdrop-filter: blur(8px);
+        }
+
+        .blog-search-bar:focus-within {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: #00b67a;
+            box-shadow: 0 0 0 3px rgba(0, 182, 122, 0.2);
+        }
+
+        .blog-search-bar svg {
+            color: rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+        }
+
+        .blog-search-bar input {
+            border: none;
+            outline: none;
+            font-size: 0.9rem;
+            color: #fff;
+            width: 100%;
+            background: transparent;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .blog-search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* Top Promo Card Event Banner (LootBar Style) */
+        .blog-promo-card {
+            background: linear-gradient(135deg, #0f2744 0%, #0052cc 45%, #00b67a 100%);
+            border-radius: 20px;
+            padding: 28px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .blog-promo-card::after {
+            content: '';
+            position: absolute;
+            right: -50px;
+            bottom: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .bpc-content {
+            max-width: 580px;
+            z-index: 2;
+        }
+
+        .bpc-badge {
+            display: inline-block;
+            background: #ffcc00;
+            color: #0b0e14;
+            font-size: 0.78rem;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .bpc-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.25;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bpc-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .bpc-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            color: #0052cc;
+            font-weight: 800;
+            font-size: 0.92rem;
+            padding: 12px 26px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .bpc-btn:hover {
+            transform: translateY(-2px);
+            background: #f0f4ff;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+        }
+
+        .bpc-art {
+            max-width: 320px;
+            z-index: 2;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bpc-art img {
+            max-width: 100%;
+            height: auto;
+            max-height: 170px;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+        }
+
+        @media (max-width: 850px) {
+            .blog-promo-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 24px;
+            }
+
+            .bpc-art {
+                align-self: center;
+                margin-top: 10px;
+            }
+
+            .bpc-title {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* ── Breadcrumb ──────────────────────────────────────────────────────── */
+        .blog-breadcrumb {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 20px;
+        }
+
+        .blog-breadcrumb-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .blog-breadcrumb-inner a {
+            color: #374151;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .blog-breadcrumb-inner a:hover {
+            color: #00b67a;
+        }
+
+        .blog-breadcrumb-inner .bc-sep {
+            color: #9ca3af;
+        }
+
+        .blog-breadcrumb-inner .bc-current {
+            color: #00b67a;
+            font-weight: 700;
+        }
+
+        /* ── Blog Main Content ───────────────────────────────────────────────── */
+        .blog-body {
+            background: #f8fafc;
+            padding: 40px 20px 80px;
+            min-height: 60vh;
+        }
+
+        .blog-container {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        /* Category Filter Pills */
+        .blog-categories {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 35px;
+            scrollbar-width: none;
+        }
+
+        .blog-categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-pill {
+            padding: 8px 20px;
+            border-radius: 999px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .cat-pill:hover {
+            border-color: #00b67a;
+            color: #00b67a;
+            background: #f0fdf4;
+        }
+
+        .cat-pill.active {
+            background: #00b67a;
+            border-color: #00b67a;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 182, 122, 0.25);
+        }
+
+        /* Section Title (LootBar Style) */
+        .lb-section-title {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lb-section-title .title-icon {
+            font-size: 1.6rem;
+        }
+
+        /* ── LootBar Horizontal Article Cards Grid ──────────────────────────── */
+        .lb-horizontal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 860px) {
+            .lb-horizontal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .lb-horizontal-card {
+            display: flex;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.04);
+            transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+            text-decoration: none;
+            color: inherit;
+            height: 155px;
+        }
+
+        .lb-horizontal-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 182, 122, 0.4);
+        }
+
+        .lb-card-img-wrap {
+            width: 40%;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        .lb-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .lb-horizontal-card:hover .lb-card-img {
+            transform: scale(1.06);
+        }
+
+        .lb-card-tag {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lb-card-body {
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .lb-card-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.38;
+            margin: 0 0 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .lb-horizontal-card:hover .lb-card-title {
+            color: #00b67a;
+        }
+
+        .lb-card-desc {
+            font-size: 0.84rem;
+            color: #64748b;
+            line-height: 1.45;
+            margin: 0 0 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .lb-card-meta {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        /* ── Standard 3-Column Articles Grid ───────────────────────────── */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 900px) {
+            .articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 580px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .article-card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.04);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 182, 122, 0.4);
+        }
+
+        .article-card-img-wrap {
+            height: 170px;
+            position: relative;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        .article-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .article-card:hover .article-card-img {
+            transform: scale(1.06);
+        }
+
+        .article-card-body {
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .article-card-tag {
+            display: inline-block;
+            background: #e6f7f0;
+            color: #00b67a;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .article-card-body h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.4;
+            margin: 0 0 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-card:hover h3 {
+            color: #00b67a;
+        }
+
+        .article-card-excerpt {
+            font-size: 0.86rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-card-meta {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* ── Newsletter Card ─────────────────────────────────────────────────── */
+        .blog-newsletter {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            color: #fff;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-newsletter h2 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .blog-newsletter p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto 24px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .newsletter-form input:focus {
+            border-color: #00b67a;
+        }
+
+        .newsletter-form button {
+            padding: 12px 24px;
+            border-radius: 10px;
+            background: #00b67a;
+            color: #fff;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .newsletter-form button:hover {
+            background: #009e6a;
+        }
+
+        @media (max-width: 500px) {
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="promo-badge">PROMO</span>
+                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="contact.html" class="top-bar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="top-icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Aide &amp; Support
+                </a>
+                <span class="top-bar-separator">|</span>
+                <div class="currency-selector" id="currencySelectorBtn" style="cursor: pointer;">
+                    <span class="currency-flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="top-icon">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
+                        FR | HTG ▾
+                    </span>
+                </div>
+                <span class="top-bar-separator">|</span>
+                <div class="top-bar-auth" id="topBarAuth">
+                    <a href="Dashboard/admin-login.html" class="auth-link login-btn">Connexion</a>
+                    <a href="Dashboard/admin-login.html" class="auth-link register-btn">S'inscrire</a>
+                </div>
+                <div class="user-profile-badge" id="topBarUser" style="display: none; align-items: center; gap: 8px;">
+                    <div class="user-avatar" id="userAvatarEl"
+                        style="width: 26px; height: 26px; border-radius: 50%; background: #00b67a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">
+                    </div>
+                    <span class="user-name" id="userNameEl"
+                        style="font-weight: 600; font-size: 0.82rem; color: #fff;"></span>
+                    <span class="user-role-tag" id="userRoleEl"
+                        style="background: rgba(0,182,122,0.2); color: #00b67a; border: 1px solid #00b67a; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="navbar">
+        <a href="index.html" class="logo" style="text-decoration:none;">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+
+        <nav class="nav-container">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="catalog.html?cat=jeux">Jeux <span class="arrow-down">▾</span></a>
+                    <div class="dropdown-mega">
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/free fire.png" alt="Free Fire"
+                                        class="prod-icon">Free Fire</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/PUBG Mobile.png" alt="PUBG Mobile"
+                                        class="prod-icon">PUBG Mobile</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Call of Duty mobile.png"
+                                        alt="Call of Duty Mobile" class="prod-icon">Call of Duty Mobile</a></li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/roblox.jpeg" alt="Roblox"
+                                        class="prod-icon">Roblox</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/FC Mobile.png" alt="EA Sports FC"
+                                        class="prod-icon">EA Sports FC (FIFA)</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/mobile legends.jpeg" alt="Mobile Legends"
+                                        class="prod-icon">Mobile Legends</a></li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Clash of clans.jpeg" alt="Clash of Clans"
+                                        class="prod-icon">Clash of Clans</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/e-football.png" alt="eFootball"
+                                        class="prod-icon">eFootball (PES)</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/fortnite.png" alt="Fortnite"
+                                        class="prod-icon">Fortnite</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="paiement-manuel.html">Paiement Manuel</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="nav-search-box">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" placeholder="Rechercher sur Asta-Shops..." id="globalSearchInput">
+            </div>
+
+            <a href="#" class="nav-icon wishlist-btn" id="wishlistBtn" aria-label="Favoris">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
+                </svg>
+                <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
+            </a>
+
+            <a href="catalog.html" class="nav-icon cart-btn" aria-label="Panier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge">0</span>
+            </a>
+
+            <a href="https://wa.me/50946966290" target="_blank" class="whatsapp-btn" aria-label="WhatsApp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                    <path fill="#25D366"
+                        d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.993 0 1.763.458 3.42 1.257 4.873L2.05 21.434c-.112.413.26.785.673.673l4.567-1.222a9.925 9.925 0 0 0 4.714 1.186c5.516 0 9.986-4.471 9.986-9.993C21.99 6.471 17.52 2 12.004 2Z">
+                    </path>
+                    <path fill="#FFF"
+                        d="M15.932 14.122c-.244-.122-1.442-.712-1.666-.794-.223-.081-.385-.122-.548.122-.162.244-.63.794-.772.956-.143.163-.285.183-.529.06-.244-.121-1.03-.38-1.962-1.21-.725-.647-1.215-1.447-1.357-1.69-.143-.244-.015-.376.107-.497.11-.11.244-.285.366-.427.122-.142.163-.244.244-.407.081-.163.04-.305-.02-.427-.061-.122-.548-1.32-.751-1.81-.199-.477-.4-.412-.549-.42-.142-.007-.305-.007-.467-.007-.163 0-.427.061-.65.305-.224.244-.854.834-.854 2.034 0 1.2 1.139 2.5 1.443 2.724.304.224 2.242 3.424 5.432 4.802.758.328 1.35.524 1.813.67.762.243 1.455.209 2.004.127.612-.091 1.442-.589 1.646-1.158.203-.57.203-1.057.142-1.158-.06-.1-.223-.163-.467-.285Z">
+                    </path>
+                </svg>
+                <span class="whatsapp-text">WhatsApp</span>
+            </a>
+
+            <button class="mobile-menu-toggle" aria-label="Menu Mobile" id="mobileMenuToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ══════════════════════ BLOG HERO & PROMO BANNER ══════════════════════ -->
+    <section class="blog-hero">
+        <div class="blog-hero-container">
+            <div class="blog-hero-top">
+                <h1>Blog <span>Asta-Shops</span></h1>
+                <div class="blog-search-bar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" placeholder="Rechercher des guides, jeux, mises à jour..." id="blogSearch">
+                </div>
+            </div>
+
+            <!-- LootBar Style Promo Banner Card -->
+            <div class="blog-promo-card">
+                <div class="bpc-content">
+                    <span class="bpc-badge">⚡ JUSQU'À 35% DE RÉDUCTION</span>
+                    <h2 class="bpc-title">Événement Recharge Spécial FC 26 &amp; Free Fire !</h2>
+                    <p class="bpc-desc">Profitez des bonus de diamants exclusifs et des offres de recharge instantanée via Moncash &amp; Natcash disponibles 24h/24.</p>
+                    <a href="catalog.html" class="bpc-btn">
+                        Recharger Maintenant
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+                <div class="bpc-art">
+                    <img src="img/free fire.png" alt="Promo Event Artwork">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════ BREADCRUMB ══════════════════════ -->
+    <div class="blog-breadcrumb">
+        <div class="blog-breadcrumb-inner">
+            <a href="index.html">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Accueil
+            </a>
+            <span class="bc-sep">›</span>
+            <span class="bc-current">Blog</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════ BLOG BODY ══════════════════════ -->
+    <div class="blog-body">
+        <div class="blog-container">
+
+            <!-- Category Filter Pills -->
+            <div class="blog-categories" id="categoryPills">
+                <button class="cat-pill active" data-cat="all">Tous les articles</button>
+                <button class="cat-pill" data-cat="updates">Dernières Mises à Jour</button>
+                <button class="cat-pill" data-cat="guides">Guides de Jeux</button>
+                <button class="cat-pill" data-cat="codes">Codes Promo &amp; Astuces</button>
+                <button class="cat-pill" data-cat="freefire">Free Fire</button>
+                <button class="cat-pill" data-cat="fifa">FIFA</button>
+                <button class="cat-pill" data-cat="pubg">PUBG Mobile</button>
+                <button class="cat-pill" data-cat="Partenaire">Contenu partenaire</button>
+                <button class="cat-pill" data-cat="Createur">Influencer</button> 
+            </div>
+
+            <!-- ── SECTION 1: 🎮 Dernière Mise à Jour (Horizontal Cards Layout) ────────────────── -->
+            <div class="lb-section-title">
+                <span class="title-icon">🎮</span>
+                Dernière Mise à Jour
+            </div>
+
+            <div class="lb-horizontal-grid" id="updatesGrid">
+                <!-- Article 1 -->
+                <a href="#" class="lb-horizontal-card article-item" data-category="updates freefire" data-keywords="free fire buffies pass saison 52 diamants">
+                    <div class="lb-card-img-wrap">
+                        <img src="img/free fire.png" alt="Free Fire Saison 52" class="lb-card-img">
+                        <span class="lb-card-tag">Free Fire Saison 52</span>
+                    </div>
+                    <div class="lb-card-body">
+                        <div>
+                            <h3 class="lb-card-title">Nouveaux Buffies de Free Fire pour la Saison 52</h3>
+                            <p class="lb-card-desc">Voici les notes de patch et les bonus exclusifs de la Saison 52 de Free Fire. Découvrez les nouveautés...</p>
+                        </div>
+                        <div class="lb-card-meta">
+                            <span>📅 24 juil. 2026</span>
+                            <span>⏱️ 3 min de lecture</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Article 2 -->
+                <a href="#" class="lb-horizontal-card article-item" data-category="updates fifa" data-keywords="fc 26 mise a jour 1.6.3 patch notes ultimate team">
+                    <div class="lb-card-img-wrap">
+                        <img src="img/FC Mobile.png" alt="Mise à jour 1.6.3 de FC 26" class="lb-card-img">
+                        <span class="lb-card-tag">FC 26 • Mise à jour 1.6.3</span>
+                    </div>
+                    <div class="lb-card-body">
+                        <div>
+                            <h3 class="lb-card-title">Mise à jour 1.6.3 de FC 26 : Aperçu et améliorations</h3>
+                            <p class="lb-card-desc">Voici les notes de patch de la mise à jour 1.6.3 de FC 26. Ajustements des tirs, physique du ballon et Ultimate Team...</p>
+                        </div>
+                        <div class="lb-card-meta">
+                            <span>📅 22 juil. 2026</span>
+                            <span>⏱️ 4 min de lecture</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Article 3 -->
+                <a href="#" class="lb-horizontal-card article-item" data-category="guides pubg" data-keywords="pubg mobile uc diamants codes pack">
+                    <div class="lb-card-img-wrap">
+                        <img src="img/PUBG Mobile.png" alt="PUBG Mobile UC Guide" class="lb-card-img">
+                        <span class="lb-card-tag">PUBG Mobile</span>
+                    </div>
+                    <div class="lb-card-body">
+                        <div>
+                            <h3 class="lb-card-title">Guide UC PUBG Mobile : Les meilleurs packs et offres 2026</h3>
+                            <p class="lb-card-desc">Comment recharger vos UC en toute sécurité et débloquer les tenues légendaires au meilleur tarif en Haïti...</p>
+                        </div>
+                        <div class="lb-card-meta">
+                            <span>📅 19 juil. 2026</span>
+                            <span>⏱️ 5 min de lecture</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Article 4 -->
+                <a href="#" class="lb-horizontal-card article-item" data-category="codes updates" data-keywords="mobile legends codes promo gemmes recharge">
+                    <div class="lb-card-img-wrap">
+                        <img src="img/mobile legends.jpeg" alt="Mobile Legends Codes" class="lb-card-img">
+                        <span class="lb-card-tag">Mobile Legends</span>
+                    </div>
+                    <div class="lb-card-body">
+                        <div>
+                            <h3 class="lb-card-title">Mobile Legends : Codes d'équipes et bonus répliqués 2026</h3>
+                            <p class="lb-card-desc">Voici la liste mise à jour des meilleurs codes promo pour obtenir des skin trial cards et diamants offerts...</p>
+                        </div>
+                        <div class="lb-card-meta">
+                            <span>📅 16 juil. 2026</span>
+                            <span>⏱️ 3 min de lecture</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ── SECTION 2: 🔥 Guides & Astuces Populaire (Standard 3-Column Grid) ───────────────── -->
+            <div class="lb-section-title">
+                <span class="title-icon">🔥</span>
+                Guides &amp; Astuces Incontournables
+            </div>
+
+            <div class="articles-grid" id="guidesGrid">
+                <!-- Article 5 -->
+                <a href="#" class="article-card article-item" data-category="guides fifa" data-keywords="fc 26 mode carriere ultimate team conseils club gagnant">
+                    <div class="article-card-img-wrap">
+                        <img src="img/e-football.png" alt="Conseils Mode Carrière FC 26" class="article-card-img">
+                    </div>
+                    <div class="article-card-body">
+                        <span class="article-card-tag">FC 26 • Guide</span>
+                        <h3>Conseils pour le Mode Carrière de FC 26 : bâtir un club gagnant</h3>
+                        <p class="article-card-excerpt">Découvrez les pépites à faible coût et les meilleures tactiques pour emmener votre équipe au sommet du championnat...</p>
+                        <div class="article-card-meta">
+                            <span>📅 14 juil. 2026</span>
+                            <span>⏱️ 6 min</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Article 6 -->
+                <a href="#" class="article-card article-item" data-category="guides gaming" data-keywords="crimson desert jeux aaa 2026 apercu sortie">
+                    <div class="article-card-img-wrap">
+                        <img src="img/crimson_desert.png" alt="Crimson Desert" class="article-card-img">
+                    </div>
+                    <div class="article-card-body">
+                        <span class="article-card-tag">Actualité Gaming</span>
+                        <h3>Crimson Desert : gameplay, univers et date de sortie officielle</h3>
+                        <p class="article-card-excerpt">Tout ce que vous devez savoir sur le jeu d'action-aventure le plus attendu de l'année. Graphismes, combat et précommandes...</p>
+                        <div class="article-card-meta">
+                            <span>📅 10 juil. 2026</span>
+                            <span>⏱️ 4 min</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Article 7 -->
+                <a href="#" class="article-card article-item" data-category="codes guides" data-keywords="roblox robux moncash natcash haiti recharge">
+                    <div class="article-card-img-wrap">
+                        <img src="img/roblox.jpeg" alt="Roblox Robux Guide" class="article-card-img">
+                    </div>
+                    <div class="article-card-body">
+                        <span class="article-card-tag">Roblox • Tuto</span>
+                        <h3>Comment acheter des Robux facilement avec Moncash en Haïti</h3>
+                        <p class="article-card-excerpt">Tutoriel pas à pas pour recharger votre compte Roblox en moins de 5 minutes grâce aux paiements mobiles régionaux...</p>
+                        <div class="article-card-meta">
+                            <span>📅 05 juil. 2026</span>
+                            <span>⏱️ 3 min</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Empty search message -->
+            <div id="noResultsMsg" style="display: none; text-align: center; padding: 50px 20px; color: #64748b;">
+                <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Aucun article trouvé</h3>
+                <p style="font-size: 0.92rem;">Essayez de modifier votre recherche ou de choisir une autre catégorie.</p>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="blog-newsletter">
+                <h2>📬 Restez informé des promos &amp; patch notes !</h2>
+                <p>Recevez les derniers guides, codes promo et bonus de recharge directement dans votre boîte mail.</p>
+                <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+                    <input type="email" placeholder="Votre adresse e-mail" required>
+                    <button type="submit">S'abonner</button>
+                </form>
+            </div>
+
+        </div><!-- /blog-container -->
+    </div><!-- /blog-body -->
+
+    <!-- ══════════════════════ FOOTER ══════════════════════ -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Payment Trust Badges (LootBar Inspired) -->
+            <div class="footer-trust-badges">
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Paiement Sécurisé</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Livraison Instantanée</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Service 24/7</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.58 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <span>Support WhatsApp</span>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <div class="footer-columns">
+                <div class="footer-col brand-col">
+                    <a href="index.html" class="footer-logo" style="text-decoration:none;color:inherit;">
+                        <span class="logo-box" style="background-color:#000000;border:1px solid #252b36;color:#fff;font-weight:900;padding:4px 8px;border-radius:6px;font-size:0.85rem;">AS</span>
+                        <span style="font-weight:900;font-size:1.1rem;">ASTA-<span class="text-green" style="color:#00b67a;">SHOPS</span></span>
+                    </a>
+                    <p class="footer-desc">Votre destination #1 pour les produits numériques : crédits de jeux, cartes cadeaux et clés de jeux. Rapide, sécurisé, instantané.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Discord">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.579-.406.837a12 12 0 0 0-3.658 0 8 8 0 0 0-.412-.837.05.05 0 0 0-.052-.025 13 13 0 0 0-3.257 1.011.05.05 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.05.05 0 0 0-.018-.011 8.8 8.8 0 0 1-1.248-.595.05.05 0 0 1-.02-.056.05.05 0 0 1 .032-.041c.086-.065.171-.133.252-.203a.05.05 0 0 1 .051-.007c2.72 1.25 5.675 1.25 8.358 0a.05.05 0 0 1 .051.007c.082.07.166.138.252.203a.05.05 0 0 1 .033.041.05.05 0 0 1-.02.056 9 9 0 0 1-1.248.595.05.05 0 0 0-.018.01.05.05 0 0 0-.01.059c.246.466.52.91.819 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.63-1.613 1.438-1.613c.807 0 1.45.724 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.799 0-1.438-.724-1.438-1.612s.63-1.613 1.438-1.613c.807 0 1.451.724 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.38 13.84 3.98 15 4v2c-1.756-.03-3.036-1.006-4-2v10.5a4.5 4.5 0 1 1-9-0 4.5 4.5 0 0 1 7.394-3.493c.123.1.206.223.333.376A4.475 4.475 0 0 1 9 14.5V0z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="catalog.html?cat=jeux">Jeux de Crédit</a></li>
+                        <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                        <li><a href="catalog.html?cat=game-cd-key">Clés de jeux (CD-Keys)</a></li>
+                        <li><a href="paiement-manuel.html">Paiement Moncash / Natcash</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Support &amp; Légal</h4>
+                    <ul>
+                        <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="liens footer/FAQ Centre d'aide.html">FAQ / Centre d'aide</a></li>
+                        <li><a href="contact.html">Contactez-nous</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Partenariat</h4>
+                    <ul>
+                        <li><a href="liens footer/partenaire de Asta-shops.html">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Vendre sur Asta Shops.html">Vendre sur Asta Shops</a></li>
+                        <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
+                        <li><a href="liens footer/Recrutement.html">Recrutement</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Asta Shops Inc. Tous droits réservés.</p>
+                <div class="footer-bottom-links">
+                    <a href="liens footer/Mentions légales.html">Mentions légales</a>
+                    <span class="dot-separator">•</span>
+                    <span class="creator-credit">Créateur et développeur : Space Dev.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ══════════════════════ SCRIPTS ══════════════════════ -->
+    <script>
+        // ── Newsletter Submit ──────────────────────────────────────────────
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.textContent = '✓ Abonné !';
+            btn.style.background = '#0f6e4a';
+            e.target.querySelector('input').value = '';
+            setTimeout(() => {
+                btn.textContent = "S'abonner";
+                btn.style.background = '#00b67a';
+            }, 3000);
+        }
+
+        // ── Mobile Menu Toggle ─────────────────────────────────────────────
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navContainer = document.querySelector('.nav-container');
+        if (mobileMenuToggle && navContainer) {
+            mobileMenuToggle.addEventListener('click', () => {
+                navContainer.classList.toggle('active');
+            });
+            document.addEventListener('click', (e) => {
+                if (!navContainer.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                    navContainer.classList.remove('active');
+                }
+            });
+        }
+
+        // ── Category & Search Filtering (LootBar Filter Logic) ──────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('blogSearch');
+            const catPills = document.querySelectorAll('.cat-pill');
+            const articleItems = document.querySelectorAll('.article-item');
+            const noResultsMsg = document.getElementById('noResultsMsg');
+
+            let currentCategory = 'all';
+            let currentQuery = '';
+
+            function filterArticles() {
+                let visibleCount = 0;
+
+                articleItems.forEach(item => {
+                    const itemCat = item.getAttribute('data-category') || '';
+                    const itemKeywords = (item.getAttribute('data-keywords') || '') + ' ' + item.innerText.toLowerCase();
+
+                    const matchesCat = (currentCategory === 'all') || itemCat.includes(currentCategory);
+                    const matchesSearch = !currentQuery || itemKeywords.toLowerCase().includes(currentQuery.toLowerCase());
+
+                    if (matchesCat && matchesSearch) {
+                        item.style.display = item.classList.contains('lb-horizontal-card') ? 'flex' : 'flex';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (noResultsMsg) {
+                    noResultsMsg.style.display = (visibleCount === 0) ? 'block' : 'none';
+                }
+            }
+
+            // Pill clicks
+            catPills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    catPills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    currentCategory = pill.getAttribute('data-cat');
+                    filterArticles();
+                });
+            });
+
+            // Live Search Input
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    currentQuery = e.target.value.trim();
+                    filterArticles();
+                });
+            }
+
+            // Global Top Navbar Search
+            const globalSearch = document.getElementById('globalSearchInput');
+            if (globalSearch) {
+                globalSearch.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && globalSearch.value.trim()) {
+                        window.location.href = `catalog.html?search=${encodeURIComponent(globalSearch.value.trim())}`;
+                    }
+                });
+            }
+        });
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/maintenance-check.js"></script>
+</body>
+
+</html>

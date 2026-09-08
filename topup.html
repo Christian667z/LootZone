@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Asta-Shops | Recharge</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css?v=2.0">
+    <style>
+        /* ── PAGE TOPUP ───────────────────────────────────────────── */
+        .tu-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px 60px;
+        }
+
+        /* Breadcrumb */
+        .tu-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: #9ca3af;
+            margin-bottom: 24px;
+        }
+        .tu-breadcrumb a { color: #9ca3af; text-decoration: none; }
+        .tu-breadcrumb a:hover { color: #00b67a; }
+        .tu-breadcrumb svg { flex-shrink: 0; }
+        .tu-breadcrumb .tu-bc-current { color: #1a1a1a; font-weight: 600; }
+
+        /* Main layout */
+        .tu-main {
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+        }
+
+        /* ── LEFT COLUMN ─────────────────────────────────────────── */
+        .tu-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tu-product-hero {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f0f2f5;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .tu-product-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .tu-hero-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ff4d4f;
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .tu-product-info { padding: 0 4px; }
+
+        .tu-game-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #111827;
+            margin: 0 0 10px;
+            line-height: 1.2;
+        }
+
+        .tu-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .tu-stars {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .tu-star {
+            color: #f59e0b;
+            font-size: 14px;
+        }
+        .tu-rating-val {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #111827;
+            margin-left: 2px;
+        }
+        .tu-reviews {
+            font-size: 0.82rem;
+            color: #9ca3af;
+        }
+        .tu-sales-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .tu-trust {
+            display: flex;
+            gap: 20px;
+            padding: 14px 18px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tu-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.8rem;
+            color: #374151;
+            font-weight: 600;
+        }
+        .tu-trust-item svg { color: #00b67a; flex-shrink: 0; }
+
+        .tu-desc-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        .tu-desc-text {
+            font-size: 0.88rem;
+            color: #4b5563;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* Info table */
+        .tu-info-table {
+            margin-top: 28px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+        .tu-info-row {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .tu-info-row:last-child { border-bottom: none; }
+        .tu-info-row:nth-child(even) { background: #f9fafb; }
+        .tu-info-label {
+            padding: 13px 16px;
+            font-size: 0.83rem;
+            font-weight: 700;
+            color: #374151;
+            white-space: nowrap;
+            width: 180px;
+            flex-shrink: 0;
+            border-right: 1px solid #e5e7eb;
+        }
+        .tu-info-value {
+            padding: 13px 16px;
+            font-size: 0.83rem;
+            color: #4b5563;
+            flex: 1;
+        }
+
+        /* ── RIGHT COLUMN (sticky order form) ───────────────────── */
+        .tu-right {
+            width: 380px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 90px;
+        }
+
+        .tu-form-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+        }
+
+        .tu-form-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .tu-form-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 4px;
+        }
+        .tu-form-subtitle {
+            font-size: 0.78rem;
+            color: #9ca3af;
+            margin: 0;
+        }
+
+        /* Pack grid */
+        .tu-section-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 20px 8px;
+        }
+        .tu-pack-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            padding: 0 20px 14px;
+        }
+        .tu-pack-btn {
+            border: 1.5px solid #e5e7eb;
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 10px 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.18s ease;
+            position: relative;
+        }
+        .tu-pack-btn:hover {
+            border-color: #00b67a;
+            background: #f0fdf4;
+        }
+        .tu-pack-btn.active {
+            border-color: #00b67a;
+            background: #f0fdf4;
+            box-shadow: 0 0 0 2px rgba(0,182,122,0.18);
+        }
+        .tu-pack-btn.active::after {
+            content: '✓';
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            font-size: 10px;
+            color: #00b67a;
+            font-weight: 900;
+        }
+        .tu-pack-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #111827;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .tu-pack-price {
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #00b67a;
+            display: block;
+        }
+        .tu-pack-htg {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* Form fields */
+        .tu-field-wrap {
+            padding: 0 20px 14px;
+        }
+        .tu-field-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 7px;
+        }
+        .tu-field-label .tu-required { color: #ef4444; }
+        .tu-field-input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            color: #111827;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.15s;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        .tu-field-input:focus {
+            border-color: #00b67a;
+            background: #fff;
+        }
+        .tu-field-hint {
+            font-size: 0.72rem;
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+
+        /* Payment tabs */
+        .tu-pay-tabs {
+            display: flex;
+            gap: 0;
+            padding: 0 20px 14px;
+        }
+        .tu-pay-tab {
+            flex: 1;
+            padding: 9px 6px;
+            border: 1.5px solid #e5e7eb;
+            background: #fafafa;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #6b7280;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s;
+        }
+        .tu-pay-tab:first-child { border-radius: 8px 0 0 8px; }
+        .tu-pay-tab:last-child { border-radius: 0 8px 8px 0; }
+        .tu-pay-tab:not(:last-child) { border-right: none; }
+        .tu-pay-tab.active {
+            background: #00b67a;
+            border-color: #00b67a;
+            color: #fff;
+        }
+
+        /* Order summary */
+        .tu-summary {
+            margin: 0 20px 16px;
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .tu-sum-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.83rem;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+        .tu-sum-row:last-child { margin-bottom: 0; }
+        .tu-sum-row .tu-sum-val { font-weight: 700; color: #111827; }
+        .tu-sum-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .tu-sum-total-label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #111827;
+        }
+        .tu-sum-total-price {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #00b67a;
+        }
+        .tu-sum-htg {
+            font-size: 0.72rem;
+            color: #9ca3af;
+            text-align: right;
+        }
+
+        /* Order button */
+        .tu-order-btn {
+            display: block;
+            width: calc(100% - 40px);
+            margin: 0 20px 20px;
+            padding: 14px;
+            background: linear-gradient(135deg, #00b67a, #007a52);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+        }
+        .tu-order-btn:hover { opacity: 0.92; }
+        .tu-order-btn:active { transform: scale(0.98); }
+        .tu-order-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .tu-secure-note {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #9ca3af;
+            padding: 0 20px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .tu-secure-note svg { color: #00b67a; }
+
+        /* Divider in form */
+        .tu-form-divider {
+            height: 1px;
+            background: #f3f4f6;
+            margin: 2px 0 10px;
+        }
+
+        /* ── CONFIRMATION OVERLAY ────────────────────────────────── */
+        .tu-confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .tu-confirm-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .tu-confirm-box {
+            background: #fff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+        .tu-confirm-overlay.active .tu-confirm-box { transform: scale(1); }
+
+        .tu-confirm-header {
+            background: linear-gradient(135deg, #00b67a, #007a52);
+            padding: 24px 24px 20px;
+            text-align: center;
+        }
+        .tu-confirm-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+        .tu-confirm-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #fff;
+            margin: 0;
+        }
+        .tu-confirm-ref {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.8);
+            margin: 4px 0 0;
+        }
+
+        .tu-confirm-body { padding: 20px 24px; }
+        .tu-confirm-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.85rem;
+        }
+        .tu-confirm-row:last-child { border-bottom: none; }
+        .tu-confirm-row span:first-child { color: #6b7280; }
+        .tu-confirm-row span:last-child { font-weight: 700; color: #111827; }
+
+        .tu-pay-instructions {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 14px;
+        }
+        .tu-pay-instructions p {
+            font-size: 0.84rem;
+            color: #92400e;
+            margin: 0 0 6px;
+            line-height: 1.5;
+        }
+        .tu-pay-instructions p:last-child { margin-bottom: 0; }
+        .tu-pay-amount-big {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #b45309;
+            display: block;
+            margin: 6px 0 4px;
+        }
+        .tu-pay-phone {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #059669;
+        }
+
+        .tu-confirm-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 24px 24px;
+        }
+        .tu-confirm-wa-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: 'Roboto', sans-serif;
+        }
+        .tu-confirm-close-btn {
+            padding: 12px 16px;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Success state */
+        .tu-wallet-success {
+            text-align: center;
+            padding: 10px 24px 24px;
+        }
+        .tu-wallet-success .tu-ws-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .tu-wallet-success h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 8px;
+        }
+        .tu-wallet-success p {
+            font-size: 0.84rem;
+            color: #6b7280;
+            margin: 0 0 16px;
+        }
+
+        /* Loading skeleton */
+        .tu-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Error state */
+        .tu-error {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .tu-error-icon { font-size: 3rem; margin-bottom: 16px; }
+        .tu-error h2 { color: #111827; margin: 0 0 8px; }
+        .tu-error p { color: #6b7280; }
+        .tu-error a { color: #00b67a; font-weight: 700; }
+
+        /* Input Glow Animation on Error */
+        .input-error-glow {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important;
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* ─── TOAST NOTIFICATION BUBBLE ─── */
+        .asta-toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 380px;
+            width: calc(100vw - 48px);
+            pointer-events: none;
+        }
+        .asta-toast {
+            pointer-events: auto;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(34, 197, 94, 0.12);
+            border-radius: 16px;
+            padding: 14px 16px;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .asta-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .asta-toast-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .asta-toast.warning .asta-toast-icon {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .asta-toast.error .asta-toast-icon {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .asta-toast.success .asta-toast-icon {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        .asta-toast.cart .asta-toast-icon {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .asta-toast-content {
+            flex: 1;
+        }
+        .asta-toast-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: #fff;
+        }
+        .asta-toast-msg {
+            font-size: 12.5px;
+            color: #9ca3af;
+            line-height: 1.4;
+        }
+        .asta-toast-btn {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #22c55e;
+            color: #000;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.15s, background 0.15s;
+        }
+        .asta-toast-btn:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+        .asta-toast-close {
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 2px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .asta-toast-close:hover {
+            color: #fff;
+        }
+        .asta-toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #22c55e, #10b981);
+            width: 100%;
+            transform-origin: left;
+            animation: toastProgress 4s linear forwards;
+        }
+        .asta-toast.warning .asta-toast-progress {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+        .asta-toast.error .asta-toast-progress {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+        @keyframes toastProgress {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .tu-main { flex-direction: column; }
+            .tu-right {
+                width: 100%;
+                position: static;
+            }
+            .tu-product-hero { aspect-ratio: 16/7; }
+        }
+        @media (max-width: 600px) {
+            .tu-pack-grid { grid-template-columns: 1fr 1fr; }
+            .tu-trust { gap: 12px; }
+            .tu-trust-item { font-size: 0.74rem; }
+            .tu-game-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="promo-badge">PROMO</span>
+                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="contact.html" class="top-bar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="top-icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Aide &amp; Support
+                </a>
+                <span class="top-bar-separator">|</span>
+                <div class="top-bar-dropdown">
+                    <span class="dropdown-trigger currency-lang-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="top-icon">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        FR | HTG ▾
+                    </span>
+                </div>
+                <span class="top-bar-separator">|</span>
+                <div class="top-bar-auth" id="topBarAuth">
+                    <a href="#" class="auth-link login-btn">Connexion</a>
+                    <span class="top-bar-separator" style="opacity:0.5;">|</span>
+                    <a href="#" class="auth-link register-btn">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+        <nav class="nav-container">
+            <ul class="nav-links">
+                <li><a href="catalog.html?cat=jeux">Jeux</a></li>
+                <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
+                <li><a href="index.html#flash-section">Ventes Flash ⚡</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <div class="nav-search-box">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." />
+            </div>
+
+            <a href="#" class="nav-icon wishlist-btn" id="wishlistBtn" aria-label="Favoris">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
+            </a>
+
+            <a href="#" class="nav-icon cart-btn" id="cartBtn" onclick="event.preventDefault(); openCartDrawer();" aria-label="Panier" title="Voir mon panier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="wishlist-badge" id="cartBadgeCount" style="background:#3b82f6">0</span>
+            </a>
+
+            <a href="#" class="whatsapp-btn" aria-label="WhatsApp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="#25D366" d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.993 0 1.763.458 3.42 1.257 4.873L2.05 21.434c-.112.413.26.785.673.673l4.567-1.222a9.925 9.925 0 0 0 4.714 1.186c5.516 0 9.986-4.471 9.986-9.993C21.99 6.471 17.52 2 12.004 2Z"></path>
+                    <path fill="#FFF" d="M15.932 14.122c-.244-.122-1.442-.712-1.666-.794-.223-.081-.385-.122-.548.122-.162.244-.63.794-.772.956-.143.163-.285.183-.529.06-.244-.121-1.03-.38-1.962-1.21-.725-.647-1.215-1.447-1.357-1.69-.143-.244-.015-.376.107-.497.11-.11.244-.285.366-.427.122-.142.163-.244.244-.407.081-.163.04-.305-.02-.427-.061-.122-.548-1.32-.751-1.81-.199-.477-.4-.412-.549-.42-.142-.007-.305-.007-.467-.007-.163 0-.427.061-.65.305-.224.244-.854.834-.854 2.034 0 1.2 1.139 2.5 1.443 2.724.304.224 2.242 3.424 5.432 4.802.758.328 1.35.524 1.813.67.762.243 1.455.209 2.004.127.612-.091 1.442-.589 1.646-1.158.203-.57.203-1.057.142-1.158-.06-.1-.223-.163-.467-.285Z"></path>
+                </svg>
+                <span class="whatsapp-text">WhatsApp</span>
+            </a>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="tu-wrapper">
+        <!-- Breadcrumb -->
+        <nav class="tu-breadcrumb" id="tu-breadcrumb">
+            <a href="index.html">Accueil</a>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <a href="catalog.html" id="bc-cat">Catalogue</a>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <span class="tu-bc-current" id="bc-name">Chargement…</span>
+        </nav>
+
+        <!-- Error state (hidden by default) -->
+        <div class="tu-error" id="tu-error" style="display:none;">
+            <div class="tu-error-icon">🔍</div>
+            <h2>Produit introuvable</h2>
+            <p>Ce produit n'existe pas ou a été retiré du catalogue.</p>
+            <a href="catalog.html">← Retour au catalogue</a>
+        </div>
+
+        <!-- Main content -->
+        <div class="tu-main" id="tu-main">
+            <!-- Left column -->
+            <div class="tu-left" id="tu-left">
+                <div class="tu-product-hero tu-skeleton" id="tu-hero" style="min-height:260px;"></div>
+                <div class="tu-product-info">
+                    <div class="tu-skeleton" style="height:30px;width:70%;margin-bottom:12px;"></div>
+                    <div class="tu-skeleton" style="height:18px;width:40%;margin-bottom:20px;"></div>
+                    <div class="tu-skeleton" style="height:14px;width:100%;margin-bottom:6px;"></div>
+                    <div class="tu-skeleton" style="height:14px;width:85%;"></div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="tu-right">
+                <div class="tu-form-card">
+                    <div class="tu-form-header">
+                        <p class="tu-form-title">Commander</p>
+                        <p class="tu-form-subtitle">Sélectionnez votre pack et entrez vos informations</p>
+                    </div>
+
+                    <!-- Pack grid -->
+                    <div class="tu-section-label">Sélectionner un Pack</div>
+                    <div class="tu-pack-grid" id="tu-pack-grid">
+                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
+                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
+                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
+                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
+                    </div>
+
+                    <div class="tu-form-divider"></div>
+
+                    <!-- Server (conditional) -->
+                    <div id="tu-server-wrap" style="display:none;">
+                        <div class="tu-section-label">Sélectionner un Serveur</div>
+                        <div class="tu-field-wrap">
+                            <select class="tu-field-input" id="tu-server-select">
+                                <option value="">-- Choisir un serveur --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- UID input -->
+                    <div class="tu-section-label" id="tu-uid-label-section">Informations du joueur</div>
+                    <div class="tu-field-wrap">
+                        <div class="tu-field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <span id="tu-uid-label">ID Joueur</span>
+                            <span class="tu-required">*</span>
+                        </div>
+                        <input type="text" class="tu-field-input" id="tu-uid-input" placeholder="Entrez votre ID de joueur" autocomplete="off">
+                        <div class="tu-field-hint" id="tu-uid-hint"></div>
+                    </div>
+
+                    <div class="tu-form-divider"></div>
+
+                    <!-- Payment method -->
+                    <div class="tu-section-label">Méthode de Paiement</div>
+                    <div class="tu-pay-tabs" id="tu-pay-tabs">
+                        <button class="tu-pay-tab active" data-pay="moncash" onclick="selectPayMethod('moncash')">Moncash</button>
+                        <button class="tu-pay-tab" data-pay="natcash" onclick="selectPayMethod('natcash')">Natcash</button>
+                        <button class="tu-pay-tab" data-pay="wallet" onclick="selectPayMethod('wallet')">Wallet</button>
+                    </div>
+
+                    <div class="tu-form-divider"></div>
+
+                    <!-- Order summary -->
+                    <div class="tu-summary" id="tu-summary">
+                        <div class="tu-sum-row">
+                            <span>Pack sélectionné</span>
+                            <span class="tu-sum-val" id="sum-pack">—</span>
+                        </div>
+                        <div class="tu-sum-row">
+                            <span>Méthode</span>
+                            <span class="tu-sum-val" id="sum-method">Moncash</span>
+                        </div>
+                        <div class="tu-sum-total">
+                            <div>
+                                <div class="tu-sum-total-label">Total</div>
+                                <div class="tu-sum-htg" id="sum-htg">— HTG</div>
+                            </div>
+                            <div class="tu-sum-total-price" id="sum-price">$0.00</div>
+                        </div>
+                    </div>
+
+                    <!-- Order button -->
+                    <button class="tu-order-btn" id="tu-order-btn" onclick="submitOrder()">
+                        Commander Maintenant →
+                    </button>
+
+                    <div class="tu-secure-note">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        Paiement 100% sécurisé — Livraison instantanée
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation overlay -->
+    <div class="tu-confirm-overlay" id="tu-confirm">
+        <div class="tu-confirm-box">
+            <div class="tu-confirm-header">
+                <div class="tu-confirm-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <p class="tu-confirm-title" id="conf-title">Commande confirmée !</p>
+                <p class="tu-confirm-ref" id="conf-ref">Référence : #ASTA-…</p>
+            </div>
+
+            <!-- Payment instructions (Moncash/Natcash) -->
+            <div id="conf-pay-section">
+                <div class="tu-confirm-body">
+                    <div class="tu-confirm-row">
+                        <span>Produit</span>
+                        <span id="conf-product">—</span>
+                    </div>
+                    <div class="tu-confirm-row">
+                        <span>Pack</span>
+                        <span id="conf-pack">—</span>
+                    </div>
+                    <div class="tu-confirm-row">
+                        <span>ID Joueur</span>
+                        <span id="conf-uid">—</span>
+                    </div>
+                    <div class="tu-confirm-row">
+                        <span>Montant</span>
+                        <span id="conf-amount-usd">—</span>
+                    </div>
+                    <div class="tu-pay-instructions">
+                        <p>Envoyez exactement ce montant via <strong id="conf-method-name">Moncash</strong> au :</p>
+                        <span class="tu-pay-phone" id="conf-phone">+509 3713-2212</span>
+                        <span class="tu-pay-amount-big" id="conf-amount-htg">0 HTG</span>
+                        <p style="margin-top:8px;">Puis confirmez votre paiement via WhatsApp en appuyant sur le bouton ci-dessous.</p>
+                    </div>
+                </div>
+                <div class="tu-confirm-actions">
+                    <a href="#" target="_blank" class="tu-confirm-wa-btn" id="conf-wa-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.993 0 1.763.458 3.42 1.257 4.873L2.05 21.434c-.112.413.26.785.673.673l4.567-1.222a9.925 9.925 0 0 0 4.714 1.186c5.516 0 9.986-4.471 9.986-9.993C21.99 6.471 17.52 2 12.004 2Z"></path></svg>
+                        Confirmer sur WhatsApp
+                    </a>
+                    <button class="tu-confirm-close-btn" onclick="closeConfirm()">Fermer</button>
+                </div>
+            </div>
+
+            <!-- Wallet success -->
+            <div id="conf-wallet-section" style="display:none;">
+                <div class="tu-wallet-success">
+                    <div class="tu-ws-icon">🎉</div>
+                    <h3>Paiement réussi !</h3>
+                    <p id="conf-wallet-msg">Votre commande a été traitée avec succès depuis votre Wallet Asta.</p>
+                    <button class="tu-order-btn" style="width:100%;margin:0;" onclick="closeConfirm()">Parfait !</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="data/products.js"></script>
+    <script>
+        // ─── State ──────────────────────────────────────────────────────────────
+        let product = null;
+        let selectedDenom = null;
+        let selectedPayMethod = 'moncash';
+        let currentUser = null;
+        let authToken = null;
+
+        const WHATSAPP_NUMBER = '50937132212';
+        const MONCASH_PHONE = '+509 3713-2212';
+        const NATCASH_PHONE = '+509 3713-2212';
+
+        // Payment method phone numbers
+        const PAY_PHONES = {
+            moncash: MONCASH_PHONE,
+            natcash: NATCASH_PHONE,
+            wallet: null
+        };
+
+        // ─── API Base URL (fonctionne en local, VSCode Live Server et Replit) ───
+        const API_BASE = window.location.protocol === 'file:'
+            ? 'http://localhost:5000'
+            : (window.location.port && window.location.port !== '5000')
+                ? `${window.location.protocol}//${window.location.hostname}:5000`
+            : window.location.origin;
+
+        // ─── Bootstrap ──────────────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'), 10);
+
+            // Try to get current user
+            try {
+                const sb = await getSB();
+                const { data: { session } } = await sb.auth.getSession();
+                if (session) {
+                    currentUser = session.user;
+                    authToken = session.access_token;
+                }
+            } catch (_) {}
+
+            // Init cart badge count
+            try {
+                const cart = JSON.parse(localStorage.getItem('asta_cart')) || [];
+                const badge = document.getElementById('cartBadgeCount');
+                if (badge) badge.textContent = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+            } catch(_) {}
+
+            await loadProduct(id);
+        });
+
+        // ─── Load product ────────────────────────────────────────────────────────
+        async function loadProduct(id) {
+            let prod = null;
+
+            // Try from in-page products array first (fast, no network)
+            if (typeof products !== 'undefined' && Array.isArray(products)) {
+                prod = products.find(p => p.id === id);
+            }
+
+            // Fallback: fetch from API
+            if (!prod) {
+                try {
+                    const res = await fetch(API_BASE + '/api/products');
+                    if (res.ok) {
+                        const data = await res.json();
+                        prod = (data.products || data).find(p => p.id === id);
+                    }
+                } catch (_) {}
+            }
+
+            if (!prod) {
+                showError();
+                return;
+            }
+
+            product = prod;
+            renderProduct(prod);
+        }
+
+        // ─── Render product ──────────────────────────────────────────────────────
+        function renderProduct(p) {
+            // Update page title
+            document.title = `Asta-Shops | ${p.name} — Recharge`;
+            document.getElementById('page-title').textContent = `Asta-Shops | ${p.name}`;
+
+            // Breadcrumb
+            document.getElementById('bc-name').textContent = p.name;
+            const bcCat = document.getElementById('bc-cat');
+            bcCat.href = `catalog.html?cat=${p.category}`;
+            bcCat.textContent = getCatLabel(p.category);
+
+            // Hero image
+            const heroEl = document.getElementById('tu-hero');
+            heroEl.classList.remove('tu-skeleton');
+            heroEl.innerHTML = `
+                <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+                ${p.discount ? `<span class="tu-hero-badge">${p.discount}</span>` : ''}
+            `;
+
+            // Product info
+            const starsHTML = renderStars(p.rating);
+            document.getElementById('tu-left').innerHTML = `
+                <div class="tu-product-hero" id="tu-hero">
+                    <img src="${p.img}" alt="${p.name}" onerror="this.style.background='#f0f2f5'">
+                    ${p.discount ? `<span class="tu-hero-badge">${p.discount}</span>` : ''}
+                </div>
+                <div class="tu-product-info">
+                    <h1 class="tu-game-title">${p.name}</h1>
+                    <div class="tu-meta">
+                        <div class="tu-stars">
+                            ${starsHTML}
+                            <span class="tu-rating-val">${p.rating.toFixed(1)}</span>
+                        </div>
+                        <span class="tu-reviews">(${Math.floor(Math.random() * 3000 + 500)} avis)</span>
+                        <span class="tu-sales-badge">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            ${p.sales} Vendus
+                        </span>
+                    </div>
+
+                    <div class="tu-trust">
+                        <div class="tu-trust-item">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            Livraison instantanée
+                        </div>
+                        <div class="tu-trust-item">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Paiement sécurisé
+                        </div>
+                        <div class="tu-trust-item">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            Support 24/7
+                        </div>
+                    </div>
+
+                    <p class="tu-desc-title">À propos</p>
+                    <p class="tu-desc-text">${p.desc || 'Recharge officielle, livrée instantanément.'}</p>
+
+                    <div class="tu-info-table" style="margin-top:24px;">
+                        <div class="tu-info-row">
+                            <div class="tu-info-label">Plateforme</div>
+                            <div class="tu-info-value">${getPlatformLabel(p.category)}</div>
+                        </div>
+                        ${p.needsServer ? `
+                        <div class="tu-info-row">
+                            <div class="tu-info-label">Serveur requis</div>
+                            <div class="tu-info-value">Oui — sélectionnez dans le formulaire</div>
+                        </div>` : ''}
+                        <div class="tu-info-row">
+                            <div class="tu-info-label">Info requise</div>
+                            <div class="tu-info-value"><strong style="color:#ef4444;">${p.idLabel || 'ID de joueur'}</strong></div>
+                        </div>
+                        <div class="tu-info-row">
+                            <div class="tu-info-label">Délai de livraison</div>
+                            <div class="tu-info-value">Dans les 5 minutes</div>
+                        </div>
+                        <div class="tu-info-row">
+                            <div class="tu-info-label">Méthodes de paiement</div>
+                            <div class="tu-info-value">Moncash · Natcash · Wallet Asta</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Pack grid
+            renderPackGrid(p);
+
+            // Server dropdown
+            if (p.needsServer && p.serverOptions && p.serverOptions.length) {
+                const wrap = document.getElementById('tu-server-wrap');
+                const sel = document.getElementById('tu-server-select');
+                wrap.style.display = '';
+                p.serverOptions.forEach(srv => {
+                    const opt = document.createElement('option');
+                    opt.value = srv;
+                    opt.textContent = srv;
+                    sel.appendChild(opt);
+                });
+            }
+
+            // UID label & prefill with 6-character user code or game ID
+            const userCode = window.getAstaUserCode ? window.getAstaUserCode(currentUser) : 'A8K9X2';
+            const uidInput = document.getElementById('tu-uid-input');
+            const uidLabel = document.getElementById('tu-uid-label');
+            const uidHint = document.getElementById('tu-uid-hint');
+
+            const isSpecificGameID = p.idLabel && !p.idLabel.toLowerCase().includes('email');
+
+            if (uidLabel) {
+                uidLabel.textContent = isSpecificGameID ? p.idLabel : "ID de joueur / Code Utilisateur (6 caractères)";
+            }
+            if (uidInput) {
+                uidInput.placeholder = p.idPlaceholder || (isSpecificGameID ? "Ex: 123456789" : "Ex: 8F3K9A");
+                if (!uidInput.value || uidInput.value.includes('@')) {
+                    uidInput.value = isSpecificGameID ? '' : userCode;
+                }
+            }
+            if (uidHint) {
+                uidHint.textContent = p.idHint || (isSpecificGameID ? "Entrez votre ID / Pseudo exact dans le jeu." : "Code unique définitif à 6 chiffres et lettres.");
+            }
+        }
+
+        // ─── Pack grid ───────────────────────────────────────────────────────────
+        function renderPackGrid(p) {
+            const grid = document.getElementById('tu-pack-grid');
+            if (!p.denoms || !p.denoms.length) {
+                grid.innerHTML = '<p style="padding:10px;color:#6b7280;font-size:0.85rem;">Aucun pack disponible.</p>';
+                return;
+            }
+            grid.innerHTML = p.denoms.map((d, i) => `
+                <button class="tu-pack-btn ${i === 0 ? 'active' : ''}" onclick="selectPack(${i})">
+                    <span class="tu-pack-label">${d.label}</span>
+                    <span class="tu-pack-price">$${parseFloat(d.eur).toFixed(2)}</span>
+                    <span class="tu-pack-htg">${d.htg.toLocaleString()} HTG</span>
+                </button>
+            `).join('');
+
+            // Select first by default
+            selectedDenom = p.denoms[0];
+            updateSummary();
+        }
+
+        function selectPack(index) {
+            if (!product || !product.denoms) return;
+            selectedDenom = product.denoms[index];
+            document.querySelectorAll('.tu-pack-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            updateSummary();
+        }
+
+        // ─── Payment method ──────────────────────────────────────────────────────
+        function selectPayMethod(method) {
+            selectedPayMethod = method;
+            document.querySelectorAll('.tu-pay-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.getAttribute('data-pay') === method);
+            });
+            document.getElementById('sum-method').textContent = method.charAt(0).toUpperCase() + method.slice(1);
+        }
+
+        // ─── Summary update ──────────────────────────────────────────────────────
+        function updateSummary() {
+            if (!selectedDenom) return;
+            document.getElementById('sum-pack').textContent = selectedDenom.label;
+            document.getElementById('sum-price').textContent = `$${parseFloat(selectedDenom.eur).toFixed(2)}`;
+            document.getElementById('sum-htg').textContent = `${selectedDenom.htg.toLocaleString()} HTG`;
+        }
+
+        // ─── TOAST BUBBLE SYSTEM ──────────────────────────────────────────────────
+        function showAstaToast(type = 'warning', title = 'Attention', message = '', action = null) {
+            let container = document.getElementById('astaToastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'astaToastContainer';
+                container.className = 'asta-toast-container';
+                document.body.appendChild(container);
+            }
+
+            const icons = {
+                warning: '⚠️',
+                error: '❌',
+                success: '✅',
+                cart: '🛒'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `asta-toast ${type}`;
+            toast.innerHTML = `
+                <div class="asta-toast-icon">${icons[type] || '🔔'}</div>
+                <div class="asta-toast-content">
+                    <div class="asta-toast-title">${title}</div>
+                    <div class="asta-toast-msg">${message}</div>
+                    ${action ? `<button class="asta-toast-btn" onclick="${action.onclick}">${action.text}</button>` : ''}
+                </div>
+                <button class="asta-toast-close" onclick="this.parentElement.remove()">×</button>
+                <div class="asta-toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 400);
+                }
+            }, 4000);
+        }
+
+        function addToCartLocal(item) {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+            
+            const existingIndex = cart.findIndex(c => c.id === item.id && c.denom === item.denom && c.player_id === item.player_id);
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
+            } else {
+                cart.push({ ...item, quantity: 1, date: new Date().toISOString() });
+            }
+            
+            localStorage.setItem('asta_cart', JSON.stringify(cart));
+            
+            const badges = document.querySelectorAll('#cartBadgeCount, .cart-badge-count');
+            badges.forEach(b => b.textContent = cart.reduce((sum, i) => sum + (i.quantity || 1), 0));
+        }
+
+        // ─── Submit order ────────────────────────────────────────────────────────
+        async function submitOrder() {
+            if (!product || !selectedDenom) {
+                showAstaToast('warning', 'Sélection requise', 'Veuillez sélectionner un pack d\'option ci-dessus.');
+                return;
+            }
+            const uidInput = document.getElementById('tu-uid-input');
+            const uid = uidInput ? uidInput.value.trim() : '';
+            if (!uid) {
+                if (uidInput) {
+                    uidInput.focus();
+                    uidInput.classList.add('input-error-glow');
+                    setTimeout(() => uidInput.classList.remove('input-error-glow'), 2500);
+                }
+                showAstaToast('warning', 'Champ requis', `Veuillez entrer votre ${product.idLabel || 'ID de joueur'}.`);
+                return;
+            }
+            const serverSelect = document.getElementById('tu-server-select');
+            const server = serverSelect?.value || '';
+            if (product.needsServer && !server) {
+                if (serverSelect) {
+                    serverSelect.focus();
+                    serverSelect.classList.add('input-error-glow');
+                    setTimeout(() => serverSelect.classList.remove('input-error-glow'), 2500);
+                }
+                showAstaToast('warning', 'Serveur requis', 'Veuillez sélectionner votre serveur de jeu.');
+                return;
+            }
+
+            // Enregistrer automatiquement dans le panier local
+            addToCartLocal({
+                id: product.id,
+                name: product.name,
+                denom: selectedDenom.label,
+                price: selectedDenom.eur,
+                htg: selectedDenom.htg,
+                player_id: uid,
+                server: server,
+                method: selectedPayMethod,
+                img: product.image
+            });
+
+            // Afficher la bulle de notification élégante
+            showAstaToast(
+                'cart', 
+                'Ajouté au panier ! 🛒', 
+                `${product.name} (${selectedDenom.label}) — $${parseFloat(selectedDenom.eur).toFixed(2)} (${selectedDenom.htg.toLocaleString()} HTG)`,
+                { text: 'Voir mon panier 🛒', onclick: 'openCartDrawer()' }
+            );
+
+            const btn = document.getElementById('tu-order-btn');
+            btn.disabled = true;
+            btn.textContent = 'Traitement en cours…';
+
+            const ref = 'ASTA-' + Date.now().toString(36).toUpperCase();
+
+            try {
+                if (selectedPayMethod === 'wallet' && authToken) {
+                    await submitWalletOrder(uid, server, ref);
+                } else {
+                    await submitPublicOrder(uid, server, ref);
+                }
+            } catch (err) {
+                console.error('[topup] order error', err);
+                showAstaToast('error', 'Erreur de commande', err.message || 'Une erreur est survenue. Veuillez réessayer.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Commander Maintenant →';
+            }
+        }
+
+        async function submitPublicOrder(uid, server, ref) {
+            const body = {
+                client_id: currentUser?.id || null,
+                client_email: currentUser?.email || 'anonyme@asta-shops.com',
+                client_nom: currentUser?.user_metadata?.full_name || 'Client',
+                produit_id: product.id,
+                produit_nom: product.name,
+                categorie: product.category,
+                denom_label: selectedDenom.label,
+                eur: selectedDenom.eur,
+                htg: selectedDenom.htg,
+                methode_paiement: selectedPayMethod,
+                player_id: uid,
+                server: server || null
+            };
+
+            try {
+                await fetch(API_BASE + '/api/orders/public', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+            } catch (_) {}
+
+            // Show confirmation modal
+            const phone = PAY_PHONES[selectedPayMethod] || MONCASH_PHONE;
+            const methodLabel = selectedPayMethod === 'moncash' ? 'Moncash' : 'Natcash';
+            const waMsg = encodeURIComponent(
+                `✅ Confirmation Paiement Asta-Shops\n` +
+                `━━━━━━━━━━━━━━━━━━━━\n` +
+                `📦 Produit : ${product.name}\n` +
+                `🎮 Pack : ${selectedDenom.label}\n` +
+                `🆔 ID Joueur : ${uid}` +
+                (server ? `\n🌐 Serveur : ${server}` : '') + `\n` +
+                `💳 Méthode : ${methodLabel}\n` +
+                `💰 Montant : ${selectedDenom.htg.toLocaleString()} HTG ($${parseFloat(selectedDenom.eur).toFixed(2)})\n` +
+                `🔑 Réf : ${ref}\n` +
+                `━━━━━━━━━━━━━━━━━━━━\n` +
+                `J'ai effectué le paiement, merci de traiter ma commande.`
+            );
+
+            document.getElementById('conf-title').textContent = 'Commande enregistrée !';
+            document.getElementById('conf-ref').textContent = `Référence : #${ref}`;
+            document.getElementById('conf-product').textContent = product.name;
+            document.getElementById('conf-pack').textContent = selectedDenom.label;
+            document.getElementById('conf-uid').textContent = uid;
+            document.getElementById('conf-amount-usd').textContent = `$${parseFloat(selectedDenom.eur).toFixed(2)}`;
+            document.getElementById('conf-method-name').textContent = methodLabel;
+            document.getElementById('conf-phone').textContent = phone;
+            document.getElementById('conf-amount-htg').textContent = `${selectedDenom.htg.toLocaleString()} HTG`;
+            document.getElementById('conf-wa-btn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`;
+            document.getElementById('conf-pay-section').style.display = '';
+            document.getElementById('conf-wallet-section').style.display = 'none';
+
+            openConfirm();
+        }
+
+        async function submitWalletOrder(uid, server, ref) {
+            const res = await fetch(API_BASE + '/api/wallet/pay-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify({
+                    produit_id: product.id,
+                    produit_nom: product.name,
+                    categorie: product.category,
+                    denom_label: selectedDenom.label,
+                    eur: selectedDenom.eur,
+                    htg: selectedDenom.htg,
+                    client_nom: currentUser?.user_metadata?.full_name || 'Client',
+                    player_id: uid,
+                    server: server
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || 'Erreur paiement wallet');
+            }
+
+            document.getElementById('conf-title').textContent = 'Paiement réussi !';
+            document.getElementById('conf-ref').textContent = `Référence : #${ref}`;
+            document.getElementById('conf-wallet-msg').textContent =
+                `Votre commande "${product.name} — ${selectedDenom.label}" a été débitée de votre Wallet. Nouveau solde : $${(data.new_balance || 0).toFixed(2)}`;
+            document.getElementById('conf-pay-section').style.display = 'none';
+            document.getElementById('conf-wallet-section').style.display = '';
+
+            openConfirm();
+        }
+
+        // ─── Confirm overlay ─────────────────────────────────────────────────────
+        function openConfirm() {
+            document.getElementById('tu-confirm').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeConfirm() {
+            document.getElementById('tu-confirm').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ─── Helpers ─────────────────────────────────────────────────────────────
+        function showError() {
+            document.getElementById('tu-error').style.display = '';
+            document.getElementById('tu-main').style.display = 'none';
+        }
+
+        function renderStars(rating) {
+            return [1,2,3,4,5].map(i => {
+                const filled = i <= Math.round(rating);
+                return `<svg width="14" height="14" viewBox="0 0 24 24" fill="${filled ? '#f59e0b' : 'none'}" stroke="#f59e0b" stroke-width="1.5"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>`;
+            }).join('');
+        }
+
+        function getCatLabel(cat) {
+            const map = {
+                'jeux': 'Jeux de crédit',
+                'gift-cards': 'Cartes Cadeaux',
+                'payment-cards': 'Cartes de Paiement',
+                'game-cd-key': 'Clés de Jeux',
+                'game-console': 'Consoles de Jeux',
+                'video-streaming': 'Streaming Vidéo',
+                'music': 'Musique',
+                'shopping': 'Shopping',
+                'telco-prepaid': 'Recharges Mobiles',
+                'tools': 'Tools',
+                'software': 'Software',
+                'social-app': 'Social App'
+            };
+            return map[cat] || 'Catalogue';
+        }
+
+        function getPlatformLabel(cat) {
+            const map = {
+                'jeux': 'Mobile / PC',
+                'gift-cards': 'Multi-plateforme',
+                'payment-cards': 'Carte de paiement numérique',
+                'game-cd-key': 'Steam / Xbox / PC',
+                'game-console': 'Console de jeu',
+                'video-streaming': 'Streaming vidéo',
+                'music': 'Streaming musical',
+                'telco-prepaid': 'Mobile / Téléphone'
+            };
+            return map[cat] || 'Numérique';
+        }
+
+        // Close confirm on overlay click
+        document.getElementById('tu-confirm').addEventListener('click', function(e) {
+            if (e.target === this) closeConfirm();
+        });
+
+        // Mobile menu
+        const mobileToggle = document.getElementById('mobileMenuToggle');
+        const navContainer = document.querySelector('.nav-container');
+        if (mobileToggle && navContainer) {
+            mobileToggle.addEventListener('click', () => {
+                navContainer.classList.toggle('active');
+            });
+        }
+
+        // ─── CART DRAWER LOGIC ───────────────────────────────────────────────────
+        function openCartDrawer() {
+            updateCartDrawerUI();
+            const overlay = document.getElementById('cartDrawerOverlay');
+            if (overlay) overlay.classList.add('active');
+        }
+
+        function closeCartDrawer() {
+            const overlay = document.getElementById('cartDrawerOverlay');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        function updateCartDrawerUI() {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+
+            const countEl = document.getElementById('cartDrawerCount');
+            const badgeEl = document.getElementById('cartBadgeCount');
+            const bodyEl = document.getElementById('cartDrawerBody');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            const subtotalHtgEl = document.getElementById('cartSubtotalHtg');
+
+            const totalQty = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            if (countEl) countEl.textContent = totalQty;
+            if (badgeEl) badgeEl.textContent = totalQty;
+
+            if (!cart.length) {
+                if (bodyEl) {
+                    bodyEl.innerHTML = `
+                        <div class="cart-empty-state" style="text-align:center;padding:40px 20px;color:#9ca3af">
+                            <span style="font-size:48px;display:block;margin-bottom:12px">🛒</span>
+                            <p style="font-size:14px">Votre panier est vide.</p>
+                        </div>
+                    `;
+                }
+                if (subtotalEl) subtotalEl.textContent = "$0.00";
+                if (subtotalHtgEl) subtotalHtgEl.textContent = "0 HTG";
+                return;
+            }
+
+            let totalUsd = 0;
+            let totalHtg = 0;
+
+            if (bodyEl) {
+                bodyEl.innerHTML = cart.map((item, index) => {
+                    const qty = item.quantity || 1;
+                    const itemUsd = (parseFloat(item.price) || 0) * qty;
+                    const itemHtg = (parseInt(item.htg, 10) || 0) * qty;
+                    totalUsd += itemUsd;
+                    totalHtg += itemHtg;
+
+                    return `
+                        <div class="cart-item-card">
+                            <img src="${item.img || 'favicon.svg'}" class="cart-item-img" alt="${item.name}" onerror="this.src='favicon.svg'">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${item.name}</div>
+                                <div class="cart-item-pack">${item.denom || ''}</div>
+                                ${item.player_id ? `<div class="cart-item-uid" title="${item.player_id}">ID: ${item.player_id}</div>` : ''}
+                                <div class="cart-item-price-row">
+                                    <span class="cart-item-htg">${itemHtg.toLocaleString()} HTG</span>
+                                    <span class="cart-item-usd">($${itemUsd.toFixed(2)})</span>
+                                </div>
+                            </div>
+                            <div class="cart-qty-ctrl">
+                                <button class="cart-qty-btn" onclick="changeCartQty(${index}, -1)">-</button>
+                                <span class="cart-qty-val">${qty}</span>
+                                <button class="cart-qty-btn" onclick="changeCartQty(${index}, 1)">+</button>
+                            </div>
+                            <button class="cart-item-del" onclick="removeCartItem(${index})" title="Supprimer">🗑️</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            if (subtotalEl) subtotalEl.textContent = `$${totalUsd.toFixed(2)}`;
+            if (subtotalHtgEl) subtotalHtgEl.textContent = `${totalHtg.toLocaleString()} HTG`;
+        }
+
+        function changeCartQty(index, delta) {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+            if (!cart[index]) return;
+            cart[index].quantity = (cart[index].quantity || 1) + delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('asta_cart', JSON.stringify(cart));
+            updateCartDrawerUI();
+        }
+
+        function removeCartItem(index) {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+            cart.splice(index, 1);
+            localStorage.setItem('asta_cart', JSON.stringify(cart));
+            updateCartDrawerUI();
+        }
+
+        function clearCart() {
+            localStorage.removeItem('asta_cart');
+            updateCartDrawerUI();
+        }
+
+        function checkoutCart() {
+            closeCartDrawer();
+            openConfirm();
+        }
+    </script>
+
+    <!-- Panier Glissant (Cart Drawer) -->
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="if(event.target===this)closeCartDrawer()">
+        <div class="cart-drawer" id="cartDrawer">
+            <div class="cart-drawer-header">
+                <h3>🛒 Mon Panier (<span id="cartDrawerCount">0</span>)</h3>
+                <button class="cart-drawer-close" id="closeCartDrawer" onclick="closeCartDrawer()" aria-label="Fermer">×</button>
+            </div>
+            <div class="cart-drawer-body" id="cartDrawerBody">
+                <div class="cart-empty-state">
+                    <span class="cart-empty-icon">🛒</span>
+                    <p>Votre panier est vide.</p>
+                </div>
+            </div>
+            <div class="cart-drawer-footer">
+                <div class="cart-subtotal-line">
+                    <span class="cart-subtotal-label">Total HTG :</span>
+                    <span class="cart-subtotal-htg" id="cartSubtotalHtg">0 HTG</span>
+                </div>
+                <div class="cart-subtotal-line">
+                    <span class="cart-subtotal-label">Total USD :</span>
+                    <span class="cart-subtotal-usd" id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="cart-drawer-actions">
+                    <button class="btn-cart-clear" onclick="clearCart()">Vider</button>
+                    <button class="btn-cart-checkout" onclick="checkoutCart()">Passer à la caisse ➔</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/currency.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const globalSearch = document.getElementById('globalSearchInput');
+            if (globalSearch) {
+                globalSearch.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && globalSearch.value.trim()) {
+                        window.location.href = `catalog.html?search=${encodeURIComponent(globalSearch.value.trim())}`;
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="js/maintenance-check.js"></script>
+</body>
+</html>

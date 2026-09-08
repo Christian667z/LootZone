@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande d'Alliance — Asta-Shops</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../main.css?v=2.0">
+    <style>
+        .alliance-hero {
+            background: linear-gradient(135deg, #0b0c0f, #1f2937);
+            padding: 80px 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .alliance-hero h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+
+        .alliance-hero p {
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 600px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        .page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .alliance-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+            margin: 40px 0;
+        }
+
+        .alliance-type {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 28px;
+            border-top: 4px solid #00b67a;
+        }
+
+        .alliance-type h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0b0c0f;
+            margin-bottom: 10px;
+        }
+
+        .alliance-type p {
+            font-size: 0.87rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            background: #f8f9fb;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+
+        .form-field label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            padding: 12px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: 'Roboto', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: #00b67a;
+        }
+
+        .form-field textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #00b67a;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        @media(max-width:600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar" style="position:sticky;top:0;z-index:1000;">
+        <a href="../index.html" class="logo" style="text-decoration:none;color:inherit;">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+        <div class="nav-actions">
+            <a href="../index.html" style="text-decoration:none;color:#00b67a;font-weight:700;">← Retour à l'accueil</a>
+        </div>
+    </header>
+
+    <div class="alliance-hero">
+        <h1>Demande d'Alliance</h1>
+        <p>Asta-Shops est ouvert aux collaborations stratégiques avec des plateformes, communautés gaming et
+            organisations partageant nos valeurs d'excellence et d'innovation dans le secteur du divertissement
+            numérique.</p>
+        <a href="#formulaire"
+            style="display:inline-block;padding:14px 36px;background:#00b67a;color:#fff;border-radius:50px;font-weight:800;text-decoration:none;">Proposer
+            une alliance →</a>
+    </div>
+
+    <div class="page-content">
+        <h2 style="font-size:1.5rem;font-weight:900;color:#0b0c0f;margin-bottom:8px;">Types d'alliances recherchées</h2>
+        <div class="alliance-types">
+            <div class="alliance-type">
+                <h3>🎮 Communautés Gaming</h3>
+                <p>Serveurs Discord, groupes Facebook, communautés TikTok/YouTube dédiées au gaming. Proposez Asta-Shops
+                    comme fournisseur officiel de recharges à votre communauté et bénéficiez d'avantages exclusifs.</p>
+            </div>
+            <div class="alliance-type">
+                <h3>🏢 Plateformes digitales</h3>
+                <p>Applications mobiles, sites web e-commerce, plateformes de services numériques souhaitant intégrer
+                    notre catalogue de produits gaming via API ou partenariat commercial.</p>
+            </div>
+            <div class="alliance-type">
+                <h3>📡 Médias & Presse</h3>
+                <p>Blogs gaming, médias numériques, podcasts et chaînes thématiques cherchant à monétiser leur audience
+                    en recommandant des services de qualité à leur lectorat/communauté.</p>
+            </div>
+            <div class="alliance-type">
+                <h3>🤝 Associations & ONG</h3>
+                <p>Organisations œuvrant dans l'éducation numérique, le développement technologique ou le soutien aux
+                    jeunes créateurs en Haïti et dans la diaspora.</p>
+            </div>
+        </div>
+
+        <div class="form-section" id="formulaire">
+            <h2 style="font-size:1.4rem;font-weight:900;color:#0b0c0f;margin-bottom:22px;">Formulaire de demande
+                d'alliance</h2>
+            <form
+                onsubmit="event.preventDefault(); alert('Votre demande d\'alliance a bien été reçue. Notre équipe vous contactera dans les 72 heures.');">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Nom de votre organisation / projet *</label>
+                        <input type="text" placeholder="Ex: Gaming Haïti Community" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Type d'organisation *</label>
+                        <select required>
+                            <option value="">Choisissez...</option>
+                            <option>Communauté gaming</option>
+                            <option>Plateforme digitale</option>
+                            <option>Média / Blog</option>
+                            <option>Association / ONG</option>
+                            <option>Autre</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Votre nom *</label>
+                        <input type="text" placeholder="Représentant officiel" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Email de contact *</label>
+                        <input type="email" placeholder="contact@votre-organisation.com" required>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label>Lien vers votre plateforme / site (facultatif)</label>
+                    <input type="url" placeholder="https://...">
+                </div>
+                <div class="form-field">
+                    <label>Description de votre proposition d'alliance *</label>
+                    <textarea
+                        placeholder="Décrivez votre organisation, votre audience, et ce que vous souhaitez accomplir avec Asta-Shops..."
+                        required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Envoyer la demande →</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-bottom" style="padding:20px 40px;text-align:center;border-top:1px solid #2a2d38;">
+            <span class="footer-copy">© 2025 Asta-Shops. Tous droits réservés.</span>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asta-Shops | Vos produits numériques en quelques clics</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css?v=2.0">
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="promo-badge">PROMO</span>
+                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="top-bar-link" id="aideSupportBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="top-icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Aide & Support
+                </a>
+                <span class="top-bar-separator">|</span>
+                <div class="top-bar-dropdown">
+                    <span class="dropdown-trigger currency-lang-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="top-icon">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
+                        FR | HTG ▾
+                    </span>
+                </div>
+                <span class="top-bar-separator">|</span>
+                <div class="top-bar-auth" id="topBarAuth">
+                    <a href="#" class="auth-link login-btn">Connexion</a>
+                    <span class="top-bar-separator" style="opacity:0.5;">|</span>
+                    <a href="#" class="auth-link register-btn">S'inscrire</a>
+                </div>
+                <div class="top-bar-user" id="topBarUser" style="display:none">
+                    <div class="user-avatar-small" id="userAvatarEl">?</div>
+                    <span id="userNameEl"></span>
+                    <span class="role-badge-small" id="userRoleEl"></span>
+                    <span style="opacity:0.5">▾</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+
+        <nav class="nav-container">
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="catalog.html?cat=jeux">Jeux <span class="arrow-down">▾</span></a>
+                    <div class="dropdown-mega">
+                        <ul class="mega-column">
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/free fire.png" alt="Free Fire" class="prod-icon">
+                                    Free Fire
+                                </a>
+                            </li>
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/PUBG Mobile.png" alt="PUBG Mobile" class="prod-icon">
+                                    PUBG Mobile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/Call of Duty mobile.png" alt="Call of Duty Mobile" class="prod-icon">
+                                    Call of Duty Mobile
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/roblox.jpeg" alt="Roblox" class="prod-icon">
+                                    Roblox
+                                </a>
+                            </li>
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/FC Mobile.png" alt="EA Sports FC" class="prod-icon">
+                                    EA Sports FC (FIFA)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/mobile legends.jpeg" alt="Mobile Legends" class="prod-icon">
+                                    Mobile Legends
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/Clash of clans.jpeg" alt="Clash of Clans" class="prod-icon">
+                                    Clash of Clans
+                                </a>
+                            </li>
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/e-football.png" alt="eFootball" class="prod-icon">
+                                    eFootball (PES)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="catalog.html?cat=jeux">
+                                    <img src="img/fortnite.png" alt="Fortnite" class="prod-icon">
+                                    Fortnite
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                <li><a href="catalog.html?cat=game-cd-key">Clés de Jeux</a></li>
+                <li><a href="#flash-section">Ventes Flash ⚡</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="nav-search-box">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." />
+            </div>
+
+            <a href="#" class="nav-icon wishlist-btn" id="wishlistBtn" aria-label="Favoris">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
+            </a>
+
+            <a href="#" class="nav-icon cart-btn" aria-label="Panier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge" id="cartBadgeCount">0</span>
+            </a>
+
+            <a href="#" class="whatsapp-btn" aria-label="WhatsApp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="#25D366"
+                        d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.987 0 2.12.659 4.094 1.792 5.727L2 22l4.411-1.306c1.551.936 3.364 1.47 5.293 1.47 5.515 0 9.986-4.471 9.986-9.987C21.99 6.471 17.52 2 12.004 2Zm4.852 13.666c-.244.683-1.22 1.251-1.688 1.301-.468.051-.915.224-2.95-.591-2.592-1.036-4.225-3.664-4.355-3.837-.13-.173-1.057-1.402-1.057-2.673 0-1.27.65-1.89.874-2.134.223-.244.487-.305.65-.305.162 0 .325.01.467.02.152.01.355-.061.558.427.203.488.71 1.728.772 1.85.06.122.091.264.01.427-.081.162-.122.244-.244.386-.122.142-.264.325-.376.437-.122.122-.254.254-.112.498.142.244.63 1.036 1.341 1.673.915.813 1.686 1.067 1.93 1.189.244.122.386.102.528-.061.142-.163.61-.711.772-.956.163-.244.325-.203.549-.122.223.081 1.412.66 1.656.783.244.122.406.183.467.285.061.102.061.59-.183 1.272Z" />
+                </svg>
+                <span class="whatsapp-text">WhatsApp</span>
+            </a>
+        </div>
+
+        <button class="mobile-menu-toggle" aria-label="Menu Mobile" id="mobileMenuToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <main class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Obtenez vos Cartes et<br>Crédits en Quelques Clics !</h1>
+                <p class="hero-subtitle">
+                    Achetez vos produits numériques préférés, comme des cartes Apple, des crédits Free Fire, et des UC
+                    PUBG, en toute simplicité. Rapide, sécurisé, et instantané.
+                </p>
+                <a href="#shop-products" class="btn-main">Explorer les Produits &darr;</a>
+            </div>
+
+            <div class="hero-images">
+                <div class="hero-single-image">
+                    <img src="img/payment_banner.png" alt="Paiement Natcash Moncash">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="flash-section">
+        <div class="section-container">
+            <div class="flash-header">
+                <div class="flash-header-left">
+                    <span class="flash-icon">⚡</span>
+                    <h2 class="flash-title">Ventes Flash</h2>
+                    <div class="flash-timer">
+                        <span class="timer-block" id="flash-hours">02</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-block" id="flash-minutes">45</span>
+                        <span class="timer-separator">:</span>
+                        <span class="timer-block" id="flash-seconds">12</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flash-grid" id="flash-grid"></div>
+        </div>
+    </section>
+
+    <section class="products-section" id="shop-products">
+        <div class="section-container">
+
+            <div class="category-block">
+                <div class="category-header">
+                    <h2 class="category-title">Jeux de crédit</h2>
+                    <button class="btn-see-all" id="btn-jeux" onclick="toggleProducts('grid-jeux', 'btn-jeux')">
+                        Tout <span class="btn-icon">▾</span>
+                    </button>
+                </div>
+
+                <div class="products-grid" id="grid-jeux">
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/free fire.png" alt="Free Fire" loading="lazy">
+                            <span class="card-badge">Populaire</span>
+                            
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
+                                </svg> Mobile</span>
+                            <h3 class="card-title">Free Fire</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>150 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/PUBG Mobile.png" alt="PUBG Mobile" loading="lazy">
+                            
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
+                                </svg> Mobile</span>
+                            <h3 class="card-title">PUBG Mobile</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>200 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/Call of Duty mobile.png" alt="Call of Duty Mobile" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
+                                </svg> Mobile</span>
+                            <h3 class="card-title">Call of Duty Mobile</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>250 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/roblox.jpeg" alt="Roblox" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="6" y1="12" x2="10" y2="12" />
+                                    <line x1="8" y1="10" x2="8" y2="14" />
+                                    <line x1="15" y1="13" x2="15.01" y2="13" stroke-width="3" />
+                                    <line x1="18" y1="11" x2="18.01" y2="11" stroke-width="3" />
+                                    <path
+                                        d="M6 20h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+                                </svg> PC / Mobile</span>
+                            <h3 class="card-title">Roblox (Robux)</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>100 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/FC Mobile.png" alt="EA Sports FC" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
+                                </svg> Mobile</span>
+                            <h3 class="card-title">EA Sports FC (FIFA)</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>300 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/mobile legends.jpeg" alt="Mobile Legends" loading="lazy">
+                            
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
+                                </svg> Mobile</span>
+                            <h3 class="card-title">Mobile Legends</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>120 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/Clash of clans.jpeg" alt="Clash of Clans" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                                    <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
+                                </svg> Mobile</span>
+                            <h3 class="card-title">Clash of Clans</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>90 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=jeux" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/fortnite.png" alt="Fortnite" loading="lazy">
+                            <span class="card-badge">Promo</span>
+                            
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="6" y1="12" x2="10" y2="12" />
+                                    <line x1="8" y1="10" x2="8" y2="14" />
+                                    <line x1="15" y1="13" x2="15.01" y2="13" stroke-width="3" />
+                                    <line x1="18" y1="11" x2="18.01" y2="11" stroke-width="3" />
+                                    <path
+                                        d="M6 20h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+                                </svg> PC / Console</span>
+                            <h3 class="card-title">Fortnite (V-Bucks)</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>180 HTG</strong></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-block" style="margin-top: 50px;">
+                <div class="category-header">
+                    <h2 class="category-title">Cartes Cadeaux</h2>
+                    <button class="btn-see-all" id="btn-cartes" onclick="toggleProducts('grid-cartes', 'btn-cartes')">
+                        Tout <span class="btn-icon">▾</span>
+                    </button>
+                </div>
+
+                <div class="products-grid" id="grid-cartes">
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/Apple Card.jpeg" alt="Apple App Store" loading="lazy">
+                            <span class="card-badge">Populaire</span>
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 814 1000"
+                                    fill="currentColor">
+                                    <path
+                                        d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 391.8 26.5 220.4 26.5 217c-.1-2.7 0-5.3.1-8 1.3-43.7 14.5-83.5 37.5-116.4 27.8-38.9 72.6-63.3 122.3-63.3 48.8 0 85.4 31.1 120.2 31.1 33.3 0 74.1-33.5 130.2-33.5 21.9 0 108.2 1.9 158.8 76.8zm-85.3-179.4c-22 26.6-56.5 47.1-90.7 47.1-3.8 0-7.5-.3-11.3-.9-1-3.6-1.5-7.4-1.5-11.4 0-26 13.9-53.7 37.1-71.9 22.7-18 55.8-32.2 88.8-33.4.7 3.1 1 6.3 1 9.7 0 23.8-11.6 50.5-23.4 60.8z" />
+                                </svg> App Store</span>
+                            <h3 class="card-title">Apple App Store</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>500 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/google_play_card.png" alt="Google Play" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M3.18 23.76c.35.19.75.24 1.15.14L15.34 12 3.18.1C2.78 0 2.38.05 2.03.24 1.38.6 1 1.32 1 2.1v19.8c0 .78.38 1.5 2.18 1.86zM16.5 10.76l-2.84-2.84L17 4.36l2.28 1.34c.97.55.97 1.45 0 2l-2.78 3.06zm-3.44 2.48L4.43 21.87l9.68-9.68 1.73 1.05-2.78 1.95v-.95zM4.43 2.13l8.63 8.63-1.73 1.05-6.9-9.68z" />
+                                </svg> Google Play</span>
+                            <h3 class="card-title">Google Play Store</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>500 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/Play Station Network.jpeg" alt="PlayStation Network" loading="lazy">
+                            <span class="card-badge">Promo</span>
+                            
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M8.985 2.596v17.548l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.181.76.814.76 1.505v5.876c2.441 1.221 4.296-.001 4.296-3.375 0-3.457-1.187-5.093-4.638-6.22-1.186-.382-3.24-.87-5.127-1.887zm9.012 14.973c-1.188.516-2.441.604-3.567.187v-2.638c0 0 2.5.748 3.567-.187.636-.563.686-1.396 0-1.886-.49-.348-1.187-.516-2.041-.726-2.695-.637-5.127-1.505-5.127-4.88 0-3.555 2.895-4.424 5.127-3.646 0 0 2.04.726 2.04 2.631v7.14z" />
+                                </svg> PlayStation</span>
+                            <h3 class="card-title">PlayStation Network</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>600 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/xbox_card.png" alt="Xbox & Game Pass" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.5 14.5c-.828 0-2.5-1.5-4.5-1.5s-3.672 1.5-4.5 1.5C5.845 14.97 4 13.12 4 12c0-1.386 1.344-3.24 3.5-4.5.828-.494 1.672-.5 2-.5.688 0 1.5.5 2.5.5s1.813-.5 2.5-.5c.328 0 1.172.006 2 .5C18.656 8.76 20 10.614 20 12c0 1.12-1.845 2.97-3.5 4.5z" />
+                                </svg> Xbox</span>
+                            <h3 class="card-title">Xbox & Game Pass</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>550 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/steam_card.png" alt="Carte Steam" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.607 0 11.979 0z" />
+                                </svg> Steam / PC</span>
+                            <h3 class="card-title">Carte Steam</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>400 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/razer_gold_card.png" alt="Razer Gold" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                </svg> Gaming</span>
+                            <h3 class="card-title">Razer Gold</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>350 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=gift-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/e-football.png" alt="eFootball" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="6" y1="12" x2="10" y2="12" />
+                                    <line x1="8" y1="10" x2="8" y2="14" />
+                                    <line x1="15" y1="13" x2="15.01" y2="13" stroke-width="3" />
+                                    <line x1="18" y1="11" x2="18.01" y2="11" stroke-width="3" />
+                                    <path
+                                        d="M6 20h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+                                </svg> PC / Mobile</span>
+                            <h3 class="card-title">eFootball (myClub)</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>200 HTG</strong></div>
+                        </div>
+                    </a>
+                    <a href="catalog.html?cat=payment-cards" class="product-card">
+                        <div class="card-img-wrap">
+                            <img src="img/carte.webp" alt="Carte prépayée" loading="lazy">
+                        </div>
+                        <div class="card-info">
+                            <span class="card-platform-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="20 12 20 22 4 22 4 12" />
+                                    <rect x="2" y="7" width="20" height="5" />
+                                    <line x1="12" y1="22" x2="12" y2="7" />
+                                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                                </svg> Carte prépayée</span>
+                            <h3 class="card-title">Carte Prépayée</h3>
+                            <div class="card-meta"><span class="card-star">★</span> 5.0 · 100k+ Vendu</div>
+                            <div class="card-price">Dès <strong>300 HTG</strong></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section Clés de Jeux Populaires (Lootbar Style) -->
+            <div class="category-block" style="margin-top: 50px;">
+                <div class="category-header">
+                    <div class="category-title-wrapper">
+                        <h2 class="category-title">Clé de jeu populaire</h2>
+                        <p class="category-subtitle">Profitez pleinement des jeux les plus amusants.</p>
+                    </div>
+                    <a href="catalog.html?cat=game-cd-key" class="btn-see-all-link">
+                        Tous les jeux (17) <span class="btn-icon">→</span>
+                    </a>
+                </div>
+
+                <div class="keys-grid">
+                    <!-- Forza Horizon 6 -->
+                    <a class="key-card" href="catalog.html?cat=game-cd-key">
+                        <div class="key-img-wrapper">
+                            <img src="img/Forza Horizon 6.png" alt="Forza Horizon 6">
+                        </div>
+                        <div class="key-body">
+                            <h3 class="key-title">Forza Horizon 6</h3>
+                            <div class="key-meta">
+                                <span class="key-platform">
+                                    <svg class="platform-icon platform-icon--xbox" viewBox="0 0 24 24" width="14" height="14"
+                                        fill="currentColor">
+                                        <path d="M4.102 5.481A9.945 9.945 0 0 1 12 2c3.108 0 5.892 1.418 7.752 3.65.208.242.44.595.442 1.11.003.498-.252.908-.415 1.118C18.262 9.21 15.695 11.73 12 15.05c-3.71-3.327-6.27-5.843-7.795-7.194a2.095 2.095 0 0 1-.411-.993c-.052-.44.082-.873.308-1.382zM3.7 6.7C2.634 8.117 2 9.885 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-2.082-.635-4.018-1.72-5.62-.908.87-2.54 2.34-4.818 4.393L12 13.476l-2.688-2.43C7.07 8.961 5.395 7.596 3.7 6.7z" />
+                                    </svg>
+                                    Xbox/PC Clé
+                                </span>
+                                <span class="key-region">Global</span>
+                            </div>
+                            <div class="key-price-row">
+                                <span class="key-price">$51.00</span>
+                                
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Gothic 1 Remake -->
+                    <a class="key-card" href="catalog.html?cat=game-cd-key">
+                        <div class="key-img-wrapper">
+                            <img src="img/Gothic 1 remake.jpeg" alt="Gothic 1 Remake">
+                        </div>
+                        <div class="key-body">
+                            <h3 class="key-title">Gothic 1 Remake</h3>
+                            <div class="key-meta">
+                                <span class="key-platform">
+                                    <svg class="platform-icon platform-icon--steam" viewBox="0 0 24 24" width="14" height="14"
+                                        fill="currentColor">
+                                        <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.521 4.524-4.521 2.494 0 4.521 2.026 4.521 4.521s-2.027 4.521-4.521 4.521h-.105l-4.083 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.386 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.455 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.662 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z" />
+                                    </svg>
+                                    Steam Clé
+                                </span>
+                                <span class="key-region">Global</span>
+                            </div>
+                            <div class="key-price-row">
+                                <span class="key-price">$36.43</span>
+                                
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- 007 First Light -->
+                    <a class="key-card" href="catalog.html?cat=game-cd-key">
+                        <div class="key-img-wrapper">
+                            <img src="img/007_first_light.png" alt="007 First Light">
+                        </div>
+                        <div class="key-body">
+                            <h3 class="key-title">007 First Light</h3>
+                            <div class="key-meta">
+                                <span class="key-platform">
+                                    <svg class="platform-icon platform-icon--xbox" viewBox="0 0 24 24" width="14" height="14"
+                                        fill="currentColor">
+                                        <path d="M4.102 5.481A9.945 9.945 0 0 1 12 2c3.108 0 5.892 1.418 7.752 3.65.208.242.44.595.442 1.11.003.498-.252.908-.415 1.118C18.262 9.21 15.695 11.73 12 15.05c-3.71-3.327-6.27-5.843-7.795-7.194a2.095 2.095 0 0 1-.411-.993c-.052-.44.082-.873.308-1.382zM3.7 6.7C2.634 8.117 2 9.885 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-2.082-.635-4.018-1.72-5.62-.908.87-2.54 2.34-4.818 4.393L12 13.476l-2.688-2.43C7.07 8.961 5.395 7.596 3.7 6.7z" />
+                                    </svg>
+                                    Xbox/PC Clé
+                                </span>
+                                <span class="key-region">Global</span>
+                            </div>
+                            <div class="key-price-row">
+                                <span class="key-price">$54.29</span>
+                                
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Pragmata -->
+                    <a class="key-card" href="catalog.html?cat=game-cd-key">
+                        <div class="key-img-wrapper">
+                            <img src="img/Pragmata.jpeg" alt="Pragmata">
+                        </div>
+                        <div class="key-body">
+                            <h3 class="key-title">Pragmata</h3>
+                            <div class="key-meta">
+                                <span class="key-platform">
+                                    <svg class="platform-icon platform-icon--steam" viewBox="0 0 24 24" width="14" height="14"
+                                        fill="currentColor">
+                                        <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.521 4.524-4.521 2.494 0 4.521 2.026 4.521 4.521s-2.027 4.521-4.521 4.521h-.105l-4.083 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.386 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.455 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.662 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z" />
+                                    </svg>
+                                    Steam Clé
+                                </span>
+                                <span class="key-region">Global</span>
+                            </div>
+                            <div class="key-price-row">
+                                <span class="key-price">$51.00</span>
+                                
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Crimson Desert -->
+                    <a class="key-card" href="catalog.html?cat=game-cd-key">
+                        <div class="key-img-wrapper">
+                            <img src="img/Crimson Desert.jpeg" alt="Crimson Desert">
+                        </div>
+                        <div class="key-body">
+                            <h3 class="key-title">Crimson Desert</h3>
+                            <div class="key-meta">
+                                <span class="key-platform">
+                                    <svg class="platform-icon platform-icon--steam" viewBox="0 0 24 24" width="14" height="14"
+                                        fill="currentColor">
+                                        <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.521 4.524-4.521 2.494 0 4.521 2.026 4.521 4.521s-2.027 4.521-4.521 4.521h-.105l-4.083 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.386 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.455 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.662 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z" />
+                                    </svg>
+                                    Steam Clé
+                                </span>
+                                <span class="key-region">Global</span>
+                            </div>
+                            <div class="key-price-row">
+                                <span class="key-price">$58.29</span>
+                                
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Section Pourquoi nous choisir ? -->
+    <section class="why-choose-us-section">
+        <div class="section-container">
+            <div class="why-section-header">
+                <div class="why-section-badge">✦ Notre engagement</div>
+                <h2 class="why-section-title">Pourquoi choisir Asta Shops ?</h2>
+                <p class="why-section-sub">Des milliers de clients nous font confiance chaque jour. Voici pourquoi nous
+                    sommes la référence pour vos recharges de jeux.</p>
+            </div>
+            <div class="why-cards-grid">
+                <div class="why-card-new">
+                    <div class="why-card-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg>
+                    </div>
+                    <h3>Livraison Instantanée</h3>
+                    <p>Recevez vos codes et crédits en quelques secondes après le paiement, à toute heure du jour et de
+                        la nuit.</p>
+                    <div class="why-card-stat">~3 sec</div>
+                </div>
+                <div class="why-card-new">
+                    <div class="why-card-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                    </div>
+                    <h3>Paiement 100% Sécurisé</h3>
+                    <p>Vos transactions sont entièrement chiffrées. Nous acceptons Moncash, Natcash, Visa, Mastercard et
+                        plus.</p>
+                    <div class="why-card-stat">SSL &amp; 3DS</div>
+                </div>
+                <div class="why-card-new">
+                    <div class="why-card-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                    </div>
+                    <h3>Support 24h/7j</h3>
+                    <p>Notre équipe est disponible à toute heure via WhatsApp pour vous accompagner et résoudre tout
+                        problème.</p>
+                    <div class="why-card-stat">24h/24</div>
+                </div>
+                <div class="why-card-new">
+                    <div class="why-card-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                    </div>
+                    <h3>Meilleurs Prix Garantis</h3>
+                    <p>Profitez de tarifs compétitifs, de remises exclusives pour les membres VIP et de promotions
+                        régulières.</p>
+                    <div class="why-card-stat">-30%</div>
+                </div>
+                <div class="why-card-new">
+                    <div class="why-card-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="7" />
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                        </svg>
+                    </div>
+                    <h3>Programme de Fidélité VIP</h3>
+                    <p>Cumulez des points à chaque achat et débloquez des avantages exclusifs : remises, bonus et accès
+                        prioritaire.</p>
+                    <div class="why-card-stat">7 niveaux</div>
+                </div>
+                <div class="why-card-new">
+                    <div class="why-card-icon-wrap">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <h3>+10 Millions de Clients</h3>
+                    <p>Rejoignez une communauté de joueurs satisfaits à travers le monde entier. Leur confiance est
+                        notre fierté.</p>
+                    <div class="why-card-stat">★ 4.9 / 5</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pied de page (Footer Premium Asta Shops) -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Trust Badges -->
+            <div class="footer-trust-badges">
+                <div class="ftb-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Paiement Sécurisé</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Livraison Instantanée</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Service 24/7</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>Support WhatsApp</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>10M+ Clients Satisfaits</span>
+                </div>
+            </div>
+            <!-- Payment Methods Band -->
+            <div class="payment-methods-band">
+                <span class="payment-title">Moyens de paiement sécurisés :</span>
+                <div class="payment-logos">
+                    <!-- Moncash -->
+                    <div class="payment-logo-card moncash">
+                        <span class="pay-mon">Mon</span><span class="pay-cash">cash</span>
+                    </div>
+                    <!-- Natcash -->
+                    <div class="payment-logo-card natcash">
+                        <span class="pay-nat">Nat</span><span class="pay-cash-blue">cash</span>
+                    </div>
+                    <!-- Visa -->
+                    <div class="payment-logo-card soon">
+                        <span class="pay-visa" style="color: #4361ee; font-style: italic; font-weight: 900; font-size: 0.92rem; letter-spacing: 0.5px;">VISA</span>
+                    </div>
+                    <!-- Mastercard -->
+                    <div class="payment-logo-card soon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 20" width="30" height="18">
+                            <circle cx="11" cy="10" r="8" fill="#EB001B"/>
+                            <circle cx="21" cy="10" r="8" fill="#F79E1B" fill-opacity="0.85"/>
+                        </svg>
+                    </div>
+                    <!-- PayPal -->
+                    <div class="payment-logo-card soon">
+                        <span class="pay-paypal">Pay</span><span class="pay-pal">Pal</span>
+                    </div>
+                    <!-- Apple Pay -->
+                    <div class="payment-logo-card soon">
+                        <span class="pay-apple" style="display: flex; align-items: center; gap: 3px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 170 170" style="margin-bottom: 1px;">
+                                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-5.01.12-9.87-1.93-14.58-6.14-3.14-2.76-7.05-7.46-11.75-14.1-6.73-9.54-12.02-20.3-15.86-32.27-3.84-11.97-5.76-23.49-5.76-34.56 0-14.28 3.56-26.06 10.68-35.34 7.12-9.28 16.03-14.07 26.73-14.37 4.58 0 9.87 1.25 15.86 3.75 5.99 2.5 10.08 3.75 12.27 3.75 1.94 0 6.14-1.31 12.6-3.94 6.46-2.63 11.85-3.88 16.18-3.75 11.83.47 21.03 4.88 27.6 13.23-10.42 6.31-15.54 15.11-15.36 26.4.18 8.87 3.51 16.31 9.99 22.32 6.48 6.01 14.19 9.38 23.13 10.11-2.28 6.83-5.2 13.79-8.76 20.89zM119.22 31.84c0-6.68 2.45-13.06 7.35-19.14 4.9-6.08 11.05-9.81 18.44-11.2 0 .91.07 1.63.07 2.16 0 6.58-2.52 13.07-7.56 19.46-5.04 6.39-11.2 10.17-18.49 11.34a21.43 21.43 0 0 1-.19-2.62z"/>
+                            </svg>
+                            Pay
+                        </span>
+                    </div>
+                    <!-- Google Pay -->
+                    <div class="payment-logo-card soon">
+                        <span class="pay-google"><span class="g-blue">G</span><span class="g-red">o</span><span
+                                class="g-yellow">o</span><span class="g-blue">g</span><span
+                                class="g-green">l</span><span class="g-red">e</span> Pay</span>
+                    </div>
+                    <!-- USDT/Bitcoin -->
+                    <div class="payment-logo-card crypto soon">
+                        <span class="pay-crypto">Crypto</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <!-- Footer Columns -->
+            <div class="footer-columns">
+                <!-- Column 1: Brand Info -->
+                <div class="footer-col brand-col">
+                    <div class="logo" style="display: flex; align-items: center; gap: 8px; margin-bottom: 15px;">
+                        <span class="logo-box"
+                            style="background-color: #000000; border: 1px solid #252b36; color: #ffffff; font-weight: 900; padding: 4px 8px; border-radius: 6px; font-size: 1rem;">AS</span>
+                        <span class="logo-text"
+                            style="font-weight: 900; font-size: 1.2rem; color: #ffffff; letter-spacing: 0.5px;">ASTA-<span
+                                class="text-green" style="color: #00b67a;">SHOPS</span></span>
+                    </div>
+                    <p class="brand-desc">
+                        La plateforme de recharge de référence. Obtenez vos crédits de jeux, cartes cadeaux et
+                        abonnements instantanément au meilleur prix.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Discord">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.579-.406.837a12 12 0 0 0-3.658 0 8 8 0 0 0-.412-.837.05.05 0 0 0-.052-.025 13 13 0 0 0-3.257 1.011.05.05 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.05.05 0 0 0-.018-.011 8.8 8.8 0 0 1-1.248-.595.05.05 0 0 1-.02-.056.05.05 0 0 1 .032-.041c.086-.065.171-.133.252-.203a.05.05 0 0 1 .051-.007c2.72 1.25 5.675 1.25 8.358 0a.05.05 0 0 1 .051.007c.082.07.166.138.252.203a.05.05 0 0 1 .033.041.05.05 0 0 1-.02.056 9 9 0 0 1-1.248.595.05.05 0 0 0-.018.01.05.05 0 0 0-.01.059c.246.466.52.91.819 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.63-1.613 1.438-1.613c.807 0 1.45.724 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.799 0-1.438-.724-1.438-1.612s.63-1.613 1.438-1.613c.807 0 1.451.724 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.38 13.84 3.98 15 4v2c-1.756-.03-3.036-1.006-4-2v10.5a4.5 4.5 0 1 1-9-0 4.5 4.5 0 0 1 7.394-3.493c.123.1.206.223.333.376A4.475 4.475 0 0 1 9 14.5V0z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="YouTube">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.104 1.981a2.01 2.01 0 0 1-1.415 1.419c-1.113.3-5.269.33-6.11.335h-.089c-.822-.003-4.987-.033-6.11-.335a2.01 2.01 0 0 1-1.415-1.42C.101 11.12.035 10.617.008 10.1l-.008-.104-.015-.26-.008-.104c-.065-.914-.073-1.77-.074-1.957v-.075c.001-.194.01-1.108.104-1.981A2.01 2.01 0 0 1 1.42 2.334C2.533 2.03 6.688 2 7.529 1.999h.522zM6.257 8.278 9.9 10.1l-.002-3.644-3.641 1.822z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Navigation -->
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="catalog.html?cat=jeux">Jeux de Crédit</a></li>
+                        <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                        <li><a href="catalog.html?cat=game-cd-key">Clés de jeux (CD-Keys)</a></li>
+                        <li><a href="catalog.html?cat=payment-cards">Cartes de Paiement</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Service & Support -->
+                <div class="footer-col">
+                    <h4>Support & Légal</h4>
+                    <ul>
+                        <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="liens footer/FAQ Centre d'aide.html">FAQ / Centre d'aide</a></li>
+                        <li><a href="contact.html">Contactez-nous</a></li>
+                        <li><a href="#">Recharges et Retours</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Partenariat -->
+                <div class="footer-col">
+                    <h4>Partenariat</h4>
+                    <ul>
+                        <li><a href="liens footer/partenaire de Asta-shops.html">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Vendre sur Asta Shops.html">Vendre sur Asta Shops</a></li>
+                        <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
+                        <li><a href="liens footer/Demande d'Alliance.html">Demande d'Alliance</a></li>
+                        <li><a href="liens footer/Recrutement.html">Recrutement</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <!-- Copyright and legal bottom -->
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Asta Shops Inc. Tous droits réservés.</p>
+                <div class="footer-bottom-links">
+                    <a href="liens footer/Mentions légales.html">Mentions légales</a>
+                    <span class="dot-separator">•</span>
+                    <span class="creator-credit">Créateur et dévéloppeur : Space Dev.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ── Ventes Flash : minuteur + rotation des produits ──────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const FLASH_DURATION = 3 * 3600; // 3h par lot
+            const KEY_END   = 'asta_flash_end';
+            const KEY_BATCH = 'asta_flash_batch';
+
+            // ── 3 lots de produits flash ──────────────────────────────────────────
+            const FLASH_BATCHES = [
+                [
+                    { id:'f1', name:'Free Fire - 1080 Diamants',       price:'$9.99',  sold:80, img:'img/free fire.png' },
+                    { id:'f2', name:'PUBG Mobile - 660 UC',             price:'$8.49',  sold:45, img:'img/PUBG Mobile.png' },
+                    { id:'f3', name:'Carte Apple App Store $25',        price:'$22.50', sold:90, img:'img/Apple Card.jpeg' },
+                    { id:'f4', name:'Carte PlayStation Network $50',    price:'$39.99', sold:60, img:'img/Play Station Network.jpeg' }
+                ],
+                [
+                    { id:'f5', name:'Roblox - 800 Robux',              price:'$9.99',  sold:70, img:'img/Roblox.png' },
+                    { id:'f6', name:'COD Mobile - 880 CP',              price:'$8.99',  sold:55, img:'img/Call of Duty Mobile.png' },
+                    { id:'f7', name:'Carte Steam $20',                  price:'$18.50', sold:85, img:'img/steam card.png' },
+                    { id:'f8', name:'Google Play $15',                  price:'$13.99', sold:40, img:'img/Google Play.png' }
+                ],
+                [
+                    { id:'f9',  name:'FC Mobile - 2200 FC Points',     price:'$19.99', sold:75, img:'img/FC Mobile.png' },
+                    { id:'f10', name:'Carte Xbox Game Pass $30',        price:'$27.50', sold:50, img:'img/Xbox.png' },
+                    { id:'f11', name:'Free Fire - 2180 Diamants',       price:'$34.99', sold:65, img:'img/free fire.png' },
+                    { id:'f12', name:'PUBG Mobile - 1800 UC',           price:'$24.99', sold:30, img:'img/PUBG Mobile.png' }
+                ]
+            ];
+
+            // ── Rendu d'un lot de cartes ──────────────────────────────────────────
+            function renderBatch(batchIdx) {
+                const grid = document.getElementById('flash-grid');
+                if (!grid) return;
+                const batch = FLASH_BATCHES[batchIdx % FLASH_BATCHES.length];
+                grid.innerHTML = batch.map(p => `
+                    <a class="flash-card" href="catalog.html?cat=flash">
+                        <div class="flash-img-wrapper">
+                            <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.opacity='0'">
+                        </div>
+                        <div class="flash-body">
+                            <h3 class="flash-prod-title">${p.name}</h3>
+                            <div class="flash-prices">
+                                <span class="flash-curr-price">${p.price}</span>
+                            </div>
+                            <div class="flash-progress-wrapper">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" style="width:${p.sold}%"></div>
+                                </div>
+                                <span class="progress-text">${p.sold}% Vendu</span>
+                            </div>
+                        </div>
+                    </a>`).join('');
+            }
+
+            // ── Rotation animée lors du changement de lot ─────────────────────────
+            function rotateBatch() {
+                const grid = document.getElementById('flash-grid');
+                if (!grid) return;
+                grid.querySelectorAll('.flash-card').forEach(c => c.classList.add('fading'));
+                setTimeout(() => {
+                    const next = (parseInt(sessionStorage.getItem(KEY_BATCH) || '0') + 1) % FLASH_BATCHES.length;
+                    sessionStorage.setItem(KEY_BATCH, next);
+                    renderBatch(next);
+                }, 380);
+            }
+
+            // ── Timer ─────────────────────────────────────────────────────────────
+            let endTime = parseInt(sessionStorage.getItem(KEY_END), 10);
+            if (!endTime || endTime <= Date.now()) {
+                endTime = Date.now() + FLASH_DURATION * 1000;
+                sessionStorage.setItem(KEY_END, endTime);
+            }
+
+            const hoursEl   = document.getElementById('flash-hours');
+            const minutesEl = document.getElementById('flash-minutes');
+            const secondsEl = document.getElementById('flash-seconds');
+            let rotated = false;
+
+            function updateTimer() {
+                let remaining = Math.floor((endTime - Date.now()) / 1000);
+                if (remaining <= 0) {
+                    if (!rotated) { rotated = true; rotateBatch(); }
+                    endTime = Date.now() + FLASH_DURATION * 1000;
+                    sessionStorage.setItem(KEY_END, endTime);
+                    remaining = FLASH_DURATION;
+                    rotated = false;
+                }
+                const hrs  = Math.floor(remaining / 3600);
+                const mins = Math.floor((remaining % 3600) / 60);
+                const secs = remaining % 60;
+                if (hoursEl)   hoursEl.textContent   = String(hrs).padStart(2, '0');
+                if (minutesEl) minutesEl.textContent = String(mins).padStart(2, '0');
+                if (secondsEl) secondsEl.textContent = String(secs).padStart(2, '0');
+            }
+
+            // Rendu initial
+            const currentBatch = parseInt(sessionStorage.getItem(KEY_BATCH) || '0');
+            renderBatch(currentBatch);
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        });
+
+        // Fonction "Tout" pour afficher/masquer les lignes superflues
+        function toggleProducts(gridId, btnId) {
+            const grid = document.getElementById(gridId);
+            const btn = document.getElementById(btnId);
+            grid.classList.toggle('show-all');
+
+            if (grid.classList.contains('show-all')) {
+                btn.innerHTML = 'Réduire <span class="btn-icon">▴</span>';
+            } else {
+                btn.innerHTML = 'Tout <span class="btn-icon">▾</span>';
+            }
+        }
+
+        // Interactivité des Modals, du Panier, des Préférences et du Portefeuille
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Authentification Modal
+            const authModal = document.getElementById('authModal');
+            const loginBtns = document.querySelectorAll('.login-btn');
+            const registerBtns = document.querySelectorAll('.register-btn');
+            const closeAuthModal = document.getElementById('closeAuthModal');
+
+            // Mobile Menu Toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navContainer = document.querySelector('.nav-container');
+
+            if (mobileMenuToggle && navContainer) {
+                mobileMenuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navContainer.classList.toggle('active');
+                    mobileMenuToggle.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!navContainer.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                        navContainer.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
+                    }
+                });
+
+                // Dropdown expansion on mobile
+                const dropdowns = document.querySelectorAll('.dropdown');
+                dropdowns.forEach(dropdown => {
+                    dropdown.addEventListener('click', (e) => {
+                        if (window.innerWidth <= 768) {
+                            if (e.target.closest('a') === dropdown.querySelector('a')) {
+                                e.preventDefault();
+                                dropdown.classList.toggle('active');
+                            }
+                        }
+                    });
+                });
+            }
+
+            function openAuth(tab) {
+                if (authModal) {
+                    authModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    const targetTab = tab || 'login';
+                    authModal.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === targetTab));
+                    authModal.querySelectorAll('.auth-column').forEach(c => c.classList.toggle('active', c.id === 'tab-' + targetTab));
+                }
+            }
+
+            function closeAuth() {
+                if (authModal) {
+                    authModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+            window.closeAuthModal = closeAuth;
+            window.openAuth = openAuth;
+
+            // Compte créé mais connexion auto échouée — ouvrir modal login avec message succès
+            if (new URLSearchParams(window.location.search).get('registered') === '1') {
+                history.replaceState(null, '', window.location.pathname);
+                openAuth('login');
+                const errEl = document.getElementById('login-error');
+                if (errEl) {
+                    errEl.style.background = '#f0fdf9';
+                    errEl.style.color = '#059669';
+                    errEl.style.borderColor = '#c8f0e0';
+                    errEl.innerHTML = '✓ Compte créé avec succès ! Connectez-vous maintenant.';
+                    errEl.style.display = 'block';
+                }
+            }
+
+            loginBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openAuth('login'); }));
+            registerBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openAuth('register'); }));
+
+            if (closeAuthModal) closeAuthModal.addEventListener('click', closeAuth);
+            if (authModal) {
+                authModal.addEventListener('click', (e) => {
+                    if (e.target === authModal) closeAuth();
+                });
+                // Auth tab switching
+                authModal.querySelectorAll('.auth-tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const tab = btn.getAttribute('data-tab');
+                        authModal.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+                        authModal.querySelectorAll('.auth-column').forEach(c => c.classList.remove('active'));
+                        btn.classList.add('active');
+                        const col = authModal.querySelector('#tab-' + tab);
+                        if (col) col.classList.add('active');
+                    });
+                });
+            }
+
+            // Aide & Support panel
+            const aideSupportBtn = document.getElementById('aideSupportBtn');
+            const supportPanel = document.getElementById('supportPanel');
+            const closeSupportPanel = document.getElementById('closeSupportPanel');
+            if (aideSupportBtn && supportPanel) {
+                aideSupportBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    supportPanel.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            if (closeSupportPanel && supportPanel) {
+                closeSupportPanel.addEventListener('click', () => {
+                    supportPanel.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+                supportPanel.addEventListener('click', (e) => {
+                    if (e.target === supportPanel) {
+                        supportPanel.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // 2. Gestion du Panier (localStorage)
+            let cart; try { cart = JSON.parse(localStorage.getItem('asta_cart') || '[]'); } catch (_) { cart = []; }
+
+            const cartDrawerOverlay = document.getElementById('cartDrawerOverlay');
+            const cartDrawer = document.getElementById('cartDrawer');
+            const closeCartDrawer = document.getElementById('closeCartDrawer');
+            const cartDrawerBody = document.getElementById('cartDrawerBody');
+            const cartSubtotal = document.getElementById('cartSubtotal');
+            const cartBadgeCount = document.getElementById('cartBadgeCount');
+            const applyCouponBtn = document.getElementById('applyCouponBtn');
+            const couponInput = document.getElementById('couponInput');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const cartBtns = document.querySelectorAll('.cart-btn');
+
+            let activeDiscount = 0; // % reduction
+
+            function saveCart() {
+                localStorage.setItem('asta_cart', JSON.stringify(cart));
+                updateCartUI();
+            }
+
+            function updateCartUI() {
+                // Total items count
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                if (cartBadgeCount) cartBadgeCount.textContent = totalItems;
+
+                if (cart.length === 0) {
+                    cartDrawerBody.innerHTML = `
+                        <div class="cart-empty-state">
+                            <span class="cart-empty-icon">🛒</span>
+                            <p class="cart-empty-text">Votre panier est vide.</p>
+                        </div>
+                    `;
+                    cartSubtotal.textContent = "$0.00";
+                    return;
+                }
+
+                // Render products
+                let subtotalVal = 0;
+                cartDrawerBody.innerHTML = cart.map(item => {
+                    const price = parseFloat(item.price);
+                    const itemTotal = price * item.quantity;
+                    subtotalVal += itemTotal;
+
+                    return `
+                        <div class="cart-item">
+                            <img src="${item.img}" alt="${item.name}" class="cart-item-img">
+                            <div class="cart-item-info">
+                                <h4 class="cart-item-name">${item.name}</h4>
+                                <div class="cart-item-price">$${price.toFixed(2)}</div>
+                                <div class="cart-item-actions">
+                                    <div class="quantity-ctrl">
+                                        <button class="quantity-btn minus-btn" data-id="${item.id}">-</button>
+                                        <span class="quantity-val">${item.quantity}</span>
+                                        <button class="quantity-btn plus-btn" data-id="${item.id}">+</button>
+                                    </div>
+                                    <button class="remove-btn" data-id="${item.id}">Supprimer</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Apply coupon code if active
+                if (activeDiscount > 0) {
+                    let discountVal = 0;
+                    if (activeDiscountType === 'fixed') {
+                        discountVal = activeDiscount;
+                    } else {
+                        discountVal = subtotalVal * (activeDiscount / 100);
+                    }
+                    subtotalVal = Math.max(0, subtotalVal - discountVal);
+                }
+
+                cartSubtotal.textContent = `${subtotalVal.toFixed(2)}`;
+
+                // Add button listeners
+                cartDrawerBody.querySelectorAll('.minus-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = cart.find(i => i.id === id);
+                        if (item) {
+                            if (item.quantity > 1) {
+                                item.quantity--;
+                            } else {
+                                cart = cart.filter(i => i.id !== id);
+                            }
+                            saveCart();
+                        }
+                    });
+                });
+
+                cartDrawerBody.querySelectorAll('.plus-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        const item = cart.find(i => i.id === id);
+                        if (item) {
+                            item.quantity++;
+                            saveCart();
+                        }
+                    });
+                });
+
+                cartDrawerBody.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.getAttribute('data-id');
+                        cart = cart.filter(i => i.id !== id);
+                        saveCart();
+                    });
+                });
+            }
+
+        window.openCartDrawer = function() {
+            const overlay = document.getElementById('cartDrawerOverlay');
+            if (overlay) {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                window.updateCartDrawerUI();
+            }
+        };
+
+        window.closeCartDrawer = function() {
+            const overlay = document.getElementById('cartDrawerOverlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        };
+
+        window.updateCartDrawerUI = function() {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+            const bodyEl = document.getElementById('cartDrawerBody');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            const subtotalHtgEl = document.getElementById('cartSubtotalHtg');
+            const badge = document.getElementById('cartBadgeCount');
+
+            const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            if (badge) badge.textContent = totalCount;
+
+            if (!cart || !cart.length) {
+                if (bodyEl) {
+                    bodyEl.innerHTML = `
+                        <div class="cart-empty-state">
+                            <span class="cart-empty-icon">🛒</span>
+                            <p class="cart-empty-text">Votre panier est vide.</p>
+                        </div>
+                    `;
+                }
+                if (subtotalEl) subtotalEl.textContent = '$0.00';
+                if (subtotalHtgEl) subtotalHtgEl.textContent = '0 HTG';
+                return;
+            }
+
+            let totalUsd = 0;
+            let totalHtg = 0;
+
+            if (bodyEl) {
+                bodyEl.innerHTML = cart.map((item, index) => {
+                    const qty = item.quantity || 1;
+                    const itemUsd = (parseFloat(item.price) || 0) * qty;
+                    const itemHtg = (parseInt(item.htg, 10) || Math.round(itemUsd * 140)) * qty;
+                    totalUsd += itemUsd;
+                    totalHtg += itemHtg;
+
+                    return `
+                        <div class="cart-item-card">
+                            <img src="${item.img || 'favicon.svg'}" class="cart-item-img" alt="${item.name || ''}" onerror="this.src='favicon.svg'">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${item.name || 'Produit'}</div>
+                                <div class="cart-item-pack">${item.denom || ''}</div>
+                                ${item.player_id ? `<div class="cart-item-uid" title="${item.player_id}">ID: ${item.player_id}</div>` : ''}
+                                <div class="cart-item-price-row">
+                                    <span class="cart-item-htg">${itemHtg.toLocaleString()} HTG</span>
+                                    <span class="cart-item-usd">($${itemUsd.toFixed(2)})</span>
+                                </div>
+                            </div>
+                            <div class="cart-qty-ctrl">
+                                <button class="cart-qty-btn" onclick="changeCartQty(${index}, -1)">-</button>
+                                <span class="cart-qty-val">${qty}</span>
+                                <button class="cart-qty-btn" onclick="changeCartQty(${index}, 1)">+</button>
+                            </div>
+                            <button class="cart-item-del" onclick="removeCartItem(${index})" title="Supprimer">🗑️</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            if (subtotalEl) subtotalEl.textContent = `$${totalUsd.toFixed(2)}`;
+            if (subtotalHtgEl) subtotalHtgEl.textContent = `${totalHtg.toLocaleString()} HTG`;
+        };
+
+        window.changeCartQty = function(index, delta) {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+            if (!cart[index]) return;
+            cart[index].quantity = (cart[index].quantity || 1) + delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('asta_cart', JSON.stringify(cart));
+            window.updateCartDrawerUI();
+        };
+
+        window.removeCartItem = function(index) {
+            let cart = [];
+            try { cart = JSON.parse(localStorage.getItem('asta_cart')) || []; } catch(_) {}
+            cart.splice(index, 1);
+            localStorage.setItem('asta_cart', JSON.stringify(cart));
+            window.updateCartDrawerUI();
+        };
+
+        window.clearCart = function() {
+            localStorage.removeItem('asta_cart');
+            window.updateCartDrawerUI();
+        };
+
+        window.checkoutCart = function() {
+            window.closeCartDrawer();
+            window.location.href = 'topup.html';
+        };
+
+        document.querySelectorAll('.cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.openCartDrawer();
+            });
+        });
+
+            if (closeCartDrawer) closeCartDrawer.addEventListener('click', closeCart);
+            if (cartDrawerOverlay) {
+                cartDrawerOverlay.addEventListener('click', (e) => {
+                    if (e.target === cartDrawerOverlay) closeCart();
+                });
+            }
+
+
+            let activeDiscount = 0;
+            let activeDiscountType = 'percent';
+            let activeCouponCode = null;
+
+            // Promo coupon
+            if (applyCouponBtn) {
+                applyCouponBtn.addEventListener('click', async () => {
+                    const code = couponInput.value.trim().toUpperCase();
+                    if (!code) {
+                        activeDiscount = 0;
+                        activeDiscountType = 'percent';
+                        activeCouponCode = null;
+                        alert("Code promo réinitialisé.");
+                        saveCart();
+                        return;
+                    }
+
+                    const rawSubtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+                    const API = (window.location.protocol === 'file:' || window.location.port !== '5000')
+                        ? 'http://localhost:5000'
+                        : window.location.origin;
+
+                    try {
+                        const res = await fetch(`${API}/api/coupons/validate`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ code, amount: rawSubtotal })
+                        });
+                        const data = await res.json();
+                        if (data.valid) {
+                            activeDiscount = Number(data.discount_value);
+                            activeDiscountType = data.discount_type;
+                            activeCouponCode = data.code;
+                            alert(data.message);
+                            saveCart();
+                        } else {
+                            activeDiscount = 0;
+                            activeCouponCode = null;
+                            alert(data.error || "Code promo invalide.");
+                            saveCart();
+                        }
+                    } catch (err) {
+                        alert("Erreur lors de la vérification du code promo.");
+                    }
+                });
+            }
+
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', () => {
+                    if (cart.length === 0) return;
+                    alert("Redirection vers la passerelle de paiement sécurisée Asta Shops...");
+                    cart = [];
+                    saveCart();
+                    closeCart();
+                });
+            }
+
+            // Initial cart UI load
+            updateCartUI();
+
+            // 3. Préférences de langue et devise
+            const prefModal = document.getElementById('prefModal');
+            const closePrefModal = document.getElementById('closePrefModal');
+            const dropdownTrigger = document.querySelector('.dropdown-trigger');
+            const savePrefBtn = document.getElementById('savePrefBtn');
+            const langCards = document.querySelectorAll('#langGrid .pref-card');
+            const currCards = document.querySelectorAll('#currencyGrid .pref-card');
+
+            let selectedLang = localStorage.getItem('asta_lang') || 'FR';
+            let selectedCurr = localStorage.getItem('asta_curr') || 'USD';
+
+            function updatePrefUI() {
+                langCards.forEach(card => {
+                    card.classList.toggle('active', card.getAttribute('data-lang') === selectedLang);
+                });
+                currCards.forEach(card => {
+                    card.classList.toggle('active', card.getAttribute('data-curr') === selectedCurr);
+                });
+                if (dropdownTrigger) {
+                    dropdownTrigger.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="top-icon">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                            </path>
+                        </svg>
+                        ${selectedLang} | ${selectedCurr} ▾
+                    `;
+                }
+            }
+
+            if (dropdownTrigger) {
+                dropdownTrigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (prefModal) {
+                        prefModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
+
+            if (closePrefModal) {
+                closePrefModal.addEventListener('click', () => {
+                    prefModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            langCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    selectedLang = card.getAttribute('data-lang');
+                    langCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+            });
+
+            currCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    selectedCurr = card.getAttribute('data-curr');
+                    currCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+            });
+
+            if (savePrefBtn) {
+                savePrefBtn.addEventListener('click', () => {
+                    localStorage.setItem('asta_lang', selectedLang);
+                    localStorage.setItem('asta_curr', selectedCurr);
+                    updatePrefUI();
+                    applyCurrencyToPage(selectedCurr);
+                    prefModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Initial pref load
+            updatePrefUI();
+            applyCurrencyToPage(selectedCurr);
+
+            // 4. Recharge de Portefeuille (Wallet Recharge)
+            const walletModal = document.getElementById('walletModal');
+            const closeWalletModal = document.getElementById('closeWalletModal');
+            const walletBtn = document.querySelector('.wallet-btn');
+            const amountCards = document.querySelectorAll('.amount-card');
+            const walletCustomInput = document.getElementById('walletCustomInput');
+            const payOptionCards = document.querySelectorAll('.pay-option-card');
+            const walletRechargeBtn = document.getElementById('walletRechargeBtn');
+            const currentWalletBalance = document.getElementById('currentWalletBalance');
+
+            let selectedAmount = 10;
+            let selectedPayMethod = "moncash";
+            let walletBalance = parseFloat(localStorage.getItem('asta_wallet_balance') || '0.00');
+
+            if (currentWalletBalance) {
+                currentWalletBalance.textContent = `${walletBalance.toFixed(2)}`;
+            }
+
+            if (walletBtn) {
+                walletBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (walletModal) {
+                        walletModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
+
+            if (closeWalletModal) {
+                closeWalletModal.addEventListener('click', () => {
+                    walletModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            amountCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    amountCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    selectedAmount = parseFloat(card.getAttribute('data-amount'));
+                    if (walletCustomInput) walletCustomInput.value = ''; // clear custom input
+                });
+            });
+
+            if (walletCustomInput) {
+                walletCustomInput.addEventListener('input', () => {
+                    amountCards.forEach(c => c.classList.remove('active'));
+                    selectedAmount = parseFloat(walletCustomInput.value) || 0;
+                });
+            }
+
+            payOptionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    payOptionCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    selectedPayMethod = card.getAttribute('data-pay');
+                    // check the radio input
+                    const radio = card.querySelector('.pay-radio');
+                    if (radio) radio.checked = true;
+                });
+            });
+
+            if (walletRechargeBtn) {
+                walletRechargeBtn.addEventListener('click', () => {
+                    if (selectedAmount <= 0) {
+                        alert("Veuillez choisir ou saisir un montant valide.");
+                        return;
+                    }
+                    // Redirect to the real topup page with pre-filled amount and method
+                    walletModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    window.location.href = `topup.html?amount=${selectedAmount}&method=${selectedPayMethod}`;
+                });
+            }
+        });
+
+        // ── Conversion de devise site-wide ──────────────────────────────────────
+        const CURRENCY_RATES = { USD: 1, EUR: 0.93, HTG: 125, GDS: 125 };
+        const CURRENCY_SYMBOLS = { EUR: '€', USD: '$', HTG: 'G', GDS: 'G' };
+
+        function applyCurrencyToPage(curr) {
+            const rate = CURRENCY_RATES[curr] || 1;
+            const sym = CURRENCY_SYMBOLS[curr] || curr;
+            document.querySelectorAll('[data-eur]').forEach(el => {
+                const eur = parseFloat(el.getAttribute('data-eur'));
+                const converted = (eur * rate).toFixed(curr === 'USD' || curr === 'EUR' ? 2 : 0);
+                el.textContent = `${converted} ${sym}`;
+            });
+        }
+
+
+        function togglePasswordVisibility(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+            } else {
+                input.type = 'password';
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+            }
+        }
+    </script>
+
+    <!-- Modal d'authentification (Mélange Connexion/S'inscrire avec Connexion Sociale) -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal-container">
+            <button class="auth-modal-close" id="closeAuthModal" aria-label="Fermer">×</button>
+
+            <!-- Onglets de navigation -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" data-tab="login">Se connecter</button>
+                <button class="auth-tab-btn" data-tab="register">S'inscrire</button>
+            </div>
+
+            <div class="auth-modal-columns">
+                <!-- Colonne Se Connecter -->
+                <div class="auth-column active" id="tab-login">
+                    <h2 class="auth-column-title">Se connecter</h2>
+                    <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="login-email">E-mail <span class="required">*</span></label>
+                            <input type="email" id="login-email" name="email" required placeholder="Votre adresse e-mail" autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Mot de passe <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="login-password" name="password" required placeholder="Votre mot de passe" autocomplete="current-password">
+                                <button type="button" class="password-toggle-btn"
+                                    onclick="togglePasswordVisibility('login-password', this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="eye-icon">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-actions-row">
+                            <label class="checkbox-label">
+                                <input type="checkbox"> Se souvenir de moi
+                            </label>
+                            <a href="#" class="forgot-password-link" onclick="handleForgotPassword(event)">Mot de passe
+                                perdu ?</a>
+                        </div>
+                        <div id="login-error"
+                            style="display:none;background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:10px;border:1px solid #fecaca;">
+                        </div>
+                        <button type="submit" class="btn-auth-submit" id="loginSubmitBtn">Se connecter</button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>Ou se connecter avec</span>
+                    </div>
+
+                    <div class="auth-social-buttons">
+                        <!-- Google -->
+                        <button class="social-btn google" aria-label="Google">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M12.24 10.285V13.4h6.887C18.2 15.614 15.645 18 12.24 18c-3.86 0-7-3.14-7-7s3.14-7 7-7c1.782 0 3.407.67 4.636 1.765l2.457-2.457C17.464 1.543 14.992 1 12.24 1c-5.522 0-10 4.477-10 10s4.478 10 10 10c5.782 0 9.76-4.062 9.76-9.92 0-.67-.06-1.316-.176-1.795H12.24z" />
+                            </svg>
+                        </button>
+                        <!-- Facebook -->
+                        <button class="social-btn facebook" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+                            </svg>
+                        </button>
+                        <!-- Apple -->
+                        <button class="social-btn apple" aria-label="Apple">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.57 2.95-1.39z" />
+                            </svg>
+                        </button>
+                        <!-- X -->
+                        <button class="social-btn x" aria-label="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ligne de séparation au milieu -->
+                <div class="auth-vertical-divider" style="display:none;"></div>
+
+                <!-- Colonne S'inscrire -->
+                <div class="auth-column" id="tab-register">
+                    <h2 class="auth-column-title">S'inscrire</h2>
+                    <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label for="register-prenom">Prénom <span class="required">*</span></label>
+                            <input type="text" id="register-prenom" name="prenom" required placeholder="Votre prénom" autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-nom">Nom</label>
+                            <input type="text" id="register-nom" name="nom" placeholder="Votre nom" autocomplete="family-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Adresse e-mail <span class="required">*</span></label>
+                            <input type="email" id="register-email" name="email" required placeholder="Votre adresse e-mail" autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Mot de passe <span class="required">*</span></label>
+                            <input type="password" id="register-password" name="password" required placeholder="Minimum 6 caractères" autocomplete="new-password">
+                        </div>
+                        <div id="register-error"
+                            style="display:none;background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:10px;border:1px solid #fecaca;">
+                        </div>
+                        <div id="register-success"
+                            style="display:none;background:#f0fdf9;color:#059669;padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:10px;border:1px solid #c8f0e0;">
+                            ✓ Compte créé ! Vérifiez votre e-mail pour confirmer.
+                        </div>
+                        <button type="submit" class="btn-auth-submit" id="registerSubmitBtn">Créer mon compte</button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>Ou s'inscrire avec</span>
+                    </div>
+
+                    <div class="auth-social-buttons">
+                        <!-- Google -->
+                        <button class="social-btn google" aria-label="Google">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M12.24 10.285V13.4h6.887C18.2 15.614 15.645 18 12.24 18c-3.86 0-7-3.14-7-7s3.14-7 7-7c1.782 0 3.407.67 4.636 1.765l2.457-2.457C17.464 1.543 14.992 1 12.24 1c-5.522 0-10 4.477-10 10s4.478 10 10 10c5.782 0 9.76-4.062 9.76-9.92 0-.67-.06-1.316-.176-1.795H12.24z" />
+                            </svg>
+                        </button>
+                        <!-- Facebook -->
+                        <button class="social-btn facebook" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+                            </svg>
+                        </button>
+                        <!-- Apple -->
+                        <button class="social-btn apple" aria-label="Apple">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.57 2.95-1.39z" />
+                            </svg>
+                        </button>
+                        <!-- X -->
+                        <button class="social-btn x" aria-label="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bande de statistiques / garanties en bas (de la Photo 1) -->
+            <div class="auth-modal-footer">
+                <div class="stat-item">
+                    <span class="stat-val">★ 4.9</span>
+                    <span class="stat-lbl">30k+ Avis</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val">30%</span>
+                    <span class="stat-lbl">Économisez jusqu'à 30%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val">10M+</span>
+                    <span class="stat-lbl">Le choix des joueurs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panier Glissant (Cart Drawer) -->
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="if(event.target===this)closeCartDrawer()">
+        <div class="cart-drawer" id="cartDrawer">
+            <div class="cart-drawer-header">
+                <h3>🛒 Mon Panier Asta</h3>
+                <button class="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Fermer">×</button>
+            </div>
+            <div class="cart-drawer-body" id="cartDrawerBody">
+                <div class="cart-empty-state">
+                    <span class="cart-empty-icon">🛒</span>
+                    <p class="cart-empty-text">Votre panier est vide.</p>
+                </div>
+            </div>
+            <div class="cart-drawer-footer">
+                <div class="cart-subtotal-line">
+                    <span class="cart-subtotal-label">Total HTG :</span>
+                    <span class="cart-subtotal-htg" id="cartSubtotalHtg">0 HTG</span>
+                </div>
+                <div class="cart-subtotal-line">
+                    <span class="cart-subtotal-label">Total USD :</span>
+                    <span class="cart-subtotal-usd" id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="cart-drawer-actions">
+                    <button class="btn-cart-clear" onclick="clearCart()">Vider</button>
+                    <button class="btn-cart-checkout" onclick="checkoutCart()">Passer à la caisse ➔</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sélecteur de Langue / Devise -->
+    <!-- Modal Aide & Support -->
+    <div class="support-panel-overlay" id="supportPanel">
+        <div class="support-panel">
+            <button class="support-panel-close" id="closeSupportPanel" aria-label="Fermer">×</button>
+            <h3>Aide &amp; Support</h3>
+            <p>Notre équipe est disponible 24h/24, 7j/7 pour répondre à toutes vos questions et résoudre vos problèmes
+                rapidement.</p>
+            <div class="support-channels">
+                <a href="https://wa.me/50912345678" target="_blank" class="support-channel-btn whatsapp">
+                    <div class="support-channel-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                            <path
+                                d="M12 0C5.373 0 0 5.373 0 12c0 2.088.535 4.05 1.476 5.757L.057 23.882c-.068.237.145.451.382.383l6.17-1.42A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.892 9.892 0 0 1-5.04-1.374l-.361-.214-3.73.859.877-3.648-.235-.374A9.86 9.86 0 0 1 2.106 12C2.106 6.53 6.53 2.106 12 2.106S21.894 6.53 21.894 12 17.47 21.894 12 21.894z" />
+                        </svg>
+                    </div>
+                    <div class="support-channel-info">
+                        <strong>WhatsApp</strong>
+                        <span>Réponse en moins de 5 minutes</span>
+                    </div>
+                </a>
+                <a href="mailto:support@asta-shops.com" class="support-channel-btn email">
+                    <div class="support-channel-icon" style="background: rgba(0,0,0,0.06);">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                    </div>
+                    <div class="support-channel-info">
+                        <strong>E-mail</strong>
+                        <span>support@asta-shops.com · Sous 24h</span>
+                    </div>
+                </a>
+                <a href="liens footer/FAQ Centre d'aide.html" class="support-channel-btn faq">
+                    <div class="support-channel-icon" style="background: rgba(0,182,122,0.12);">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                    <div class="support-channel-info">
+                        <strong>Centre d'aide (FAQ)</strong>
+                        <span>Trouvez des réponses instantanément</span>
+                    </div>
+                </a>
+            </div>
+            <div class="support-hours">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                Heures de service : <strong>Disponible 24h/24, 7j/7</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="pref-modal-overlay" id="prefModal">
+        <div class="pref-modal-container">
+            <button class="pref-modal-close" id="closePrefModal" aria-label="Fermer">×</button>
+            <div class="pref-modal-body">
+                <h3>Paramètres</h3>
+
+                <span class="pref-group-label">Sélectionnez votre langue</span>
+                <div class="pref-grid" id="langGrid">
+                    <div class="pref-card active" data-lang="FR" data-flag="FR">
+                        <span class="pref-flag">🇫🇷</span>
+                        <span>Français</span>
+                    </div>
+                    <div class="pref-card" data-lang="EN" data-flag="EN">
+                        <span class="pref-flag">🇺🇸</span>
+                        <span>English</span>
+                    </div>
+                    <div class="pref-card" data-lang="ES" data-flag="ES">
+                        <span class="pref-flag">🇪🇸</span>
+                        <span>Español</span>
+                    </div>
+                </div>
+
+                <span class="pref-group-label">Sélectionnez votre devise</span>
+                <div class="pref-grid" id="currencyGrid">
+                    <div class="pref-card active" data-curr="USD" data-symbol="$">
+                        <span class="pref-flag">$</span>
+                        <span>USD ($)</span>
+                    </div>
+                    <div class="pref-card" data-curr="USD" data-symbol="$">
+                        <span class="pref-flag">$</span>
+                        <span>USD ($)</span>
+                    </div>
+                    <div class="pref-card" data-curr="HTG" data-symbol="G">
+                        <span class="pref-flag">G</span>
+                        <span>HTG (G)</span>
+                    </div>
+                    <div class="pref-card" data-curr="GDS" data-symbol="G">
+                        <span class="pref-flag">🇭🇹</span>
+                        <span>GDS (G)</span>
+                    </div>
+                </div>
+
+                <button class="btn-pref-save" id="savePrefBtn">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recharge de Portefeuille (Wallet) -->
+    <div class="wallet-modal-overlay" id="walletModal">
+        <div class="wallet-modal-container">
+            <button class="wallet-modal-close" id="closeWalletModal" aria-label="Fermer">×</button>
+            <div class="wallet-modal-body">
+                <h3>Recharger mon portefeuille</h3>
+
+                <div class="wallet-balance-card">
+                    <span class="balance-lbl">Solde actuel</span>
+                    <span class="balance-val" id="currentWalletBalance">$0.00</span>
+                </div>
+
+                <span class="pref-group-label">Sélectionnez un montant</span>
+                <div class="wallet-amount-grid">
+                    <div class="amount-card active" data-amount="10">+$10</div>
+                    <div class="amount-card" data-amount="20">+$20</div>
+                    <div class="amount-card" data-amount="50">+$50</div>
+                    <div class="amount-card" data-amount="100">+$100</div>
+                    <div class="amount-card" data-amount="200">+$200</div>
+                    <div class="amount-card" data-amount="500">+$500</div>
+                </div>
+
+                <div class="wallet-custom-amount">
+                    <span class="pref-group-label">Ou saisissez un montant personnalisé ($)</span>
+                    <input type="number" id="walletCustomInput" placeholder="Ex: 15" min="5">
+                </div>
+
+                <span class="pref-group-label">Moyen de recharge</span>
+                <div class="payment-options-list">
+                    <div class="pay-option-card active" data-pay="moncash">
+                        <img src="img/carte.webp" alt="Moncash" style="filter: hue-rotate(90deg);">
+                        <label>Moncash</label>
+                        <input type="radio" name="pay-method" class="pay-radio" checked>
+                    </div>
+                    <div class="pay-option-card" data-pay="natcash">
+                        <img src="img/carte.webp" alt="Natcash" style="filter: hue-rotate(180deg);">
+                        <label>Natcash</label>
+                        <input type="radio" name="pay-method" class="pay-radio">
+                    </div>
+                    <div class="pay-option-card" data-pay="card">
+                        <img src="img/carte.webp" alt="Carte Bancaire">
+                        <label>Carte Bancaire</label>
+                        <input type="radio" name="pay-method" class="pay-radio">
+                    </div>
+                </div>
+
+                <button class="btn-wallet-recharge" id="walletRechargeBtn">Confirmer la recharge</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const globalSearch = document.getElementById('globalSearchInput');
+            if (globalSearch) {
+                globalSearch.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && globalSearch.value.trim()) {
+                        window.location.href = `catalog.html?search=${encodeURIComponent(globalSearch.value.trim())}`;
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        // ── Helpers localStorage sécurisé (Safari private mode safe) ────────────
+        const safeStorage = {
+            get(key, fallback = null) { try { return localStorage.getItem(key) ?? fallback; } catch (_) { return fallback; } },
+            set(key, val) { try { localStorage.setItem(key, val); } catch (_) {} },
+            remove(key) { try { localStorage.removeItem(key); } catch (_) {} }
+        };
+
+        // ── Traduction des erreurs Supabase ──────────────────────────────────────
+        function translateAuthError(message, email) {
+            const m = (message || '').toLowerCase();
+            if (m.includes('invalid login credentials') || m.includes('invalid_credentials') || m.includes('wrong password'))
+                return { text: 'E-mail ou mot de passe incorrect. Vérifiez vos identifiants.', resend: false };
+            if (m.includes('email not confirmed') || m.includes('email_not_confirmed') || m.includes('not confirmed'))
+                return { text: `Votre e-mail n'a pas encore été confirmé.<br><small>Consultez votre boîte mail (et spams). <a href="#" style="color:#00b67a;font-weight:700;" onclick="resendConfirmEmail(event,'${email}')">Renvoyer l'e-mail de confirmation →</a></small>`, resend: true };
+            if (m.includes('user already registered') || m.includes('already registered') || m.includes('already exists'))
+                return { text: 'Un compte existe déjà avec cet e-mail. Essayez de vous connecter.', resend: false };
+            if (m.includes('password') && (m.includes('weak') || m.includes('short') || m.includes('characters')))
+                return { text: 'Mot de passe trop faible. Utilisez au moins 6 caractères.', resend: false };
+            if (m.includes('rate') || m.includes('too many') || m.includes('exceeded'))
+                return { text: 'Trop de tentatives. Attendez quelques minutes avant de réessayer.', resend: false };
+            if (m.includes('network') || m.includes('fetch') || m.includes('failed to fetch') || m.includes('connexion réseau'))
+                return { text: 'Problème de connexion réseau. Vérifiez votre connexion internet.', resend: false };
+            if (m.includes('unexpected end of json') || m.includes('json') || m.includes('erreur serveur') || m.includes('erreur de communication'))
+                return { text: 'Erreur de communication avec le serveur. Réessayez dans quelques instants.', resend: false };
+            if (m.includes('signup') && m.includes('disabled'))
+                return { text: 'Les inscriptions sont temporairement désactivées.', resend: false };
+            if (m.includes('user not found') || m.includes('no user'))
+                return { text: 'Aucun compte trouvé avec cet e-mail.', resend: false };
+            return { text: message || 'Une erreur est survenue. Réessayez.', resend: false };
+        }
+
+        // Renvoyer e-mail de confirmation
+        async function resendConfirmEmail(e, email) {
+            e.preventDefault();
+            const btn = e.target;
+            btn.textContent = 'Envoi...'; btn.style.pointerEvents = 'none';
+            try {
+                await window.AstaAuth.resendConfirmation(email);
+                btn.textContent = '✓ E-mail renvoyé !'; btn.style.color = '#059669';
+            } catch (err) {
+                btn.textContent = 'Erreur, réessayez'; btn.style.color = '#dc2626';
+                btn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Mot de passe oublié
+        async function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            if (!email) {
+                const errEl = document.getElementById('login-error');
+                errEl.innerHTML = 'Entrez votre e-mail ci-dessus puis cliquez "Mot de passe perdu".';
+                errEl.style.display = 'block';
+                return;
+            }
+            const link = e.target;
+            link.textContent = 'Envoi...'; link.style.pointerEvents = 'none';
+            try {
+                await window.AstaAuth.resetPassword(email);
+                const errEl = document.getElementById('login-error');
+                errEl.style.background = '#f0fdf9';
+                errEl.style.color = '#059669';
+                errEl.style.borderColor = '#c8f0e0';
+                errEl.innerHTML = '✓ E-mail de réinitialisation envoyé ! Vérifiez votre boîte mail.';
+                errEl.style.display = 'block';
+            } catch (err) {
+                const translated = translateAuthError(err.message, email);
+                const errEl = document.getElementById('login-error');
+                errEl.innerHTML = translated.text;
+                errEl.style.display = 'block';
+            } finally {
+                link.textContent = 'Mot de passe perdu ?'; link.style.pointerEvents = 'auto';
+            }
+        }
+
+        // ── Connexion via Supabase ────────────────────────────────────────────
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errEl = document.getElementById('login-error');
+            const btn = document.getElementById('loginSubmitBtn');
+            errEl.style.display = 'none';
+            errEl.style.background = '#fef2f2'; errEl.style.color = '#dc2626'; errEl.style.borderColor = '#fecaca';
+            if (!email || !password) {
+                errEl.innerHTML = 'Veuillez remplir l\'e-mail et le mot de passe.';
+                errEl.style.display = 'block';
+                return;
+            }
+            btn.disabled = true; btn.textContent = 'Connexion...';
+            try {
+                const resData = await window.AstaAuth.login(email, password);
+                window.closeAuthModal?.();
+                const profile = resData?.profile || await window.AstaAuth.getProfile();
+                const isStaff = ['helper', 'employe', 'administrateur', 'manager', 'directeur'].includes(profile?.role);
+                if (isStaff) {
+                    setTimeout(() => window.location.href = 'Dashboard/dashboard.html', 400);
+                } else {
+                    setTimeout(() => window.location.href = 'profile.html', 400);
+                }
+            } catch (err) {
+                const translated = translateAuthError(err.message, email);
+                errEl.innerHTML = translated.text;
+                errEl.style.display = 'block';
+            } finally {
+                btn.disabled = false; btn.textContent = 'Se connecter';
+            }
+        }
+
+        // ── Inscription via Supabase ──────────────────────────────────────────
+        async function handleRegister(e) {
+            e.preventDefault();
+            const prenom = document.getElementById('register-prenom').value.trim();
+            const nom = document.getElementById('register-nom').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const errEl = document.getElementById('register-error');
+            const sucEl = document.getElementById('register-success');
+            const btn = document.getElementById('registerSubmitBtn');
+            errEl.style.display = 'none'; sucEl.style.display = 'none';
+            if (!prenom || !email || !password) {
+                errEl.textContent = 'Prénom, e-mail et mot de passe sont obligatoires.';
+                errEl.style.display = 'block'; return;
+            }
+            if (password.length < 6) {
+                errEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+                errEl.style.display = 'block'; return;
+            }
+            btn.disabled = true; btn.textContent = 'Création...';
+            try {
+                const result = await window.AstaAuth.register(email, password, nom, prenom);
+                // Connexion automatique — session toujours retournée
+                window.closeAuthModal?.();
+                setTimeout(() => window.location.href = 'profile.html', 400);
+            } catch (err) {
+                const translated = translateAuthError(err.message, email);
+                errEl.innerHTML = translated.text;
+                errEl.style.display = 'block';
+            } finally {
+                btn.disabled = false; btn.textContent = 'Créer mon compte';
+            }
+        }
+    <script src="js/maintenance-check.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement Moncash & Natcash | Asta-Shops</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css?v=2.0">
+    <style>
+        /* ===== PAGE PAIEMENT MANUEL ===== */
+        .pay-page-hero {
+            background: linear-gradient(135deg, #0b0c0f 0%, #131620 60%, #0d1a12 100%);
+            padding: 72px 40px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pay-page-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(0, 182, 122, 0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        .pay-page-hero .hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pay-page-hero h1 {
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .pay-page-hero h1 span {
+            color: #00b67a;
+        }
+
+        .pay-page-hero p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 560px;
+            margin: 0 auto 32px;
+        }
+
+        .pay-hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .pay-hero-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 182, 122, 0.12);
+            border: 1px solid rgba(0, 182, 122, 0.3);
+            border-radius: 50px;
+            padding: 8px 18px;
+            color: #00b67a;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        /* Numbers Cards */
+        .pay-numbers-section {
+            background: #f8f9fb;
+            padding: 60px 40px;
+        }
+
+        .pay-section-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pay-section-title {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: #0b0c0f;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .pay-section-sub {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 40px;
+            font-size: 0.97rem;
+        }
+
+        .pay-numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 0;
+        }
+
+        .pay-number-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pay-number-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .pay-number-card.moncash::before {
+            background: linear-gradient(90deg, #e31937, #ff6b35);
+        }
+
+        .pay-number-card.natcash::before {
+            background: linear-gradient(90deg, #0052cc, #0099ff);
+        }
+
+        .pay-number-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .pay-number-card.moncash:hover {
+            border-color: rgba(227, 25, 55, 0.25);
+        }
+
+        .pay-number-card.natcash:hover {
+            border-color: rgba(0, 82, 204, 0.25);
+        }
+
+        .pnc-logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .pnc-logo.moncash {
+            background: linear-gradient(135deg, #e31937, #ff6b35);
+            color: #fff;
+        }
+
+        .pnc-logo.natcash {
+            background: linear-gradient(135deg, #0052cc, #0099ff);
+            color: #fff;
+        }
+
+        .pnc-name {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #0b0c0f;
+            margin-bottom: 6px;
+        }
+
+        .pnc-provider {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-bottom: 24px;
+        }
+
+        .pnc-number {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .pnc-number.moncash {
+            color: #e31937;
+        }
+
+        .pnc-number.natcash {
+            color: #0052cc;
+        }
+
+        .pnc-number-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        .pnc-copy-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .pnc-copy-btn.moncash {
+            background: linear-gradient(135deg, #e31937, #ff6b35);
+            color: #fff;
+        }
+
+        .pnc-copy-btn.natcash {
+            background: linear-gradient(135deg, #0052cc, #0099ff);
+            color: #fff;
+        }
+
+        .pnc-copy-btn:hover {
+            opacity: 0.88;
+        }
+
+        /* Steps Section */
+        .pay-steps-section {
+            padding: 70px 40px;
+            background: #fff;
+        }
+
+        .pay-steps-section.alt {
+            background: #f8f9fb;
+        }
+
+        .pay-steps-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .psh-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .psh-icon.moncash {
+            background: linear-gradient(135deg, #e31937, #ff6b35);
+        }
+
+        .psh-icon.natcash {
+            background: linear-gradient(135deg, #0052cc, #0099ff);
+        }
+
+        .psh-text h2 {
+            font-size: 1.65rem;
+            font-weight: 900;
+            color: #0b0c0f;
+            margin-bottom: 4px;
+        }
+
+        .psh-text p {
+            font-size: 0.93rem;
+            color: #6b7280;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .step-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px 24px;
+            border: 1.5px solid #f0f2f5;
+            position: relative;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .pay-steps-section.alt .step-card {
+            background: #fff;
+        }
+
+        .step-card:hover {
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+            border-color: #00b67a;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            flex-shrink: 0;
+        }
+
+        .step-number.mc {
+            background: rgba(227, 25, 55, 0.1);
+            color: #e31937;
+        }
+
+        .step-number.nc {
+            background: rgba(0, 82, 204, 0.1);
+            color: #0052cc;
+        }
+
+        .step-icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0faf5;
+            margin-bottom: 16px;
+        }
+
+        .step-icon-circle.mc {
+            background: rgba(227, 25, 55, 0.08);
+        }
+
+        .step-icon-circle.nc {
+            background: rgba(0, 82, 204, 0.08);
+        }
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0b0c0f;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 0.88rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .step-highlight {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .step-highlight.mc {
+            background: rgba(227, 25, 55, 0.08);
+            color: #e31937;
+        }
+
+        .step-highlight.nc {
+            background: rgba(0, 82, 204, 0.08);
+            color: #0052cc;
+        }
+
+        /* Important info banner */
+        .pay-important-banner {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border: 1.5px solid #f59e0b;
+            border-radius: 16px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .pib-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .pib-content h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #92400e;
+            margin-bottom: 6px;
+        }
+
+        .pib-content p {
+            font-size: 0.88rem;
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        /* FAQ */
+        .pay-faq-section {
+            padding: 70px 40px;
+            background: #0b0c0f;
+            color: #fff;
+        }
+
+        .faq-title {
+            font-size: 1.7rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .faq-sub {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 44px;
+            font-size: 0.95rem;
+        }
+
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #fff;
+            text-align: left;
+            padding: 22px 0;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .faq-question svg {
+            flex-shrink: 0;
+            transition: transform 0.25s;
+            color: #00b67a;
+        }
+
+        .faq-item.open .faq-question svg {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.2s;
+            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding-bottom: 20px;
+        }
+
+        /* CTA Bottom */
+        .pay-cta-section {
+            background: linear-gradient(135deg, #00b67a 0%, #007a52 100%);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .pay-cta-section h2 {
+            font-size: 1.9rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .pay-cta-section p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-bottom: 28px;
+        }
+
+        .pay-cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: #0b0c0f;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.97rem;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .cta-btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        .cta-btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.97rem;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .cta-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pay-page-hero {
+                padding: 56px 20px 48px;
+            }
+
+            .pay-page-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .pay-numbers-section,
+            .pay-steps-section,
+            .pay-faq-section,
+            .pay-cta-section {
+                padding: 48px 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pay-steps-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="promo-badge">PROMO</span>
+                <span class="promo-text">Recharge instantanée 24/7 au meilleur prix sur Asta Shops !</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="contact.html" class="top-bar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="top-icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Aide & Support
+                </a>
+                <span class="top-bar-separator">|</span>
+                <div class="top-bar-auth">
+                    <a href="#" class="auth-link login-btn">Connexion</a>
+                    <a href="#" class="auth-link register-btn">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <a href="index.html" class="logo" style="text-decoration:none;">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+        <nav class="nav-container">
+            <ul class="nav-links">
+                <li><a href="catalog.html?cat=jeux">Jeux</a></li>
+                <li><a href="#" class="login-btn">Mon Compte</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="catalog.html" class="nav-icon cart-btn" aria-label="Panier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge">0</span>
+            </a>
+            <a href="https://wa.me/50946966290" target="_blank" class="whatsapp-btn" aria-label="WhatsApp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="#25D366"
+                        d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.993 0 1.763.458 3.42 1.257 4.873L2.05 21.434c-.112.413.26.785.673.673l4.567-1.222a9.925 9.925 0 0 0 4.714 1.186c5.516 0 9.986-4.471 9.986-9.993C21.99 6.471 17.52 2 12.004 2Z">
+                    </path>
+                    <path fill="#FFF"
+                        d="M15.932 14.122c-.244-.122-1.442-.712-1.666-.794-.223-.081-.385-.122-.548.122-.162.244-.63.794-.772.956-.143.163-.285.183-.529.06-.244-.121-1.03-.38-1.962-1.21-.725-.647-1.215-1.447-1.357-1.69-.143-.244-.015-.376.107-.497.11-.11.244-.285.366-.427.122-.142.163-.244.244-.407.081-.163.04-.305-.02-.427-.061-.122-.548-1.32-.751-1.81-.199-.477-.4-.412-.549-.42-.142-.007-.305-.007-.467-.007-.163 0-.427.061-.65.305-.224.244-.854.834-.854 2.034 0 1.2 1.139 2.5 1.443 2.724.304.224 2.242 3.424 5.432 4.802.758.328 1.35.524 1.813.67.762.243 1.455.209 2.004.127.612-.091 1.442-.589 1.646-1.158.203-.57.203-1.057.142-1.158-.06-.1-.223-.163-.467-.285Z">
+                    </path>
+                </svg>
+                <span class="whatsapp-text">WhatsApp</span>
+            </a>
+            <button class="mobile-menu-toggle" aria-label="Menu" id="mobileMenuToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="pay-page-hero">
+        <div class="hero-inner">
+            <h1>Payer avec <span>Moncash</span> ou <span>Natcash</span></h1>
+            <p>Guide complet pour effectuer un paiement manuel sur Asta-Shops via les deux principaux services de
+                paiement mobile en Haïti.</p>
+            <div class="pay-hero-badges">
+                <div class="pay-hero-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    100% Sécurisé
+                </div>
+                <div class="pay-hero-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Traitement en 5 min
+                </div>
+                <div class="pay-hero-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Support 24/7 WhatsApp
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phone Numbers -->
+    <section class="pay-numbers-section">
+        <div class="pay-section-container">
+            <h2 class="pay-section-title">Numéros de paiement officiels</h2>
+            <p class="pay-section-sub">Envoyez votre paiement uniquement à ces numéros vérifiés.</p>
+            <div class="pay-numbers-grid">
+                <!-- Moncash -->
+                <div class="pay-number-card moncash">
+                    <div class="pnc-logo moncash">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="pnc-name">Moncash</div>
+                    <div class="pnc-provider">Digicel Haïti — Mobile Money</div>
+                    <div class="pnc-number moncash" id="moncash-number">+509 4696-6290</div>
+                    <div class="pnc-number-label">Numéro officiel Asta-Shops</div>
+                    <button class="pnc-copy-btn moncash" onclick="copyNumber('moncash-number', this)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copier le numéro
+                    </button>
+                </div>
+                <!-- Natcash -->
+                <div class="pay-number-card natcash">
+                    <div class="pnc-logo natcash">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="pnc-name">Natcash</div>
+                    <div class="pnc-provider">Natcom Haïti — Mobile Money</div>
+                    <div class="pnc-number natcash" id="natcash-number">+509 3567-2037</div>
+                    <div class="pnc-number-label">Numéro officiel Asta-Shops</div>
+                    <button class="pnc-copy-btn natcash" onclick="copyNumber('natcash-number', this)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copier le numéro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Moncash -->
+    <section class="pay-steps-section">
+        <div class="pay-section-container">
+            <div class="pay-steps-header">
+                <div class="psh-icon moncash">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="psh-text">
+                    <h2>Comment payer avec Moncash</h2>
+                    <p>Suivez ces étapes simples pour régler votre commande via Moncash (Digicel Haïti).</p>
+                </div>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number mc">1</div>
+                    <div class="step-icon-circle mc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e31937" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </div>
+                    <div class="step-title">Choisissez votre produit</div>
+                    <div class="step-desc">Parcourez notre catalogue, sélectionnez le jeu ou la carte cadeau de votre
+                        choix et choisissez la dénomination souhaitée.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number mc">2</div>
+                    <div class="step-icon-circle mc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e31937" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="step-title">Ouvrez votre app Moncash</div>
+                    <div class="step-desc">Lancez l'application Moncash sur votre téléphone Digicel. Assurez-vous
+                        d'avoir un solde suffisant sur votre compte.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number mc">3</div>
+                    <div class="step-icon-circle mc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e31937" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <div class="step-title">Transférez le montant</div>
+                    <div class="step-desc">Dans l'app, allez dans <strong>"Envoyer de l'argent"</strong> et entrez le
+                        numéro officiel.</div>
+                    <span class="step-highlight mc">📱 +509 4696-6290</span>
+                </div>
+                <div class="step-card">
+                    <div class="step-number mc">4</div>
+                    <div class="step-icon-circle mc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e31937" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="step-title">Envoyez la preuve</div>
+                    <div class="step-desc">Prenez une capture d'écran du reçu Moncash et envoyez-la sur WhatsApp avec
+                        votre ID de joueur et le nom du produit commandé.</div>
+                    <span class="step-highlight mc">WhatsApp: +509 4696-6290</span>
+                </div>
+                <div class="step-card">
+                    <div class="step-number mc">5</div>
+                    <div class="step-icon-circle mc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e31937" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="step-title">Livraison en 5 minutes</div>
+                    <div class="step-desc">Après vérification de votre paiement, votre recharge est effectuée
+                        directement sur votre compte de jeu en moins de 5 minutes.</div>
+                </div>
+            </div>
+            <div class="pay-important-banner">
+                <div class="pib-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="pib-content">
+                    <h4>⚠️ Important — Mentionnez votre référence de commande</h4>
+                    <p>Dans le message WhatsApp, indiquez toujours : votre <strong>ID/Pseudo de joueur</strong>, le
+                        <strong>nom du jeu</strong>, la <strong>dénomination choisie</strong> et la <strong>référence de
+                            votre commande</strong>. Cela nous permet de traiter votre recharge plus rapidement.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Natcash -->
+    <section class="pay-steps-section alt">
+        <div class="pay-section-container">
+            <div class="pay-steps-header">
+                <div class="psh-icon natcash">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="psh-text">
+                    <h2>Comment payer avec Natcash</h2>
+                    <p>Suivez ces étapes simples pour régler votre commande via Natcash (Natcom Haïti).</p>
+                </div>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number nc">1</div>
+                    <div class="step-icon-circle nc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </div>
+                    <div class="step-title">Sélectionnez votre produit</div>
+                    <div class="step-desc">Sur Asta-Shops, choisissez le produit et la dénomination souhaitée. Notez le
+                        montant en HTG affiché lors de la commande.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number nc">2</div>
+                    <div class="step-icon-circle nc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="step-title">Ouvrez votre app Natcash</div>
+                    <div class="step-desc">Lancez l'application Natcash sur votre téléphone Natcom. Vérifiez votre solde
+                        disponible avant de procéder au transfert.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number nc">3</div>
+                    <div class="step-icon-circle nc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <div class="step-title">Faites le transfert</div>
+                    <div class="step-desc">Allez dans <strong>"Transfer"</strong> ou <strong>"Envoyer"</strong> et
+                        entrez le numéro officiel Natcash d'Asta-Shops.</div>
+                    <span class="step-highlight nc">📱 +509 3567-2037</span>
+                </div>
+                <div class="step-card">
+                    <div class="step-number nc">4</div>
+                    <div class="step-icon-circle nc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="step-title">Confirmez via WhatsApp</div>
+                    <div class="step-desc">Envoyez le reçu de transaction sur WhatsApp avec votre ID de joueur, le nom
+                        du jeu et la référence de commande.</div>
+                    <span class="step-highlight nc">WhatsApp: +509 3567-2037</span>
+                </div>
+                <div class="step-card">
+                    <div class="step-number nc">5</div>
+                    <div class="step-icon-circle nc">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="step-title">Recharge instantanée</div>
+                    <div class="step-desc">Votre recharge est traitée immédiatement après confirmation du paiement. Vous
+                        recevrez une notification sur WhatsApp.</div>
+                </div>
+            </div>
+            <div class="pay-important-banner">
+                <div class="pib-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="pib-content">
+                    <h4>💡 Conseil — Gardez le reçu de transaction</h4>
+                    <p>Conservez toujours votre reçu Natcash jusqu'à réception de votre recharge. En cas de problème, ce
+                        document sera nécessaire pour résoudre le litige avec notre équipe support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="pay-faq-section">
+        <div class="pay-section-container">
+            <h2 class="faq-title">Questions fréquentes</h2>
+            <p class="faq-sub">Tout ce que vous devez savoir sur le paiement manuel.</p>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Combien de temps faut-il pour recevoir ma recharge après paiement ?
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">En général, votre recharge est traitée en moins de 5 minutes après réception
+                        et vérification de votre paiement. Durant les heures de forte affluence, cela peut prendre
+                        jusqu'à 15 minutes. Notre équipe est disponible 24h/24 et 7j/7 pour traiter vos commandes.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Que faire si j'ai envoyé le mauvais montant ?
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">Contactez-nous immédiatement via WhatsApp avec votre reçu de paiement. Si
+                        vous avez envoyé moins que le montant requis, nous vous informerons du solde manquant. Si vous
+                        avez envoyé trop, nous effectuerons un remboursement ou un crédit sur votre prochaine commande.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Puis-je annuler ma commande après avoir payé ?
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">Une annulation est possible uniquement si la recharge n'a pas encore été
+                        effectuée. Contactez-nous rapidement via WhatsApp. Une fois la recharge traitée sur votre compte
+                        de jeu, nous ne pouvons plus procéder à un remboursement car les transactions de recharge sont
+                        irréversibles.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Est-il sécurisé d'envoyer de l'argent à ces numéros ?
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">Oui, ces numéros sont les numéros officiels d'Asta-Shops, vérifiés et
+                        enregistrés. Nous avons servi des milliers de clients. Assurez-vous de toujours utiliser les
+                        numéros affichés sur cette page officielle et de ne jamais envoyer d'argent à d'autres numéros
+                        qui prétendent être nous.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Puis-je payer en plusieurs fois ou en deux fois ?
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">Non, le paiement doit être effectué en une seule fois pour un montant exact.
+                        Si vous avez besoin de commander plusieurs produits, passez une commande séparée pour chacun
+                        avec le montant exact correspondant.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Les prix sur le site sont en EUR. Quel montant envoyer en HTG ?
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">Lorsque vous cliquez sur "Acheter" sur un produit, le montant exact en HTG à
+                        envoyer via Moncash ou Natcash est affiché clairement dans la fenêtre de commande. Utilisez ce
+                        montant HTG indiqué, il inclut déjà la conversion.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="pay-cta-section">
+        <h2>Prêt à commander ?</h2>
+        <p>Des milliers de joueurs haïtiens nous font confiance. Recharge instantanée, service 24/7.</p>
+        <div class="pay-cta-btns">
+            <a href="catalog.html" class="cta-btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Voir le catalogue
+            </a>
+            <a href="https://wa.me/50946966290?text=Bonjour%20Asta-Shops%2C%20je%20veux%20commander" target="_blank"
+                class="cta-btn-secondary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.993 0 1.763.458 3.42 1.257 4.873L2.05 21.434c-.112.413.26.785.673.673l4.567-1.222a9.925 9.925 0 0 0 4.714 1.186c5.516 0 9.986-4.471 9.986-9.993C21.99 6.471 17.52 2 12.004 2Z" />
+                </svg>
+                Commander via WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-trust-badges">
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Paiement Sécurisé</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Livraison Instantanée</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Service 24/7</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.58 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                        </path>
+                    </svg>
+                    <span>Support WhatsApp</span>
+                </div>
+                <div class="ftb-item">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>10M+ Clients Satisfaits</span>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="footer-columns">
+                <div class="footer-col brand-col">
+                    <div class="logo" style="display:flex;align-items:center;gap:8px;margin-bottom:15px;">
+                        <span class="logo-box"
+                            style="background-color:#000000;border:1px solid #252b36;color:#fff;font-weight:900;padding:4px 8px;border-radius:6px;font-size:1rem;">AS</span>
+                        <span class="logo-text"
+                            style="font-weight:900;font-size:1.2rem;color:#fff;letter-spacing:.5px;">ASTA-<span
+                                class="text-green" style="color:#00b67a;">SHOPS</span></span>
+                    </div>
+                    <p class="brand-desc">La plateforme de recharge de référence en Haïti. Crédits de jeux, cartes
+                        cadeaux et abonnements instantanément.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Discord"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.579-.406.837a12 12 0 0 0-3.658 0 8 8 0 0 0-.412-.837.05.05 0 0 0-.052-.025 13 13 0 0 0-3.257 1.011.05.05 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.05.05 0 0 0-.018-.011 8.8 8.8 0 0 1-1.248-.595.05.05 0 0 1-.02-.056.05.05 0 0 1 .032-.041c.086-.065.171-.133.252-.203a.05.05 0 0 1 .051-.007c2.72 1.25 5.675 1.25 8.358 0a.05.05 0 0 1 .051.007c.082.07.166.138.252.203a.05.05 0 0 1 .033.041.05.05 0 0 1-.02.056 9 9 0 0 1-1.248.595.05.05 0 0 0-.018.01.05.05 0 0 0-.01.059c.246.466.52.91.819 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.63-1.613 1.438-1.613c.807 0 1.45.724 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.799 0-1.438-.724-1.438-1.612s.63-1.613 1.438-1.613c.807 0 1.451.724 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z" />
+                            </svg></a>
+                        <a href="#" class="social-icon" aria-label="TikTok"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.38 13.84 3.98 15 4v2c-1.756-.03-3.036-1.006-4-2v10.5a4.5 4.5 0 1 1-9-0 4.5 4.5 0 0 1 7.394-3.493c.123.1.206.223.333.376A4.475 4.475 0 0 1 9 14.5V0z" />
+                            </svg></a>
+                        <a href="#" class="social-icon" aria-label="X (Twitter)"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg></a>
+                        <a href="#" class="social-icon" aria-label="YouTube"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.104 1.981a2.01 2.01 0 0 1-1.415 1.419c-1.113.3-5.269.33-6.11.335h-.089c-.822-.003-4.987-.033-6.11-.335a2.01 2.01 0 0 1-1.415-1.42C.101 11.12.035 10.617.008 10.1l-.008-.104-.015-.26-.008-.104c-.065-.914-.073-1.77-.074-1.957v-.075c.001-.194.01-1.108.104-1.981A2.01 2.01 0 0 1 1.42 2.334C2.533 2.03 6.688 2 7.529 1.999h.522zM6.257 8.278 9.9 10.1l-.002-3.644-3.641 1.822z" />
+                            </svg></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="catalog.html?cat=jeux">Jeux de Crédit</a></li>
+                        <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                        <li><a href="catalog.html?cat=game-cd-key">Clés de jeux (CD-Keys)</a></li>
+                        <li><a href="catalog.html?cat=payment-cards">Cartes de Paiement</a></li>
+                        <li><a href="paiement-manuel.html">Paiement Moncash / Natcash</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support & Légal</h4>
+                    <ul>
+                        <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="liens footer/FAQ  Centre d'aide.html">FAQ / Centre d'aide</a></li>
+                        <li><a href="contact.html">Contactez-nous</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Partenariat</h4>
+                    <ul>
+                        <li><a href="liens footer/partenaire de Asta-shops.html">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Vendre sur Asta Shops.html">Vendre sur Asta Shops</a></li>
+                        <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
+                        <li><a href="liens footer/Recrutement.html">Recrutement</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Asta Shops Inc. Tous droits réservés.</p>
+                <div class="footer-bottom-links">
+                    <a href="liens footer/Mentions légales.html">Mentions légales</a>
+                    <span class="dot-separator">•</span>
+                    <span class="creator-credit">Créateur et développeur : Space Dev.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyNumber(id, btn) {
+            const text = document.getElementById(id).textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copié !';
+                setTimeout(() => { btn.innerHTML = orig; }, 2000);
+            });
+        }
+        function toggleFAQ(btn) {
+            const item = btn.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+        // Mobile menu
+        const mmt = document.getElementById('mobileMenuToggle');
+        const nav = document.querySelector('.nav-container');
+        if (mmt && nav) {
+            mmt.addEventListener('click', e => { e.stopPropagation(); nav.classList.toggle('active'); });
+            document.addEventListener('click', e => { if (!nav.contains(e.target) && !mmt.contains(e.target)) nav.classList.remove('active'); });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/maintenance-check.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programme Créateurs — Asta-Shops</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../main.css?v=2.0">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, #0b0c0f 0%, #111827 50%, #00b67a18 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .page-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 620px;
+            margin: 0 auto 32px;
+            line-height: 1.7;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 182, 122, 0.15);
+            border: 1px solid rgba(0, 182, 122, 0.4);
+            color: #00b67a;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .page-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #0b0c0f;
+            margin-bottom: 10px;
+        }
+
+        .section-sub {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .benefit-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 28px;
+            transition: box-shadow 0.2s;
+        }
+
+        .benefit-card:hover {
+            box-shadow: 0 12px 32px rgba(0, 182, 122, 0.1);
+            border-color: #00b67a;
+        }
+
+        .benefit-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #00b67a, #007a52);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .benefit-icon svg {
+            color: #fff;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0b0c0f;
+            margin-bottom: 8px;
+        }
+
+        .benefit-card p {
+            font-size: 0.88rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .how-it-works {
+            background: #f8f9fb;
+            border-radius: 20px;
+            padding: 48px;
+            margin-bottom: 60px;
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: #00b67a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .step-body h4 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0b0c0f;
+            margin-bottom: 6px;
+        }
+
+        .step-body p {
+            font-size: 0.88rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .clips-section {
+            background: linear-gradient(135deg, #0b0c0f, #1a2234);
+            border-radius: 20px;
+            padding: 48px;
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .clips-section h2 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .clips-section p {
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .clips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .clip-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .clip-card h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #00b67a;
+        }
+
+        .clip-card p {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.5;
+        }
+
+        .cta-box {
+            text-align: center;
+            background: #f0fdf9;
+            border: 2px solid #00b67a;
+            border-radius: 20px;
+            padding: 48px;
+        }
+
+        .cta-box h2 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #0b0c0f;
+            margin-bottom: 12px;
+        }
+
+        .cta-box p {
+            color: #6b7280;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #00b67a;
+            color: #fff;
+            font-weight: 800;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-cta:hover {
+            background: #007a52;
+            transform: translateY(-2px);
+        }
+
+        .commission-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 28px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .commission-table th {
+            background: #0b0c0f;
+            color: #fff;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .commission-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .commission-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .commission-table tr:nth-child(even) td {
+            background: #f8f9fb;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .tier-debutant {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .tier-actif {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .tier-premium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tier-elite {
+            background: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span class="promo-badge">CRÉATEURS</span>
+                <span class="promo-text">Monétisez votre audience avec le Programme Créateurs Asta-Shops</span>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <a href="../index.html" class="logo" style="text-decoration:none;color:inherit;">
+            <span class="logo-box">AS</span>
+            <span class="logo-text">ASTA-<span class="text-green">SHOPS</span></span>
+        </a>
+        <div class="nav-actions">
+            <a href="../index.html" style="text-decoration:none;color:#00b67a;font-weight:700;">← Retour à l'accueil</a>
+        </div>
+    </header>
+
+    <div class="page-hero">
+        <span class="hero-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="23 7 16 12 23 17 23 7" />
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+            </svg>
+            Programme Créateurs de Contenu
+        </span>
+        <h1>Créez. Streamez. Gagnez.</h1>
+        <p>Rejoignez le Programme Créateurs Asta-Shops et transformez votre passion pour le gaming en véritable revenu.
+            Partagez vos moments de jeu, vos clips, vos streams — et soyez récompensé à chaque vente générée.</p>
+        <a href="#postuler" class="btn-cta">Postuler maintenant →</a>
+    </div>
+
+    <div class="page-content">
+
+        <div class="clips-section">
+            <h2>🎮 Votre contenu. Votre jeu. Votre monnaie.</h2>
+            <p>En tant que créateur partenaire Asta-Shops, vous avez accès à une opportunité unique : intégrer des liens
+                de recharge directement dans vos vidéos, clips, streams et publications. Lorsque vous streamez un jeu ou
+                réalisez des clips en jeu — Free Fire, PUBG Mobile, Fortnite, Mobile Legends, Roblox — vous pouvez
+                montrer votre expérience d'achat sur Asta-Shops en direct et inciter votre communauté à passer à
+                l'action.</p>
+            <div class="clips-grid">
+                <div class="clip-card">
+                    <h4>📹 Clips & Highlights en jeu</h4>
+                    <p>Partagez vos meilleurs moments de gameplay — kills, skins rares, events — et mentionnez comment
+                        vous avez rechargé vos crédits via Asta-Shops. Vos followers voient la valeur en temps réel.</p>
+                </div>
+                <div class="clip-card">
+                    <h4>🔴 Live Streaming</h4>
+                    <p>Streamez vos sessions de jeu sur YouTube, TikTok ou Twitch. Montrez en direct comment acheter vos
+                        UC, diamants ou robux sur Asta-Shops — rapide, sécurisé, en quelques clics.</p>
+                </div>
+                <div class="clip-card">
+                    <h4>🎬 Vidéos de présentation</h4>
+                    <p>Créez des tutoriels, des unboxings de skins ou des comparatifs de prix en utilisant Asta-Shops.
+                        Vos vidéos génèrent des commissions à chaque achat via votre lien affilié.</p>
+                </div>
+                <div class="clip-card">
+                    <h4>📱 Réseaux sociaux</h4>
+                    <p>Publiez vos clips sur TikTok, Instagram Reels, YouTube Shorts. Intégrez votre code promo exclusif
+                        dans vos descriptions pour booster vos conversions et vos gains.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Avantages du Programme Créateurs</h2>
+        <p class="section-sub">Des bénéfices conçus pour maximiser vos revenus et votre influence dans la communauté
+            gaming.</p>
+
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+                <h3>Commissions sur chaque vente</h3>
+                <p>Gagnez jusqu'à 15% de commission sur chaque achat réalisé via votre lien affilié ou code promo
+                    exclusif. Vos gains augmentent avec votre volume de ventes.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                    </svg>
+                </div>
+                <h3>Code promo personnalisé</h3>
+                <p>Recevez un code promo unique (ex: CREATOR-NOM) à partager avec votre communauté. Vos abonnés
+                    bénéficient d'une réduction et vous gagnez une commission à chaque utilisation.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <h3>Audience fidélisée</h3>
+                <p>Offrez à votre communauté des prix compétitifs et une expérience d'achat fiable. Votre crédibilité se
+                    renforce, votre audience grandit et vos revenus aussi.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                </div>
+                <h3>Contenu sponsorisé exclusif</h3>
+                <p>Accédez à des opportunités de contenu sponsorisé, des partenariats exclusifs et des lancements de
+                    produits en avant-première pour les créateurs les plus actifs.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg>
+                </div>
+                <h3>Tableau de bord en temps réel</h3>
+                <p>Suivez vos clics, conversions, commissions et historique de paiements via un tableau de bord dédié.
+                    Analysez vos performances et optimisez votre stratégie de contenu.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                </div>
+                <h3>Support créateur dédié</h3>
+                <p>Un gestionnaire de compte dédié vous accompagne dans le développement de votre stratégie de
+                    monétisation et répond à toutes vos questions via WhatsApp ou Discord.</p>
+            </div>
+        </div>
+
+        <div class="how-it-works">
+            <h2 class="section-title">Comment rejoindre le Programme ?</h2>
+            <p class="section-sub">Un processus simple en 4 étapes pour commencer à monétiser votre audience.</p>
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-body">
+                        <h4>Postulez en ligne</h4>
+                        <p>Remplissez le formulaire de candidature ci-dessous avec vos informations (nom, plateforme
+                            principale, nombre d'abonnés, jeux que vous streamez). Toutes les tailles d'audience sont
+                            les bienvenues — nous valorisons la qualité de votre engagement.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-body">
+                        <h4>Validation de votre profil</h4>
+                        <p>Notre équipe Partenariat examine votre candidature sous 48 heures. Nous analysons la
+                            pertinence de votre contenu, votre taux d'engagement et l'alignement avec notre communauté
+                            gaming.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-body">
+                        <h4>Activation & ressources créateur</h4>
+                        <p>Une fois accepté, vous recevez votre code affilié personnalisé, vos ressources visuelles
+                            (bannières, logos), vos liens trackés et l'accès à votre tableau de bord créateur.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-body">
+                        <h4>Créez et gagnez</h4>
+                        <p>Intégrez Asta-Shops dans votre contenu — clips, streams, vidéos — et regardez vos commissions
+                            s'accumuler. Les paiements sont effectués chaque mois directement sur votre compte.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Barème des commissions</h2>
+        <p class="section-sub">Votre niveau de commission évolue en fonction de votre volume de ventes mensuel.</p>
+        <table class="commission-table">
+            <thead>
+                <tr>
+                    <th>Niveau</th>
+                    <th>Ventes mensuelles générées</th>
+                    <th>Commission</th>
+                    <th>Avantages supplémentaires</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="tier-badge tier-debutant">Débutant</span></td>
+                    <td>0 – 50 ventes</td>
+                    <td><strong>5%</strong></td>
+                    <td>Code affilié, accès tableau de bord</td>
+                </tr>
+                <tr>
+                    <td><span class="tier-badge tier-actif">Actif</span></td>
+                    <td>51 – 200 ventes</td>
+                    <td><strong>8%</strong></td>
+                    <td>+ Badge créateur, priorité support</td>
+                </tr>
+                <tr>
+                    <td><span class="tier-badge tier-premium">Premium</span></td>
+                    <td>201 – 500 ventes</td>
+                    <td><strong>12%</strong></td>
+                    <td>+ Crédits offerts, contenus sponsorisés</td>
+                </tr>
+                <tr>
+                    <td><span class="tier-badge tier-elite">Élite</span></td>
+                    <td>500+ ventes</td>
+                    <td><strong>15%</strong></td>
+                    <td>+ Gestionnaire dédié, exclusivités</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br><br>
+
+        <div class="cta-box" id="postuler">
+            <h2>Prêt à rejoindre le Programme ?</h2>
+            <p>Postulez dès maintenant et commencez à monétiser votre contenu gaming avec Asta-Shops. Plus de 500
+                créateurs nous font déjà confiance.</p>
+            <a href="../contact.html" class="btn-cta">Soumettre ma candidature →</a>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-bottom" style="padding:20px 40px;text-align:center;border-top:1px solid #2a2d38;">
+            <span class="footer-copy">© 2025 Asta-Shops. Tous droits réservés.</span>
+        </div>
+    </footer>
+</body>
+
+</html>

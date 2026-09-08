@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asta-Shops | Connexion Staff</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --green: #22c55e;
+            --green-dark: #16a34a;
+            --dark: #0a0a0a;
+            --dark2: #111111;
+            --dark3: #1a1a1a;
+            --dark4: #222222;
+            --border: #2a2a2a;
+            --text: #f0f0f0;
+            --text-muted: #888;
+            --red: #ef4444;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(ellipse at 20% 50%, rgba(34, 197, 94, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.04) 0%, transparent 50%);
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 24px;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: var(--green);
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 20px;
+            color: #000;
+            margin-bottom: 14px;
+        }
+
+        .logo-title {
+            display: block;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .logo-title span {
+            color: var(--green);
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .login-card {
+            background: var(--dark3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 32px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #ccc;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            background: var(--dark4);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        input:focus {
+            border-color: var(--green);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: var(--green);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background .2s, transform .1s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .btn-login:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .alert.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            display: block;
+        }
+
+        .alert.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            display: block;
+        }
+
+        .demo-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .demo-badge strong {
+            color: #fff;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <div class="logo-area">
+            <div class="logo-box">AS</div>
+            <span class="logo-title">ASTA-<span>SHOPS</span></span>
+            <span class="logo-sub">Espace Staff</span>
+        </div>
+
+        <div class="login-card">
+            <h1 class="card-title">Connexion Staff</h1>
+            <p class="card-sub">Accès réservé aux membres de l'équipe Asta-Shops</p>
+
+            <div id="demoBanner" class="demo-badge" style="display:none">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span>Mode <strong>Démo</strong> — Supabase non connecté. Utilisez n'importe quel email/mot de
+                    passe.</span>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" placeholder="votre@asta-shops.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="••••••••" required
+                        autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn-login" id="btnLogin">Se connecter</button>
+            </form>
+        </div>
+
+        <a href="index.html" class="back-link">← Retour au catalogue public</a>
+    </div>
+
+    <script>
+        const API = (window.location.protocol === 'file:' || window.location.port !== '5000')
+            ? 'http://localhost:5000'
+            : window.location.origin;
+
+        async function safeJsonFetch(url, options) {
+            let res;
+            try {
+                res = await fetch(url, options);
+            } catch (_) {
+                throw new Error('Problème de connexion réseau. Vérifiez votre connexion internet.');
+            }
+            let data;
+            try {
+                const text = await res.text();
+                data = text ? JSON.parse(text) : {};
+            } catch (_) {
+                throw new Error('Erreur serveur (' + res.status + '). Réessayez dans quelques instants.');
+            }
+            return { res, data };
+        }
+
+        async function checkDemo() {
+            try {
+                const { data } = await safeJsonFetch(API + '/api/health');
+                if (data.mode === 'demo') document.getElementById('demoBanner').style.display = 'flex';
+            } catch { }
+        }
+        checkDemo();
+
+        if (localStorage.getItem('as_token')) {
+            window.location.href = 'Dashboard/dashboard.html';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnLogin');
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = 'alert';
+            alertBox.textContent = '';
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Connexion...';
+
+            try {
+                const { res, data } = await safeJsonFetch(API + '/api/auth/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!res.ok) throw new Error(data.error || 'Identifiants incorrects.');
+
+                localStorage.setItem('as_token', data.token);
+                localStorage.setItem('as_user', JSON.stringify(data.user));
+                localStorage.setItem('as_perms', JSON.stringify(data.sidebarPerms));
+                localStorage.setItem('as_level', data.roleLevel);
+
+                alertBox.className = 'alert success';
+                const isStaff = data.user.role !== 'client';
+                alertBox.textContent = 'Bienvenue ' + (isStaff ? 'Staff (' + data.user.role + '), ' : '') + (data.user.prenom || data.user.email) + ' ! Redirection...';
+
+                const targetUrl = data.redirectUrl || (isStaff ? 'Dashboard/dashboard.html' : 'profile.html');
+                setTimeout(() => { window.location.href = targetUrl; }, 800);
+
+            } catch (err) {
+                alertBox.className = 'alert error';
+                alertBox.textContent = err.message;
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+            }
+        });
+    </script>
+</body>
+
+</html>
