@@ -584,17 +584,75 @@
         <a href="index.html" class="logo" id="headerLogoLink" aria-label="LootZone" style="text-decoration:none;">
             <img src="LootZone_img-removebg-preview.png" alt="LootZone" class="logo-img" id="headerLogoImg">
         </a>
-        <nav class="nav-container">
+        <nav class="nav-container" id="mainNavContainer">
             <ul class="nav-links">
-                <li><a href="catalog.html?cat=jeux">Jeux</a></li>
-                <li><a href="#" class="login-btn">Mon Compte</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="index.html" class="nav-item-link" id="navHomeLink">Home</a></li>
+                <li class="dropdown">
+                    <a href="catalog.html?cat=jeux" class="nav-item-link" id="navGamesLink">Games <span class="nav-chevron">▾</span></a>
+                    <div class="dropdown-mega">
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/free fire.png" alt="Free Fire" class="prod-icon">Free Fire</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/PUBG Mobile.png" alt="PUBG Mobile" class="prod-icon">PUBG Mobile</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Call of Duty mobile.png" alt="Call of Duty Mobile" class="prod-icon">Call of Duty Mobile</a></li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/roblox.jpeg" alt="Roblox" class="prod-icon">Roblox</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/FC Mobile.png" alt="EA Sports FC" class="prod-icon">EA Sports FC (FIFA)</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/mobile legends.jpeg" alt="Mobile Legends" class="prod-icon">Mobile Legends</a></li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Clash of clans.jpeg" alt="Clash of Clans" class="prod-icon">Clash of Clans</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/e-football.png" alt="eFootball" class="prod-icon">eFootball (PES)</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/fortnite.png" alt="Fortnite" class="prod-icon">Fortnite</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="blog.html" class="nav-item-link" id="navBlogLink">Blog</a></li>
+                <li class="dropdown help-center-dropdown">
+                    <a href="liens footer/FAQ Centre d'aide.html" class="nav-item-link" id="navHelpLink">Help Center <span class="nav-chevron">▾</span></a>
+                    <div class="help-dropdown-sub">
+                        <ul class="help-dropdown-list">
+                            <li><a href="liens footer/FAQ Centre d'aide.html">Centre d'aide & FAQ</a></li>
+                            <li><a href="contact.html">Contact & Support</a></li>
+                            <li><a href="liens footer/Demande d'Alliance.html">Demande d'Alliance</a></li>
+                            <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
+                            <li><a href="liens footer/Conditions d'utilisation.htm">Conditions d'utilisation</a></li>
+                            <li><a href="liens footer/Mentions légales.html">Mentions Légales</a></li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </nav>
         <div class="nav-actions">
-            <a href="catalog.html" class="nav-icon cart-btn" aria-label="Panier">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+            <!-- Search Button with expanding panel -->
+            <div class="header-search-wrap" id="headerSearchWrap">
+                <button type="button" class="header-search-toggle" id="headerSearchToggle" aria-label="Rechercher" title="Rechercher">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <div class="header-search-panel" id="headerSearchPanel">
+                    <svg class="header-search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." autocomplete="off" />
+                    <button type="button" class="header-search-close" id="headerSearchClose" aria-label="Fermer la recherche">&times;</button>
+                </div>
+            </div>
+
+            <!-- Wishlist Button -->
+            <a href="#" class="nav-icon wishlist-btn" id="wishlistBtn" aria-label="Favoris" title="Favoris">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
+            </a>
+
+            <!-- Cart Button -->
+            <a href="catalog.html" class="nav-icon cart-btn" aria-label="Panier" title="Panier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="21" r="1"></circle>
                     <circle cx="20" cy="21" r="1"></circle>
@@ -602,8 +660,22 @@
                 </svg>
                 <span class="cart-badge">0</span>
             </a>
-            <a href="https://wa.me/50946966290" target="_blank" class="whatsapp-btn" aria-label="WhatsApp">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+
+            <!-- Currency & Language Trigger (EN / USD) -->
+            <div class="header-currency-dropdown top-bar-dropdown" id="headerCurrencyDropdown">
+                <button type="button" class="header-currency-btn dropdown-trigger currency-lang-trigger" id="headerCurrencyBtn" aria-label="Devise et langue" title="Devise et langue">
+                    <span class="header-currency-label" id="headerCurrencyLabel">EN / USD</span>
+                </button>
+            </div>
+
+            <!-- Log in / Sign up Button -->
+            <a href="#" class="header-auth-btn auth-link login-btn" id="navAccountBtn" aria-label="Log in / Sign up">
+                <span class="auth-btn-label">Log in / Sign up</span>
+            </a>
+
+            <!-- WhatsApp Support Button -->
+            <a href="https://wa.me/50946966290" target="_blank" class="whatsapp-btn" aria-label="WhatsApp" title="WhatsApp Support">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
                     <path fill="#25D366"
                         d="M12.004 2c-5.516 0-9.987 4.471-9.987 9.993 0 1.763.458 3.42 1.257 4.873L2.05 21.434c-.112.413.26.785.673.673l4.567-1.222a9.925 9.925 0 0 0 4.714 1.186c5.516 0 9.986-4.471 9.986-9.993C21.99 6.471 17.52 2 12.004 2Z">
                     </path>
@@ -1173,7 +1245,48 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/wishlist.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const globalSearch = document.getElementById('globalSearchInput');
+            const searchToggle = document.getElementById('headerSearchToggle');
+            const searchWrap = document.getElementById('headerSearchWrap');
+            const searchClose = document.getElementById('headerSearchClose');
+
+            if (searchToggle && searchWrap) {
+                searchToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    searchWrap.classList.toggle('active');
+                    if (searchWrap.classList.contains('active') && globalSearch) {
+                        globalSearch.focus();
+                    }
+                });
+            }
+
+            if (searchClose && searchWrap) {
+                searchClose.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    searchWrap.classList.remove('active');
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (searchWrap && !searchWrap.contains(e.target)) {
+                    searchWrap.classList.remove('active');
+                }
+            });
+
+            if (globalSearch) {
+                globalSearch.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && globalSearch.value.trim()) {
+                        window.location.href = `catalog.html?search=${encodeURIComponent(globalSearch.value.trim())}`;
+                    }
+                });
+            }
+        });
+    </script>
     <script src="js/maintenance-check.js"></script>
 </body>
 

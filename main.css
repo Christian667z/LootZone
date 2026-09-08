@@ -108,7 +108,93 @@ img {
     margin-left: auto;
 }
 
-/* --- Search Input Box dans la Navbar (Style LootBar) --- */
+/* --- Search Input Box & Search Toggle dans la Navbar --- */
+.header-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.header-search-toggle {
+    width: 38px;
+    height: 38px;
+    background: #1c202a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.header-search-toggle:hover {
+    background: #252b39;
+    color: #ffb700;
+    border-color: rgba(255, 183, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+.header-search-panel {
+    display: none;
+    align-items: center;
+    background: #141722;
+    border: 1px solid rgba(255, 183, 0, 0.5);
+    border-radius: 8px;
+    padding: 6px 12px;
+    gap: 8px;
+    width: 250px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 1050;
+}
+
+.header-search-wrap.active .header-search-panel {
+    display: flex;
+}
+
+.header-search-wrap.active .header-search-toggle {
+    display: none;
+}
+
+.header-search-panel input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.86rem;
+    width: 100%;
+    color: #f8fafc;
+}
+
+.header-search-panel input::placeholder {
+    color: #8b94a8;
+}
+
+.header-search-panel .header-search-icon {
+    color: #ffb700;
+    flex-shrink: 0;
+}
+
+.header-search-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.header-search-close:hover {
+    color: #ffffff;
+}
+
+/* Fallback simple search box si utilisé sans toggle */
 .nav-search-box {
     display: flex;
     align-items: center;
@@ -123,8 +209,8 @@ img {
 
 .nav-search-box:focus-within {
     background: #1a1c2a;
-    border-color: #a855f7;
-    box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
+    border-color: #ffb700;
+    box-shadow: 0 0 14px rgba(255, 183, 0, 0.25);
     width: 260px;
 }
 
@@ -148,19 +234,21 @@ img {
 }
 
 .nav-search-box:focus-within .search-icon {
-    color: #c084fc;
+    color: #ffb700;
 }
 
-.wishlist-badge {
+/* --- Badges --- */
+.wishlist-badge,
+.cart-badge {
     position: absolute;
-    top: -7px;
-    right: -9px;
+    top: -6px;
+    right: -7px;
     min-width: 18px;
     height: 18px;
-    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-    color: #fff;
+    background: #ffb700;
+    color: #000000;
     font-size: 0.65rem;
-    font-weight: 700;
+    font-weight: 800;
     border-radius: 999px;
     display: flex;
     align-items: center;
@@ -168,33 +256,204 @@ img {
     padding: 0 4px;
     line-height: 1;
     border: 2px solid #090a0f;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
+    box-shadow: 0 0 8px rgba(255, 183, 0, 0.5);
     pointer-events: none;
 }
 
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 16px;
+    gap: 20px;
     align-items: center;
 }
 
 .nav-links>li>a {
     text-decoration: none;
-    color: #e2e8f0;
+    color: #ffffff;
     font-weight: 500;
-    font-size: 0.93rem;
+    font-size: 0.95rem;
     transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     padding: 6px 12px;
-    border-radius: 8px;
+    border-radius: 6px;
+    letter-spacing: 0.2px;
 }
 
-.nav-links>li>a:hover,
-.nav-links>li>a.active {
-    color: #c084fc;
-    background-color: rgba(168, 85, 247, 0.12);
+.nav-links>li>a:hover {
+    color: #ffb700;
+}
+
+.nav-links>li>a.nav-home,
+.nav-links>li>a.active-home {
+    color: #ffb700 !important;
+    font-weight: 700;
+}
+
+.nav-chevron {
+    margin-left: 6px;
+    font-size: 0.75rem;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.dropdown:hover .nav-chevron {
+    transform: rotate(180deg);
+}
+
+/* --- Help Center Submenu --- */
+.help-dropdown-sub {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: translateY(12px);
+    background-color: #10131c;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 1px rgba(255, 183, 0, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+    min-width: 240px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 1200;
+}
+
+.help-center-dropdown:hover .help-dropdown-sub {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.help-dropdown-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0;
+    margin: 0;
+}
+
+.help-dropdown-list a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    color: #e2e8f0;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.help-dropdown-list a:hover {
+    background-color: rgba(255, 183, 0, 0.12);
+    color: #ffb700;
+    transform: translateX(3px);
+}
+
+/* --- EN / USD Currency Button --- */
+.header-currency-dropdown {
+    position: relative;
+}
+
+.header-currency-btn {
+    height: 38px;
+    padding: 0 14px;
+    background: #1c202a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.header-currency-btn:hover {
+    background: #252b39;
+    color: #ffb700;
+    border-color: rgba(255, 183, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+.header-currency-label {
+    letter-spacing: 0.5px;
+}
+
+/* --- Log in / Sign up Button --- */
+.header-auth-btn {
+    height: 38px;
+    padding: 0 18px;
+    background: #ffb700;
+    color: #000000 !important;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(255, 183, 0, 0.25);
+    white-space: nowrap;
+}
+
+.header-auth-btn:hover {
+    background: #ffc72c;
+    color: #000000 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(255, 183, 0, 0.4);
+}
+
+.header-auth-btn.logged-in {
+    background: #1c202a;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 183, 0, 0.35);
+    padding: 0 12px;
+    gap: 8px;
+    box-shadow: none;
+}
+
+.header-auth-btn.logged-in:hover {
+    background: #252b39;
+    border-color: #ffb700;
+}
+
+.nav-avatar-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #ffb700;
+}
+
+.nav-avatar-initial {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ffb700;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.nav-user-label {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.85rem;
 }
 
 .arrow-down {
@@ -277,42 +536,24 @@ img {
 
 .nav-icon {
     color: #e2e8f0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     transition: all 0.2s ease;
     position: relative;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    background: #1c202a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
 }
 
-.cart-badge {
-    position: absolute;
-    top: -7px;
-    right: -9px;
-    min-width: 18px;
-    height: 18px;
-    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    line-height: 1;
-    border: 2px solid #090a0f;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
-    pointer-events: none;
-}
-
 .nav-icon:hover {
-    color: #c084fc;
-    background-color: rgba(168, 85, 247, 0.12);
-    transform: scale(1.05);
+    color: #ffb700;
+    background-color: #252b39;
+    border-color: rgba(255, 183, 0, 0.4);
+    transform: translateY(-1px);
 }
 
 .whatsapp-btn {

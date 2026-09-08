@@ -8,7 +8,7 @@ expertMode = true
 [userenv]
 
 [userenv.shared]
-SUPABASE_URL = "https://ukgqtyyywakgvbfxsfac.supabase.co"
+SUPABASE_URL = "https://bdezshjorwdxzojuecja.supabase.co"
 PORT = "5000"
 
 [workflows]

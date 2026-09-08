@@ -42,6 +42,8 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
 app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
+    crossOriginResourcePolicy: false,
     frameguard: false
 }));
 

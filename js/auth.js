@@ -3,8 +3,8 @@
  * Gestion de l'authentification côté navigateur
  */
 
-const SUPABASE_URL = 'https://ukgqtyyywakgvbfxsfac.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_N7fWHUmetq4bj5MaFMB9XA_yUi1Q3iv';
+const SUPABASE_URL = 'https://bdezshjorwdxzojuecja.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_PDxfwtviufPwC92pVHdNaA_G01ZE50h';
 
 // ─── Rôles utilisateur ───────────────────────────────────────────────────────
 window.USER_ROLES = {
@@ -341,26 +341,23 @@ function updateNavAccount(user, profile) {
     btn.setAttribute('aria-label', 'Mon profil');
     btn.title = 'Mon profil';
     btn.classList.remove('login-btn');
+    btn.classList.add('logged-in');
     btn.onclick = null;
     const avatarUrl = profile?.avatar_url || profile?.avatar;
+    const displayName = ((profile?.prenom || '') + ' ' + (profile?.nom || '')).trim() || user?.email?.split('@')[0] || 'Profil';
+    const initial = displayName.charAt(0).toUpperCase();
     if (avatarUrl) {
-      btn.innerHTML = `<img src="${escHtml(avatarUrl)}" alt="Avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid #a855f7;box-shadow:0 0 8px rgba(168,85,247,0.4);">`;
+      btn.innerHTML = `<img src="${escHtml(avatarUrl)}" alt="Avatar" class="nav-avatar-img"><span class="nav-user-label">${escHtml(displayName)}</span>`;
     } else {
-      const displayName = ((profile?.prenom || '') + ' ' + (profile?.nom || '')).trim() || user?.email?.split('@')[0] || 'U';
-      const initial = displayName.charAt(0).toUpperCase();
-      btn.innerHTML = `<span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg, #a855f7, #7c3aed);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;box-shadow:0 0 8px rgba(168,85,247,0.4);">${initial}</span>`;
+      btn.innerHTML = `<span class="nav-avatar-initial">${initial}</span><span class="nav-user-label">${escHtml(displayName)}</span>`;
     }
   } else {
     btn.href = '#';
-    btn.setAttribute('aria-label', 'Mon compte');
-    btn.title = 'Mon compte';
+    btn.setAttribute('aria-label', 'Log in / Sign up');
+    btn.title = 'Log in / Sign up';
     btn.classList.add('login-btn');
-    btn.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-        <circle cx="12" cy="7" r="4"></circle>
-      </svg>
-    `;
+    btn.classList.remove('logged-in');
+    btn.innerHTML = `<span class="auth-btn-label">Log in / Sign up</span>`;
     btn.onclick = (e) => {
       e.preventDefault();
       if (window.openAuth) {

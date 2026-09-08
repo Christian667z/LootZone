@@ -16,8 +16,8 @@
         EUR: '€'
     };
 
-    let currentCurrency = localStorage.getItem('as_currency') || 'HTG';
-    let currentLang = localStorage.getItem('as_lang') || 'FR';
+    let currentCurrency = localStorage.getItem('as_currency') || 'USD';
+    let currentLang = localStorage.getItem('as_lang') || 'EN';
 
     function formatAmount(amountHTG, currency) {
         const targetCurr = currency || currentCurrency;
@@ -47,20 +47,31 @@
         currentLang = newLang;
         localStorage.setItem('as_lang', newLang);
         updateTopBarTrigger();
+        window.dispatchEvent(new CustomEvent('asta:langChange', { detail: { lang: newLang } }));
     }
 
     function updateTopBarTrigger() {
-        const trigger = document.querySelectorAll('.currency-lang-trigger');
-        trigger.forEach(el => {
-            el.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="top-icon">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                ${currentLang} | ${currentCurrency} ▾
-            `;
+        const triggers = document.querySelectorAll('.currency-lang-trigger');
+        triggers.forEach(el => {
+            const labelEl = el.querySelector('.header-currency-label, #headerCurrencyLabel');
+            if (labelEl) {
+                labelEl.textContent = `${currentLang} / ${currentCurrency}`;
+            } else if (el.classList.contains('header-currency-btn')) {
+                el.innerHTML = `<span class="header-currency-label">${currentLang} / ${currentCurrency}</span>`;
+            } else {
+                el.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="top-icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    ${currentLang} / ${currentCurrency} ▾
+                `;
+            }
+        });
+        document.querySelectorAll('#headerCurrencyLabel, .header-currency-label').forEach(el => {
+            el.textContent = `${currentLang} / ${currentCurrency}`;
         });
     }
 
@@ -86,13 +97,12 @@
 
     // Modal / Dropdown Toggle for Currency & Language Selection
     function initCurrencyDropdown() {
-        const topDropdowns = document.querySelectorAll('.top-bar-dropdown');
+        const topDropdowns = document.querySelectorAll('.top-bar-dropdown, .header-currency-dropdown');
         topDropdowns.forEach(dd => {
             dd.style.position = 'relative';
-            dd.style.cursor = 'pointer';
 
             // Ensure class on trigger
-            const trigger = dd.querySelector('.dropdown-trigger');
+            const trigger = dd.querySelector('.dropdown-trigger, .header-currency-btn');
             if (trigger) trigger.classList.add('currency-lang-trigger');
 
             // Create dropdown menu if not present
@@ -102,51 +112,81 @@
                 menu.style.cssText = `
                     display: none;
                     position: absolute;
-                    top: 100%;
+                    top: calc(100% + 8px);
                     right: 0;
-                    margin-top: 6px;
-                    background: #111827;
-                    border: 1px solid #374151;
-                    border-radius: 8px;
-                    padding: 8px;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+                    background: #11141d;
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    border-radius: 10px;
+                    padding: 10px;
+                    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7);
                     z-index: 9999;
-                    min-width: 150px;
-                `;
-                menu.innerHTML = `
-                    <div style="font-size:0.75rem;color:#9ca3af;font-weight:700;margin-bottom:6px;padding:0 6px;text-transform:uppercase;letter-spacing:0.5px;">Devise</div>
-                    <div class="curr-opt ${currentCurrency === 'HTG' ? 'active' : ''}" data-curr="HTG" style="padding:6px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.2s;">
-                        <span>🇭🇹 HTG (Gourde)</span>
-                    </div>
-                    <div class="curr-opt ${currentCurrency === 'USD' ? 'active' : ''}" data-curr="USD" style="padding:6px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.2s;">
-                        <span>🇺🇸 USD ($)</span>
-                    </div>
-                    <div class="curr-opt ${currentCurrency === 'EUR' ? 'active' : ''}" data-curr="EUR" style="padding:6px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background 0.2s;">
-                        <span>🇪🇺 EUR (€)</span>
-                    </div>
+                    min-width: 190px;
                 `;
 
+                function renderMenu() {
+                    menu.innerHTML = `
+                        <div style="font-size:0.7rem;color:#9ca3af;font-weight:700;margin-bottom:6px;padding:0 6px;text-transform:uppercase;letter-spacing:0.5px;">Langue</div>
+                        <div class="lang-opt ${currentLang === 'EN' ? 'active' : ''}" data-lang="EN" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentLang === 'EN' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentLang === 'EN' ? '#ffb700' : '#e2e8f0'};">
+                            <span>🇺🇸 English (EN)</span>
+                            ${currentLang === 'EN' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                        </div>
+                        <div class="lang-opt ${currentLang === 'FR' ? 'active' : ''}" data-lang="FR" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px;background:${currentLang === 'FR' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentLang === 'FR' ? '#ffb700' : '#e2e8f0'};">
+                            <span>🇫🇷 Français (FR)</span>
+                            ${currentLang === 'FR' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                        </div>
+
+                        <div style="height:1px;background:rgba(255,255,255,0.08);margin:6px 0 8px;"></div>
+
+                        <div style="font-size:0.7rem;color:#9ca3af;font-weight:700;margin-bottom:6px;padding:0 6px;text-transform:uppercase;letter-spacing:0.5px;">Devise</div>
+                        <div class="curr-opt ${currentCurrency === 'USD' ? 'active' : ''}" data-curr="USD" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentCurrency === 'USD' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentCurrency === 'USD' ? '#ffb700' : '#e2e8f0'};">
+                            <span>🇺🇸 USD ($)</span>
+                            ${currentCurrency === 'USD' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                        </div>
+                        <div class="curr-opt ${currentCurrency === 'HTG' ? 'active' : ''}" data-curr="HTG" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentCurrency === 'HTG' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentCurrency === 'HTG' ? '#ffb700' : '#e2e8f0'};">
+                            <span>🇭🇹 HTG (Gourde)</span>
+                            ${currentCurrency === 'HTG' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                        </div>
+                        <div class="curr-opt ${currentCurrency === 'EUR' ? 'active' : ''}" data-curr="EUR" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;background:${currentCurrency === 'EUR' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentCurrency === 'EUR' ? '#ffb700' : '#e2e8f0'};">
+                            <span>🇪🇺 EUR (€)</span>
+                            ${currentCurrency === 'EUR' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                        </div>
+                    `;
+
+                    menu.querySelectorAll('.lang-opt').forEach(opt => {
+                        opt.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const selectedLang = opt.getAttribute('data-lang');
+                            setLanguage(selectedLang);
+                            renderMenu();
+                        });
+                    });
+
+                    menu.querySelectorAll('.curr-opt').forEach(opt => {
+                        opt.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const selectedCurr = opt.getAttribute('data-curr');
+                            setCurrency(selectedCurr);
+                            renderMenu();
+                            menu.style.display = 'none';
+                        });
+                    });
+                }
+
+                renderMenu();
                 dd.appendChild(menu);
 
-                dd.addEventListener('click', (e) => {
+                const toggleHandler = (e) => {
                     e.stopPropagation();
                     const isOpen = menu.style.display === 'block';
                     document.querySelectorAll('.currency-menu').forEach(m => m.style.display = 'none');
                     menu.style.display = isOpen ? 'none' : 'block';
-                });
+                };
 
-                menu.querySelectorAll('.curr-opt').forEach(opt => {
-                    opt.addEventListener('mouseenter', () => opt.style.background = '#1f2937');
-                    opt.addEventListener('mouseleave', () => opt.style.background = 'transparent');
-                    opt.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const selectedCurr = opt.getAttribute('data-curr');
-                        setCurrency(selectedCurr);
-                        menu.querySelectorAll('.curr-opt').forEach(o => o.style.color = '#fff');
-                        opt.style.color = '#00b67a';
-                        menu.style.display = 'none';
-                    });
-                });
+                if (trigger) {
+                    trigger.addEventListener('click', toggleHandler);
+                } else {
+                    dd.addEventListener('click', toggleHandler);
+                }
             }
         });
 
