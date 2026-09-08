@@ -1,6 +1,6 @@
 (function () {
-    const API = (window.location.protocol === 'file:' || window.location.port !== '5000')
-        ? 'http://localhost:5000'
+    const API = (window.location.protocol === 'file:')
+        ? 'http://localhost:3000'
         : window.location.origin;
 
     async function checkMaintenance() {

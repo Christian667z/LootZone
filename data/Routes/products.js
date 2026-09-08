@@ -12,20 +12,21 @@ let demoProducts = null;
 async function getProducts() {
     if (DEMO_MODE) {
         if (!demoProducts) {
-            const { readFileSync } = await import('fs');
-            const { fileURLToPath } = await import('url');
-            const path = await import('path');
-            const __dirname = path.dirname(fileURLToPath(import.meta.url));
-            const raw = readFileSync(path.join(__dirname, '../products.js'), 'utf8');
-            const match = raw.match(/const products\s*=\s*(\[[\s\S]*?\])\s*;?\s*\/\//);
-            if (match) {
-                try {
-                    demoProducts = JSON.parse(match[1]);
-                } catch (_) {
-                    console.error('[products] Erreur parsing products.js');
+            try {
+                const { readFileSync } = await import('fs');
+                const { fileURLToPath } = await import('url');
+                const path = await import('path');
+                const __dirname = path.dirname(fileURLToPath(import.meta.url));
+                const raw = readFileSync(path.join(__dirname, '../products.js'), 'utf8');
+                const idx = raw.indexOf('const products =');
+                if (idx !== -1) {
+                    const fn = new Function(raw.substring(idx) + '\nreturn products;');
+                    demoProducts = fn();
+                } else {
                     demoProducts = [];
                 }
-            } else {
+            } catch (err) {
+                console.error('[products] Erreur chargement products.js:', err.message);
                 demoProducts = [];
             }
         }

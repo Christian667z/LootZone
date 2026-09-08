@@ -26,7 +26,7 @@ const ROOT_DIR = path.join(__dirname, '..');
 
 const app = express();
 app.set('trust proxy', 1);
-const PORT = process.env.PORT || 5000;
+const PORT = 3000;
 
 // ─── ORIGINES AUTORISÉES ────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
@@ -41,7 +41,8 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
 // ─── SÉCURITÉ ───────────────────────────────────────────────────────────────
 app.use(helmet({
     contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false
+    crossOriginEmbedderPolicy: false,
+    frameguard: false
 }));
 
 app.use(cors({

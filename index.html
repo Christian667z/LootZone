@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asta-Shops | Vos produits numériques en quelques clics</title>
+    <meta name="description" content="Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
+    <meta property="og:title" content="Asta-Shops | Vos produits numériques en quelques clics">
+    <meta property="og:description" content="Plateforme e-commerce de produits numériques, crédits de jeux et cartes cadeaux">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1436,8 +1439,8 @@
                     }
 
                     const rawSubtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
-                    const API = (window.location.protocol === 'file:' || window.location.port !== '5000')
-                        ? 'http://localhost:5000'
+                    const API = (window.location.protocol === 'file:')
+                        ? 'http://localhost:3000'
                         : window.location.origin;
 
                     try {

@@ -279,8 +279,8 @@
     <script>
         // Admin panel is served by the same Express server — always use same origin.
         // Access via the Replit preview URL, not via VS Code Live Server.
-        const API = (window.location.protocol === 'file:' || window.location.port !== '5000')
-            ? 'http://localhost:5000'
+        const API = (window.location.protocol === 'file:')
+            ? 'http://localhost:3000'
             : window.location.origin;
 
         async function safeJsonFetch(url, options) {

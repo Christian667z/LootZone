@@ -1059,9 +1059,7 @@
 
         // ─── API Base URL (fonctionne en local, VSCode Live Server et Replit) ───
         const API_BASE = window.location.protocol === 'file:'
-            ? 'http://localhost:5000'
-            : (window.location.port && window.location.port !== '5000')
-                ? `${window.location.protocol}//${window.location.hostname}:5000`
+            ? 'http://localhost:3000'
             : window.location.origin;
 
         // ─── Bootstrap ──────────────────────────────────────────────────────────

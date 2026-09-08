@@ -1,5 +1,5 @@
-const API = (window.location.protocol === 'file:' || window.location.port !== '5000')
-    ? 'http://localhost:5000'
+const API = (window.location.protocol === 'file:')
+    ? 'http://localhost:3000'
     : window.location.origin;
 let TOKEN = localStorage.getItem('as_token');
 let USER = JSON.parse(localStorage.getItem('as_user') || 'null');

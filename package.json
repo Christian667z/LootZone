@@ -5,6 +5,7 @@
   "type": "module",
   "main": "data/server.js",
   "scripts": {
+    "build": "echo 'Build complete'",
     "start": "node data/server.js",
     "dev": "node data/server.js"
   },
