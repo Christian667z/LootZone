@@ -623,8 +623,8 @@ window.exportOrdersToPDF = function() {
         <title>Rapport d'Activité LootZone - ${new Date().toLocaleDateString('fr-FR')}</title>
         <style>
             body { font-family: 'Segoe UI', Roboto, sans-serif; padding: 30px; color: #1e293b; background: #fff; }
-            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00b67a; padding-bottom: 15px; margin-bottom: 20px; }
-            .logo { font-size: 24px; font-weight: 800; color: #00b67a; letter-spacing: -0.5px; }
+            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #7c3aed; padding-bottom: 15px; margin-bottom: 20px; }
+            .logo { font-size: 24px; font-weight: 800; color: #7c3aed; letter-spacing: -0.5px; }
             .date { font-size: 13px; color: #64748b; }
             .stats-bar { display: flex; gap: 20px; margin-bottom: 25px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
             .stat-box { flex: 1; text-align: center; }

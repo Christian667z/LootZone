@@ -146,10 +146,10 @@
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </a>
 
-            <!-- Currency & Language Trigger (EN / USD) -->
+            <!-- Currency & Language Trigger (Français / USD) -->
             <div class="header-currency-dropdown top-bar-dropdown" id="headerCurrencyDropdown">
                 <button type="button" class="header-currency-btn dropdown-trigger currency-lang-trigger" id="headerCurrencyBtn" aria-label="Devise et langue" title="Devise et langue">
-                    <span class="header-currency-label" id="headerCurrencyLabel">EN / USD</span>
+                    <span class="header-currency-label" id="headerCurrencyLabel">Français / USD</span>
                 </button>
             </div>
 
@@ -1516,88 +1516,6 @@
             // Initial cart UI load
             updateCartUI();
 
-            // 3. Préférences de langue et devise
-            const prefModal = document.getElementById('prefModal');
-            const closePrefModal = document.getElementById('closePrefModal');
-            const dropdownTrigger = document.querySelector('.dropdown-trigger');
-            const savePrefBtn = document.getElementById('savePrefBtn');
-            const langCards = document.querySelectorAll('#langGrid .pref-card');
-            const currCards = document.querySelectorAll('#currencyGrid .pref-card');
-
-            let selectedLang = localStorage.getItem('asta_lang') || 'FR';
-            let selectedCurr = localStorage.getItem('asta_curr') || 'USD';
-
-            function updatePrefUI() {
-                langCards.forEach(card => {
-                    card.classList.toggle('active', card.getAttribute('data-lang') === selectedLang);
-                });
-                currCards.forEach(card => {
-                    card.classList.toggle('active', card.getAttribute('data-curr') === selectedCurr);
-                });
-                if (dropdownTrigger) {
-                    dropdownTrigger.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="top-icon">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                        </svg>
-                        ${selectedLang} | ${selectedCurr} ▾
-                    `;
-                }
-            }
-
-            if (dropdownTrigger) {
-                dropdownTrigger.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (prefModal) {
-                        prefModal.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    }
-                });
-            }
-
-            if (closePrefModal) {
-                closePrefModal.addEventListener('click', () => {
-                    prefModal.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-
-            langCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    selectedLang = card.getAttribute('data-lang');
-                    langCards.forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                });
-            });
-
-            currCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    selectedCurr = card.getAttribute('data-curr');
-                    currCards.forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                });
-            });
-
-            if (savePrefBtn) {
-                savePrefBtn.addEventListener('click', () => {
-                    localStorage.setItem('asta_lang', selectedLang);
-                    localStorage.setItem('asta_curr', selectedCurr);
-                    updatePrefUI();
-                    applyCurrencyToPage(selectedCurr);
-                    prefModal.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-
-            // Initial pref load
-            updatePrefUI();
-            applyCurrencyToPage(selectedCurr);
-
             // 4. Recharge de Portefeuille (Wallet Recharge)
             const walletModal = document.getElementById('walletModal');
             const closeWalletModal = document.getElementById('closeWalletModal');
@@ -1969,53 +1887,6 @@
                     <polyline points="12 6 12 12 16 14" />
                 </svg>
                 Heures de service : <strong>Disponible 24h/24, 7j/7</strong>
-            </div>
-        </div>
-    </div>
-
-    <div class="pref-modal-overlay" id="prefModal">
-        <div class="pref-modal-container">
-            <button class="pref-modal-close" id="closePrefModal" aria-label="Fermer">×</button>
-            <div class="pref-modal-body">
-                <h3>Paramètres</h3>
-
-                <span class="pref-group-label">Sélectionnez votre langue</span>
-                <div class="pref-grid" id="langGrid">
-                    <div class="pref-card active" data-lang="FR" data-flag="FR">
-                        <span class="pref-flag">🇫🇷</span>
-                        <span>Français</span>
-                    </div>
-                    <div class="pref-card" data-lang="EN" data-flag="EN">
-                        <span class="pref-flag">🇺🇸</span>
-                        <span>English</span>
-                    </div>
-                    <div class="pref-card" data-lang="ES" data-flag="ES">
-                        <span class="pref-flag">🇪🇸</span>
-                        <span>Español</span>
-                    </div>
-                </div>
-
-                <span class="pref-group-label">Sélectionnez votre devise</span>
-                <div class="pref-grid" id="currencyGrid">
-                    <div class="pref-card active" data-curr="USD" data-symbol="$">
-                        <span class="pref-flag">$</span>
-                        <span>USD ($)</span>
-                    </div>
-                    <div class="pref-card" data-curr="USD" data-symbol="$">
-                        <span class="pref-flag">$</span>
-                        <span>USD ($)</span>
-                    </div>
-                    <div class="pref-card" data-curr="HTG" data-symbol="G">
-                        <span class="pref-flag">G</span>
-                        <span>HTG (G)</span>
-                    </div>
-                    <div class="pref-card" data-curr="GDS" data-symbol="G">
-                        <span class="pref-flag">🇭🇹</span>
-                        <span>GDS (G)</span>
-                    </div>
-                </div>
-
-                <button class="btn-pref-save" id="savePrefBtn">Sauvegarder</button>
             </div>
         </div>
     </div>

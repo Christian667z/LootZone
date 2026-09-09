@@ -218,74 +218,68 @@
             margin: 0;
         }
 
-        /* Section 2: Que propose LootZone ? (4 Cards) */
+        /* Section 2: Que propose LootZone ? (Unified 4-column container with vertical dividers as in Image 1) */
         .loot-propose-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            gap: 0;
             max-width: 1220px;
             margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #edf0f5;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
         }
 
         .loot-propose-card {
             background: #ffffff;
-            border: 1px solid #edf0f5;
-            border-radius: 18px;
-            padding: 42px 22px 36px 22px;
+            border: none;
+            border-right: 1px solid #edf0f5;
+            border-radius: 0;
+            padding: 44px 26px 40px 26px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            box-shadow: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            transition: background-color 0.25s ease;
+        }
+
+        .loot-propose-card:last-child {
+            border-right: none;
         }
 
         .loot-propose-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-            border-color: #cbd5e1;
+            background-color: #fafaff;
         }
 
         .propose-icon-wrap {
-            width: 78px;
-            height: 78px;
-            border-radius: 20px;
+            width: 76px;
+            height: 76px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 24px;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            margin-bottom: 22px;
+            transition: transform 0.25s ease;
         }
 
         .loot-propose-card:hover .propose-icon-wrap {
             transform: scale(1.08);
         }
 
-        .propose-icon-wrap.orange-bg {
-            background: #fff7ed;
-            border: 1px solid #ffedd5;
-        }
-
-        .propose-icon-wrap.yellow-bg {
-            background: #fffbeb;
-            border: 1px solid #fef3c7;
-        }
-
-        .propose-icon-wrap.rose-bg {
-            background: #fff1f2;
-            border: 1px solid #ffe4e6;
-        }
-
-        .propose-icon-wrap.blue-bg {
-            background: #eff6ff;
-            border: 1px solid #dbeafe;
+        .propose-icon-wrap svg {
+            display: block;
+            width: 72px;
+            height: 72px;
+            transition: transform 0.25s ease;
         }
 
         .loot-propose-card h3 {
-            font-size: 1.25rem;
+            font-size: 1.22rem;
             font-weight: 800;
             color: #111827;
-            margin: 0 0 14px 0;
+            margin: 0 0 12px 0;
             line-height: 1.35;
         }
 
@@ -355,7 +349,20 @@
 
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
-            .loot-propose-grid, .loot-why-grid {
+            .loot-propose-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .loot-propose-card:nth-child(1),
+            .loot-propose-card:nth-child(2) {
+                border-bottom: 1px solid #edf0f5;
+            }
+
+            .loot-propose-card:nth-child(2) {
+                border-right: none;
+            }
+
+            .loot-why-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 26px;
             }
@@ -387,7 +394,20 @@
                 font-size: 1.85rem;
             }
 
-            .loot-propose-grid, .loot-why-grid {
+            .loot-propose-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .loot-propose-card {
+                border-right: none !important;
+                border-bottom: 1px solid #edf0f5;
+            }
+
+            .loot-propose-card:last-child {
+                border-bottom: none;
+            }
+
+            .loot-why-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
@@ -446,11 +466,11 @@
                         <ul class="mega-column">
                             <li><a href="catalog.html?cat=jeux"><img src="img/roblox.jpeg" alt="Roblox" class="prod-icon">Roblox</a></li>
                             <li><a href="catalog.html?cat=jeux"><img src="img/FC Mobile.png" alt="EA Sports FC" class="prod-icon">EA Sports FC Mobile</a></li>
-                            <li><a href="catalog.html?cat=jeux"><img src="img/brawl star.png" alt="Brawl Stars" class="prod-icon">Brawl Stars</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/e-football.png" alt="eFootball" class="prod-icon">eFootball</a></li>
                         </ul>
                         <ul class="mega-column">
-                            <li><a href="catalog.html?cat=jeux"><img src="img/genshin impact.png" alt="Genshin Impact" class="prod-icon">Genshin Impact</a></li>
-                            <li><a href="catalog.html?cat=jeux"><img src="img/Clash of clans.png" alt="Clash of Clans" class="prod-icon">Clash of Clans</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/mobile legends.jpeg" alt="Mobile Legends" class="prod-icon">Mobile Legends</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Clash of clans.jpeg" alt="Clash of Clans" class="prod-icon">Clash of Clans</a></li>
                             <li><a href="catalog.html?cat=jeux"><img src="img/fortnite.png" alt="Fortnite" class="prod-icon">Fortnite</a></li>
                         </ul>
                     </div>
@@ -514,7 +534,7 @@
             <!-- Currency & Language Trigger (EN / USD) -->
             <div class="header-currency-dropdown top-bar-dropdown" id="headerCurrencyDropdown">
                 <button type="button" class="header-currency-btn dropdown-trigger currency-lang-trigger" id="headerCurrencyBtn" aria-label="Devise et langue" title="Devise et langue">
-                    <span class="header-currency-label" id="headerCurrencyLabel">FR / USD</span>
+                    <span class="header-currency-label" id="headerCurrencyLabel">Français / USD</span>
                 </button>
             </div>
 
@@ -574,9 +594,9 @@
         <section class="loot-hero">
             <!-- Background Game Character Strips -->
             <div class="loot-hero-bg-strips" aria-hidden="true">
-                <div class="loot-hero-bg-col" style="background-image: url('img/genshin impact.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/mobile legends.jpeg');"></div>
                 <div class="loot-hero-bg-col" style="background-image: url('img/PUBG Mobile.png');"></div>
-                <div class="loot-hero-bg-col" style="background-image: url('img/Clash of clans.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/Clash of clans.jpeg');"></div>
                 <div class="loot-hero-bg-col" style="background-image: url('img/fortnite.png');"></div>
                 <div class="loot-hero-bg-col" style="background-image: url('img/free fire.png');"></div>
                 <div class="loot-hero-bg-col" style="background-image: url('img/Call of Duty mobile.png');"></div>
@@ -785,7 +805,7 @@
                         </svg>
                     </div>
                     <h3>Livraison rapide</h3>
-                    <p>Nous offrons les prix de recharge les plus compétitifs, avec jusqu'à 30% de réduction.</p>
+                    <p>Livraison automatique et instantanée en seulement 3 à 5 minutes pour vos jeux et crédits.</p>
                 </div>
 
                 <!-- Why 3 -->
@@ -874,7 +894,7 @@
                 <div class="footer-col">
                     <h4>Support & Légal</h4>
                     <ul>
-                        <li><a href="about.html" style="font-weight:700;color:#00b67a;">À propos de nous</a></li>
+                        <li><a href="about.html" style="font-weight:700;color:#a855f7;">À propos de nous</a></li>
                         <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
                         <li><a href="#">Politique de confidentialité</a></li>
                         <li><a href="liens footer/FAQ Centre d'aide.html">FAQ / Centre d'aide</a></li>
@@ -902,7 +922,7 @@
             <div class="footer-bottom">
                 <p class="copyright">© 2026 LootZone Inc. Tous droits réservés.</p>
                 <div class="footer-bottom-links">
-                    <a href="about.html" style="font-weight:600;color:#00b67a;">À propos de nous</a>
+                    <a href="about.html" style="font-weight:600;color:#a855f7;">À propos de nous</a>
                     <span style="color:#4b5563;margin:0 4px;">•</span>
                     <a href="liens footer/Mentions légales.html">Mentions légales</a>
                 </div>

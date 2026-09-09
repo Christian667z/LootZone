@@ -437,6 +437,163 @@ img {
     letter-spacing: 0.5px;
 }
 
+/* --- Langue et Monnaie Modal (Style LootBar) --- */
+.currency-lang-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.currency-lang-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.currency-lang-dialog {
+    background: #ffffff;
+    color: #111827;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 16px;
+    padding: 24px 28px 28px 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    transform: scale(0.96);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.currency-lang-overlay.active .currency-lang-dialog {
+    transform: scale(1);
+}
+
+.currency-lang-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.currency-lang-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.currency-lang-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 6px;
+    margin: -6px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.currency-lang-close:hover {
+    color: #111827;
+    background: #f3f4f6;
+}
+
+.currency-lang-group {
+    margin-bottom: 18px;
+}
+
+.currency-lang-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+.currency-lang-select-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.currency-lang-select {
+    width: 100%;
+    height: 48px;
+    background: #f3f4f6;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 0 42px 0 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #111827;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    outline: none;
+    box-sizing: border-box;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.currency-lang-select:hover,
+.currency-lang-select:focus {
+    background: #ebedf0;
+    border-color: #cbd5e1;
+}
+
+.currency-lang-select-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.currency-lang-btn-confirm {
+    width: 100%;
+    height: 48px;
+    margin-top: 26px;
+    background: #ffbe00;
+    color: #111827;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.currency-lang-btn-confirm:hover {
+    background: #f5b300;
+}
+
+.currency-lang-btn-confirm:active {
+    transform: scale(0.99);
+}
+
 /* --- Log in / Sign up Button (Flat LootZone Purple) --- */
 .header-auth-btn {
     height: 38px;
@@ -3534,9 +3691,9 @@ body.user-logged-in .guest-only {
 /* Auth modal tab switcher */
 .auth-tabs {
     display: flex;
-    border-bottom: 2px solid #f0f0f0;
     padding: 0 40px;
-    background: #0d0b18; border-bottom: 2px solid #2d264f;
+    background: #0d0b18; 
+    border-bottom: 2px solid #2d264f;
     flex-shrink: 0;
 }
 
@@ -3545,17 +3702,21 @@ body.user-logged-in .guest-only {
     margin-right: 32px;
     background: none;
     border: none;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: #999;
+    color: #94a3b8;
     cursor: pointer;
     position: relative;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
     white-space: nowrap;
 }
 
+.auth-tab-btn:hover {
+    color: #ffffff;
+}
+
 .auth-tab-btn.active {
-    color: #0b0c0f;
+    color: #ffffff;
 }
 
 .auth-tab-btn.active::after {
@@ -3565,8 +3726,9 @@ body.user-logged-in .guest-only {
     left: 0;
     width: 100%;
     height: 3px;
-    background: #7c3aed;
+    background: #a855f7;
     border-radius: 3px 3px 0 0;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
 }
 
 /* Hide/show columns via tab mechanism */
@@ -3632,13 +3794,13 @@ body.user-logged-in .guest-only {
 }
 
 .support-panel-close:hover {
-    color: #000;
+    color: #ffffff;
 }
 
 .support-panel h3 {
     font-size: 1.4rem;
     font-weight: 800;
-    color: #0b0c0f;
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
@@ -3751,7 +3913,7 @@ body.user-logged-in .guest-only {
 }
 
 .auth-modal-close:hover {
-    color: #000000;
+    color: #ffffff;
 }
 
 .auth-modal-columns {
@@ -3845,7 +4007,7 @@ body.user-logged-in .guest-only {
 }
 
 .password-toggle-btn:hover {
-    color: #111111;
+    color: #a855f7;
 }
 
 .form-actions-row {
@@ -3860,7 +4022,7 @@ body.user-logged-in .guest-only {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #555555;
+    color: #cbd5e1;
     cursor: pointer;
 }
 
@@ -4504,139 +4666,6 @@ body.user-logged-in .guest-only {
 
 .btn-checkout:hover {
     background-color: #008f5f;
-}
-
-/* --- Language & Currency Preferences Modal --- */
-.pref-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.pref-modal-overlay.active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.pref-modal-container {
-    background-color: #13111c; border: 1px solid #2d264f; color: #ffffff;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 450px;
-    overflow: hidden;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-    position: relative;
-    transform: translateY(30px);
-    opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.pref-modal-overlay.active .pref-modal-container {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.pref-modal-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 2rem;
-    color: #888888;
-    background: none;
-    border: none;
-    cursor: pointer;
-    line-height: 1;
-    transition: color 0.2s;
-}
-
-.pref-modal-close:hover {
-    color: #111111;
-}
-
-.pref-modal-body {
-    padding: 30px;
-}
-
-.pref-modal-body h3 {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0 0 25px 0;
-}
-
-.pref-group-label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #555555;
-    margin-bottom: 10px;
-    display: block;
-}
-
-.pref-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.pref-card {
-    padding: 12px 10px;
-    border: 1px solid #2d264f;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    background-color: #181524;
-}
-
-.pref-flag {
-    font-size: 1.4rem;
-}
-
-.pref-card:hover {
-    border-color: #7c3aed;
-    background-color: rgba(0, 182, 122, 0.03);
-}
-
-.pref-card.active {
-    border-color: #7c3aed;
-    background-color: rgba(0, 182, 122, 0.08);
-    color: #7c3aed;
-}
-
-.btn-pref-save {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s;
-}
-
-.btn-pref-save:hover {
-    background-color: #7c3aed;
 }
 
 /* --- Wallet Recharge Modal --- */

@@ -315,9 +315,9 @@ function showClientToast(title, body) {
   if (existing) existing.remove();
   const t = document.createElement('div');
   t.id = 'asta-client-toast';
-  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0f1923;border:1.5px solid #00b67a;border-radius:14px;padding:14px 18px;z-index:99999;color:#fff;font-family:Roboto,sans-serif;font-size:14px;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:4px;animation:slideInToast .3s ease;';
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0f1923;border:1.5px solid #a855f7;border-radius:14px;padding:14px 18px;z-index:99999;color:#fff;font-family:Roboto,sans-serif;font-size:14px;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:4px;animation:slideInToast .3s ease;';
   const titleEl = document.createElement('div');
-  titleEl.style.cssText = 'font-weight:700;color:#00b67a;font-size:15px;';
+  titleEl.style.cssText = 'font-weight:700;color:#a855f7;font-size:15px;';
   titleEl.textContent = title;
   const bodyEl = document.createElement('div');
   bodyEl.style.cssText = 'color:#b0b8c8;font-size:13px;';
