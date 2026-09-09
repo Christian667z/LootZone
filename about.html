@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos de nous | LootZone - Votre marketplace gaming & numérique</title>
+    <meta name="description" content="Découvrez LootZone, la plateforme de référence pour l'achat instantané de crédits de jeux, cartes cadeaux et clés numériques sécurisées.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css?v=2.0">
+    <style>
+        .about-page {
+            background-color: #ffffff;
+            color: #0f1115;
+            min-height: 80vh;
+        }
+
+        /* Hero Banner */
+        .loot-hero {
+            background-color: #08080c;
+            color: #ffffff;
+            padding: 45px 20px 65px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Characters backdrop strips */
+        .loot-hero-bg-strips {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            opacity: 0.18;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .loot-hero-bg-col {
+            flex: 1;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            filter: saturate(1.2) contrast(1.1);
+        }
+
+        .loot-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 35%, rgba(13, 15, 22, 0.45) 0%, rgba(8, 8, 12, 0.94) 85%);
+            pointer-events: none;
+        }
+
+        /* 3D Perspective Grid Floor */
+        .loot-hero-grid-floor {
+            position: absolute;
+            bottom: 0;
+            left: -30%;
+            right: -30%;
+            height: 280px;
+            background-image: 
+                linear-gradient(to bottom, transparent 0%, rgba(8, 8, 12, 0.95) 85%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+            background-size: 100% 100%, 46px 46px, 46px 46px;
+            transform: perspective(320px) rotateX(65deg);
+            transform-origin: bottom center;
+            pointer-events: none;
+            opacity: 0.75;
+        }
+
+        .loot-hero-container {
+            max-width: 1140px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 3;
+            text-align: center;
+        }
+
+        /* LootZone Hero Brand Header (Enlarged & Centered Purple Logo) */
+        .loot-hero-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 26px auto;
+            text-align: center;
+        }
+
+        .loot-hero-brand-logo {
+            height: 84px;
+            max-width: 92%;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 22px rgba(168, 85, 247, 0.45));
+            transition: transform 0.25s ease, filter 0.25s ease;
+        }
+
+        .loot-hero-brand-logo:hover {
+            transform: scale(1.04);
+            filter: drop-shadow(0 6px 28px rgba(168, 85, 247, 0.65));
+        }
+
+        /* Hero Intro Text */
+        .loot-hero-intro {
+            color: #ffffff;
+            font-size: 1.15rem;
+            max-width: 820px;
+            margin: 0 auto 30px auto;
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        .loot-hero-intro strong {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        /* 3D Floating Controller Visual */
+        .loot-hero-visual {
+            max-width: 820px;
+            margin: 0 auto 15px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .loot-hero-controller-img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 45px rgba(168, 85, 247, 0.25), 0 0 20px rgba(234, 179, 8, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Stat Badges with Laurel Wreaths */
+        .loot-hero-stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 70px;
+            margin-top: 45px;
+            position: relative;
+            z-index: 4;
+            flex-wrap: wrap;
+        }
+
+        .loot-stat-badge {
+            text-align: center;
+            min-width: 180px;
+        }
+
+        .loot-stat-number-row {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .loot-stat-number-row .stat-num {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .laurel-branch {
+            display: inline-block;
+            vertical-align: middle;
+            color: #ffffff;
+        }
+
+        .laurel-branch.right {
+            transform: scaleX(-1);
+        }
+
+        .loot-stat-label {
+            font-size: 0.92rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Section Generic */
+        .loot-section {
+            padding: 75px 24px 75px 24px;
+            background: #ffffff;
+        }
+
+        .loot-section-heading {
+            text-align: center;
+            max-width: 820px;
+            margin: 0 auto 55px auto;
+        }
+
+        .loot-section-heading h2 {
+            font-size: 2.35rem;
+            font-weight: 900;
+            color: #111827;
+            letter-spacing: -0.5px;
+            margin: 0 0 16px 0;
+        }
+
+        .loot-section-heading p {
+            font-size: 1.05rem;
+            color: #4b5563;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* Section 2: Que propose LootZone ? (4 Cards) */
+        .loot-propose-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1220px;
+            margin: 0 auto;
+        }
+
+        .loot-propose-card {
+            background: #ffffff;
+            border: 1px solid #edf0f5;
+            border-radius: 18px;
+            padding: 42px 22px 36px 22px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .loot-propose-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        .propose-icon-wrap {
+            width: 78px;
+            height: 78px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .loot-propose-card:hover .propose-icon-wrap {
+            transform: scale(1.08);
+        }
+
+        .propose-icon-wrap.orange-bg {
+            background: #fff7ed;
+            border: 1px solid #ffedd5;
+        }
+
+        .propose-icon-wrap.yellow-bg {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+        }
+
+        .propose-icon-wrap.rose-bg {
+            background: #fff1f2;
+            border: 1px solid #ffe4e6;
+        }
+
+        .propose-icon-wrap.blue-bg {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+        }
+
+        .loot-propose-card h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 14px 0;
+            line-height: 1.35;
+        }
+
+        .loot-propose-card p {
+            font-size: 0.92rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Section 3: Pourquoi choisir LootZone (4 Circular items) */
+        .loot-why-section {
+            border-top: 1px solid #f3f4f6;
+            padding: 85px 24px 95px 24px;
+            background: #ffffff;
+        }
+
+        .loot-why-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1220px;
+            margin: 0 auto;
+        }
+
+        .loot-why-item {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .why-circle-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 1.5px solid #e5e7eb;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .loot-why-item:hover .why-circle-icon {
+            transform: scale(1.06);
+            border-color: #94a3b8;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .loot-why-item h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 12px 0;
+            line-height: 1.35;
+        }
+
+        .loot-why-item p {
+            font-size: 0.92rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin: 0;
+            max-width: 270px;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .loot-propose-grid, .loot-why-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 26px;
+            }
+
+            .loot-hero-stats {
+                gap: 35px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .loot-hero {
+                padding: 35px 16px 45px 16px;
+            }
+
+            .loot-hero-brand-logo {
+                height: 58px;
+            }
+
+            .loot-hero-intro {
+                font-size: 1rem;
+            }
+
+            .loot-hero-stats {
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .loot-section-heading h2 {
+                font-size: 1.85rem;
+            }
+
+            .loot-propose-grid, .loot-why-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .loot-why-item p {
+                max-width: 100%;
+            }
+        }
+
+        /* Centered Footer Copyright & Links */
+        .footer-bottom {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            gap: 10px !important;
+            padding-top: 24px !important;
+        }
+
+        .footer-bottom .copyright {
+            text-align: center !important;
+            margin: 0 !important;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .footer-bottom-links {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 12px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <a href="index.html" class="logo" id="headerLogoLink" aria-label="LootZone">
+            <img src="LootZone_img-removebg-preview.png" alt="LootZone" class="logo-img" id="headerLogoImg">
+        </a>
+
+        <nav class="nav-container" id="mainNavContainer">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-item-link nav-home" id="navHomeLink">Home</a></li>
+                <li class="dropdown">
+                    <a href="catalog.html?cat=jeux" class="nav-item-link" id="navGamesLink">Games <span class="nav-chevron">▾</span></a>
+                    <div class="dropdown-mega">
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/free fire.png" alt="Free Fire" class="prod-icon">Free Fire</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/PUBG Mobile.png" alt="PUBG Mobile" class="prod-icon">PUBG Mobile</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Call of Duty mobile.png" alt="Call of Duty Mobile" class="prod-icon">Call of Duty Mobile</a></li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/roblox.jpeg" alt="Roblox" class="prod-icon">Roblox</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/FC Mobile.png" alt="EA Sports FC" class="prod-icon">EA Sports FC Mobile</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/brawl star.png" alt="Brawl Stars" class="prod-icon">Brawl Stars</a></li>
+                        </ul>
+                        <ul class="mega-column">
+                            <li><a href="catalog.html?cat=jeux"><img src="img/genshin impact.png" alt="Genshin Impact" class="prod-icon">Genshin Impact</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/Clash of clans.png" alt="Clash of Clans" class="prod-icon">Clash of Clans</a></li>
+                            <li><a href="catalog.html?cat=jeux"><img src="img/fortnite.png" alt="Fortnite" class="prod-icon">Fortnite</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="blog.html" class="nav-item-link" id="navBlogLink">Blog</a></li>
+                <li class="dropdown help-center-dropdown">
+                    <a href="liens footer/FAQ Centre d'aide.html" class="nav-item-link active-home" id="navHelpLink">Help Center <span class="nav-chevron">▾</span></a>
+                    <div class="help-dropdown-sub">
+                        <ul class="help-dropdown-list">
+                            <li><a href="about.html" style="font-weight:700;color:#a855f7;">À propos de nous</a></li>
+                            <li><a href="liens footer/FAQ Centre d'aide.html">Centre d'aide & FAQ</a></li>
+                            <li><a href="contact.html">Contact & Support</a></li>
+                            <li><a href="liens footer/Demande d'Alliance.html">Demande d'Alliance</a></li>
+                            <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
+                            <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
+                            <li><a href="liens footer/Mentions légales.html">Mentions Légales</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <!-- Search Button with expanding panel -->
+            <div class="header-search-wrap" id="headerSearchWrap">
+                <button type="button" class="header-search-toggle" id="headerSearchToggle" aria-label="Rechercher" title="Rechercher">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <div class="header-search-panel" id="headerSearchPanel">
+                    <svg class="header-search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." autocomplete="off" />
+                    <button type="button" class="header-search-close" id="headerSearchClose" aria-label="Fermer la recherche">&times;</button>
+                </div>
+            </div>
+
+            <!-- Wishlist Button (auth-required) -->
+            <a href="profile.html#favoris" class="nav-icon wishlist-btn auth-required" id="wishlistBtn" aria-label="Favoris" title="Favoris">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
+            </a>
+
+            <!-- Cart Button (auth-required) -->
+            <a href="#" class="nav-icon cart-btn auth-required" id="cartBtn" aria-label="Panier" title="Panier">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge" id="cartBadgeCount">0</span>
+            </a>
+
+            <!-- Currency & Language Trigger (EN / USD) -->
+            <div class="header-currency-dropdown top-bar-dropdown" id="headerCurrencyDropdown">
+                <button type="button" class="header-currency-btn dropdown-trigger currency-lang-trigger" id="headerCurrencyBtn" aria-label="Devise et langue" title="Devise et langue">
+                    <span class="header-currency-label" id="headerCurrencyLabel">FR / USD</span>
+                </button>
+            </div>
+
+            <!-- User Avatar & Dropdown Menu (auth-required) -->
+            <div class="user-menu-wrapper auth-required" id="navUserMenuWrapper">
+                <button class="user-menu-trigger" id="userMenuTrigger" type="button" aria-label="Menu utilisateur" title="Mon compte">
+                    <div class="user-avatar-small" id="navUserAvatar">
+                        <span class="user-avatar-initials" id="navUserInitial">U</span>
+                    </div>
+                    <span class="user-menu-name" id="navUserName">Mon Compte</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="user-dropdown-header">
+                        <div class="user-dropdown-avatar" id="dropdownUserAvatar">
+                            <span id="dropdownUserInitial">U</span>
+                        </div>
+                        <div class="user-dropdown-info">
+                            <div class="user-dropdown-name" id="dropdownUserName">Mon Profil</div>
+                            <div class="user-dropdown-email" id="dropdownUserEmail" style="font-size:0.75rem;color:#94a3b8;">utilisateur@lootzone.gg</div>
+                        </div>
+                    </div>
+                    <div class="user-dropdown-menu">
+                        <a href="profile.html" class="user-dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Mon profil
+                        </a>
+                        <a href="profile.html#commandes" class="user-dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            Historique des achats
+                        </a>
+                        <a href="profile.html#messages" class="user-dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                            Messages & Notifications
+                        </a>
+                        <a href="profile.html#favoris" class="user-dropdown-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Mes Favoris
+                        </a>
+                    </div>
+                    <button class="user-dropdown-logout" id="dropdownLogoutBtn" type="button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+
+            <!-- Log in / Sign up Button (guest-only) -->
+            <a href="#" class="header-auth-btn auth-link login-btn guest-only" id="navAccountBtn" aria-label="Log in / Sign up">
+                <span class="auth-btn-label">Log in / Sign up</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="about-page">
+        <!-- Hero Section -->
+        <section class="loot-hero">
+            <!-- Background Game Character Strips -->
+            <div class="loot-hero-bg-strips" aria-hidden="true">
+                <div class="loot-hero-bg-col" style="background-image: url('img/genshin impact.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/PUBG Mobile.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/Clash of clans.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/fortnite.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/free fire.png');"></div>
+                <div class="loot-hero-bg-col" style="background-image: url('img/Call of Duty mobile.png');"></div>
+            </div>
+            
+            <div class="loot-hero-overlay" aria-hidden="true"></div>
+            <div class="loot-hero-grid-floor" aria-hidden="true"></div>
+
+            <div class="loot-hero-container">
+                <!-- Brand Header (Enlarged & Centered LootZone Logo) -->
+                <div class="loot-hero-brand">
+                    <img src="LootZone_img-removebg-preview.png" alt="LootZone Logo" class="loot-hero-brand-logo">
+                </div>
+
+                <!-- Intro Description -->
+                <p class="loot-hero-intro">
+                    <strong>À propos de nous :</strong> LootZone est une plateforme internationale professionnelle et sécurisée de transactions de jeux, proposant des services de recharge de jeux, de transactions d'objets, de transactions de monnaie de jeu, etc.
+                </p>
+
+                <!-- Floating 3D Controller Centerpiece -->
+                <div class="loot-hero-visual">
+                    <img src="img/about_hero_gaming_visual.jpg" alt="LootZone Gaming Setup" class="loot-hero-controller-img">
+                </div>
+
+                <!-- 3 Stat Badges with Laurel Wreaths -->
+                <div class="loot-hero-stats">
+                    <!-- Stat 1 -->
+                    <div class="loot-stat-badge">
+                        <div class="loot-stat-number-row">
+                            <svg class="laurel-branch" width="28" height="40" viewBox="0 0 26 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 35C14 32 6 25 6 15C6 9 9 5 12 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 31C3 29 2 25 3 22C6 23 8 28 7 31Z" fill="#ffffff"/>
+                                <path d="M5 23C1 21 0 17 2 14C4 16 6 20 5 23Z" fill="#ffffff"/>
+                                <path d="M6 15C2 13 2 9 4 6C6 8 7 12 6 15Z" fill="#ffffff"/>
+                                <path d="M10 7C8 5 8 2 10 0.5C12 3 12 5.5 10 7Z" fill="#ffffff"/>
+                                <path d="M13 30C10 29 9 27 10 25C12 26 13 28 13 30Z" fill="#ffffff"/>
+                                <path d="M12 22C9 21 8 19 9 17C11 18 12 20 12 22Z" fill="#ffffff"/>
+                                <path d="M12 14C9 13 9 11 10 9C12 10 13 12 12 14Z" fill="#ffffff"/>
+                            </svg>
+                            <span class="stat-num">150+</span>
+                            <svg class="laurel-branch right" width="28" height="40" viewBox="0 0 26 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 35C14 32 6 25 6 15C6 9 9 5 12 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 31C3 29 2 25 3 22C6 23 8 28 7 31Z" fill="#ffffff"/>
+                                <path d="M5 23C1 21 0 17 2 14C4 16 6 20 5 23Z" fill="#ffffff"/>
+                                <path d="M6 15C2 13 2 9 4 6C6 8 7 12 6 15Z" fill="#ffffff"/>
+                                <path d="M10 7C8 5 8 2 10 0.5C12 3 12 5.5 10 7Z" fill="#ffffff"/>
+                                <path d="M13 30C10 29 9 27 10 25C12 26 13 28 13 30Z" fill="#ffffff"/>
+                                <path d="M12 22C9 21 8 19 9 17C11 18 12 20 12 22Z" fill="#ffffff"/>
+                                <path d="M12 14C9 13 9 11 10 9C12 10 13 12 12 14Z" fill="#ffffff"/>
+                            </svg>
+                        </div>
+                        <p class="loot-stat-label">Jeux supportés par LootZone</p>
+                    </div>
+
+                    <!-- Stat 2 -->
+                    <div class="loot-stat-badge">
+                        <div class="loot-stat-number-row">
+                            <svg class="laurel-branch" width="28" height="40" viewBox="0 0 26 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 35C14 32 6 25 6 15C6 9 9 5 12 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 31C3 29 2 25 3 22C6 23 8 28 7 31Z" fill="#ffffff"/>
+                                <path d="M5 23C1 21 0 17 2 14C4 16 6 20 5 23Z" fill="#ffffff"/>
+                                <path d="M6 15C2 13 2 9 4 6C6 8 7 12 6 15Z" fill="#ffffff"/>
+                                <path d="M10 7C8 5 8 2 10 0.5C12 3 12 5.5 10 7Z" fill="#ffffff"/>
+                                <path d="M13 30C10 29 9 27 10 25C12 26 13 28 13 30Z" fill="#ffffff"/>
+                                <path d="M12 22C9 21 8 19 9 17C11 18 12 20 12 22Z" fill="#ffffff"/>
+                                <path d="M12 14C9 13 9 11 10 9C12 10 13 12 12 14Z" fill="#ffffff"/>
+                            </svg>
+                            <span class="stat-num">99%</span>
+                            <svg class="laurel-branch right" width="28" height="40" viewBox="0 0 26 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 35C14 32 6 25 6 15C6 9 9 5 12 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 31C3 29 2 25 3 22C6 23 8 28 7 31Z" fill="#ffffff"/>
+                                <path d="M5 23C1 21 0 17 2 14C4 16 6 20 5 23Z" fill="#ffffff"/>
+                                <path d="M6 15C2 13 2 9 4 6C6 8 7 12 6 15Z" fill="#ffffff"/>
+                                <path d="M10 7C8 5 8 2 10 0.5C12 3 12 5.5 10 7Z" fill="#ffffff"/>
+                                <path d="M13 30C10 29 9 27 10 25C12 26 13 28 13 30Z" fill="#ffffff"/>
+                                <path d="M12 22C9 21 8 19 9 17C11 18 12 20 12 22Z" fill="#ffffff"/>
+                                <path d="M12 14C9 13 9 11 10 9C12 10 13 12 12 14Z" fill="#ffffff"/>
+                            </svg>
+                        </div>
+                        <p class="loot-stat-label">des transactions ont reçu des avis 5 étoiles</p>
+                    </div>
+
+                    <!-- Stat 3 -->
+                    <div class="loot-stat-badge">
+                        <div class="loot-stat-number-row">
+                            <svg class="laurel-branch" width="28" height="40" viewBox="0 0 26 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 35C14 32 6 25 6 15C6 9 9 5 12 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 31C3 29 2 25 3 22C6 23 8 28 7 31Z" fill="#ffffff"/>
+                                <path d="M5 23C1 21 0 17 2 14C4 16 6 20 5 23Z" fill="#ffffff"/>
+                                <path d="M6 15C2 13 2 9 4 6C6 8 7 12 6 15Z" fill="#ffffff"/>
+                                <path d="M10 7C8 5 8 2 10 0.5C12 3 12 5.5 10 7Z" fill="#ffffff"/>
+                                <path d="M13 30C10 29 9 27 10 25C12 26 13 28 13 30Z" fill="#ffffff"/>
+                                <path d="M12 22C9 21 8 19 9 17C11 18 12 20 12 22Z" fill="#ffffff"/>
+                                <path d="M12 14C9 13 9 11 10 9C12 10 13 12 12 14Z" fill="#ffffff"/>
+                            </svg>
+                            <span class="stat-num">10M+</span>
+                            <svg class="laurel-branch right" width="28" height="40" viewBox="0 0 26 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 35C14 32 6 25 6 15C6 9 9 5 12 2" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 31C3 29 2 25 3 22C6 23 8 28 7 31Z" fill="#ffffff"/>
+                                <path d="M5 23C1 21 0 17 2 14C4 16 6 20 5 23Z" fill="#ffffff"/>
+                                <path d="M6 15C2 13 2 9 4 6C6 8 7 12 6 15Z" fill="#ffffff"/>
+                                <path d="M10 7C8 5 8 2 10 0.5C12 3 12 5.5 10 7Z" fill="#ffffff"/>
+                                <path d="M13 30C10 29 9 27 10 25C12 26 13 28 13 30Z" fill="#ffffff"/>
+                                <path d="M12 22C9 21 8 19 9 17C11 18 12 20 12 22Z" fill="#ffffff"/>
+                                <path d="M12 14C9 13 9 11 10 9C12 10 13 12 12 14Z" fill="#ffffff"/>
+                            </svg>
+                        </div>
+                        <p class="loot-stat-label">de joueurs nous ont choisi</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Que propose LootZone ? -->
+        <section class="loot-section">
+            <div class="loot-section-heading">
+                <h2>Que propose LootZone ?</h2>
+                <p>LootZone propose des services de recharge, de transactions de monnaie de jeu, de codes d'activation de jeu, de cartes cadeaux et d'objets de jeu pour plus de 150 jeux. Sécurisé, pratique et efficace !</p>
+            </div>
+
+            <div class="loot-propose-grid">
+                <!-- Card 1: Recharge de jeux -->
+                <div class="loot-propose-card">
+                    <div class="propose-icon-wrap">
+                        <svg width="68" height="68" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 16C10 12.6863 12.6863 10 16 10H32C35.3137 10 38 12.6863 38 16V22C38 28 35 38 30 38C27.5 38 26.5 35 24 35C21.5 35 20.5 38 18 38C13 38 10 28 10 22V16Z" fill="#FF7A00"/>
+                            <path d="M24 16V28M20.5 19.5C20.5 18 22 17 24 17C26 17 27.5 18 27.5 19.5C27.5 21.5 25 22 24 22.5C23 23 20.5 23.5 20.5 25.5C20.5 27 22 28 24 28C26 28 27.5 27 27.5 25.5" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Recharge de jeux</h3>
+                    <p>Service de recharge sécurisé, fiable et économique pour plus de 80 jeux.</p>
+                </div>
+
+                <!-- Card 2: Monnaie de jeu -->
+                <div class="loot-propose-card">
+                    <div class="propose-icon-wrap">
+                        <svg width="68" height="68" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="24" cy="24" r="20" fill="#F59E0B"/>
+                            <circle cx="24" cy="24" r="16.5" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3 3" fill="none"/>
+                            <path d="M24 13L26.8 19.5L34 20.2L28.6 25L30.2 32L24 28.3L17.8 32L19.4 25L14 20.2L21.2 19.5L24 13Z" fill="#FFFFFF"/>
+                        </svg>
+                    </div>
+                    <h3>Monnaie de jeu</h3>
+                    <p>Moyen simple et abordable d'obtenir de la monnaie de jeu, livrée instantanément pour 25+ jeux.</p>
+                </div>
+
+                <!-- Card 3: Codes d'activation & Cartes Cadeaux -->
+                <div class="loot-propose-card">
+                    <div class="propose-icon-wrap">
+                        <svg width="68" height="68" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="19" width="28" height="21" rx="4" fill="#F43F5E"/>
+                            <rect x="8" y="15" width="32" height="6" rx="3" fill="#E11D48"/>
+                            <rect x="22" y="15" width="4" height="25" fill="#FFFFFF"/>
+                            <path d="M22 15C19 11 15.5 11 16 13.5C16.8 16 21 15 22 15Z" fill="#FFFFFF"/>
+                            <path d="M26 15C29 11 32.5 11 32 13.5C31.2 16 27 15 26 15Z" fill="#FFFFFF"/>
+                        </svg>
+                    </div>
+                    <h3>Codes d'activation de jeu & Cartes Cadeaux</h3>
+                    <p>Cartes-cadeaux livrées rapidement et en toute sécurité, dont cartes cadeaux Apple, Steam, etc.</p>
+                </div>
+
+                <!-- Card 4: Objet en jeu -->
+                <div class="loot-propose-card">
+                    <div class="propose-icon-wrap">
+                        <svg width="68" height="68" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 12L24 21L21 24L12 15L10 16.5L8.5 15L10 13.5L8.5 12L10 10.5L11.5 12L13 10.5L11.5 9L13.5 7L15 8.5L16.5 7L18 8.5L16.5 10L15 12Z" fill="#3B82F6"/>
+                            <path d="M33 12L24 21L27 24L36 15L38 16.5L39.5 15L38 13.5L39.5 12L38 10.5L36.5 12L35 10.5L36.5 9L34.5 7L33 8.5L31.5 7L30 8.5L31.5 10L33 12Z" fill="#60A5FA"/>
+                            <path d="M17 31L13 35L11 33L15 29L17 31Z" fill="#2563EB"/>
+                            <path d="M31 31L35 35L37 33L33 29L31 31Z" fill="#1D4ED8"/>
+                            <circle cx="24" cy="22.5" r="3.5" fill="#93C5FD"/>
+                        </svg>
+                    </div>
+                    <h3>Objet en jeu</h3>
+                    <p>Service d'achat d'objets de jeu direct, économique et gain de temps pour les jeux populaires.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Pourquoi choisir LootZone -->
+        <section class="loot-why-section">
+            <div class="loot-section-heading">
+                <h2>Pourquoi choisir LootZone</h2>
+                <p>LootZone offre continuellement une expérience de transaction de jeu fluide et économique aux joueurs du monde entier, pour que vous puissiez profiter de vos jeux préférés. Jouez plus, dépensez moins.</p>
+            </div>
+
+            <div class="loot-why-grid">
+                <!-- Why 1 -->
+                <div class="loot-why-item">
+                    <div class="why-circle-icon">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"/>
+                            <line x1="9" y1="15" x2="15" y2="9"/>
+                            <circle cx="9.5" cy="9.5" r="0.8" fill="#111827"/>
+                            <circle cx="14.5" cy="14.5" r="0.8" fill="#111827"/>
+                        </svg>
+                    </div>
+                    <h3>Meilleurs prix de recharge</h3>
+                    <p>Nous offrons les prix de recharge les plus compétitifs, avec des réductions allant jusqu'à 30%.</p>
+                </div>
+
+                <!-- Why 2 -->
+                <div class="loot-why-item">
+                    <div class="why-circle-icon">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <h3>Livraison rapide</h3>
+                    <p>Nous offrons les prix de recharge les plus compétitifs, avec jusqu'à 30% de réduction.</p>
+                </div>
+
+                <!-- Why 3 -->
+                <div class="loot-why-item">
+                    <div class="why-circle-icon">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <polyline points="9 12 11.5 14.5 15.5 9.5"/>
+                        </svg>
+                    </div>
+                    <h3>Transactions 100% sécurisées</h3>
+                    <p>Nous garantissons des transactions professionnelles et sécurisées, protégeant entièrement vos données.</p>
+                </div>
+
+                <!-- Why 4 -->
+                <div class="loot-why-item">
+                    <div class="why-circle-icon">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="7"/>
+                            <path d="M9.5 14c.7 1 1.6 1.5 2.5 1.5s1.8-.5 2.5-1.5"/>
+                            <circle cx="9.5" cy="10.5" r="0.8" fill="#111827"/>
+                            <circle cx="14.5" cy="10.5" r="0.8" fill="#111827"/>
+                            <path d="M5 12a7 7 0 0 1 14 0"/>
+                            <rect x="3.5" y="10.5" width="2.5" height="4" rx="1.2" fill="#111827"/>
+                            <rect x="18" y="10.5" width="2.5" height="4" rx="1.2" fill="#111827"/>
+                            <path d="M19 13.5v2.5a2 2 0 0 1-2 2h-2"/>
+                        </svg>
+                    </div>
+                    <h3>Équipe de service professionnelle</h3>
+                    <p>Notre service client est disponible 24h/24 et 7j/7, pour une assistance rapide et fiable.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pied de page (Footer Premium LootZone) -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Footer Columns -->
+            <div class="footer-columns">
+                <!-- Column 1: Brand Info -->
+                <div class="footer-col brand-col">
+                    <div class="logo" style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="LootZone_img-removebg-preview.png" alt="LootZone" style="height: 40px; width: auto; object-fit: contain;">
+                    </div>
+                    <p class="brand-desc">
+                        La plateforme de recharge de référence. Obtenez vos crédits de jeux, cartes cadeaux et
+                        abonnements instantanément au meilleur prix.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="X (Twitter)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 2.89 3.5 2.77 1.06-.01 2.05-.53 2.66-1.39.46-.62.7-1.4.69-2.19V.02z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Navigation -->
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="catalog.html?cat=jeux">Jeux de Crédit</a></li>
+                        <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
+                        <li><a href="catalog.html?cat=game-cd-key">Clés de jeux (CD-Keys)</a></li>
+                        <li><a href="catalog.html?cat=payment-cards">Cartes de Paiement</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Service & Support -->
+                <div class="footer-col">
+                    <h4>Support & Légal</h4>
+                    <ul>
+                        <li><a href="about.html" style="font-weight:700;color:#00b67a;">À propos de nous</a></li>
+                        <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="liens footer/FAQ Centre d'aide.html">FAQ / Centre d'aide</a></li>
+                        <li><a href="contact.html">Contactez-nous</a></li>
+                        <li><a href="#">Recharges et Retours</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Partenariat -->
+                <div class="footer-col">
+                    <h4>Partenariat</h4>
+                    <ul>
+                        <li><a href="liens footer/partenaire de LootZone.html">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Vendre sur LootZone.html">Vendre sur LootZone</a></li>
+                        <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
+                        <li><a href="liens footer/Demande d'Alliance.html">Demande d'Alliance</a></li>
+                        <li><a href="liens footer/Recrutement.html">Recrutement</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <!-- Copyright and legal bottom -->
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 LootZone Inc. Tous droits réservés.</p>
+                <div class="footer-bottom-links">
+                    <a href="about.html" style="font-weight:600;color:#00b67a;">À propos de nous</a>
+                    <span style="color:#4b5563;margin:0 4px;">•</span>
+                    <a href="liens footer/Mentions légales.html">Mentions légales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal-overlay" id="authModal">
+        <div class="auth-modal-container">
+            <button class="auth-modal-close" id="closeAuthModal" aria-label="Fermer">×</button>
+            <div class="auth-modal-columns">
+                <div class="auth-column">
+                    <h2 class="auth-column-title">Se connecter</h2>
+                    <form class="auth-form" onsubmit="event.preventDefault(); alert('Connexion réussie !'); closeAuth();">
+                        <div class="form-group">
+                            <label for="login-email">Adresse e-mail <span class="required">*</span></label>
+                            <input type="email" id="login-email" required placeholder="Votre adresse e-mail">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Mot de passe <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="login-password" required placeholder="Votre mot de passe">
+                                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password', this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-actions-row">
+                            <label class="checkbox-label">
+                                <input type="checkbox"> Se souvenir de moi
+                            </label>
+                            <a href="#" class="forgot-password-link">Mot de passe perdu ?</a>
+                        </div>
+                        <button type="submit" class="btn-auth-submit">Se connecter</button>
+                    </form>
+                </div>
+                <div class="auth-vertical-divider"></div>
+                <div class="auth-column">
+                    <h2 class="auth-column-title">S'inscrire</h2>
+                    <form class="auth-form" onsubmit="event.preventDefault(); alert('Inscription réussie !'); closeAuth();">
+                        <div class="form-group">
+                            <label for="register-email">Adresse e-mail <span class="required">*</span></label>
+                            <input type="email" id="register-email" required placeholder="Votre adresse e-mail">
+                        </div>
+                        <p class="auth-info-text">
+                            Un lien permettant de définir un nouveau mot de passe sera envoyé à votre adresse e-mail.
+                        </p>
+                        <button type="submit" class="btn-auth-submit">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+
+        const authModal = document.getElementById('authModal');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const loginBtn = document.getElementById('navAccountBtn');
+
+        function openAuth() {
+            if (authModal) authModal.classList.add('active');
+        }
+
+        function closeAuth() {
+            if (authModal) authModal.classList.remove('active');
+        }
+
+        if (loginBtn) loginBtn.addEventListener('click', (e) => { e.preventDefault(); openAuth(); });
+        if (closeAuthModal) closeAuthModal.addEventListener('click', closeAuth);
+        if (authModal) authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuth(); });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const globalSearch = document.getElementById('globalSearchInput');
+            const searchToggle = document.getElementById('headerSearchToggle');
+            const searchWrap = document.getElementById('headerSearchWrap');
+            const searchClose = document.getElementById('headerSearchClose');
+
+            if (searchToggle && searchWrap) {
+                searchToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    searchWrap.classList.toggle('active');
+                    if (searchWrap.classList.contains('active') && globalSearch) {
+                        globalSearch.focus();
+                    }
+                });
+            }
+
+            if (searchClose && searchWrap) {
+                searchClose.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    searchWrap.classList.remove('active');
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (searchWrap && !searchWrap.contains(e.target)) {
+                    searchWrap.classList.remove('active');
+                }
+            });
+
+            if (globalSearch) {
+                globalSearch.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && globalSearch.value.trim()) {
+                        window.location.href = `catalog.html?search=${encodeURIComponent(globalSearch.value.trim())}`;
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="js/currency.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/maintenance-check.js"></script>
+</body>
+
+</html>
