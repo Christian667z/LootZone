@@ -24,9 +24,9 @@
 
         <nav class="nav-container" id="mainNavContainer">
             <ul class="nav-links">
-                <li><a href="index.html" class="nav-item-link nav-home active-home" id="navHomeLink">Home</a></li>
+                <li><a href="index.html" class="nav-item-link nav-home active-home" id="navHomeLink" data-i18n="nav.home">Accueil</a></li>
                 <li class="dropdown">
-                    <a href="catalog.html?cat=jeux" class="nav-item-link" id="navGamesLink">Games <span class="nav-chevron">▾</span></a>
+                    <a href="catalog.html?cat=jeux" class="nav-item-link" id="navGamesLink"><span data-i18n="nav.games">Jeux</span> <span class="nav-chevron">▾</span></a>
                     <div class="dropdown-mega">
                         <ul class="mega-column">
                             <li>
@@ -90,9 +90,9 @@
                         </ul>
                     </div>
                 </li>
-                <li><a href="blog.html" class="nav-item-link" id="navBlogLink">Blog</a></li>
+                <li><a href="blog.html" class="nav-item-link" id="navBlogLink" data-i18n="nav.blog">Blog</a></li>
                 <li class="dropdown help-center-dropdown">
-                    <a href="liens footer/FAQ Centre d'aide.html" class="nav-item-link" id="navHelpLink">Help Center <span class="nav-chevron">▾</span></a>
+                    <a href="liens footer/FAQ Centre d'aide.html" class="nav-item-link" id="navHelpLink"><span data-i18n="nav.help">Centre d'aide</span> <span class="nav-chevron">▾</span></a>
                     <div class="help-dropdown-sub">
                         <ul class="help-dropdown-list">
                             <li><a href="about.html">À propos de nous</a></li>
@@ -122,7 +122,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." autocomplete="off" />
+                    <input type="text" id="globalSearchInput" placeholder="Rechercher un jeu, carte..." data-i18n-placeholder="nav.search_placeholder" autocomplete="off" />
                     <button type="button" class="header-search-close" id="headerSearchClose" aria-label="Fermer la recherche">&times;</button>
                 </div>
             </div>
@@ -207,8 +207,8 @@
             </div>
 
             <!-- Log in / Sign up Button (guest-only) -->
-            <a href="#" class="header-auth-btn auth-link login-btn guest-only" id="navAccountBtn" aria-label="Log in / Sign up">
-                <span class="auth-btn-label">Log in / Sign up</span>
+            <a href="#" class="header-auth-btn auth-link login-btn guest-only" id="navAccountBtn" aria-label="Log in / Sign up" data-i18n-aria="nav.login">
+                <span class="auth-btn-label" data-i18n="nav.login">Log in / Sign up</span>
             </a>
         </div>
 
@@ -423,7 +423,7 @@
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                 </span>
-                <span class="quick-nav-label">Recharge de jeu</span>
+                <span class="quick-nav-label" data-i18n="quicknav.recharge">Recharge de jeu</span>
             </a>
 
             <!-- 2. [Icône Cyan Néon] Pièces de jeu -->
@@ -433,7 +433,7 @@
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
                     </svg>
                 </span>
-                <span class="quick-nav-label">Pièces de jeu</span>
+                <span class="quick-nav-label" data-i18n="quicknav.coins">Pièces de jeu</span>
             </a>
 
             <!-- 3. [Icône Rose] Carte Cadeau -->
@@ -443,7 +443,7 @@
                         <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.5 2.5 0 0 0-5 0c0 .35.07.69.18 1H11a2.5 2.5 0 0 0-5 0c0 .35.07.69.18 1H4a2 2 0 0 0-2 2v2a1 1 0 0 0 1 1h1v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8h1a1 1 0 0 0 1-1V8a2 2 0 0 0-2-2zM9 5a1 1 0 0 1 2 0c0 .4-.2.8-.5 1H8.5c-.3-.2-.5-.6-.5-1a1 1 0 0 1 1-1zm6 0a1 1 0 0 1 2 0c0 .4-.2.8-.5 1h-2c-.3-.2-.5-.6-.5-1a1 1 0 0 1 1-1zM4 8h7v2H4V8zm7 12H6v-8h5v8zm2 0h5v-8h-5v8zm7-10h-7V8h7v2z"/>
                     </svg>
                 </span>
-                <span class="quick-nav-label">Carte Cadeau</span>
+                <span class="quick-nav-label" data-i18n="quicknav.giftcards">Carte Cadeau</span>
             </a>
 
             <!-- 4. [Icône Violette + Badge HOT] Clé de jeu -->
@@ -454,7 +454,7 @@
                         <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
                     </svg>
                 </span>
-                <span class="quick-nav-label">Clé de jeu</span>
+                <span class="quick-nav-label" data-i18n="quicknav.gamekeys">Clé de jeu</span>
             </a>
 
             <!-- 5. [Icône Rouge/T-Shirt] Loot Shop -->
@@ -464,7 +464,7 @@
                         <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
                     </svg>
                 </span>
-                <span class="quick-nav-label">Loot Shop</span>
+                <span class="quick-nav-label" data-i18n="quicknav.lootshop">Loot Shop</span>
             </a>
         </div>
     </main>
@@ -844,7 +844,7 @@
                             </div>
                             <div class="key-region-text">Global</div>
                             <div class="key-price-row">
-                                <span class="key-price">$51.00</span>
+                                <span class="key-price" data-price-usd="51.00">$51.00</span>
                             </div>
                         </div>
                     </a>
@@ -867,7 +867,7 @@
                             </div>
                             <div class="key-region-text">Global</div>
                             <div class="key-price-row">
-                                <span class="key-price">$36.43</span>
+                                <span class="key-price" data-price-usd="36.43">$36.43</span>
                             </div>
                         </div>
                     </a>
@@ -890,7 +890,7 @@
                             </div>
                             <div class="key-region-text">Global</div>
                             <div class="key-price-row">
-                                <span class="key-price">$54.29</span>
+                                <span class="key-price" data-price-usd="54.29">$54.29</span>
                             </div>
                         </div>
                     </a>
@@ -913,7 +913,7 @@
                             </div>
                             <div class="key-region-text">Global</div>
                             <div class="key-price-row">
-                                <span class="key-price">$51.00</span>
+                                <span class="key-price" data-price-usd="51.00">$51.00</span>
                             </div>
                         </div>
                     </a>
@@ -936,7 +936,7 @@
                             </div>
                             <div class="key-region-text">Global</div>
                             <div class="key-price-row">
-                                <span class="key-price">$58.29</span>
+                                <span class="key-price" data-price-usd="58.29">$58.29</span>
                             </div>
                         </div>
                     </a>
@@ -949,7 +949,7 @@
     <!-- Section Pourquoi nous choisir ? -->
     <section class="why-choose-us-section">
         <div class="section-container">
-            <h2 class="why-title">Pourquoi nous choisir?</h2>
+            <h2 class="why-title" data-i18n="features.why_title">Pourquoi nous choisir?</h2>
             <div class="why-cards-container">
                 <div class="why-card">
                     <div class="why-icon-wrapper">
@@ -959,8 +959,8 @@
                         </svg>
                     </div>
                     <div class="why-content">
-                        <h3>100% de sécurité de transaction</h3>
-                        <p>LootZone garantit des transactions efficaces, professionnelles et sécurisées, protégeant entièrement vos données, 100% sécurisées.</p>
+                        <h3 data-i18n="features.security_title">100% de sécurité de transaction</h3>
+                        <p data-i18n="features.security_desc">LootZone garantit des transactions efficaces, professionnelles et sécurisées, protégeant entièrement vos données, 100% sécurisées.</p>
                     </div>
                 </div>
                 <div class="why-card">
@@ -977,8 +977,8 @@
                         </svg>
                     </div>
                     <div class="why-content">
-                        <h3>Service Client 24/7</h3>
-                        <p>L'équipe de Service Client fiable de LootZone est disponible 24h/24 et 7j/7 pour vous offrir une aide rapide et pratique, que ce soit avant, pendant ou après l'achat.</p>
+                        <h3 data-i18n="features.support_title">Service Client 24/7</h3>
+                        <p data-i18n="features.support_desc">L'équipe de Service Client fiable de LootZone est disponible 24h/24 et 7j/7 pour vous offrir une aide rapide et pratique, que ce soit avant, pendant ou après l'achat.</p>
                     </div>
                 </div>
                 <div class="why-card">
@@ -993,8 +993,8 @@
                         </svg>
                     </div>
                     <div class="why-content">
-                        <h3>Remboursement intégral si non expédié</h3>
-                        <p>LootZone offre les prix les plus compétitifs et un service de livraison efficace. Si l'article n'est pas livré ou ne peut pas être utilisé, nous promettons un remboursement à 100% et garantissons la sécurité financière.</p>
+                        <h3 data-i18n="features.refund_title">Remboursement intégral si non expédié</h3>
+                        <p data-i18n="features.refund_desc">LootZone offre les prix les plus compétitifs et un service de livraison efficace. Si l'article n'est pas livré ou ne peut pas être utilisé, nous promettons un remboursement à 100% et garantissons la sécurité financière.</p>
                     </div>
                 </div>
             </div>
@@ -1011,7 +1011,7 @@
                     <div class="logo" style="display: flex; align-items: center; margin-bottom: 15px;">
                         <img src="LootZone_img-removebg-preview.png" alt="LootZone" style="height: 40px; width: auto; object-fit: contain;">
                     </div>
-                    <p class="brand-desc">
+                    <p class="brand-desc" data-i18n="footer.about_text">
                         La plateforme de recharge de référence. Obtenez vos crédits de jeux, cartes cadeaux et
                         abonnements instantanément au meilleur prix.
                     </p>
@@ -1041,37 +1041,37 @@
 
                 <!-- Column 2: Navigation -->
                 <div class="footer-col">
-                    <h4>Navigation</h4>
+                    <h4 data-i18n="footer.col_nav">Navigation</h4>
                     <ul>
-                        <li><a href="catalog.html?cat=jeux">Jeux de Crédit</a></li>
-                        <li><a href="catalog.html?cat=gift-cards">Cartes Cadeaux</a></li>
-                        <li><a href="catalog.html?cat=game-cd-key">Clés de jeux (CD-Keys)</a></li>
-                        <li><a href="catalog.html?cat=payment-cards">Cartes de Paiement</a></li>
+                        <li><a href="catalog.html?cat=jeux" data-i18n="footer.game_credits">Jeux de Crédit</a></li>
+                        <li><a href="catalog.html?cat=gift-cards" data-i18n="footer.gift_cards">Cartes Cadeaux</a></li>
+                        <li><a href="catalog.html?cat=game-cd-key" data-i18n="footer.game_cd_keys">Clés de jeux (CD-Keys)</a></li>
+                        <li><a href="catalog.html?cat=payment-cards" data-i18n="footer.payment_cards">Cartes de Paiement</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 3: Service & Support -->
                 <div class="footer-col">
-                    <h4>Support & Légal</h4>
+                    <h4 data-i18n="footer.col_support">Support & Légal</h4>
                     <ul>
-                        <li><a href="about.html">À propos de nous</a></li>
-                        <li><a href="liens footer/Conditions d'utilisation.html">Conditions d'utilisation</a></li>
-                        <li><a href="#">Politique de confidentialité</a></li>
-                        <li><a href="liens footer/FAQ Centre d'aide.html">FAQ / Centre d'aide</a></li>
-                        <li><a href="contact.html">Contactez-nous</a></li>
-                        <li><a href="#">Recharges et Retours</a></li>
+                        <li><a href="about.html" data-i18n="footer.about_us">À propos de nous</a></li>
+                        <li><a href="liens footer/Conditions d'utilisation.html" data-i18n="footer.terms">Conditions d'utilisation</a></li>
+                        <li><a href="#" data-i18n="footer.privacy">Politique de confidentialité</a></li>
+                        <li><a href="liens footer/FAQ Centre d'aide.html" data-i18n="footer.help_faq">FAQ / Centre d'aide</a></li>
+                        <li><a href="contact.html" data-i18n="footer.contact">Contactez-nous</a></li>
+                        <li><a href="#" data-i18n="footer.refunds_returns">Recharges et Retours</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 4: Partenariat -->
                 <div class="footer-col">
-                    <h4>Partenariat</h4>
+                    <h4 data-i18n="footer.col_partner">Partenariat</h4>
                     <ul>
-                        <li><a href="liens footer/partenaire de LootZone.html">Devenir Partenaire</a></li>
-                        <li><a href="liens footer/Vendre sur LootZone.html">Vendre sur LootZone</a></li>
-                        <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
-                        <li><a href="liens footer/Demande d'Alliance.html">Demande d'Alliance</a></li>
-                        <li><a href="liens footer/Recrutement.html">Recrutement</a></li>
+                        <li><a href="liens footer/partenaire de LootZone.html" data-i18n="footer.become_partner">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Vendre sur LootZone.html" data-i18n="footer.sell_on_lootzone">Vendre sur LootZone</a></li>
+                        <li><a href="liens footer/Programme Créateurs.html" data-i18n="footer.creator_program">Programme Créateurs</a></li>
+                        <li><a href="liens footer/Demande d'Alliance.html" data-i18n="footer.alliance_request">Demande d'Alliance</a></li>
+                        <li><a href="liens footer/Recrutement.html" data-i18n="footer.recruitment">Recrutement</a></li>
                     </ul>
                 </div>
             </div>
@@ -1080,11 +1080,11 @@
 
             <!-- Copyright and legal bottom -->
             <div class="footer-bottom">
-                <p class="copyright">© 2026 LootZone Inc. Tous droits réservés.</p>
+                <p class="copyright" data-i18n="footer.copyright">© 2026 LootZone Inc. Tous droits réservés.</p>
                 <div class="footer-bottom-links">
-                    <a href="about.html">À propos de nous</a>
+                    <a href="about.html" data-i18n="footer.about_us">À propos de nous</a>
                     <span style="color:#4b5563;margin:0 6px;">•</span>
-                    <a href="liens footer/Mentions légales.html">Mentions légales</a>
+                    <a href="liens footer/Mentions légales.html" data-i18n="footer.legal">Mentions légales</a>
                 </div>
             </div>
         </div>

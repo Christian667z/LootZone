@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * LootZone - Universal i18n & Currency Engine v3.0
+ * LootZone - Universal i18n & Currency Engine v3.0 (i18n-currency.js)
  * Multi-language (FR / EN / Extensible) & Real-time Live Exchange Rates
  * Base Currency: USD (Backend & DB reference)
  * ===================================================================
@@ -8,6 +8,10 @@
 
 (function () {
     'use strict';
+
+    // Si déjà initialisé par currency.js, on ne duplique pas l'exécution
+    if (window.LootZoneI18nInitialized) return;
+    window.LootZoneI18nInitialized = true;
 
     // ---------------------------------------------------------------
     // 1. CONFIGURATION & CONSTANTS
