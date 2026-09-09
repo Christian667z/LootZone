@@ -1737,34 +1737,36 @@ img {
 }
 
 
-/* Section Pourquoi Nous Choisir (Style Lootbar Premium) */
+/* Section Pourquoi Nous Choisir (Style Photo 1) */
 .why-choose-us-section {
-    padding: 60px 0;
+    padding: 45px 0 55px 0;
     background-color: #f7f9fc;
 }
 
 .why-choose-us-section .section-container {
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
 .why-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 800;
-    color: #111a36;
-    margin-bottom: 24px;
+    color: #0b0c0f;
+    margin: 0 0 18px 0;
+    text-align: left;
+    letter-spacing: -0.3px;
 }
 
 .why-cards-container {
     background-color: #ffffff;
     border-radius: 12px;
-    border: 1px solid #eaeef5;
-    padding: 40px 30px;
+    border: 1px solid #e5e7eb;
+    padding: 34px 32px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    gap: 32px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .why-card {
@@ -1777,40 +1779,36 @@ img {
     width: 54px;
     height: 54px;
     border-radius: 50%;
-    border: 1px solid #eaeef5;
-    background-color: #fcfdfe;
+    border: 1px solid #e5e7eb;
+    background-color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: #00b67a;
-    box-shadow: 0 4px 12px rgba(0, 182, 122, 0.03);
-}
-
-.why-icon {
-    stroke-width: 2.2px;
+    color: #111827;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .why-content h3 {
-    font-size: 1rem;
+    font-size: 0.98rem;
     font-weight: 700;
-    color: #111a36;
-    margin: 0 0 8px 0;
-    line-height: 1.3;
+    color: #111827;
+    margin: 2px 0 8px 0;
+    line-height: 1.35;
 }
 
 .why-content p {
-    font-size: 0.8rem;
-    color: #727b93;
+    font-size: 0.82rem;
+    color: #64748b;
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 @media (max-width: 992px) {
     .why-cards-container {
         grid-template-columns: 1fr;
-        gap: 30px;
-        padding: 30px 20px;
+        gap: 26px;
+        padding: 24px 20px;
     }
 }
 
@@ -3305,121 +3303,6 @@ img {
         gap: 15px;
         padding: 20px;
     }
-}
-
-/* --- Pourquoi nous choisir — version améliorée --- */
-.why-choose-us-section {
-    padding: 70px 0;
-    background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%);
-}
-
-.why-section-header {
-    text-align: center;
-    margin-bottom: 48px;
-}
-
-.why-section-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(0, 182, 122, 0.1);
-    color: #00b67a;
-    font-size: 0.78rem;
-    font-weight: 800;
-    padding: 5px 14px;
-    border-radius: 50px;
-    border: 1px solid rgba(0, 182, 122, 0.25);
-    margin-bottom: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.why-section-title {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #0b0c0f;
-    margin-bottom: 12px;
-    line-height: 1.2;
-}
-
-.why-section-sub {
-    font-size: 0.95rem;
-    color: #6b7280;
-    max-width: 520px;
-    margin: 0 auto;
-    line-height: 1.7;
-}
-
-.why-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 22px;
-}
-
-.why-card-new {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 18px;
-    padding: 30px 26px;
-    transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
-    position: relative;
-    overflow: hidden;
-}
-
-.why-card-new::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #00b67a, #007a52);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.25s ease;
-}
-
-.why-card-new:hover {
-    box-shadow: 0 16px 40px rgba(0, 182, 122, 0.1);
-    border-color: rgba(0, 182, 122, 0.3);
-    transform: translateY(-4px);
-}
-
-.why-card-new:hover::before {
-    transform: scaleX(1);
-}
-
-.why-card-icon-wrap {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #00b67a18, #00b67a08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 18px;
-    color: #00b67a;
-    border: 1px solid rgba(0, 182, 122, 0.15);
-}
-
-.why-card-new h3 {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #0b0c0f;
-    margin-bottom: 8px;
-}
-
-.why-card-new p {
-    font-size: 0.85rem;
-    color: #6b7280;
-    line-height: 1.6;
-}
-
-.why-card-stat {
-    margin-top: 14px;
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: #00b67a;
 }
 
 /* --- Cart Drawer (Panier Glissant) --- */
