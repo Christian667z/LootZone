@@ -403,48 +403,6 @@
     <!-- Pied de page (Footer Premium Asta Shops) -->
     <footer class="main-footer">
         <div class="footer-container">
-            <!-- Trust Badges -->
-            <div class="footer-trust-badges">
-                <div class="ftb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span>Paiement Sécurisé</span>
-                </div>
-                <div class="ftb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
-                    <span>Livraison Instantanée</span>
-                </div>
-                <div class="ftb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span>Service 24/7</span>
-                </div>
-                <div class="ftb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <span>Support WhatsApp</span>
-                </div>
-                <div class="ftb-item">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b67a" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>10M+ Clients Satisfaits</span>
-                </div>
-            </div>
-
-            <hr class="footer-divider">
-
             <!-- Footer Columns -->
             <div class="footer-columns">
                 <!-- Column 1: Brand Info -->
@@ -508,8 +466,8 @@
                 <div class="footer-col">
                     <h4>Partenariat</h4>
                     <ul>
-                        <li><a href="liens footer/partenaire de Asta-shops.html">Devenir Partenaire</a></li>
-                        <li><a href="liens footer/Vendre sur Asta Shops.html">Vendre sur Asta Shops</a></li>
+                        <li><a href="liens footer/partenaire de LootZone.html">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Vendre sur LootZone.html">Vendre sur LootZone</a></li>
                         <li><a href="liens footer/Programme Créateurs.html">Programme Créateurs</a></li>
                         <li><a href="liens footer/Demande d'Alliance.html">Demande d'Alliance</a></li>
                         <li><a href="liens footer/Recrutement.html">Recrutement</a></li>
@@ -521,11 +479,9 @@
 
             <!-- Copyright and legal bottom -->
             <div class="footer-bottom">
-                <p class="copyright">© 2026 Asta Shops Inc. Tous droits réservés.</p>
+                <p class="copyright">© 2026 LootZone Inc. Tous droits réservés.</p>
                 <div class="footer-bottom-links">
                     <a href="liens footer/Mentions légales.html">Mentions légales</a>
-                    <span class="dot-separator">•</span>
-                    <span class="creator-credit">Créateur et dévéloppeur : Space Dev.</span>
                 </div>
             </div>
         </div>
@@ -1087,7 +1043,7 @@
             if (checkoutBtn) {
                 checkoutBtn.addEventListener('click', () => {
                     if (cart.length === 0) return;
-                    alert("Redirection vers la passerelle de paiement sécurisée Asta Shops...");
+                    alert("Redirection vers la passerelle de paiement sécurisée LootZone...");
                     cart = [];
                     saveCart();
                     closeCart();
@@ -1430,7 +1386,7 @@
     <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="if(event.target===this)closeCartDrawer()">
         <div class="cart-drawer" id="cartDrawer">
             <div class="cart-drawer-header">
-                <h3>🛒 Mon Panier Asta</h3>
+                <h3>🛒 Mon Panier LootZone</h3>
                 <button class="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Fermer">×</button>
             </div>
             <div class="cart-drawer-body" id="cartDrawerBody">
@@ -2192,7 +2148,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         client_id: clientId,
-                        client_email: clientEmail || 'anonyme@asta-shops.com',
+                        client_email: clientEmail || 'anonyme@lootzone.com',
                         client_nom: clientNom,
                         produit_id: p.id,
                         produit_nom: p.name,
@@ -2233,7 +2189,7 @@
 
             const serverLine = serverVal ? `\nServeur: ${serverVal}` : '';
             const waMsg = encodeURIComponent(
-                `🎮 Commande Asta-Shops\n` +
+                `🎮 Commande LootZone\n` +
                 `Réf: ${ref}\n` +
                 `Produit: ${p.name} — ${pomSelectedDenom.label}\n` +
                 `${p.idLabel || 'ID Joueur'}: ${playerId}${serverLine}\n` +

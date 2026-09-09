@@ -989,7 +989,7 @@
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                 </div>
                 <p class="tu-confirm-title" id="conf-title">Commande confirmée !</p>
-                <p class="tu-confirm-ref" id="conf-ref">Référence : #ASTA-…</p>
+                <p class="tu-confirm-ref" id="conf-ref">Référence : #LOOT-…</p>
             </div>
 
             <!-- Payment instructions (Moncash/Natcash) -->
@@ -1032,7 +1032,7 @@
                 <div class="tu-wallet-success">
                     <div class="tu-ws-icon">🎉</div>
                     <h3>Paiement réussi !</h3>
-                    <p id="conf-wallet-msg">Votre commande a été traitée avec succès depuis votre Wallet Asta.</p>
+                    <p id="conf-wallet-msg">Votre commande a été traitée avec succès depuis votre Wallet LootZone.</p>
                     <button class="tu-order-btn" style="width:100%;margin:0;" onclick="closeConfirm()">Parfait !</button>
                 </div>
             </div>
@@ -1124,8 +1124,8 @@
         // ─── Render product ──────────────────────────────────────────────────────
         function renderProduct(p) {
             // Update page title
-            document.title = `Asta-Shops | ${p.name} — Recharge`;
-            document.getElementById('page-title').textContent = `Asta-Shops | ${p.name}`;
+            document.title = `LootZone | ${p.name} — Recharge`;
+            document.getElementById('page-title').textContent = `LootZone | ${p.name}`;
 
             // Breadcrumb
             document.getElementById('bc-name').textContent = p.name;
@@ -1200,7 +1200,7 @@
                         </div>
                         <div class="tu-info-row">
                             <div class="tu-info-label">Méthodes de paiement</div>
-                            <div class="tu-info-value">Moncash · Natcash · Wallet Asta</div>
+                            <div class="tu-info-value">Moncash · Natcash · Wallet LootZone</div>
                         </div>
                     </div>
                 </div>
@@ -1402,7 +1402,7 @@
             btn.disabled = true;
             btn.textContent = 'Traitement en cours…';
 
-            const ref = 'ASTA-' + Date.now().toString(36).toUpperCase();
+            const ref = 'LOOT-' + Date.now().toString(36).toUpperCase();
 
             try {
                 if (selectedPayMethod === 'wallet' && authToken) {
@@ -1422,7 +1422,7 @@
         async function submitPublicOrder(uid, server, ref) {
             const body = {
                 client_id: currentUser?.id || null,
-                client_email: currentUser?.email || 'anonyme@asta-shops.com',
+                client_email: currentUser?.email || 'anonyme@lootzone.com',
                 client_nom: currentUser?.user_metadata?.full_name || 'Client',
                 produit_id: product.id,
                 produit_nom: product.name,
@@ -1447,7 +1447,7 @@
             const phone = PAY_PHONES[selectedPayMethod] || MONCASH_PHONE;
             const methodLabel = selectedPayMethod === 'moncash' ? 'Moncash' : 'Natcash';
             const waMsg = encodeURIComponent(
-                `✅ Confirmation Paiement Asta-Shops\n` +
+                `✅ Confirmation Paiement LootZone\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
                 `📦 Produit : ${product.name}\n` +
                 `🎮 Pack : ${selectedDenom.label}\n` +

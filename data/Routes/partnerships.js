@@ -8,7 +8,7 @@ const router = express.Router();
 
 const BADGE_TYPES = {
     'partenaire': { label: 'Devenir Partenaire', color: '#10b981', bg: '#d1fae5' },
-    'vendeur': { label: 'Vendre sur Asta Shops', color: '#3b82f6', bg: '#dbeafe' },
+    'vendeur': { label: 'Vendre sur LootZone', color: '#3b82f6', bg: '#dbeafe' },
     'createur': { label: 'Programme Créateurs', color: '#8b5cf6', bg: '#ede9fe' },
     'alliance': { label: "Demande d'Alliance", color: '#f59e0b', bg: '#fef3c7' }
 };

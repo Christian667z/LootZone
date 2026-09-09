@@ -1,7 +1,7 @@
 {
-  "name": "asta-shops",
+  "name": "lootzone",
   "version": "2.1.0",
-  "description": "Asta-Shops — Plateforme e-commerce de produits numériques",
+  "description": "LootZone — Plateforme e-commerce de produits numériques",
   "type": "module",
   "main": "data/server.js",
   "scripts": {
@@ -10,8 +10,8 @@
     "dev": "node data/server.js",
     "lint": "node --check data/server.js"
   },
-  "keywords": ["asta-shops", "ecommerce", "digital-products"],
-  "author": "Asta-Shops",
+  "keywords": ["lootzone", "ecommerce", "digital-products"],
+  "author": "LootZone",
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",

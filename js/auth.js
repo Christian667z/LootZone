@@ -15,9 +15,9 @@ window.USER_ROLES = {
   influenceur: { label: 'Influenceur', icon: '🌟', color: '#ec4899', bg: 'rgba(236,72,153,.25)' },
   vendeur: { label: 'Vendeur', icon: '🛒', color: '#f97316', bg: 'rgba(249,115,22,.25)' },
   helper: { label: 'Staff', icon: '🛡️', color: '#14b8a6', bg: 'rgba(20,184,166,.25)' },
-  employe: { label: 'Asta Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
-  administrateur: { label: 'Asta Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
-  manager: { label: 'Asta Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+  employe: { label: 'LootZone Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+  administrateur: { label: 'LootZone Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+  manager: { label: 'LootZone Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
   directeur: { label: 'Directeur', icon: '👑', color: '#f59e0b', bg: 'rgba(245,158,11,.18)' },
   vip: { label: 'VIP', icon: '💎', color: '#d4a017', bg: 'rgba(212,160,23,.25)' },
 };

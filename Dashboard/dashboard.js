@@ -583,7 +583,7 @@ window.exportOrdersToCSV = function() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `Asta_Rapport_Commandes_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `LootZone_Rapport_Commandes_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -609,7 +609,7 @@ window.exportOrdersToPDF = function() {
     <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>Rapport d'Activité Asta-Shops - ${new Date().toLocaleDateString('fr-FR')}</title>
+        <title>Rapport d'Activité LootZone - ${new Date().toLocaleDateString('fr-FR')}</title>
         <style>
             body { font-family: 'Segoe UI', Roboto, sans-serif; padding: 30px; color: #1e293b; background: #fff; }
             .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #00b67a; padding-bottom: 15px; margin-bottom: 20px; }
@@ -677,7 +677,7 @@ window.exportOrdersToPDF = function() {
             </tbody>
         </table>
         <div class="footer">
-            © 2026 Asta-Shops · Document confidentiel d'administration interne
+            © 2026 LootZone · Document confidentiel d'administration interne
         </div>
         <script>
             window.onload = function() {
@@ -740,7 +740,7 @@ const BADGE_COLORS = {
 };
 const TYPE_LABELS = {
     partenaire: '🟢 Devenir Partenaire',
-    vendeur: '🔵 Vendre sur Asta Shops',
+    vendeur: '🔵 Vendre sur LootZone',
     createur: '🟣 Programme Créateurs',
     alliance: '🟡 Demande d\'Alliance'
 };

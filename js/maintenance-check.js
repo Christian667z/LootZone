@@ -57,7 +57,7 @@
                     <div style="font-size:64px;margin-bottom:18px;display:inline-block;filter:drop-shadow(0 0 15px rgba(234,179,8,0.4));">🛠️</div>
                     <h1 style="font-size:26px;font-weight:800;margin-bottom:14px;background:linear-gradient(135deg,#00c882,#0284c7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px;">Plateforme en Maintenance</h1>
                     <p style="font-size:14px;color:#94a3b8;line-height:1.6;margin-bottom:30px;">
-                        Asta-Shops effectue actuellement une mise à jour technique programmée afin d'améliorer la rapidité et la sécurité de vos recharges. Nous serons de retour très rapidement !
+                        LootZone effectue actuellement une mise à jour technique programmée afin d'améliorer la rapidité et la sécurité de vos recharges. Nous serons de retour très rapidement !
                     </p>
                     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
                         <button onclick="window.location.reload()" style="background:#00c882;color:#0b1329;font-weight:700;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-size:14px;transition:transform 0.2s;">🔄 Rafraîchir la page</button>
