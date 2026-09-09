@@ -32,7 +32,7 @@ img {
     display: block;
 }
 
-/* --- Barre de navigation (Header Noir LootBar Style) --- */
+/* --- Barre de navigation (Header Noir LootZone - Flat & Clean) --- */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -43,9 +43,9 @@ img {
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(168, 85, 247, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     gap: 25px;
 }
 
@@ -69,13 +69,13 @@ img {
     max-height: 54px;
     object-fit: contain;
     display: block;
-    transition: transform 0.25s ease, filter 0.25s ease;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+    transition: transform 0.25s ease;
+    filter: none;
 }
 
 .logo:hover .logo-img {
     transform: scale(1.04);
-    filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
+    filter: none;
 }
 
 .logo-box {
@@ -131,21 +131,22 @@ img {
 
 .header-search-toggle:hover {
     background: #252b39;
-    color: #ffb700;
-    border-color: rgba(255, 183, 0, 0.4);
+    color: #7c3aed;
+    border-color: rgba(124, 58, 237, 0.4);
     transform: translateY(-1px);
+    box-shadow: none;
 }
 
 .header-search-panel {
     display: none;
     align-items: center;
     background: #141722;
-    border: 1px solid rgba(255, 183, 0, 0.5);
+    border: 1px solid rgba(124, 58, 237, 0.4);
     border-radius: 8px;
     padding: 6px 12px;
     gap: 8px;
     width: 250px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    box-shadow: none;
     position: relative;
     z-index: 1050;
 }
@@ -172,7 +173,7 @@ img {
 }
 
 .header-search-panel .header-search-icon {
-    color: #ffb700;
+    color: #7c3aed;
     flex-shrink: 0;
 }
 
@@ -205,12 +206,13 @@ img {
     gap: 8px;
     width: 220px;
     transition: all 0.25s ease;
+    box-shadow: none;
 }
 
 .nav-search-box:focus-within {
     background: #1a1c2a;
-    border-color: #ffb700;
-    box-shadow: 0 0 14px rgba(255, 183, 0, 0.25);
+    border-color: #7c3aed;
+    box-shadow: none;
     width: 260px;
 }
 
@@ -234,10 +236,10 @@ img {
 }
 
 .nav-search-box:focus-within .search-icon {
-    color: #ffb700;
+    color: #7c3aed;
 }
 
-/* --- Badges --- */
+/* --- Badges de compteur (Flat Purple LootZone) --- */
 .wishlist-badge,
 .cart-badge {
     position: absolute;
@@ -245,10 +247,10 @@ img {
     right: -7px;
     min-width: 18px;
     height: 18px;
-    background: #ffb700;
-    color: #000000;
+    background-color: #7c3aed;
+    color: #ffffff;
     font-size: 0.65rem;
-    font-weight: 800;
+    font-weight: 700;
     border-radius: 999px;
     display: flex;
     align-items: center;
@@ -256,7 +258,9 @@ img {
     padding: 0 4px;
     line-height: 1;
     border: 2px solid #090a0f;
-    box-shadow: 0 0 8px rgba(255, 183, 0, 0.5);
+    box-shadow: none;
+    text-shadow: none;
+    filter: none;
     pointer-events: none;
 }
 
@@ -281,12 +285,12 @@ img {
 }
 
 .nav-links>li>a:hover {
-    color: #ffb700;
+    color: #7c3aed;
 }
 
 .nav-links>li>a.nav-home,
 .nav-links>li>a.active-home {
-    color: #ffb700 !important;
+    color: #7c3aed !important;
     font-weight: 700;
 }
 
@@ -308,7 +312,7 @@ img {
     left: 0;
     transform: translateY(12px);
     background-color: #10131c;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 1px rgba(255, 183, 0, 0.3);
+    box-shadow: none;
     border-radius: 12px;
     padding: 10px;
     min-width: 240px;
@@ -348,8 +352,8 @@ img {
 }
 
 .help-dropdown-list a:hover {
-    background-color: rgba(255, 183, 0, 0.12);
-    color: #ffb700;
+    background-color: rgba(124, 58, 237, 0.12);
+    color: #7c3aed;
     transform: translateX(3px);
 }
 
@@ -373,26 +377,28 @@ img {
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
+    box-shadow: none;
 }
 
 .header-currency-btn:hover {
     background: #252b39;
-    color: #ffb700;
-    border-color: rgba(255, 183, 0, 0.4);
+    color: #ffffff;
+    border-color: rgba(124, 58, 237, 0.5);
     transform: translateY(-1px);
+    box-shadow: none;
 }
 
 .header-currency-label {
     letter-spacing: 0.5px;
 }
 
-/* --- Log in / Sign up Button --- */
+/* --- Log in / Sign up Button (Flat LootZone Purple) --- */
 .header-auth-btn {
     height: 38px;
     padding: 0 18px;
-    background: #ffb700;
-    color: #000000 !important;
-    font-weight: 700;
+    background-color: #7c3aed;
+    color: #ffffff !important;
+    font-weight: 600;
     font-size: 0.88rem;
     border-radius: 8px;
     border: none;
@@ -401,30 +407,35 @@ img {
     justify-content: center;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 10px rgba(255, 183, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: none;
+    text-shadow: none;
+    filter: none;
     white-space: nowrap;
 }
 
 .header-auth-btn:hover {
-    background: #ffc72c;
-    color: #000000 !important;
+    background-color: #6d28d9;
+    color: #ffffff !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(255, 183, 0, 0.4);
+    box-shadow: none;
+    filter: none;
 }
 
 .header-auth-btn.logged-in {
     background: #1c202a;
     color: #ffffff !important;
-    border: 1px solid rgba(255, 183, 0, 0.35);
+    border: 1px solid rgba(124, 58, 237, 0.4);
     padding: 0 12px;
     gap: 8px;
     box-shadow: none;
+    filter: none;
 }
 
 .header-auth-btn.logged-in:hover {
     background: #252b39;
-    border-color: #ffb700;
+    border-color: #7c3aed;
+    box-shadow: none;
 }
 
 .nav-avatar-img {
@@ -432,20 +443,20 @@ img {
     height: 24px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1.5px solid #ffb700;
+    border: 1.5px solid #7c3aed;
 }
 
 .nav-avatar-initial {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #ffb700;
-    color: #000;
+    background-color: #7c3aed;
+    color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .nav-user-label {
@@ -547,13 +558,15 @@ img {
     background: #1c202a;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
+    box-shadow: none;
 }
 
 .nav-icon:hover {
-    color: #ffb700;
+    color: #ffffff;
     background-color: #252b39;
-    border-color: rgba(255, 183, 0, 0.4);
+    border-color: rgba(124, 58, 237, 0.5);
     transform: translateY(-1px);
+    box-shadow: none;
 }
 
 /* --- Section Hero LootBar (Carrousel 3D Coverflow & Barre de Catégories) --- */
@@ -960,7 +973,7 @@ img {
 
 .carousel-dot.active {
     width: 68px;
-    background: rgba(148, 163, 184, 0.35);
+    background: rgba(0, 242, 254, 0.22);
 }
 
 .carousel-dot-fill {
@@ -971,8 +984,8 @@ img {
     bottom: 0;
     width: 0%;
     border-radius: 9999px;
-    background: linear-gradient(90deg, #ff8800 0%, #ffaa00 60%, #ffd000 100%);
-    box-shadow: 0 0 12px rgba(255, 170, 0, 0.9), 0 0 4px rgba(255, 136, 0, 0.8);
+    background: linear-gradient(90deg, #00f2fe 0%, #7f00ff 55%, #e100ff 100%);
+    box-shadow: 0 0 14px rgba(0, 242, 254, 0.95), 0 0 8px rgba(127, 0, 255, 0.85);
     pointer-events: none;
 }
 
@@ -1037,39 +1050,68 @@ img {
     color: #ffffff;
     flex-shrink: 0;
     position: relative;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: none;
+    text-shadow: none;
+    filter: none;
+    transition: transform 0.2s ease;
 }
 
 .quick-nav-item:hover .quick-nav-icon {
-    transform: scale(1.08);
-    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
+    transform: translateY(-2px);
+    box-shadow: none;
 }
 
-/* Couleurs des petits carrés d'icône (Style LootBar) */
+/* Couleurs des petits carrés d'icône (Charte Flat Gaming LootZone - Sans ombres ni reflets néon) */
+/* 1. Recharge de jeu (Orange Gaming) */
 .icon-bg-orange {
-    background: linear-gradient(135deg, #ff8c00 0%, #ff5500 100%);
-    box-shadow: 0 4px 14px rgba(255, 115, 0, 0.35);
+    background: #ff4757;
+    box-shadow: none;
 }
 
+.quick-nav-item:hover .icon-bg-orange {
+    box-shadow: none;
+}
+
+/* 2. Pièces de jeu (Cyan / Bleu) */
+.icon-bg-cyan,
 .icon-bg-yellow {
-    background: linear-gradient(135deg, #fbc02d 0%, #f57f17 100%);
-    box-shadow: 0 4px 14px rgba(251, 192, 45, 0.35);
+    background: #00b4d8;
+    box-shadow: none;
 }
 
+.quick-nav-item:hover .icon-bg-cyan,
+.quick-nav-item:hover .icon-bg-yellow {
+    box-shadow: none;
+}
+
+/* 3. Carte Cadeau (Rose Magenta) */
 .icon-bg-pink {
-    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-    box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+    background: #ec4899;
+    box-shadow: none;
 }
 
+.quick-nav-item:hover .icon-bg-pink {
+    box-shadow: none;
+}
+
+/* 4. Clé de jeu (Violet LootZone) */
 .icon-bg-purple {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    background: #7c3aed;
+    box-shadow: none;
 }
 
+.quick-nav-item:hover .icon-bg-purple {
+    box-shadow: none;
+}
+
+/* 5. Loot Shop (Rouge / Corail) */
 .icon-bg-red {
-    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    background: #ef4444;
+    box-shadow: none;
+}
+
+.quick-nav-item:hover .icon-bg-red {
+    box-shadow: none;
 }
 
 .quick-nav-label {
@@ -1085,7 +1127,7 @@ img {
     color: #7c3aed;
 }
 
-/* Badge HOT néon violet pour Clé de jeu */
+/* Badge HOT épuré pour Clé de jeu */
 .quick-nav-item.with-hot-badge {
     position: relative;
 }
@@ -1094,27 +1136,18 @@ img {
     position: absolute;
     top: -6px;
     right: -8px;
-    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    background-color: #ec4899;
     color: #ffffff;
     font-size: 0.58rem;
-    font-weight: 900;
+    font-weight: 800;
     padding: 1px 5px;
     border-radius: 4px;
     letter-spacing: 0.5px;
     line-height: 1.2;
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.7);
+    box-shadow: none;
+    text-shadow: none;
+    filter: none;
     pointer-events: none;
-    animation: hotGlowPulse 2.4s infinite ease-in-out;
-}
-
-@keyframes hotGlowPulse {
-    0%, 100% {
-        box-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 2px 5px rgba(0, 0, 0, 0.4);
-    }
-    50% {
-        box-shadow: 0 0 16px rgba(192, 132, 252, 1), 0 2px 5px rgba(0, 0, 0, 0.4);
-        transform: translateY(-1px);
-    }
 }
 
 /* Responsive Carrousel */

@@ -126,29 +126,29 @@
                 function renderMenu() {
                     menu.innerHTML = `
                         <div style="font-size:0.7rem;color:#9ca3af;font-weight:700;margin-bottom:6px;padding:0 6px;text-transform:uppercase;letter-spacing:0.5px;">Langue</div>
-                        <div class="lang-opt ${currentLang === 'EN' ? 'active' : ''}" data-lang="EN" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentLang === 'EN' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentLang === 'EN' ? '#ffb700' : '#e2e8f0'};">
+                        <div class="lang-opt ${currentLang === 'EN' ? 'active' : ''}" data-lang="EN" style="padding:7px 10px;border-radius:6px;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentLang === 'EN' ? 'rgba(124, 58, 237, 0.18)' : 'transparent'};color:${currentLang === 'EN' ? '#a78bfa' : '#e2e8f0'};">
                             <span>🇺🇸 English (EN)</span>
-                            ${currentLang === 'EN' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                            ${currentLang === 'EN' ? '<span style="font-size:0.8rem;color:#a78bfa;">✓</span>' : ''}
                         </div>
-                        <div class="lang-opt ${currentLang === 'FR' ? 'active' : ''}" data-lang="FR" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px;background:${currentLang === 'FR' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentLang === 'FR' ? '#ffb700' : '#e2e8f0'};">
+                        <div class="lang-opt ${currentLang === 'FR' ? 'active' : ''}" data-lang="FR" style="padding:7px 10px;border-radius:6px;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px;background:${currentLang === 'FR' ? 'rgba(124, 58, 237, 0.18)' : 'transparent'};color:${currentLang === 'FR' ? '#a78bfa' : '#e2e8f0'};">
                             <span>🇫🇷 Français (FR)</span>
-                            ${currentLang === 'FR' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                            ${currentLang === 'FR' ? '<span style="font-size:0.8rem;color:#a78bfa;">✓</span>' : ''}
                         </div>
 
                         <div style="height:1px;background:rgba(255,255,255,0.08);margin:6px 0 8px;"></div>
 
                         <div style="font-size:0.7rem;color:#9ca3af;font-weight:700;margin-bottom:6px;padding:0 6px;text-transform:uppercase;letter-spacing:0.5px;">Devise</div>
-                        <div class="curr-opt ${currentCurrency === 'USD' ? 'active' : ''}" data-curr="USD" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentCurrency === 'USD' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentCurrency === 'USD' ? '#ffb700' : '#e2e8f0'};">
+                        <div class="curr-opt ${currentCurrency === 'USD' ? 'active' : ''}" data-curr="USD" style="padding:7px 10px;border-radius:6px;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentCurrency === 'USD' ? 'rgba(124, 58, 237, 0.18)' : 'transparent'};color:${currentCurrency === 'USD' ? '#a78bfa' : '#e2e8f0'};">
                             <span>🇺🇸 USD ($)</span>
-                            ${currentCurrency === 'USD' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                            ${currentCurrency === 'USD' ? '<span style="font-size:0.8rem;color:#a78bfa;">✓</span>' : ''}
                         </div>
-                        <div class="curr-opt ${currentCurrency === 'HTG' ? 'active' : ''}" data-curr="HTG" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentCurrency === 'HTG' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentCurrency === 'HTG' ? '#ffb700' : '#e2e8f0'};">
+                        <div class="curr-opt ${currentCurrency === 'HTG' ? 'active' : ''}" data-curr="HTG" style="padding:7px 10px;border-radius:6px;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:2px;background:${currentCurrency === 'HTG' ? 'rgba(124, 58, 237, 0.18)' : 'transparent'};color:${currentCurrency === 'HTG' ? '#a78bfa' : '#e2e8f0'};">
                             <span>🇭🇹 HTG (Gourde)</span>
-                            ${currentCurrency === 'HTG' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                            ${currentCurrency === 'HTG' ? '<span style="font-size:0.8rem;color:#a78bfa;">✓</span>' : ''}
                         </div>
-                        <div class="curr-opt ${currentCurrency === 'EUR' ? 'active' : ''}" data-curr="EUR" style="padding:7px 10px;border-radius:6px;color:#fff;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;background:${currentCurrency === 'EUR' ? 'rgba(255, 183, 0, 0.15)' : 'transparent'};color:${currentCurrency === 'EUR' ? '#ffb700' : '#e2e8f0'};">
+                        <div class="curr-opt ${currentCurrency === 'EUR' ? 'active' : ''}" data-curr="EUR" style="padding:7px 10px;border-radius:6px;font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s;background:${currentCurrency === 'EUR' ? 'rgba(124, 58, 237, 0.18)' : 'transparent'};color:${currentCurrency === 'EUR' ? '#a78bfa' : '#e2e8f0'};">
                             <span>🇪🇺 EUR (€)</span>
-                            ${currentCurrency === 'EUR' ? '<span style="font-size:0.8rem;">✓</span>' : ''}
+                            ${currentCurrency === 'EUR' ? '<span style="font-size:0.8rem;color:#a78bfa;">✓</span>' : ''}
                         </div>
                     `;
 
