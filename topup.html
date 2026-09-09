@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css?v=2.0">
+    <link rel="stylesheet" href="styles.css?v=1.0">
     <style>
         /* ── PAGE TOPUP ───────────────────────────────────────────── */
         .tu-wrapper {
@@ -758,6 +759,67 @@
             .tu-trust-item { font-size: 0.74rem; }
             .tu-game-title { font-size: 1.3rem; }
         }
+        /* ── DIRECTIVE: CHARTE CLAIRE, CARTES BLANCHES & STICKY SIDEBAR ── */
+        body.topup-page,
+        body:has(.lootbar-page-wrap) {
+            background-color: #f5f6fa !important;
+            color: #111827 !important;
+        }
+
+        /* Barre latérale fixe au scroll (Sticky Sidebar) */
+        .order-summary-sidebar {
+            position: sticky;
+            top: 90px; /* Ajusté par rapport à la hauteur du header */
+            align-self: flex-start;
+            z-index: 10;
+        }
+
+        /* Style de carte clair moderne harmonisé avec l'accueil */
+        .lootbar-card-section,
+        .lootbar-guide-section,
+        .lootbar-reviews-section,
+        .lootbar-trust-section,
+        .lootbar-order-card,
+        .lootbar-hero-header {
+            background: #ffffff !important;
+            border: 1px solid #eaedf1 !important;
+            border-radius: 16px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        .lootbar-step-card,
+        .lootbar-trust-card,
+        .lootbar-reviews-summary-card {
+            background: #f8f9fa !important;
+            border: 1px solid #eaedf1 !important;
+            border-radius: 12px !important;
+            box-shadow: none !important;
+        }
+
+        .lootbar-section-title,
+        .lootbar-order-title,
+        .lootbar-trust-title,
+        .lootbar-game-title {
+            color: #111827 !important;
+            font-weight: 800 !important;
+        }
+
+        .lootbar-step-desc,
+        .lootbar-trust-card p,
+        .tu-desc-text,
+        .lootbar-review-content {
+            color: #4b5563 !important;
+        }
+
+        @media (max-width: 900px) {
+            .order-summary-sidebar,
+            .lootbar-right-sidebar {
+                position: static !important;
+                top: auto !important;
+                width: 100% !important;
+                align-self: stretch !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -917,14 +979,14 @@
         </div>
     </header>
 
-    <div class="tu-wrapper">
+    <div class="lootbar-page-wrap">
         <!-- Breadcrumb -->
-        <nav class="tu-breadcrumb" id="tu-breadcrumb">
-            <a href="index.html">Accueil</a>
+        <nav class="lootbar-breadcrumb" id="tu-breadcrumb">
+            <a href="index.html" data-i18n="nav.home">Accueil</a>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            <a href="catalog.html" id="bc-cat">Catalogue</a>
+            <a href="catalog.html" id="bc-cat" data-i18n="nav.catalog">Catalogue</a>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            <span class="tu-bc-current" id="bc-name">Chargement…</span>
+            <span class="current" id="bc-name">Chargement…</span>
         </nav>
 
         <!-- Error state (hidden by default) -->
@@ -935,104 +997,565 @@
             <a href="catalog.html">← Retour au catalogue</a>
         </div>
 
-        <!-- Main content -->
-        <div class="tu-main" id="tu-main">
-            <!-- Left column -->
-            <div class="tu-left" id="tu-left">
-                <div class="tu-product-hero tu-skeleton" id="tu-hero" style="min-height:260px;"></div>
-                <div class="tu-product-info">
-                    <div class="tu-skeleton" style="height:30px;width:70%;margin-bottom:12px;"></div>
-                    <div class="tu-skeleton" style="height:18px;width:40%;margin-bottom:20px;"></div>
-                    <div class="tu-skeleton" style="height:14px;width:100%;margin-bottom:6px;"></div>
-                    <div class="tu-skeleton" style="height:14px;width:85%;"></div>
+        <!-- LootBar Main Product Section -->
+        <div class="lootbar-product-container" id="tu-main">
+            <!-- ── Top Hero Game Banner (Style LootBar) ── -->
+            <div class="lootbar-hero-header" id="lootbar-hero-header">
+                <div class="lootbar-hero-main">
+                    <div class="lootbar-game-icon-wrap" id="tu-game-icon-wrap">
+                        <img src="favicon.svg" alt="Game Icon" id="tu-game-icon">
+                    </div>
+                    <div class="lootbar-hero-info">
+                        <h1 class="lootbar-game-title">
+                            <span id="tu-game-title">Jeu</span>
+                            <span data-i18n="product.game_topup" style="color:#6b7280;font-weight:700;font-size:1.1rem;">Recharge de jeu</span>
+                        </h1>
+                        <div class="lootbar-rating-row">
+                            <div class="lootbar-stars-wrap" id="tu-stars">
+                                ★★★★★
+                            </div>
+                            <span class="lootbar-rating-badge" id="tu-rating-val">5.0</span>
+                            <span class="lootbar-sales-text" id="tu-sales-val">100k+ <span data-i18n="product.sold">Vendu</span></span>
+                        </div>
+                        <div class="lootbar-trust-tags">
+                            <span class="lootbar-trust-tag">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                                <span data-i18n="product.fast">Rapide</span>
+                            </span>
+                            <span class="lootbar-trust-tag">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                <span data-i18n="product.secure">Sécurisé</span>
+                            </span>
+                            <span class="lootbar-trust-tag">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <span data-i18n="product.support_247">24/7</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top-Right Promo Box -->
+                <div class="lootbar-promo-box" id="lootbar-promo-box">
+                    <div>
+                        <div class="lootbar-promo-timer">
+                            <span>⏱</span> <span id="lootbar-promo-clock">01:56:39</span>
+                        </div>
+                        <div class="lootbar-promo-content">
+                            <p data-i18n="product.invite_promo">Invitez des amis pour 3*10% de réduction</p>
+                        </div>
+                    </div>
+                    <button class="lootbar-promo-btn" data-i18n="product.invite_btn" onclick="openShareModal()">Allez Inviter</button>
                 </div>
             </div>
 
-            <!-- Right column -->
-            <div class="tu-right">
-                <div class="tu-form-card">
-                    <div class="tu-form-header">
-                        <p class="tu-form-title">Commander</p>
-                        <p class="tu-form-subtitle">Sélectionnez votre pack et entrez vos informations</p>
-                    </div>
+            <!-- ── Soft Notice Banner (Style LootBar) ── -->
+            <div class="lootbar-notice-banner" id="lootbar-notice-banner">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:16px;">💡</span>
+                    <span data-i18n="product.notice_text">Les achats utilisent par défaut votre solde de Gold Bar. Il est préférable d'échanger d'abord le même niveau dans le Gold Bar Store pour un achat fluide.</span>
+                </div>
+                <button class="lootbar-notice-close" onclick="document.getElementById('lootbar-notice-banner').style.display='none'" title="Fermer">✕</button>
+            </div>
 
-                    <!-- Pack grid -->
-                    <div class="tu-section-label">Sélectionner un Pack</div>
-                    <div class="tu-pack-grid" id="tu-pack-grid">
-                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
-                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
-                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
-                        <div class="tu-skeleton" style="height:68px;border-radius:10px;"></div>
-                    </div>
+            <!-- ── 2-Column Product Layout ── -->
+            <div class="lootbar-main-grid">
+                <!-- LEFT COLUMN: Player Info & Pack Grid -->
+                <div class="lootbar-left-zone">
+                    <!-- Step 1: Player Information -->
+                    <div class="lootbar-card-section" id="section-player-info">
+                        <div class="lootbar-section-header">
+                            <div class="lootbar-section-step">1</div>
+                            <h2 class="lootbar-section-title" data-i18n="product.player_info">Informations du joueur</h2>
+                        </div>
 
-                    <div class="tu-form-divider"></div>
-
-                    <!-- Server (conditional) -->
-                    <div id="tu-server-wrap" style="display:none;">
-                        <div class="tu-section-label">Sélectionner un Serveur</div>
-                        <div class="tu-field-wrap">
-                            <select class="tu-field-input" id="tu-server-select">
-                                <option value="">-- Choisir un serveur --</option>
+                        <!-- Server Select (conditional) -->
+                        <div class="lootbar-input-group" id="tu-server-wrap" style="display:none;">
+                            <label class="lootbar-input-label">
+                                <span data-i18n="product.select_server">Sélectionner un Serveur</span>
+                                <span class="required">*</span>
+                            </label>
+                            <select class="lootbar-text-input" id="tu-server-select">
+                                <option value="" data-i18n="product.choose_server">-- Choisir un serveur --</option>
                             </select>
                         </div>
+
+                        <!-- Player ID Input -->
+                        <div class="lootbar-input-group">
+                            <label class="lootbar-input-label">
+                                <span id="tu-uid-label" data-i18n="product.uid_label">ID Joueur</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input type="text" class="lootbar-text-input" id="tu-uid-input" data-i18n-placeholder="product.uid_placeholder" placeholder="Entrez votre ID de joueur" autocomplete="off">
+                            <div class="lootbar-input-hint" id="tu-uid-hint">Entrez votre identifiant ou pseudo exact dans le jeu.</div>
+                        </div>
                     </div>
 
-                    <!-- UID input -->
-                    <div class="tu-section-label" id="tu-uid-label-section">Informations du joueur</div>
-                    <div class="tu-field-wrap">
-                        <div class="tu-field-label">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            <span id="tu-uid-label">ID Joueur</span>
-                            <span class="tu-required">*</span>
+                    <!-- Step 2: Select a Pack (LootBar Grid of Cards) -->
+                    <div class="lootbar-card-section" id="section-pack-selection">
+                        <div class="lootbar-section-header">
+                            <div class="lootbar-section-step">2</div>
+                            <h2 class="lootbar-section-title" data-i18n="product.select_pack">Sélectionner un Pack</h2>
                         </div>
-                        <input type="text" class="tu-field-input" id="tu-uid-input" placeholder="Entrez votre ID de joueur" autocomplete="off">
-                        <div class="tu-field-hint" id="tu-uid-hint"></div>
+
+                        <!-- Recharge Pack Grid -->
+                        <div class="lootbar-packs-grid" id="tu-pack-grid">
+                            <!-- Dynamically generated LootBar Pack Cards -->
+                            <div class="tu-skeleton" style="height:180px;border-radius:14px;"></div>
+                            <div class="tu-skeleton" style="height:180px;border-radius:14px;"></div>
+                            <div class="tu-skeleton" style="height:180px;border-radius:14px;"></div>
+                            <div class="tu-skeleton" style="height:180px;border-radius:14px;"></div>
+                        </div>
                     </div>
 
-                    <div class="tu-form-divider"></div>
-
-                    <!-- Payment method -->
-                    <div class="tu-section-label">Méthode de Paiement</div>
-                    <div class="tu-pay-tabs" id="tu-pay-tabs">
-                        <button class="tu-pay-tab active" data-pay="moncash" onclick="selectPayMethod('moncash')">Moncash</button>
-                        <button class="tu-pay-tab" data-pay="natcash" onclick="selectPayMethod('natcash')">Natcash</button>
-                        <button class="tu-pay-tab" data-pay="wallet" onclick="selectPayMethod('wallet')">Wallet</button>
-                    </div>
-
-                    <div class="tu-form-divider"></div>
-
-                    <!-- Order summary -->
-                    <div class="tu-summary" id="tu-summary">
-                        <div class="tu-sum-row">
-                            <span>Pack sélectionné</span>
-                            <span class="tu-sum-val" id="sum-pack">—</span>
+                    <!-- Step 3: Product Description & About -->
+                    <div class="lootbar-card-section" id="section-about-product">
+                        <div class="lootbar-section-header">
+                            <div class="lootbar-section-step" style="background:#6b7280;">i</div>
+                            <h2 class="lootbar-section-title" data-i18n="product.about_title">À propos</h2>
                         </div>
-                        <div class="tu-sum-row">
-                            <span>Méthode</span>
-                            <span class="tu-sum-val" id="sum-method">Moncash</span>
-                        </div>
-                        <div class="tu-sum-total">
+                        <p class="tu-desc-text" id="tu-desc-text" style="color:#4b5563;line-height:1.6;font-size:0.9rem;margin-bottom:16px;">
+                            Recharge officielle garantie. Les crédits sont ajoutés directement sur votre compte.
+                        </p>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;background:#f9fafb;border-radius:12px;padding:14px 16px;">
                             <div>
-                                <div class="tu-sum-total-label">Total</div>
-                                <div class="tu-sum-htg" id="sum-htg">— HTG</div>
+                                <span style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;font-weight:700;display:block;" data-i18n="product.platform">Plateforme</span>
+                                <strong id="tu-platform-val" style="font-size:0.88rem;color:#111827;">Mobile / PC</strong>
                             </div>
-                            <div class="tu-sum-total-price" id="sum-price">$0.00</div>
+                            <div>
+                                <span style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;font-weight:700;display:block;" data-i18n="product.delivery_time">Délai de livraison</span>
+                                <strong style="font-size:0.88rem;color:#15803d;" data-i18n="product.delivery_5min">Dans les 5 minutes</strong>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Order button -->
-                    <button class="tu-order-btn" id="tu-order-btn" onclick="submitOrder()">
-                        Commander Maintenant →
-                    </button>
+                    <!-- ═════════════════════════════════════════════════════════════════
+                         SECTION 2: GUIDE DE RECHARGE / INSTRUCTIONS (IMAGE 3 / 4)
+                         ═════════════════════════════════════════════════════════════════ -->
+                    <section class="lootbar-guide-section" id="lootbar-guide-section">
+                        <div class="lootbar-section-header">
+                            <div class="lootbar-section-step" style="background:#f59e0b;">?</div>
+                            <h2 class="lootbar-section-title" data-i18n="product.guide_title">Guide &amp; Instructions de Recharge</h2>
+                        </div>
 
-                    <div class="tu-secure-note">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                        Paiement 100% sécurisé — Livraison instantanée
+                        <!-- 4 Simple Steps -->
+                        <div class="lootbar-steps-grid">
+                            <div class="lootbar-step-card">
+                                <div class="lootbar-step-badge">1</div>
+                                <h3 class="lootbar-step-title">Sélectionner le Pack</h3>
+                                <p class="lootbar-step-desc">Choisissez le montant de crédits, gemmes ou cristaux souhaité dans la grille ci-dessus.</p>
+                            </div>
+                            <div class="lootbar-step-card">
+                                <div class="lootbar-step-badge">2</div>
+                                <h3 class="lootbar-step-title">Renseigner l'ID Joueur</h3>
+                                <p class="lootbar-step-desc">Entrez votre UID (ID unique en jeu) et sélectionnez votre serveur si demandé.</p>
+                            </div>
+                            <div class="lootbar-step-card">
+                                <div class="lootbar-step-badge">3</div>
+                                <h3 class="lootbar-step-title">Paiement Sécurisé</h3>
+                                <p class="lootbar-step-desc">Réglez rapidement par Moncash, Natcash ou directement via votre solde de Wallet LootZone.</p>
+                            </div>
+                            <div class="lootbar-step-card">
+                                <div class="lootbar-step-badge">4</div>
+                                <h3 class="lootbar-step-title">Livraison Immédiate</h3>
+                                <p class="lootbar-step-desc">Vos crédits de jeu sont automatiquement crédités sur votre compte en moins de 5 minutes.</p>
+                            </div>
+                        </div>
+
+                        <!-- Accordéon FAQ & Précisions -->
+                        <div class="lootbar-faq-wrap">
+                            <h3 class="lootbar-faq-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                Questions fréquentes &amp; Aide
+                            </h3>
+
+                            <div class="lootbar-faq-item">
+                                <button type="button" class="lootbar-faq-question">
+                                    <span>Comment trouver mon identifiant de joueur (UID) ?</span>
+                                    <span class="lootbar-faq-icon">▾</span>
+                                </button>
+                                <div class="lootbar-faq-answer">
+                                    Ouvrez le jeu sur votre appareil, cliquez sur votre avatar ou votre profil en haut à gauche de l'écran principal. Votre UID (Player ID) y est affiché sous forme d'une série de chiffres. Vous pouvez le copier directement.
+                                </div>
+                            </div>
+
+                            <div class="lootbar-faq-item">
+                                <button type="button" class="lootbar-faq-question">
+                                    <span>Combien de temps faut-il pour recevoir la recharge ?</span>
+                                    <span class="lootbar-faq-icon">▾</span>
+                                </button>
+                                <div class="lootbar-faq-answer">
+                                    La majorité des recharges LootZone sont traitées automatiquement dans un délai de <strong>1 à 5 minutes</strong> après validation de votre paiement.
+                                </div>
+                            </div>
+
+                            <div class="lootbar-faq-item">
+                                <button type="button" class="lootbar-faq-question">
+                                    <span>La recharge est-elle 100% officielle et sécurisée ?</span>
+                                    <span class="lootbar-faq-icon">▾</span>
+                                </button>
+                                <div class="lootbar-faq-answer">
+                                    Oui, absolument. LootZone opère uniquement via les partenaires officiels et distributeurs certifiés. Aucun mot de passe de compte de jeu ne vous sera jamais demandé.
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ═════════════════════════════════════════════════════════════════
+                         SECTION 3: AVIS & COMMENTAIRES CLIENTS (IMAGE 4 / 5)
+                         ═════════════════════════════════════════════════════════════════ -->
+                    <section class="lootbar-reviews-section" id="lootbar-reviews-section">
+                        <div class="lootbar-section-header" style="justify-content:space-between;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div class="lootbar-section-step" style="background:#f59e0b;">★</div>
+                                <h2 class="lootbar-section-title" data-i18n="product.reviews_title">Avis et commentaires des joueurs</h2>
+                            </div>
+                        </div>
+
+                        <!-- Score Summary Card -->
+                        <div class="lootbar-reviews-summary-card">
+                            <!-- Big Score -->
+                            <div class="lootbar-rating-score-box">
+                                <div class="lootbar-rating-huge" id="lb-avg-rating">5.0</div>
+                                <div class="lootbar-stars-row-big">
+                                    ★★★★★
+                                </div>
+                                <div class="lootbar-reviews-total-text" id="lb-total-reviews-count">4 820+ avis vérifiés</div>
+                            </div>
+
+                            <!-- Rating Bars Breakdown -->
+                            <div class="lootbar-rating-bars">
+                                <div class="lootbar-bar-row">
+                                    <span class="lootbar-bar-label">5 ★</span>
+                                    <div class="lootbar-bar-track"><div class="lootbar-bar-fill" style="width: 96%;"></div></div>
+                                    <span class="lootbar-bar-pct">96%</span>
+                                </div>
+                                <div class="lootbar-bar-row">
+                                    <span class="lootbar-bar-label">4 ★</span>
+                                    <div class="lootbar-bar-track"><div class="lootbar-bar-fill" style="width: 3%;"></div></div>
+                                    <span class="lootbar-bar-pct">3%</span>
+                                </div>
+                                <div class="lootbar-bar-row">
+                                    <span class="lootbar-bar-label">3 ★</span>
+                                    <div class="lootbar-bar-track"><div class="lootbar-bar-fill" style="width: 1%;"></div></div>
+                                    <span class="lootbar-bar-pct">1%</span>
+                                </div>
+                                <div class="lootbar-bar-row">
+                                    <span class="lootbar-bar-label">2 ★</span>
+                                    <div class="lootbar-bar-track"><div class="lootbar-bar-fill" style="width: 0%;"></div></div>
+                                    <span class="lootbar-bar-pct">0%</span>
+                                </div>
+                                <div class="lootbar-bar-row">
+                                    <span class="lootbar-bar-label">1 ★</span>
+                                    <div class="lootbar-bar-track"><div class="lootbar-bar-fill" style="width: 0%;"></div></div>
+                                    <span class="lootbar-bar-pct">0%</span>
+                                </div>
+                            </div>
+
+                            <!-- Write review CTA -->
+                            <div class="lootbar-write-review-cta-wrap">
+                                <button type="button" class="lootbar-write-btn" id="toggleReviewFormBtn" onclick="toggleReviewForm()">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    Écrire un avis
+                                </button>
+                                <span style="font-size:0.75rem;color:#9ca3af;">100% Retours vérifiés</span>
+                            </div>
+                        </div>
+
+                        <!-- Formulaire d'ajout d'avis (Masqué par défaut) -->
+                        <form class="lootbar-review-form" id="lootbarReviewForm" onsubmit="handleReviewSubmit(event)">
+                            <h4 style="font-size:1rem;font-weight:800;color:#111827;margin:0 0 12px;">Partager votre expérience de recharge</h4>
+                            <div class="lootbar-star-picker">
+                                <span>Votre note :</span>
+                                <button type="button" class="lootbar-star-btn active" data-val="1">★</button>
+                                <button type="button" class="lootbar-star-btn active" data-val="2">★</button>
+                                <button type="button" class="lootbar-star-btn active" data-val="3">★</button>
+                                <button type="button" class="lootbar-star-btn active" data-val="4">★</button>
+                                <button type="button" class="lootbar-star-btn active" data-val="5">★</button>
+                                <input type="hidden" id="reviewStarInput" value="5">
+                            </div>
+                            <div class="lootbar-form-row">
+                                <input type="text" class="lootbar-text-input" id="reviewAuthorInput" placeholder="Votre pseudo ou nom de joueur" required>
+                                <input type="text" class="lootbar-text-input" id="reviewPackInput" placeholder="Pack rechargé (ex: 6480 Cristaux)" value="">
+                            </div>
+                            <textarea class="lootbar-text-input" id="reviewContentInput" rows="3" placeholder="Écrivez votre commentaire sur la rapidité et la qualité du service..." required style="resize:vertical;margin-bottom:12px;"></textarea>
+                            <div style="display:flex;justify-content:flex-end;gap:10px;">
+                                <button type="button" class="tu-confirm-close-btn" onclick="toggleReviewForm()">Annuler</button>
+                                <button type="submit" class="lootbar-recharge-cta" style="width:auto;padding:10px 22px;margin:0;">Publier mon avis</button>
+                            </div>
+                        </form>
+
+                        <!-- Onglets de filtrage -->
+                        <div class="lootbar-reviews-tabs">
+                            <button type="button" class="lootbar-tab-chip active" data-filter="all" onclick="filterReviews('all')">Tous les avis (4 820)</button>
+                            <button type="button" class="lootbar-tab-chip" data-filter="5star" onclick="filterReviews('5star')">5 étoiles (4 650)</button>
+                            <button type="button" class="lootbar-tab-chip" data-filter="vip" onclick="filterReviews('vip')">Avis VIP (320)</button>
+                            <button type="button" class="lootbar-tab-chip" data-filter="fast" onclick="filterReviews('fast')">Livraison Rapide (1 240)</button>
+                        </div>
+
+                        <!-- Liste dynamique des commentaires -->
+                        <div class="lootbar-reviews-list" id="lootbarReviewsList">
+                            <!-- Review Card 1 -->
+                            <div class="lootbar-review-card" data-category="5star vip">
+                                <div class="lootbar-review-top">
+                                    <div class="lootbar-review-user-info">
+                                        <div class="lootbar-user-avatar">JM</div>
+                                        <div>
+                                            <div class="lootbar-user-name">
+                                                Jean-Marc D.
+                                                <span class="lootbar-user-badge-vip">VIP</span>
+                                                <span class="lootbar-user-badge-verified">✓ Vérifié</span>
+                                            </div>
+                                            <div class="lootbar-review-date">Il y a 20 minutes</div>
+                                        </div>
+                                    </div>
+                                    <div class="lootbar-review-stars">★★★★★</div>
+                                </div>
+                                <div class="lootbar-review-middle">
+                                    <span class="lootbar-review-pack-pill">Recharge Validée</span>
+                                </div>
+                                <p class="lootbar-review-content">
+                                    Incroyablement rapide ! J'ai payé par Moncash et les crédits étaient sur mon compte en moins de 3 minutes chrono. Meilleur site de recharge en Haïti.
+                                </p>
+                                <div class="lootbar-review-footer">
+                                    <button type="button" class="lootbar-useful-btn" onclick="toggleUseful(this)">
+                                        👍 <span>Utile (42)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Review Card 2 -->
+                            <div class="lootbar-review-card" data-category="5star fast">
+                                <div class="lootbar-review-top">
+                                    <div class="lootbar-review-user-info">
+                                        <div class="lootbar-user-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">G</div>
+                                        <div>
+                                            <div class="lootbar-user-name">
+                                                Guerrier_HT
+                                                <span class="lootbar-user-badge-verified">✓ Vérifié</span>
+                                            </div>
+                                            <div class="lootbar-review-date">Il y a 2 heures</div>
+                                        </div>
+                                    </div>
+                                    <div class="lootbar-review-stars">★★★★★</div>
+                                </div>
+                                <div class="lootbar-review-middle">
+                                    <span class="lootbar-review-pack-pill">Pack Supérieur</span>
+                                </div>
+                                <p class="lootbar-review-content">
+                                    J'avais une hésitation par rapport à mon ID de serveur, mais le support WhatsApp m'a répondu immédiatement et la transaction s'est faite sans souci. Bravo LootZone !
+                                </p>
+                                <div class="lootbar-review-footer">
+                                    <button type="button" class="lootbar-useful-btn" onclick="toggleUseful(this)">
+                                        👍 <span>Utile (19)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Review Card 3 -->
+                            <div class="lootbar-review-card" data-category="5star vip">
+                                <div class="lootbar-review-top">
+                                    <div class="lootbar-review-user-info">
+                                        <div class="lootbar-user-avatar" style="background:linear-gradient(135deg,#6366f1,#4f46e5);">D</div>
+                                        <div>
+                                            <div class="lootbar-user-name">
+                                                D****8
+                                                <span class="lootbar-user-badge-vip">VIP</span>
+                                                <span class="lootbar-user-badge-verified">✓ Vérifié</span>
+                                            </div>
+                                            <div class="lootbar-review-date">Hier</div>
+                                        </div>
+                                    </div>
+                                    <div class="lootbar-review-stars">★★★★★</div>
+                                </div>
+                                <div class="lootbar-review-middle">
+                                    <span class="lootbar-review-pack-pill">Pack Spécial</span>
+                                </div>
+                                <p class="lootbar-review-content">
+                                    Les prix sont les plus bas du marché avec les réductions appliquées. La conversion en HTG est claire et transparente. Je recommande les yeux fermés !
+                                </p>
+                                <div class="lootbar-review-footer">
+                                    <button type="button" class="lootbar-useful-btn" onclick="toggleUseful(this)">
+                                        👍 <span>Utile (31)</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- RIGHT COLUMN: Order Summary Sidebar (Sticky LootBar Style) -->
+                <div class="lootbar-right-sidebar order-summary-sidebar">
+                    <div class="lootbar-order-card">
+                        <h3 class="lootbar-order-title" data-i18n="product.order_info">Informations de commande</h3>
+
+                        <!-- Row: Product Name -->
+                        <div class="lootbar-order-row">
+                            <span class="lootbar-order-label" data-i18n="product.label_product">Produit</span>
+                            <span class="lootbar-order-val" id="sum-pack">—</span>
+                        </div>
+
+                        <!-- Row: Quantity Selector (- / +) -->
+                        <div class="lootbar-order-row">
+                            <span class="lootbar-order-label" data-i18n="product.label_quantity">Quantité</span>
+                            <div class="lootbar-qty-stepper">
+                                <button type="button" class="lootbar-qty-btn" id="qty-minus" onclick="changeQuantity(-1)" aria-label="Diminuer">−</button>
+                                <input type="number" class="lootbar-qty-input" id="qty-input" value="1" min="1" max="99" onchange="onQuantityChange(this.value)">
+                                <button type="button" class="lootbar-qty-btn" id="qty-plus" onclick="changeQuantity(1)" aria-label="Augmenter">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Row: Price & Dynamic Conversion -->
+                        <div class="lootbar-order-row" style="align-items:baseline;margin-top:16px;">
+                            <span class="lootbar-order-label" data-i18n="product.label_price">Prix</span>
+                            <div class="lootbar-price-container">
+                                <div class="lootbar-order-total-price" id="sum-price" data-price-usd="0.00">$0.00</div>
+                                <div class="lootbar-order-savings" id="sum-savings">
+                                    <span data-i18n="product.savings">Économies</span>
+                                    <span id="sum-savings-val" data-price-usd="0.00">$0.00</span> &gt;
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method Selector -->
+                        <div class="lootbar-pay-methods-title" data-i18n="product.payment_method">Méthode de Paiement</div>
+                        <div class="lootbar-pay-tabs" id="tu-pay-tabs">
+                            <button type="button" class="lootbar-pay-tab active" data-pay="moncash" onclick="selectPayMethod('moncash')">Moncash</button>
+                            <button type="button" class="lootbar-pay-tab" data-pay="natcash" onclick="selectPayMethod('natcash')">Natcash</button>
+                            <button type="button" class="lootbar-pay-tab" data-pay="wallet" onclick="selectPayMethod('wallet')">Wallet</button>
+                        </div>
+
+                        <!-- Primary Recharge CTA (Golden #f59e0b) -->
+                        <button class="lootbar-recharge-cta" id="tu-order-btn" onclick="submitOrder()">
+                            <span data-i18n="product.recharge_now">Recharger</span>
+                        </button>
+
+                        <!-- Secondary Guide CTA -->
+                        <button type="button" class="lootbar-guide-cta" onclick="showBuyGuide()">
+                            <span data-i18n="product.how_to_buy">Comment acheter ?</span>
+                        </button>
+
+                        <!-- Secure Checkout Note -->
+                        <div class="tu-secure-note" style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.75rem;color:#10b981;font-weight:700;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            <span data-i18n="product.secure_payment">Paiement 100% sécurisé — Livraison instantanée</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- ═════════════════════════════════════════════════════════════════
+             SECTION 4: POURQUOI NOUS CHOISIR ? (IMAGE 5)
+             ═════════════════════════════════════════════════════════════════ -->
+        <section class="lootbar-trust-section">
+            <h2 class="lootbar-trust-title" data-i18n="features.why_title">Pourquoi choisir LootZone ?</h2>
+            <div class="lootbar-trust-grid">
+                <div class="lootbar-trust-card">
+                    <div class="lootbar-trust-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                    </div>
+                    <h4 data-i18n="features.security_title">100% Transaction Sécurisée</h4>
+                    <p data-i18n="features.security_desc">Cryptage de pointe et protection totale de vos informations personnelles et identifiants.</p>
+                </div>
+                <div class="lootbar-trust-card">
+                    <div class="lootbar-trust-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </div>
+                    <h4>Livraison Éclair</h4>
+                    <p>Système de rechargement direct automatisé en moins de 5 minutes sur votre compte de jeu.</p>
+                </div>
+                <div class="lootbar-trust-card">
+                    <div class="lootbar-trust-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12a8 8 0 0 1 16 0"></path><rect x="2" y="11" width="3" height="5" rx="1.5"></rect><rect x="19" y="11" width="3" height="5" rx="1.5"></rect><circle cx="12" cy="13" r="5"></circle></svg>
+                    </div>
+                    <h4 data-i18n="features.support_title">Support Client 24/7</h4>
+                    <p data-i18n="features.support_desc">Une assistance humaine dédiée prête à vous accompagner par WhatsApp et messagerie à tout instant.</p>
+                </div>
+                <div class="lootbar-trust-card">
+                    <div class="lootbar-trust-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="5" width="18" height="10" rx="1.5"></rect><circle cx="12" cy="10" r="2.5"></circle><path d="M2 18h3l3 2h8a2 2 0 0 0 2-2v-1.5"></path></svg>
+                    </div>
+                    <h4 data-i18n="features.refund_title">Remboursement Intégral</h4>
+                    <p data-i18n="features.refund_desc">Garantie satisfait ou remboursé à 100% en cas d'incident technique ou de non-livraison.</p>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <!-- ═════════════════════════════════════════════════════════════════
+         SECTION 5: PIED DE PAGE COMPLET (IMAGE 5)
+         ═════════════════════════════════════════════════════════════════ -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-columns">
+                <!-- Col 1: Logo & Info -->
+                <div class="footer-col brand-col">
+                    <div class="logo" style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="LootZone_img-removebg-preview.png" alt="LootZone" style="height: 40px; width: auto; object-fit: contain;">
+                    </div>
+                    <p class="brand-desc" data-i18n="footer.about_text">
+                        La plateforme de recharge de référence. Obtenez vos crédits de jeux, cartes cadeaux et abonnements instantanément au meilleur prix.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="X"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                        <a href="#" class="social-icon" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162z"/></svg></a>
+                        <a href="#" class="social-icon" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation -->
+                <div class="footer-col">
+                    <h4 data-i18n="footer.col_nav">Navigation</h4>
+                    <ul>
+                        <li><a href="catalog.html?cat=jeux" data-i18n="footer.game_credits">Jeux de Crédit</a></li>
+                        <li><a href="catalog.html?cat=gift-cards" data-i18n="footer.gift_cards">Cartes Cadeaux</a></li>
+                        <li><a href="catalog.html?cat=game-cd-key" data-i18n="footer.game_cd_keys">Clés de jeux (CD-Keys)</a></li>
+                        <li><a href="catalog.html?cat=payment-cards" data-i18n="footer.payment_cards">Cartes de Paiement</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Support -->
+                <div class="footer-col">
+                    <h4 data-i18n="footer.col_support">Support &amp; Légal</h4>
+                    <ul>
+                        <li><a href="about.html" data-i18n="footer.about_us">À propos de nous</a></li>
+                        <li><a href="liens footer/Conditions d'utilisation.html" data-i18n="footer.terms">Conditions d'utilisation</a></li>
+                        <li><a href="liens footer/FAQ Centre d'aide.html" data-i18n="footer.help_faq">FAQ / Centre d'aide</a></li>
+                        <li><a href="contact.html" data-i18n="footer.contact">Contactez-nous</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Partenariat -->
+                <div class="footer-col">
+                    <h4 data-i18n="footer.col_partner">Partenariat</h4>
+                    <ul>
+                        <li><a href="liens footer/partenaire de LootZone.html" data-i18n="footer.become_partner">Devenir Partenaire</a></li>
+                        <li><a href="liens footer/Programme Créateurs.html" data-i18n="footer.creator_program">Programme Créateurs</a></li>
+                        <li><a href="liens footer/Demande d'Alliance.html" data-i18n="footer.alliance_request">Demande d'Alliance</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="footer-divider">
+
+            <div class="footer-bottom">
+                <p class="copyright" data-i18n="footer.copyright">© 2026 LootZone Inc. Tous droits réservés.</p>
+                <div class="footer-bottom-links">
+                    <a href="about.html" data-i18n="footer.about_us">À propos de nous</a>
+                    <span style="color:#4b5563;margin:0 6px;">•</span>
+                    <a href="liens footer/Mentions légales.html" data-i18n="footer.legal">Mentions légales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Floating 24/7 Support (Style LootBar) ── -->
+    <a href="contact.html" class="lootbar-floating-support" id="lootbarFloatingSupport">
+        <div class="lootbar-support-bubble">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+        </div>
+        <span data-i18n="product.support_247">24/7</span>
+    </a>
 
     <!-- Confirmation overlay -->
     <div class="tu-confirm-overlay" id="tu-confirm">
@@ -1078,6 +1601,17 @@
                     </a>
                     <button class="tu-confirm-close-btn" onclick="closeConfirm()">Fermer</button>
                 </div>
+
+                <!-- Post-Payment Review Banner -->
+                <div class="tu-confirm-review-prompt" style="margin-top:16px;padding:12px 14px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px;text-align:center;">
+                    <div style="font-size:0.82rem;font-weight:700;color:#1e293b;display:flex;align-items:center;justify-content:center;gap:6px;">
+                        <span>⭐</span> <span>Déjà habitué ou commande terminée ?</span>
+                    </div>
+                    <p style="font-size:0.75rem;color:#64748b;margin:4px 0 8px;">Partagez votre avis avec la communauté de joueurs LootZone !</p>
+                    <button type="button" onclick="openPostPaymentReview()" style="background:#f1f5f9;border:1px solid #cbd5e1;color:#0f172a;font-size:0.78rem;font-weight:700;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s;">
+                        ✍️ Laisser un avis sur ce pack
+                    </button>
+                </div>
             </div>
 
             <!-- Wallet success -->
@@ -1086,6 +1620,15 @@
                     <div class="tu-ws-icon">🎉</div>
                     <h3>Paiement réussi !</h3>
                     <p id="conf-wallet-msg">Votre commande a été traitée avec succès depuis votre Wallet LootZone.</p>
+                    <div style="margin:16px 0;padding:12px 14px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px;text-align:center;">
+                        <div style="font-size:0.85rem;font-weight:700;color:#1e293b;display:flex;align-items:center;justify-content:center;gap:6px;">
+                            <span>⭐</span> <span>Partagez votre expérience !</span>
+                        </div>
+                        <p style="font-size:0.75rem;color:#64748b;margin:4px 0 10px;">Votre retour aide des milliers de joueurs en Haïti.</p>
+                        <button type="button" onclick="openPostPaymentReview()" style="background:#f59e0b;border:none;color:#ffffff;font-size:0.8rem;font-weight:700;padding:8px 16px;border-radius:6px;cursor:pointer;">
+                            ✍️ Laisser un avis joueur
+                        </button>
+                    </div>
                     <button class="tu-order-btn" style="width:100%;margin:0;" onclick="closeConfirm()">Parfait !</button>
                 </div>
             </div>
@@ -1100,6 +1643,8 @@
         // ─── State ──────────────────────────────────────────────────────────────
         let product = null;
         let selectedDenom = null;
+        let selectedPackIndex = 0;
+        let orderQuantity = 1;
         let selectedPayMethod = 'moncash';
         let currentUser = null;
         let authToken = null;
@@ -1142,8 +1687,25 @@
                 if (badge) badge.textContent = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
             } catch(_) {}
 
+            // Start countdown timer on promo card
+            startPromoTimer();
+
             await loadProduct(id);
         });
+
+        // Countdown timer for promo card
+        function startPromoTimer() {
+            const clockEl = document.getElementById('lootbar-promo-clock');
+            if (!clockEl) return;
+            let seconds = 7000;
+            setInterval(() => {
+                seconds = Math.max(0, seconds - 1);
+                const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+                const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+                const s = String(seconds % 60).padStart(2, '0');
+                clockEl.textContent = `${h}:${m}:${s}`;
+            }, 1000);
+        }
 
         // ─── Load product ────────────────────────────────────────────────────────
         async function loadProduct(id) {
@@ -1186,78 +1748,35 @@
             bcCat.href = `catalog.html?cat=${p.category}`;
             bcCat.textContent = getCatLabel(p.category);
 
-            // Hero image
-            const heroEl = document.getElementById('tu-hero');
-            heroEl.classList.remove('tu-skeleton');
-            heroEl.innerHTML = `
-                <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
-                ${p.discount ? `<span class="tu-hero-badge">${p.discount}</span>` : ''}
-            `;
+            // Game Hero Header Info (LootBar Style)
+            const iconImg = document.getElementById('tu-game-icon');
+            if (iconImg) {
+                iconImg.src = p.img || 'favicon.svg';
+                iconImg.alt = p.name;
+                iconImg.onerror = function() { this.src = 'favicon.svg'; };
+            }
 
-            // Product info
-            const starsHTML = renderStars(p.rating);
-            document.getElementById('tu-left').innerHTML = `
-                <div class="tu-product-hero" id="tu-hero">
-                    <img src="${p.img}" alt="${p.name}" onerror="this.style.background='#f0f2f5'">
-                    ${p.discount ? `<span class="tu-hero-badge">${p.discount}</span>` : ''}
-                </div>
-                <div class="tu-product-info">
-                    <h1 class="tu-game-title">${p.name}</h1>
-                    <div class="tu-meta">
-                        <div class="tu-stars">
-                            ${starsHTML}
-                            <span class="tu-rating-val">${p.rating.toFixed(1)}</span>
-                        </div>
-                        <span class="tu-reviews">(${Math.floor(Math.random() * 3000 + 500)} avis)</span>
-                        <span class="tu-sales-badge">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            ${p.sales} Vendus
-                        </span>
-                    </div>
+            const titleEl = document.getElementById('tu-game-title');
+            if (titleEl) titleEl.textContent = p.name;
 
-                    <div class="tu-trust">
-                        <div class="tu-trust-item">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                            Livraison instantanée
-                        </div>
-                        <div class="tu-trust-item">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                            Paiement sécurisé
-                        </div>
-                        <div class="tu-trust-item">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            Support 24/7
-                        </div>
-                    </div>
+            const starsEl = document.getElementById('tu-stars');
+            if (starsEl) starsEl.innerHTML = renderStars(p.rating || 5.0);
 
-                    <p class="tu-desc-title">À propos</p>
-                    <p class="tu-desc-text">${p.desc || 'Recharge officielle, livrée instantanément.'}</p>
+            const ratingValEl = document.getElementById('tu-rating-val');
+            if (ratingValEl) ratingValEl.textContent = (p.rating || 5.0).toFixed(1);
 
-                    <div class="tu-info-table" style="margin-top:24px;">
-                        <div class="tu-info-row">
-                            <div class="tu-info-label">Plateforme</div>
-                            <div class="tu-info-value">${getPlatformLabel(p.category)}</div>
-                        </div>
-                        ${p.needsServer ? `
-                        <div class="tu-info-row">
-                            <div class="tu-info-label">Serveur requis</div>
-                            <div class="tu-info-value">Oui — sélectionnez dans le formulaire</div>
-                        </div>` : ''}
-                        <div class="tu-info-row">
-                            <div class="tu-info-label">Info requise</div>
-                            <div class="tu-info-value"><strong style="color:#ef4444;">${p.idLabel || 'ID de joueur'}</strong></div>
-                        </div>
-                        <div class="tu-info-row">
-                            <div class="tu-info-label">Délai de livraison</div>
-                            <div class="tu-info-value">Dans les 5 minutes</div>
-                        </div>
-                        <div class="tu-info-row">
-                            <div class="tu-info-label">Méthodes de paiement</div>
-                            <div class="tu-info-value">Moncash · Natcash · Wallet LootZone</div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            const salesValEl = document.getElementById('tu-sales-val');
+            if (salesValEl) {
+                salesValEl.innerHTML = `${p.sales || '100k+'} <span data-i18n="product.sold">Vendu</span>`;
+            }
+
+            const descText = document.getElementById('tu-desc-text');
+            if (descText) {
+                descText.textContent = p.desc || 'Recharge officielle garantie. Les crédits sont ajoutés directement sur votre compte.';
+            }
+
+            const platEl = document.getElementById('tu-platform-val');
+            if (platEl) platEl.textContent = getPlatformLabel(p.category);
 
             // Pack grid
             renderPackGrid(p);
@@ -1266,13 +1785,15 @@
             if (p.needsServer && p.serverOptions && p.serverOptions.length) {
                 const wrap = document.getElementById('tu-server-wrap');
                 const sel = document.getElementById('tu-server-select');
-                wrap.style.display = '';
-                p.serverOptions.forEach(srv => {
-                    const opt = document.createElement('option');
-                    opt.value = srv;
-                    opt.textContent = srv;
-                    sel.appendChild(opt);
-                });
+                if (wrap && sel) {
+                    wrap.style.display = '';
+                    p.serverOptions.forEach(srv => {
+                        const opt = document.createElement('option');
+                        opt.value = srv;
+                        opt.textContent = srv;
+                        sel.appendChild(opt);
+                    });
+                }
             }
 
             // UID label & prefill with 6-character user code or game ID
@@ -1284,7 +1805,7 @@
             const isSpecificGameID = p.idLabel && !p.idLabel.toLowerCase().includes('email');
 
             if (uidLabel) {
-                uidLabel.textContent = isSpecificGameID ? p.idLabel : "ID de joueur / Code Utilisateur (6 caractères)";
+                uidLabel.textContent = isSpecificGameID ? p.idLabel : "ID de joueur / Code Utilisateur";
             }
             if (uidInput) {
                 uidInput.placeholder = p.idPlaceholder || (isSpecificGameID ? "Ex: 123456789" : "Ex: 8F3K9A");
@@ -1295,52 +1816,175 @@
             if (uidHint) {
                 uidHint.textContent = p.idHint || (isSpecificGameID ? "Entrez votre ID / Pseudo exact dans le jeu." : "Code unique définitif à 6 chiffres et lettres.");
             }
+
+            // Dynamic translations & live currency formatting
+            if (window.updateLanguage) window.updateLanguage();
+            if (window.updateAllPrices) window.updateAllPrices();
         }
 
-        // ─── Pack grid ───────────────────────────────────────────────────────────
+        // ─── LootBar Pack Grid ───────────────────────────────────────────────────
         function renderPackGrid(p) {
             const grid = document.getElementById('tu-pack-grid');
+            if (!grid) return;
+
             if (!p.denoms || !p.denoms.length) {
-                grid.innerHTML = '<p style="padding:10px;color:#6b7280;font-size:0.85rem;">Aucun pack disponible.</p>';
+                grid.innerHTML = '<p style="padding:10px;color:#6b7280;font-size:0.85rem;" data-i18n="product.no_packs">Aucun pack disponible.</p>';
                 return;
             }
-            grid.innerHTML = p.denoms.map((d, i) => `
-                <button class="tu-pack-btn ${i === 0 ? 'active' : ''}" onclick="selectPack(${i})">
-                    <span class="tu-pack-label">${d.label}</span>
-                    <span class="tu-pack-price">$${parseFloat(d.eur).toFixed(2)}</span>
-                    <span class="tu-pack-htg">${d.htg.toLocaleString()} HTG</span>
-                </button>
-            `).join('');
 
-            // Select first by default
+            selectedPackIndex = 0;
             selectedDenom = p.denoms[0];
+
+            grid.innerHTML = p.denoms.map((d, i) => {
+                const priceUsd = parseFloat(d.eur) || 0;
+                const oldPriceUsd = parseFloat(d.old_price || (priceUsd * 1.15).toFixed(2));
+                const discountDiff = Math.max(0, oldPriceUsd - priceUsd);
+                const discountPct = Math.round((discountDiff / oldPriceUsd) * 100);
+                const badgeText = d.discount || (discountDiff > 0 ? `-$${discountDiff.toFixed(2)}` : (p.discount || '-10%'));
+                const packImg = d.img || p.img || 'favicon.svg';
+
+                return `
+                    <div class="lootbar-pack-card ${i === 0 ? 'active' : ''}" id="lootbar-pack-${i}" onclick="selectPack(${i})">
+                        <div class="lootbar-card-img-wrap">
+                            <img src="${packImg}" alt="${d.label}" class="lootbar-card-img" onerror="this.src='favicon.svg'">
+                        </div>
+                        <div class="lootbar-card-name" title="${d.label}">${d.label}</div>
+                        <div class="lootbar-card-price-row">
+                            <span class="lootbar-card-price" data-price-usd="${priceUsd.toFixed(2)}">$${priceUsd.toFixed(2)}</span>
+                            <span class="lootbar-card-badge">${badgeText}</span>
+                        </div>
+                        <div class="lootbar-card-footer">
+                            <span class="lootbar-card-old-price" data-price-usd="${oldPriceUsd.toFixed(2)}">$${oldPriceUsd.toFixed(2)}</span>
+                            <button type="button" class="lootbar-card-cart-btn" onclick="event.stopPropagation(); addPackToCart(${i});" title="Ajouter au panier" aria-label="Ajouter au panier">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
             updateSummary();
         }
 
         function selectPack(index) {
-            if (!product || !product.denoms) return;
+            if (!product || !product.denoms || !product.denoms[index]) return;
+            selectedPackIndex = index;
             selectedDenom = product.denoms[index];
-            document.querySelectorAll('.tu-pack-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === index);
+
+            document.querySelectorAll('.lootbar-pack-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
             });
+
+            updateSummary();
+        }
+
+        // ─── Quantity Stepper (- / +) ─────────────────────────────────────────────
+        function changeQuantity(delta) {
+            orderQuantity = Math.max(1, Math.min(99, orderQuantity + delta));
+            const input = document.getElementById('qty-input');
+            if (input) input.value = orderQuantity;
+            updateSummary();
+        }
+
+        function onQuantityChange(val) {
+            const num = parseInt(val, 10);
+            orderQuantity = isNaN(num) || num < 1 ? 1 : Math.min(99, num);
+            const input = document.getElementById('qty-input');
+            if (input) input.value = orderQuantity;
             updateSummary();
         }
 
         // ─── Payment method ──────────────────────────────────────────────────────
         function selectPayMethod(method) {
             selectedPayMethod = method;
-            document.querySelectorAll('.tu-pay-tab').forEach(tab => {
+            document.querySelectorAll('.lootbar-pay-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.getAttribute('data-pay') === method);
             });
-            document.getElementById('sum-method').textContent = method.charAt(0).toUpperCase() + method.slice(1);
         }
 
         // ─── Summary update ──────────────────────────────────────────────────────
         function updateSummary() {
             if (!selectedDenom) return;
-            document.getElementById('sum-pack').textContent = selectedDenom.label;
-            document.getElementById('sum-price').textContent = `$${parseFloat(selectedDenom.eur).toFixed(2)}`;
-            document.getElementById('sum-htg').textContent = `${selectedDenom.htg.toLocaleString()} HTG`;
+
+            const packNameEl = document.getElementById('sum-pack');
+            if (packNameEl) packNameEl.textContent = selectedDenom.label;
+
+            const unitPrice = parseFloat(selectedDenom.eur) || 0;
+            const oldUnitPrice = parseFloat(selectedDenom.old_price || (unitPrice * 1.15).toFixed(2));
+            const totalPrice = (unitPrice * orderQuantity).toFixed(2);
+            const totalSavings = Math.max(0, (oldUnitPrice - unitPrice) * orderQuantity).toFixed(2);
+
+            const priceEl = document.getElementById('sum-price');
+            if (priceEl) {
+                priceEl.setAttribute('data-price-usd', totalPrice);
+                priceEl.textContent = `$${totalPrice}`;
+            }
+
+            const savingsValEl = document.getElementById('sum-savings-val');
+            if (savingsValEl) {
+                savingsValEl.setAttribute('data-price-usd', totalSavings);
+                savingsValEl.textContent = `$${totalSavings}`;
+            }
+
+            // Real-time live currency format & i18n
+            if (window.updateAllPrices) {
+                window.updateAllPrices();
+            }
+        }
+
+        // Quick add from card cart icon
+        function addPackToCart(index) {
+            if (!product || !product.denoms || !product.denoms[index]) return;
+            const denom = product.denoms[index];
+            const uidInput = document.getElementById('tu-uid-input');
+            const uid = uidInput ? uidInput.value.trim() : '';
+
+            addToCartLocal({
+                id: product.id,
+                name: product.name,
+                denom: denom.label,
+                price: denom.eur,
+                htg: denom.htg,
+                player_id: uid,
+                server: document.getElementById('tu-server-select')?.value || '',
+                method: selectedPayMethod,
+                img: denom.img || product.img,
+                quantity: 1
+            });
+
+            showAstaToast(
+                'cart',
+                'Pack ajouté au panier ! 🛒',
+                `${product.name} (${denom.label}) — $${parseFloat(denom.eur).toFixed(2)}`,
+                { text: 'Voir panier 🛒', onclick: 'openCartDrawer()' }
+            );
+        }
+
+        function showBuyGuide() {
+            showAstaToast(
+                'warning',
+                'Guide d\'achat LootZone',
+                '1. Entrez votre ID Joueur\n2. Choisissez votre pack\n3. Cliquez sur Recharger et payez via Moncash ou Natcash.',
+                null
+            );
+        }
+
+        function openShareModal() {
+            if (navigator.share) {
+                navigator.share({
+                    title: `Recharge ${product ? product.name : 'LootZone'}`,
+                    text: `Profite de 10% de réduction sur tes recharges de jeux sur LootZone !`,
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showAstaToast('success', 'Lien copié !', 'Partagez ce lien à vos amis pour profiter de réductions.');
+            }
+        }
+
+        function contactSupport() {
+            const msg = encodeURIComponent(`Bonjour support LootZone, j'ai une question concernant la recharge ${product ? product.name : ''}.`);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
         }
 
         // ─── TOAST BUBBLE SYSTEM ──────────────────────────────────────────────────
@@ -1440,14 +2084,17 @@
                 player_id: uid,
                 server: server,
                 method: selectedPayMethod,
-                img: product.image
+                img: product.image,
+                quantity: orderQuantity
             });
 
             // Afficher la bulle de notification élégante
+            const unitPrice = parseFloat(selectedDenom.eur) || 0;
+            const totPrice = (unitPrice * orderQuantity).toFixed(2);
             showAstaToast(
                 'cart', 
                 'Ajouté au panier ! 🛒', 
-                `${product.name} (${selectedDenom.label}) — $${parseFloat(selectedDenom.eur).toFixed(2)} (${selectedDenom.htg.toLocaleString()} HTG)`,
+                `${product.name} (${selectedDenom.label} x${orderQuantity}) — $${totPrice}`,
                 { text: 'Voir mon panier 🛒', onclick: 'openCartDrawer()' }
             );
 
@@ -1468,11 +2115,16 @@
                 showAstaToast('error', 'Erreur de commande', err.message || 'Une erreur est survenue. Veuillez réessayer.');
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Commander Maintenant →';
+                btn.innerHTML = '<span data-i18n="product.recharge_now">Recharger</span>';
+                if (window.updateLanguage) window.updateLanguage();
             }
         }
 
         async function submitPublicOrder(uid, server, ref) {
+            const unitPrice = parseFloat(selectedDenom.eur) || 0;
+            const totalUsd = (unitPrice * orderQuantity).toFixed(2);
+            const totalHtg = Math.round((selectedDenom.htg || 0) * orderQuantity);
+
             const body = {
                 client_id: currentUser?.id || null,
                 client_email: currentUser?.email || 'anonyme@lootzone.com',
@@ -1480,12 +2132,13 @@
                 produit_id: product.id,
                 produit_nom: product.name,
                 categorie: product.category,
-                denom_label: selectedDenom.label,
-                eur: selectedDenom.eur,
-                htg: selectedDenom.htg,
+                denom_label: `${selectedDenom.label} (x${orderQuantity})`,
+                eur: totalUsd,
+                htg: totalHtg,
                 methode_paiement: selectedPayMethod,
                 player_id: uid,
-                server: server || null
+                server: server || null,
+                quantity: orderQuantity
             };
 
             try {
@@ -1503,11 +2156,11 @@
                 `✅ Confirmation Paiement LootZone\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
                 `📦 Produit : ${product.name}\n` +
-                `🎮 Pack : ${selectedDenom.label}\n` +
+                `🎮 Pack : ${selectedDenom.label} (x${orderQuantity})\n` +
                 `🆔 ID Joueur : ${uid}` +
                 (server ? `\n🌐 Serveur : ${server}` : '') + `\n` +
                 `💳 Méthode : ${methodLabel}\n` +
-                `💰 Montant : ${selectedDenom.htg.toLocaleString()} HTG ($${parseFloat(selectedDenom.eur).toFixed(2)})\n` +
+                `💰 Montant : ${totalHtg.toLocaleString()} HTG ($${totalUsd})\n` +
                 `🔑 Réf : ${ref}\n` +
                 `━━━━━━━━━━━━━━━━━━━━\n` +
                 `J'ai effectué le paiement, merci de traiter ma commande.`
@@ -1516,12 +2169,12 @@
             document.getElementById('conf-title').textContent = 'Commande enregistrée !';
             document.getElementById('conf-ref').textContent = `Référence : #${ref}`;
             document.getElementById('conf-product').textContent = product.name;
-            document.getElementById('conf-pack').textContent = selectedDenom.label;
+            document.getElementById('conf-pack').textContent = `${selectedDenom.label} (x${orderQuantity})`;
             document.getElementById('conf-uid').textContent = uid;
-            document.getElementById('conf-amount-usd').textContent = `$${parseFloat(selectedDenom.eur).toFixed(2)}`;
+            document.getElementById('conf-amount-usd').textContent = `$${totalUsd}`;
             document.getElementById('conf-method-name').textContent = methodLabel;
             document.getElementById('conf-phone').textContent = phone;
-            document.getElementById('conf-amount-htg').textContent = `${selectedDenom.htg.toLocaleString()} HTG`;
+            document.getElementById('conf-amount-htg').textContent = `${totalHtg.toLocaleString()} HTG`;
             document.getElementById('conf-wa-btn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`;
             document.getElementById('conf-pay-section').style.display = '';
             document.getElementById('conf-wallet-section').style.display = 'none';
@@ -1776,6 +2429,7 @@
     <script src="js/wishlist.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // ─── 1. Header Search Bar ───
             const globalSearch = document.getElementById('globalSearchInput');
             const searchToggle = document.getElementById('headerSearchToggle');
             const searchWrap = document.getElementById('headerSearchWrap');
@@ -1811,7 +2465,178 @@
                     }
                 });
             }
+
+            // ─── 2. FAQ Accordions (Guide de recharge) ───
+            document.querySelectorAll('.lootbar-faq-question').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.closest('.lootbar-faq-item');
+                    if (item) item.classList.toggle('active');
+                });
+            });
+
+            // ─── 3. Star Picker in Review Form ───
+            const starBtns = document.querySelectorAll('.lootbar-star-btn');
+            const starInput = document.getElementById('reviewStarInput');
+            starBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const val = parseInt(btn.getAttribute('data-val'), 10);
+                    if (starInput) starInput.value = val;
+                    starBtns.forEach(b => {
+                        const bVal = parseInt(b.getAttribute('data-val'), 10);
+                        b.classList.toggle('active', bVal <= val);
+                    });
+                });
+            });
         });
+
+        // ─── 4. Review Form Visibility Toggle ───
+        function toggleReviewForm() {
+            const form = document.getElementById('lootbarReviewForm');
+            if (form) {
+                form.classList.toggle('active');
+                if (form.classList.contains('active')) {
+                    // Pre-fill with current pack if available
+                    const packInput = document.getElementById('reviewPackInput');
+                    const curPack = document.getElementById('sum-pack');
+                    if (packInput && curPack && !packInput.value) {
+                        packInput.value = curPack.textContent || '';
+                    }
+                    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const authorInput = document.getElementById('reviewAuthorInput');
+                    if (authorInput) authorInput.focus();
+                }
+            }
+        }
+
+        // ─── 4b. Post-Payment Review Trigger ───
+        function openPostPaymentReview() {
+            closeConfirm();
+            setTimeout(() => {
+                const form = document.getElementById('lootbarReviewForm');
+                if (form) {
+                    if (!form.classList.contains('active')) {
+                        form.classList.add('active');
+                    }
+                    const packInput = document.getElementById('reviewPackInput');
+                    const curPack = document.getElementById('sum-pack');
+                    if (packInput) {
+                        const productName = (product && product.name) ? product.name + ' - ' : '';
+                        packInput.value = productName + (curPack ? curPack.textContent : 'Pack Rechargé');
+                    }
+                    const authorInput = document.getElementById('reviewAuthorInput');
+                    const uidInput = document.getElementById('tu-uid');
+                    if (authorInput && !authorInput.value) {
+                        if (currentUser && (currentUser.name || currentUser.email)) {
+                            authorInput.value = currentUser.name || currentUser.email.split('@')[0];
+                        } else if (uidInput && uidInput.value) {
+                            authorInput.value = 'Joueur #' + uidInput.value.slice(-4);
+                        }
+                    }
+                    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const contentInput = document.getElementById('reviewContentInput');
+                    if (contentInput) contentInput.focus();
+                }
+            }, 250);
+        }
+
+        // ─── 5. Handle Review Submit ───
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+            const author = document.getElementById('reviewAuthorInput').value.trim() || 'Joueur';
+            const pack = document.getElementById('reviewPackInput').value.trim() || 'Recharge Confirmée';
+            const text = document.getElementById('reviewContentInput').value.trim();
+            const stars = parseInt(document.getElementById('reviewStarInput').value, 10) || 5;
+
+            if (!text) return;
+
+            const list = document.getElementById('lootbarReviewsList');
+            if (list) {
+                const newCard = document.createElement('div');
+                newCard.className = 'lootbar-review-card';
+                newCard.setAttribute('data-category', '5star');
+
+                let starsHtml = '';
+                for (let i = 0; i < stars; i++) starsHtml += '★';
+
+                newCard.innerHTML = `
+                    <div class="lootbar-review-top">
+                        <div class="lootbar-review-user-info">
+                            <div class="lootbar-user-avatar">${escapeReviewHtml(author.charAt(0).toUpperCase())}</div>
+                            <div>
+                                <div class="lootbar-user-name">
+                                    ${escapeReviewHtml(author)}
+                                    <span class="lootbar-user-badge-verified">✓ Vérifié</span>
+                                </div>
+                                <div class="lootbar-review-date">À l'instant</div>
+                            </div>
+                        </div>
+                        <div class="lootbar-review-stars">${starsHtml}</div>
+                    </div>
+                    <div class="lootbar-review-middle">
+                        <span class="lootbar-review-pack-pill">${escapeReviewHtml(pack)}</span>
+                    </div>
+                    <p class="lootbar-review-content">${escapeReviewHtml(text)}</p>
+                    <div class="lootbar-review-footer">
+                        <button type="button" class="lootbar-useful-btn" onclick="toggleUseful(this)">
+                            👍 <span>Utile (1)</span>
+                        </button>
+                    </div>
+                `;
+                list.prepend(newCard);
+            }
+
+            // Reset form
+            document.getElementById('reviewContentInput').value = '';
+            toggleReviewForm();
+
+            if (typeof showToast === 'function') {
+                showToast("Merci ! Votre avis a été publié avec succès.", "success");
+            } else if (typeof showAstaToast === 'function') {
+                showAstaToast("success", "Avis publié !", "Merci d'avoir partagé votre expérience.");
+            }
+        }
+
+        // ─── 6. Review Filter Tabs ───
+        function filterReviews(category) {
+            document.querySelectorAll('.lootbar-tab-chip').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-filter') === category);
+            });
+            const cards = document.querySelectorAll('.lootbar-review-card');
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = '';
+                } else {
+                    const cats = card.getAttribute('data-category') || '';
+                    card.style.display = cats.includes(category) ? '' : 'none';
+                }
+            });
+        }
+
+        // ─── 7. Useful Thumbs Up Button ───
+        function toggleUseful(btn) {
+            btn.classList.toggle('liked');
+            const span = btn.querySelector('span');
+            if (span) {
+                const match = span.textContent.match(/\d+/);
+                let count = match ? parseInt(match[0], 10) : 0;
+                if (btn.classList.contains('liked')) {
+                    count++;
+                } else {
+                    count = Math.max(0, count - 1);
+                }
+                span.textContent = `Utile (${count})`;
+            }
+        }
+
+        function escapeReviewHtml(str) {
+            return String(str).replace(/[&<>"']/g, m => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[m]));
+        }
     </script>
     <script src="js/maintenance-check.js"></script>
 </body>

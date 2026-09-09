@@ -55,7 +55,7 @@ async function saveProductsToFile(products) {
     }
 }
 
-router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const products = await getProducts();
         res.json({ products, total: products.length });
