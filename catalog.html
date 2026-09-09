@@ -2196,14 +2196,14 @@
                 }
             } catch (e) { }
 
-            let ref = 'AS-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            let ref = 'LZ-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
             try {
                 const resp = await fetch('/api/orders/public', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         client_id: clientId,
-                        client_email: clientEmail || 'anonyme@lootzone.com',
+                        client_email: clientEmail || 'anonyme@lootzone.gg',
                         client_nom: clientNom,
                         produit_id: p.id,
                         produit_nom: p.name,

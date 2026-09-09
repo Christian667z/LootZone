@@ -260,7 +260,7 @@ router.post('/pay-order', requireAuth, async (req, res) => {
     const amount = parseFloat(parseFloat(eur).toFixed(2));
 
     if (DEMO_MODE) {
-        return res.json({ success: true, order_id: 'AS-DEMO-WALLET', new_balance: 0 });
+        return res.json({ success: true, order_id: 'LZ-DEMO-WALLET', new_balance: 0 });
     }
 
     // Vérifier le solde du client
@@ -283,7 +283,7 @@ router.post('/pay-order', requireAuth, async (req, res) => {
     // Générer un ID de commande
     const year = new Date().getFullYear();
     const seq = String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0');
-    const orderId = `AS-${year}-${seq}W`;
+    const orderId = `LZ-${year}-${seq}W`;
 
     // Créer la commande
     const { error: orderErr } = await supabaseAdmin

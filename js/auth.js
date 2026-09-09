@@ -16,6 +16,7 @@ window.USER_ROLES = {
   vendeur: { label: 'Vendeur', icon: '🛒', color: '#f97316', bg: 'rgba(249,115,22,.25)' },
   helper: { label: 'Staff', icon: '🛡️', color: '#14b8a6', bg: 'rgba(20,184,166,.25)' },
   employe: { label: 'LootZone Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
+  admin: { label: 'Administrateur', icon: '⭐', color: '#7c3aed', bg: 'rgba(124,58,237,.25)' },
   administrateur: { label: 'LootZone Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
   manager: { label: 'LootZone Team', icon: '⭐', color: '#eab308', bg: 'rgba(234,179,8,.25)' },
   directeur: { label: 'Directeur', icon: '👑', color: '#f59e0b', bg: 'rgba(245,158,11,.18)' },
@@ -542,6 +543,19 @@ window.AstaAuth = {
       sb.auth.onAuthStateChange(async (event, session) => {
         if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') && session?.user) {
           const profile = await fetchProfile(session.user.id);
+          if (session.access_token && profile && profile.role && profile.role !== 'client') {
+            try {
+              localStorage.setItem('as_token', session.access_token);
+              localStorage.setItem('as_user', JSON.stringify({
+                id: profile.id,
+                email: session.user.email,
+                role: profile.role,
+                nom: profile.nom || '',
+                prenom: profile.prenom || '',
+                avatar: profile.avatar_url || null
+              }));
+            } catch (_) {}
+          }
           updateTopBar(session.user, profile);
           updateNavAccount(session.user, profile);
           updateHeaderAuthState(true, session.user, profile);
@@ -688,6 +702,10 @@ window.AstaAuth = {
   getVipLevel: window.getVipLevel,
   getNextVipLevel: window.getNextVipLevel
 };
+
+window.LootZoneAuth = window.AstaAuth;
+window.generateLootZoneUserCode = window.generateAstaUserCode;
+window.getLootZoneUserCode = window.getAstaUserCode;
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => window.AstaAuth.init());

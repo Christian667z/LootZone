@@ -27,7 +27,7 @@ export const supabaseAdmin = supabaseUrl && supabaseServiceKey
         },
         db: { schema: 'public' },
         global: {
-            headers: { 'x-application-name': 'asta-shops-backend' }
+            headers: { 'x-application-name': 'lootzone-backend' }
         }
     })
     : null;

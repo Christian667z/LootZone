@@ -18,15 +18,16 @@
         }
 
         :root {
-            --green: #22c55e;
-            --green-dark: #16a34a;
-            --dark: #0a0a0a;
-            --dark2: #111111;
-            --dark3: #1a1a1a;
-            --dark4: #222222;
-            --border: #2a2a2a;
-            --text: #f0f0f0;
-            --text-muted: #888;
+            --green: #7c3aed;
+            --green-dark: #6d28d9;
+            --cyan: #06b6d4;
+            --dark: #0d0b18;
+            --dark2: #13111c;
+            --dark3: #181524;
+            --dark4: #1f1b30;
+            --border: #2d264f;
+            --text: #ffffff;
+            --text-muted: #9ca3af;
             --red: #ef4444;
         }
 
@@ -38,8 +39,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-image: radial-gradient(ellipse at 20% 50%, rgba(34, 197, 94, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.04) 0%, transparent 50%);
+            background-image: radial-gradient(ellipse at 20% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
         }
 
         .login-wrapper {
@@ -59,12 +60,13 @@
             justify-content: center;
             width: 56px;
             height: 56px;
-            background: var(--green);
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
             border-radius: 14px;
             font-weight: 900;
             font-size: 20px;
-            color: #000;
+            color: #ffffff;
             margin-bottom: 14px;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
         }
 
         .logo-title {
@@ -75,7 +77,7 @@
         }
 
         .logo-title span {
-            color: var(--green);
+            color: var(--cyan);
         }
 
         .logo-sub {
@@ -307,8 +309,33 @@
         }
         checkDemo();
 
-        if (localStorage.getItem('as_token')) {
-            window.location.href = 'dashboard.html';
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('expired') === '1') {
+            const alertBox = document.getElementById('alertBox');
+            if (alertBox) {
+                alertBox.className = 'alert';
+                alertBox.style.display = 'block';
+                alertBox.style.background = 'rgba(239, 68, 68, 0.15)';
+                alertBox.style.border = '1px solid #ef4444';
+                alertBox.style.color = '#fca5a5';
+                alertBox.textContent = 'Votre session a expiré. Veuillez vous reconnecter.';
+            }
+        } else if (localStorage.getItem('as_token')) {
+            // Verify token before redirecting to avoid infinite loop
+            safeJsonFetch(API + '/api/auth/me', {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('as_token')}` }
+            }).then(({ res, data }) => {
+                if (res && res.ok && data?.user?.role && data.user.role !== 'client') {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    localStorage.removeItem('as_token');
+                    localStorage.removeItem('as_user');
+                    localStorage.removeItem('as_perms');
+                    localStorage.removeItem('as_level');
+                }
+            }).catch(() => {
+                // If network failure or backend starting up, do not redirect
+            });
         }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {

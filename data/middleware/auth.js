@@ -3,26 +3,29 @@ import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
 export const ROLES = {
     HELPER: 'helper',
     EMPLOYE: 'employe',
+    ADMIN: 'admin',
     ADMINISTRATEUR: 'administrateur',
     MANAGER: 'manager',
     DIRECTEUR: 'directeur'
 };
 
 export const ROLE_LEVEL = {
+    client: 0,
     helper: 1,
     employe: 2,
+    admin: 3,
     administrateur: 3,
     manager: 4,
     directeur: 5
 };
 
 export const SIDEBAR_PERMISSIONS = {
-    tableau_de_bord: ['directeur', 'manager'],
-    catalogue_produits: ['directeur', 'manager', 'administrateur'],
-    gestion_commandes: ['directeur', 'manager', 'administrateur', 'employe'],
-    hub_partenariats: ['directeur', 'manager'],
-    moderation_equipe: ['directeur', 'administrateur'],
-    configuration: ['directeur']
+    tableau_de_bord: ['directeur', 'manager', 'admin', 'administrateur'],
+    catalogue_produits: ['directeur', 'manager', 'admin', 'administrateur'],
+    gestion_commandes: ['directeur', 'manager', 'admin', 'administrateur', 'employe'],
+    hub_partenariats: ['directeur', 'manager', 'admin', 'administrateur'],
+    moderation_equipe: ['directeur', 'admin', 'administrateur'],
+    configuration: ['directeur', 'admin', 'administrateur']
 };
 
 // Format attendu : "Bearer <jwt>" ou juste "<jwt>"
@@ -42,7 +45,7 @@ export async function requireAuth(req, res, next) {
     if (DEMO_MODE) {
         req.user = {
             id: 'demo-user',
-            email: 'demo@asta-shops.com',
+            email: 'demo@lootzone.gg',
             role: 'directeur',
             nom: 'Démo',
             prenom: 'Directeur'
@@ -97,9 +100,13 @@ export async function requireAuth(req, res, next) {
  * Vérifie que l'utilisateur a exactement l'un des rôles listés.
  */
 export function requireRole(...roles) {
+    const expanded = new Set(roles);
+    if (expanded.has('administrateur')) expanded.add('admin');
+    if (expanded.has('admin')) expanded.add('administrateur');
+
     return (req, res, next) => {
         if (!req.user) return res.status(401).json({ error: 'Non authentifié' });
-        if (!roles.includes(req.user.role)) {
+        if (!expanded.has(req.user.role)) {
             return res.status(403).json({
                 error: `Accès refusé — rôle requis : ${roles.join(' ou ')}`
             });

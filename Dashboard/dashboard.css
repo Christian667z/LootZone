@@ -7,18 +7,18 @@
 }
 
 :root {
-    --green: #22c55e;
-    --green-dark: #16a34a;
-    --green-dim: rgba(34, 197, 94, 0.1);
-    --dark: #0a0a0a;
-    --dark2: #0f0f0f;
-    --dark3: #161616;
-    --dark4: #1e1e1e;
-    --dark5: #252525;
-    --border: #2a2a2a;
-    --border2: #333;
-    --text: #f0f0f0;
-    --text2: #bbb;
+    --green: #7c3aed;
+    --green-dark: #6d28d9;
+    --green-dim: rgba(124, 58, 237, 0.15);
+    --dark: #0d0b18;
+    --dark2: #13111c;
+    --dark3: #181524;
+    --dark4: #1f1b30;
+    --dark5: #25203b;
+    --border: #2d264f;
+    --border2: #3d3466;
+    --text: #ffffff;
+    --text2: #9ca3af;
     --text3: #888;
     --text4: #555;
     --red: #ef4444;
@@ -300,8 +300,8 @@ body {
 
 .btn-back-site:hover {
     background: rgba(0, 182, 122, .1);
-    border-color: #00b67a;
-    color: #00b67a;
+    border-color: #7c3aed;
+    color: #7c3aed;
 }
 
 .btn-logout {
@@ -1451,3 +1451,36 @@ select.filter-select:focus {
         margin: 0;
     }
 }
+
+/* ── UI/UX Transitions & Loading States ────────────────────────── */
+a, button, .nav-item, .btn-action, .btn-primary, .kpi-card, .table-row, .tab-btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.lz-skeleton {
+    background: linear-gradient(90deg, #13111c 25%, #1f1b30 50%, #13111c 75%);
+    background-size: 200% 100%;
+    animation: lz-skeleton-pulse 1.5s infinite ease-in-out;
+    border-radius: 6px;
+}
+
+@keyframes lz-skeleton-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border-top-color: #7c3aed;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+

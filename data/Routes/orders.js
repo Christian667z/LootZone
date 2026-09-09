@@ -13,7 +13,7 @@ const RISK_THRESHOLD_WINDOW_MS = 2 * 60 * 60 * 1000;
 function generateOrderId() {
     const year = new Date().getFullYear();
     const seq = String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0');
-    return `AS-${year}-${seq}`;
+    return `LZ-${year}-${seq}`;
 }
 
 let demoOrders = [];

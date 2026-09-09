@@ -56,4 +56,5 @@
         isWishlisted,
         updateBadge
     };
+    window.LootZoneWishlist = window.AstaWishlist;
 })();

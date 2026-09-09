@@ -50,16 +50,16 @@ function initUI() {
         const el = document.getElementById(`nav-${key}`);
         if (el) el.style.display = allowed ? '' : 'none';
     }
-    if (ROLE_LEVEL >= 5) {
+    if (ROLE_LEVEL >= 5 || u.role === 'directeur') {
         document.getElementById('nav-kpi').style.display = '';
         document.getElementById('nav-logs').style.display = '';
         document.getElementById('nav-wallet').style.display = '';
         document.getElementById('nav-ventes').style.display = '';
-    } else if (ROLE_LEVEL >= 4) {
+    } else if (ROLE_LEVEL >= 4 || u.role === 'manager') {
         document.getElementById('nav-logs').style.display = '';
         document.getElementById('nav-wallet').style.display = '';
         document.getElementById('nav-ventes').style.display = '';
-    } else if (ROLE_LEVEL >= 3) {
+    } else if (ROLE_LEVEL >= 3 || u.role === 'admin' || u.role === 'administrateur') {
         document.getElementById('nav-wallet').style.display = '';
         document.getElementById('nav-ventes').style.display = '';
     }
@@ -82,12 +82,12 @@ async function loadAll() {
         loadBlogCategories(),
         loadBlogArticles()
     ]);
-    if (ROLE_LEVEL >= 5) loadKPI();
+    if (ROLE_LEVEL >= 5 || USER?.role === 'directeur') loadKPI();
     checkDemoMode();
 }
 
 async function loadWalletBadge() {
-    if (ROLE_LEVEL < 3) return;
+    if (ROLE_LEVEL < 3 && USER?.role !== 'admin' && USER?.role !== 'administrateur') return;
     const data = await api('/api/wallet/all?statut=en_attente&limit=1');
     if (!data) return;
     const badge = document.getElementById('badgeWallet');
@@ -114,7 +114,14 @@ async function api(path, opts = {}) {
         console.error('[API] Erreur réseau :', path);
         return null;
     }
-    if (res.status === 401) { window.location.href = 'admin-login.html'; return null; }
+    if (res.status === 401) {
+        localStorage.removeItem('as_token');
+        localStorage.removeItem('as_user');
+        localStorage.removeItem('as_perms');
+        localStorage.removeItem('as_level');
+        window.location.href = 'admin-login.html?expired=1';
+        return null;
+    }
     try {
         const text = await res.text();
         return text ? JSON.parse(text) : null;
@@ -637,7 +644,7 @@ window.exportOrdersToPDF = function() {
     </head>
     <body>
         <div class="header">
-            <div class="logo">⚡ ASTA-SHOPS — Rapport Officiel</div>
+            <div class="logo">⚡ LOOTZONE — Rapport Officiel</div>
             <div class="date">${dateStr}</div>
         </div>
         <div class="stats-bar">

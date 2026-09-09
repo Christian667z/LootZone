@@ -209,4 +209,5 @@
         formatAmount,
         updatePagePrices
     };
+    window.LootZoneCurrency = window.AstaCurrency;
 })();

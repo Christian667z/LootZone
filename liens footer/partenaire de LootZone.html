@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devenir Partenaire — LootZone</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../main.css?v=2.0">
+    <style>
+        body {
+            background-color: #0d0b18;
+            color: #ffffff;
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .partner-hero {
+            background: radial-gradient(circle at 50% 20%, rgba(124, 58, 237, 0.18) 0%, #0d0b18 70%);
+            padding: 80px 20px;
+            text-align: center;
+            color: #fff;
+            border-bottom: 1px solid #2d264f;
+        }
+
+        .partner-hero h1 {
+            font-size: 2.6rem;
+            font-weight: 900;
+            margin-bottom: 14px;
+            color: #ffffff;
+        }
+
+        .partner-hero p {
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .partner-hero .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            color: #fff;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+        }
+
+        .partner-hero .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+        }
+
+        .partner-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 70px 20px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 70px;
+        }
+
+        .benefit-card {
+            background: #13111c;
+            border: 1px solid #2d264f;
+            border-radius: 16px;
+            padding: 32px 24px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-4px);
+            border-color: #7c3aed;
+        }
+
+        .benefit-icon {
+            font-size: 2.4rem;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .benefit-card p {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .partner-form-section {
+            background: #13111c;
+            border: 1px solid #2d264f;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .partner-form-section h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .partner-form-section p.sub {
+            color: #9ca3af;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-row {
+            margin-bottom: 20px;
+        }
+
+        .form-row label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 100%;
+            background: #181524;
+            border: 1px solid #2d264f;
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-row input:focus,
+        .form-row select:focus,
+        .form-row textarea:focus {
+            border-color: #7c3aed;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1rem;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+        }
+
+        .footer-mini {
+            background: #0d0b18;
+            border-top: 1px solid #2d264f;
+            padding: 30px 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.88rem;
+        }
+
+        .footer-mini a {
+            color: #06b6d4;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer-mini a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="../index.html" class="logo" aria-label="LootZone">
+            <img src="../LootZone_img-removebg-preview.png" alt="LootZone" class="logo-img">
+        </a>
+        <nav class="nav-container">
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-item-link">Accueil</a></li>
+                <li><a href="../catalog.html" class="nav-item-link">Catalogue</a></li>
+                <li><a href="../blog.html" class="nav-item-link">Blog</a></li>
+                <li><a href="../contact.html" class="nav-item-link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="partner-hero">
+        <h1>Devenez Partenaire LootZone</h1>
+        <p>Rejoignez le réseau leader de distribution de crédits de jeux et de cartes numériques. Développez votre activité avec notre infrastructure haute performance.</p>
+        <a href="#postuler" class="cta-btn">Déposer une candidature</a>
+    </div>
+
+    <div class="partner-content">
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <span class="benefit-icon">🚀</span>
+                <h3>API & Automatisation</h3>
+                <p>Intégrez notre API de distribution instantanée avec une disponibilité de 99.9% et un traitement automatisé en temps réel.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">💎</span>
+                <h3>Tarifs Grossiste Exclusifs</h3>
+                <p>Bénéficiez de remises volume substantielles sur l'ensemble de notre catalogue pour maximiser vos marges commerciales.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-icon">🛡️</span>
+                <h3>Support Dédié 24/7</h3>
+                <p>Un gestionnaire de compte dédié et une assistance prioritaire pour accompagner chaque étape de votre croissance.</p>
+            </div>
+        </div>
+
+        <div class="partner-form-section" id="postuler">
+            <h2>Formulaire de Partenariat</h2>
+            <p class="sub">Remplissez les informations ci-dessous, notre équipe vous répondra sous 24 heures.</p>
+            <form onsubmit="event.preventDefault(); alert('Merci pour votre demande ! Notre équipe commerciale vous contactera très rapidement.'); this.reset();">
+                <div class="form-row">
+                    <label>Nom ou Entreprise</label>
+                    <input type="text" required placeholder="Ex: Gaming Hub Studio">
+                </div>
+                <div class="form-row">
+                    <label>Email Professionnel</label>
+                    <input type="email" required placeholder="contact@votre-entreprise.com">
+                </div>
+                <div class="form-row">
+                    <label>Type d'activité</label>
+                    <select required>
+                        <option value="">Sélectionnez une option</option>
+                        <option value="revendeur">Revendeur / Boutique e-commerce</option>
+                        <option value="cybercafe">Gaming Lounge / Cybercafé</option>
+                        <option value="esport">Structure eSport / Organisation</option>
+                        <option value="autre">Autre structure commerciale</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label>Message & Volume prévisionnel</label>
+                    <textarea rows="4" required placeholder="Présentez brièvement vos besoins et votre volume estimé..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Envoyer ma demande</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer-mini">
+        <p>© 2026 LootZone Inc. Tous droits réservés.
+            <a href="Conditions d'utilisation.html">Conditions d'utilisation</a> ·
+            <a href="Mentions légales.html">Mentions légales</a> ·
+            <a href="../contact.html">Support</a>
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -201,7 +201,7 @@ app.use((err, req, res, next) => {
 // ─── DÉMARRAGE ────────────────────────────────────────────────────────────────
 app.listen(PORT, '0.0.0.0', async () => {
     console.log(`\n╔══════════════════════════════════════════════════╗`);
-    console.log(`║   🟢 ASTA-SHOPS Backend v2.1 — Port ${PORT}       ║`);
+    console.log(`║   🟢 LOOTZONE Backend v2.1 — Port ${PORT}         ║`);
     console.log(`║   Mode: ${process.env.SUPABASE_URL ? 'Production (Supabase)     ' : 'Démo (sans Supabase)     '}    ║`);
     console.log(`╚══════════════════════════════════════════════════╝\n`);
 
