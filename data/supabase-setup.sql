@@ -385,6 +385,144 @@ create policy "Utilisateur peut supprimer son avatar"
   );
 
 -- ═══════════════════════════════════════════════════════════════
+--  9. BLOG & ACTUALITÉS (STYLE LOOTBAR + DASHBOARD)
+-- ═══════════════════════════════════════════════════════════════
+
+create table if not exists blog_categories (
+  id          uuid        primary key default gen_random_uuid(),
+  name        text        not null unique,
+  slug        text        not null unique,
+  icon_url    text,
+  created_at  timestamptz default now()
+);
+
+alter table blog_categories enable row level security;
+
+drop policy if exists "Catégories de blog publiques en lecture" on blog_categories;
+create policy "Catégories de blog publiques en lecture"
+  on blog_categories for select
+  using (true);
+
+drop policy if exists "Staff peut insérer ou modifier blog_categories" on blog_categories;
+create policy "Staff peut insérer ou modifier blog_categories"
+  on blog_categories for all
+  using (
+    exists (
+      select 1 from profiles
+      where id = auth.uid()
+        and role in ('directeur','manager','administrateur','employe')
+    )
+    or auth.role() = 'service_role'
+  );
+
+create table if not exists blogs (
+  id          uuid        primary key default gen_random_uuid(),
+  title       text        not null,
+  slug        text        not null unique,
+  excerpt     text,
+  content     text        not null,
+  image_url   text,
+  category_id uuid        references blog_categories(id) on delete set null,
+  game_name   text,
+  is_featured boolean     default false,
+  is_partner  boolean     default false,
+  author_name text        default 'Équipe LootZone',
+  read_time   text        default '4 min',
+  views_count int         default 0,
+  created_at  timestamptz default now(),
+  updated_at  timestamptz default now()
+);
+
+create index if not exists idx_blogs_slug on blogs(slug);
+create index if not exists idx_blogs_game on blogs(game_name);
+create index if not exists idx_blogs_featured on blogs(is_featured);
+create index if not exists idx_blogs_partner on blogs(is_partner);
+create index if not exists idx_blogs_category on blogs(category_id);
+
+alter table blogs enable row level security;
+
+drop policy if exists "Articles de blog publics en lecture" on blogs;
+create policy "Articles de blog publics en lecture"
+  on blogs for select
+  using (true);
+
+drop policy if exists "Staff peut modifier les blogs" on blogs;
+create policy "Staff peut modifier les blogs"
+  on blogs for all
+  using (
+    exists (
+      select 1 from profiles
+      where id = auth.uid()
+        and role in ('directeur','manager','administrateur','employe')
+    )
+    or auth.role() = 'service_role'
+  );
+
+-- BUCKET DE STOCKAGE: blog-images (pour couvertures et médias du blog)
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'blog-images',
+  'blog-images',
+  true,
+  5242880,
+  array['image/jpeg','image/png','image/gif','image/webp','image/svg+xml']
+)
+on conflict (id) do update set
+  public = true,
+  file_size_limit = 5242880,
+  allowed_mime_types = array['image/jpeg','image/png','image/gif','image/webp','image/svg+xml'];
+
+drop policy if exists "Images de blog publiques en lecture" on storage.objects;
+create policy "Images de blog publiques en lecture"
+  on storage.objects for select
+  using (bucket_id = 'blog-images');
+
+drop policy if exists "Staff peut uploader images de blog" on storage.objects;
+create policy "Staff peut uploader images de blog"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'blog-images'
+    and (
+      auth.role() = 'service_role'
+      or exists (
+        select 1 from profiles
+        where id = auth.uid()
+          and role in ('directeur','manager','administrateur','employe')
+      )
+    )
+  );
+
+drop policy if exists "Staff peut modifier images de blog" on storage.objects;
+create policy "Staff peut modifier images de blog"
+  on storage.objects for update
+  using (
+    bucket_id = 'blog-images'
+    and (
+      auth.role() = 'service_role'
+      or exists (
+        select 1 from profiles
+        where id = auth.uid()
+          and role in ('directeur','manager','administrateur','employe')
+      )
+    )
+  );
+
+drop policy if exists "Staff peut supprimer images de blog" on storage.objects;
+create policy "Staff peut supprimer images de blog"
+  on storage.objects for delete
+  using (
+    bucket_id = 'blog-images'
+    and (
+      auth.role() = 'service_role'
+      or exists (
+        select 1 from profiles
+        where id = auth.uid()
+          and role in ('directeur','manager','administrateur','employe')
+      )
+    )
+  );
+
+-- ═══════════════════════════════════════════════════════════════
 --  9. RESET WALLET — Remettre le solde à 0 pour tous les profils
 --     (uniquement si c'est un solde de test/factice)
 -- ═══════════════════════════════════════════════════════════════

@@ -78,7 +78,9 @@ async function loadAll() {
         loadStaff(),
         loadLogs(),
         loadStock(),
-        loadWalletBadge()
+        loadWalletBadge(),
+        loadBlogCategories(),
+        loadBlogArticles()
     ]);
     if (ROLE_LEVEL >= 5) loadKPI();
     checkDemoMode();
@@ -243,13 +245,15 @@ function switchSection(navEl) {
         'section-stock': 'Stock Numérique',
         'section-coupons': 'Codes Promo & Coupons',
         'section-wallet': 'Portefeuille Clients',
-        'section-ventes': 'Ventes Produits'
+        'section-ventes': 'Ventes Produits',
+        'section-blog': 'Gestion du Blog & Actualités'
     };
     document.getElementById('topbarTitle').textContent = titles[sectionId] || '';
     if (sectionId === 'section-wallet') loadWalletTx(currentWalletFilter);
     if (sectionId === 'section-ventes') loadProductSales();
     if (sectionId === 'section-coupons') loadCoupons();
     if (sectionId === 'section-config') initCurrencyRates();
+    if (sectionId === 'section-blog') { loadBlogArticles(); loadBlogCategories(); }
 }
 
 // ── PRESENCE
@@ -1524,3 +1528,422 @@ async function deleteCoupon(id) {
         showToast('red', '⚠️', 'Erreur suppression coupon', err.message);
     }
 }
+
+// ═══════════════════════════════════════════════════════════════
+//  GESTION DU BLOG & ACTUALITÉS (STYLE LOOTBAR + DASHBOARD)
+// ═══════════════════════════════════════════════════════════════
+
+let allBlogArticles = [];
+let allBlogCategories = [];
+
+async function loadBlogCategories() {
+    try {
+        const res = await api('/api/blogs/categories');
+        const cats = Array.isArray(res) ? res : (res?.categories || []);
+        if (cats && cats.length > 0) {
+            allBlogCategories = cats;
+            renderBlogCategoriesOptions();
+            renderBlogCategoriesTable();
+            const statEl = document.getElementById('statBlogCategories');
+            if (statEl) statEl.textContent = allBlogCategories.length;
+        }
+    } catch (err) {
+        console.error('[Blog] Erreur chargement catégories:', err);
+    }
+}
+
+function renderBlogCategoriesOptions() {
+    // Select in Article Modal Form
+    const selForm = document.getElementById('blogCategorySelect');
+    if (selForm) {
+        const currentVal = selForm.value;
+        selForm.innerHTML = '<option value="">Sélectionner une catégorie...</option>' +
+            allBlogCategories.map(c => `<option value="${c.id}">${c.icon_url ? c.icon_url + ' ' : ''}${escHtml(c.name)}</option>`).join('');
+        if (currentVal) selForm.value = currentVal;
+    }
+
+    // Select in Toolbar Filter
+    const selFilter = document.getElementById('blogFilterCategory');
+    if (selFilter) {
+        const currentVal = selFilter.value;
+        selFilter.innerHTML = '<option value="all">Toutes catégories</option>' +
+            allBlogCategories.map(c => `<option value="${c.id}">${escHtml(c.name)}</option>`).join('');
+        if (currentVal) selFilter.value = currentVal;
+    }
+}
+
+function renderBlogCategoriesTable() {
+    const tbody = document.getElementById('blogCategoriesListBody');
+    if (!tbody) return;
+    if (!allBlogCategories.length) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:12px;color:var(--text3)">Aucune catégorie</td></tr>';
+        return;
+    }
+    tbody.innerHTML = allBlogCategories.map(c => `
+        <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-size:16px">${escHtml(c.icon_url || '📄')}</td>
+            <td style="padding:8px 12px;font-weight:600">${escHtml(c.name)}</td>
+            <td style="padding:8px 12px;color:var(--text3);font-family:monospace;font-size:11px">${escHtml(c.slug)}</td>
+        </tr>
+    `).join('');
+}
+
+async function loadBlogArticles() {
+    const tbody = document.getElementById('blogArticlesBody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">Chargement des articles...</td></tr>';
+
+    try {
+        const res = await api('/api/blogs?limit=100');
+        if (res && res.articles) {
+            allBlogArticles = res.articles;
+
+            // Stats
+            const statTotal = document.getElementById('statBlogTotal');
+            const statFeatured = document.getElementById('statBlogFeatured');
+            const statPartner = document.getElementById('statBlogPartner');
+            const badge = document.getElementById('badgeBlog');
+
+            if (statTotal) statTotal.textContent = allBlogArticles.length;
+            if (statFeatured) statFeatured.textContent = allBlogArticles.filter(a => a.is_featured).length;
+            if (statPartner) statPartner.textContent = allBlogArticles.filter(a => a.is_partner).length;
+            if (badge) {
+                badge.textContent = allBlogArticles.length;
+                badge.style.display = allBlogArticles.length > 0 ? '' : 'none';
+            }
+
+            filterBlogList();
+        } else {
+            if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">Aucun article trouvé.</td></tr>';
+        }
+    } catch (err) {
+        console.error('[Blog] Erreur chargement articles:', err);
+        if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#ef4444">Erreur de connexion avec le serveur.</td></tr>';
+    }
+}
+
+function filterBlogList() {
+    const catVal = document.getElementById('blogFilterCategory')?.value || 'all';
+    const typeVal = document.getElementById('blogFilterType')?.value || 'all';
+    const query = (document.getElementById('blogSearchInput')?.value || '').toLowerCase().trim();
+
+    const filtered = allBlogArticles.filter(a => {
+        if (catVal !== 'all' && String(a.category_id) !== String(catVal)) return false;
+        if (typeVal === 'featured' && !a.is_featured) return false;
+        if (typeVal === 'partner' && !a.is_partner) return false;
+        if (query) {
+            const haystack = [a.title, a.excerpt, a.game_name, a.author_name, a.slug].join(' ').toLowerCase();
+            if (!haystack.includes(query)) return false;
+        }
+        return true;
+    });
+
+    renderBlogArticles(filtered);
+}
+
+function renderBlogArticles(articles) {
+    const tbody = document.getElementById('blogArticlesBody');
+    if (!tbody) return;
+
+    if (!articles || articles.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">Aucun article ne correspond aux filtres.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = articles.map(a => {
+        const cat = allBlogCategories.find(c => String(c.id) === String(a.category_id));
+        const catName = cat ? cat.name : (a.category_name || 'Général');
+        const imgUrl = a.image_url || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=80';
+        const formattedDate = a.created_at ? new Date(a.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+
+        let badges = [];
+        if (a.is_featured) {
+            badges.push('<span style="background:rgba(34,197,94,0.15);color:#22c55e;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap">⭐ En Vedette</span>');
+        }
+        if (a.is_partner) {
+            badges.push('<span style="background:rgba(59,130,246,0.15);color:#3b82f6;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap">🤝 Partenaire</span>');
+        }
+        if (!badges.length) {
+            badges.push('<span style="color:var(--text3);font-size:11px">Standard</span>');
+        }
+
+        return `
+            <tr>
+                <td>
+                    <img src="${escHtml(imgUrl)}" alt="" style="width:54px;height:40px;object-fit:cover;border-radius:6px;background:var(--dark4);display:block" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=80'">
+                </td>
+                <td style="max-width:240px">
+                    <div style="font-weight:700;color:var(--text);font-size:13px;line-height:1.3;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(a.title)}">
+                        ${escHtml(a.title)}
+                    </div>
+                    <div style="font-size:11px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                        ${escHtml(a.excerpt || a.slug)}
+                    </div>
+                </td>
+                <td>
+                    <div style="font-size:12px;font-weight:600;color:var(--text)">${escHtml(a.game_name || 'Général')}</div>
+                    <div style="font-size:11px;color:var(--text3)">${escHtml(catName)}</div>
+                </td>
+                <td>
+                    <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-start">
+                        ${badges.join('')}
+                    </div>
+                </td>
+                <td>
+                    <div style="font-size:12px">${escHtml(a.author_name || 'LootZone')}</div>
+                    <div style="font-size:10px;color:var(--text3)">⏱️ ${escHtml(a.read_time || '4 min')}</div>
+                </td>
+                <td style="font-size:12px;color:var(--text2)">
+                    👁️ ${a.views_count || 0}
+                </td>
+                <td style="font-size:11px;color:var(--text3);white-space:nowrap">
+                    ${formattedDate}
+                </td>
+                <td style="text-align:right;white-space:nowrap">
+                    <button class="btn btn-outline btn-sm" onclick="editBlogArticle('${a.id}')" title="Modifier l'article">✏️</button>
+                    <a href="../blog.html?article=${encodeURIComponent(a.slug || a.id)}" target="_blank" class="btn btn-outline btn-sm" title="Voir sur le site">🌐</a>
+                    <button class="btn btn-red btn-sm" onclick="deleteBlogArticle('${a.id}', '${escHtml(a.title).replace(/'/g, "\\'")}')" title="Supprimer">🗑️</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function autoGenerateBlogSlug(title) {
+    const slugInput = document.getElementById('blogSlug');
+    if (!slugInput) return;
+    // Only auto-generate if article id is empty (new article) or slug matches title
+    if (!document.getElementById('blogArticleId').value) {
+        const slug = title
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        slugInput.value = slug;
+    }
+}
+
+function updateBlogImagePreview(url) {
+    const previewWrap = document.getElementById('blogImagePreviewWrap');
+    const previewImg = document.getElementById('blogImagePreview');
+    if (!previewWrap || !previewImg) return;
+    if (url && url.trim().length > 0) {
+        previewImg.src = url;
+        previewWrap.style.display = 'block';
+    } else {
+        previewWrap.style.display = 'none';
+    }
+}
+
+async function uploadBlogImageFile(input) {
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const statusEl = document.getElementById('blogImageUploadStatus');
+    if (statusEl) statusEl.textContent = '⏳ Upload en cours vers Supabase Storage...';
+
+    const reader = new FileReader();
+    reader.onload = async function (e) {
+        const base64Data = e.target.result;
+        try {
+            const res = await api('/api/blogs/upload-image', {
+                method: 'POST',
+                body: JSON.stringify({
+                    fileData: base64Data,
+                    fileName: file.name
+                })
+            });
+
+            if (res && res.imageUrl) {
+                document.getElementById('blogImageUrl').value = res.imageUrl;
+                updateBlogImagePreview(res.imageUrl);
+                if (statusEl) {
+                    statusEl.style.color = 'var(--green)';
+                    statusEl.textContent = '✅ Image uploadée avec succès !';
+                }
+                showToast('green', '🖼️', 'Image uploadée avec succès !');
+            } else {
+                throw new Error(res?.error || "Erreur lors de l'upload");
+            }
+        } catch (err) {
+            console.error('[Blog] Erreur upload image:', err);
+            if (statusEl) {
+                statusEl.style.color = '#ef4444';
+                statusEl.textContent = '⚠️ ' + err.message;
+            }
+            showToast('red', '⚠️', 'Erreur upload image', err.message);
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function insertBlogTag(openTag, closeTag) {
+    const ta = document.getElementById('blogContent');
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const selected = ta.value.substring(start, end) || 'texte';
+    const replacement = `${openTag}${selected}${closeTag}`;
+    ta.value = ta.value.substring(0, start) + replacement + ta.value.substring(end);
+    ta.focus();
+    ta.selectionStart = start + openTag.length;
+    ta.selectionEnd = start + openTag.length + selected.length;
+}
+
+function openBlogArticleModal() {
+    document.getElementById('blogModalTitle').textContent = '📰 Nouvel Article de Blog';
+    document.getElementById('blogArticleId').value = '';
+    document.getElementById('blogTitle').value = '';
+    document.getElementById('blogSlug').value = '';
+    document.getElementById('blogCategorySelect').value = allBlogCategories[0]?.id || '';
+    document.getElementById('blogGameName').value = 'Free Fire';
+    document.getElementById('blogAuthorName').value = 'Équipe LootZone';
+    document.getElementById('blogReadTime').value = '4 min';
+    document.getElementById('blogImageUrl').value = '';
+    document.getElementById('blogExcerpt').value = '';
+    document.getElementById('blogContent').value = '';
+    document.getElementById('blogIsFeatured').checked = false;
+    document.getElementById('blogIsPartner').checked = false;
+    document.getElementById('blogImageUploadStatus').textContent = '';
+    updateBlogImagePreview('');
+
+    document.getElementById('modalBlogArticle').classList.add('active');
+}
+
+function editBlogArticle(id) {
+    const a = allBlogArticles.find(x => String(x.id) === String(id));
+    if (!a) return;
+
+    document.getElementById('blogModalTitle').textContent = `✏️ Modifier : ${a.title}`;
+    document.getElementById('blogArticleId').value = a.id;
+    document.getElementById('blogTitle').value = a.title || '';
+    document.getElementById('blogSlug').value = a.slug || '';
+    document.getElementById('blogCategorySelect').value = a.category_id || '';
+    document.getElementById('blogGameName').value = a.game_name || '';
+    document.getElementById('blogAuthorName').value = a.author_name || 'Équipe LootZone';
+    document.getElementById('blogReadTime').value = a.read_time || '4 min';
+    document.getElementById('blogImageUrl').value = a.image_url || '';
+    document.getElementById('blogExcerpt').value = a.excerpt || '';
+    document.getElementById('blogContent').value = a.content || '';
+    document.getElementById('blogIsFeatured').checked = !!a.is_featured;
+    document.getElementById('blogIsPartner').checked = !!a.is_partner;
+    document.getElementById('blogImageUploadStatus').textContent = '';
+    updateBlogImagePreview(a.image_url);
+
+    document.getElementById('modalBlogArticle').classList.add('active');
+}
+
+function closeBlogArticleModal() {
+    document.getElementById('modalBlogArticle').classList.remove('active');
+}
+
+async function saveBlogArticle(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSaveBlogArticle');
+    btn.disabled = true;
+    btn.textContent = 'Enregistrement...';
+
+    const id = document.getElementById('blogArticleId').value;
+    const title = document.getElementById('blogTitle').value.trim();
+    const slug = document.getElementById('blogSlug').value.trim() || title.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const category_id = document.getElementById('blogCategorySelect').value || null;
+    const game_name = document.getElementById('blogGameName').value.trim() || null;
+    const author_name = document.getElementById('blogAuthorName').value.trim() || 'Équipe LootZone';
+    const read_time = document.getElementById('blogReadTime').value.trim() || '4 min';
+    const image_url = document.getElementById('blogImageUrl').value.trim() || null;
+    const excerpt = document.getElementById('blogExcerpt').value.trim() || null;
+    const content = document.getElementById('blogContent').value.trim();
+    const is_featured = document.getElementById('blogIsFeatured').checked;
+    const is_partner = document.getElementById('blogIsPartner').checked;
+
+    const payload = {
+        title,
+        slug,
+        category_id,
+        game_name,
+        author_name,
+        read_time,
+        image_url,
+        excerpt,
+        content,
+        is_featured,
+        is_partner
+    };
+
+    try {
+        let res;
+        if (id) {
+            res = await api(`/api/blogs/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+        } else {
+            res = await api('/api/blogs', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+        }
+
+        if (res && res.article) {
+            showToast('green', '📰', id ? 'Article mis à jour !' : 'Article publié avec succès !');
+            closeBlogArticleModal();
+            await loadBlogArticles();
+        } else {
+            throw new Error(res?.error || 'Erreur inconnue');
+        }
+    } catch (err) {
+        showToast('red', '⚠️', 'Erreur enregistrement article', err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Enregistrer l\'article';
+    }
+}
+
+async function deleteBlogArticle(id, title) {
+    if (!confirm(`Voulez-vous vraiment supprimer l'article "${title}" ? Cette action est irréversible.`)) return;
+
+    try {
+        const res = await api(`/api/blogs/${id}`, { method: 'DELETE' });
+        if (res && res.success) {
+            showToast('green', '🗑️', 'Article supprimé');
+            await loadBlogArticles();
+        } else {
+            throw new Error(res?.error || 'Erreur lors de la suppression');
+        }
+    } catch (err) {
+        showToast('red', '⚠️', 'Erreur suppression', err.message);
+    }
+}
+
+function openBlogCategoriesModal() {
+    renderBlogCategoriesTable();
+    document.getElementById('modalBlogCategories').classList.add('active');
+}
+
+function closeBlogCategoriesModal() {
+    document.getElementById('modalBlogCategories').classList.remove('active');
+}
+
+async function saveBlogCategory(e) {
+    e.preventDefault();
+    const name = document.getElementById('newCatName').value.trim();
+    const slug = document.getElementById('newCatSlug').value.trim();
+    const icon_url = document.getElementById('newCatIcon').value.trim();
+
+    try {
+        const res = await api('/api/blogs/categories', {
+            method: 'POST',
+            body: JSON.stringify({ name, slug, icon_url })
+        });
+
+        if (res && res.category) {
+            showToast('green', '🏷️', `Catégorie "${name}" créée avec succès !`);
+            document.getElementById('blogCategoryForm').reset();
+            await loadBlogCategories();
+        } else {
+            throw new Error(res?.error || 'Erreur inconnue');
+        }
+    } catch (err) {
+        showToast('red', '⚠️', 'Erreur création catégorie', err.message);
+    }
+}
+

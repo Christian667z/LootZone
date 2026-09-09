@@ -18,6 +18,7 @@ import stockRoutes from './Routes/stock.js';
 import invoicesRoutes from './Routes/invoices.js';
 import walletRoutes from './Routes/wallet.js';
 import couponsRoutes from './Routes/coupons.js';
+import blogsRoutes from './Routes/blogs.js';
 import { startRealtime, registerSSEClient, registerClientSSE } from './Routes/realtime.js';
 import { checkSupabaseConnection } from './supabase.js';
 
@@ -120,6 +121,7 @@ app.use('/api/stock', stockRoutes);
 app.use('/api/invoices', invoicesRoutes);
 app.use('/api/wallet', walletRoutes);
 app.use('/api/coupons', couponsRoutes);
+app.use('/api/blogs', blogsRoutes);
 
 // ─── SSE CLIENT PUBLIC (notifications commande) ───────────────────────────────
 app.get('/api/events/client', async (req, res) => {

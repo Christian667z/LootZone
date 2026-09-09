@@ -80,6 +80,10 @@
                 <div class="nav-item" id="nav-coupons" data-section="section-coupons" onclick="switchSection(this)">
                     <span class="nav-icon">🎟️</span><span>Codes Promo & Coupons</span>
                 </div>
+                <div class="nav-item" id="nav-blog" data-section="section-blog" onclick="switchSection(this)">
+                    <span class="nav-icon">📰</span><span>Blog & Actualités</span>
+                    <span class="nav-badge green" id="badgeBlog" style="display:none">0</span>
+                </div>
                 <div class="nav-item" id="nav-wallet" data-section="section-wallet" onclick="switchSection(this)"
                     style="display:none">
                     <span class="nav-icon">💰</span><span>Portefeuille</span>
@@ -675,6 +679,85 @@
                     </div>
                 </div>
 
+                <!-- ━━━━━━━━━━━━━━ SECTION: BLOG & ACTUALITÉS ━━━━━━━━━━━━━━ -->
+                <div class="section" id="section-blog">
+                    <div class="section-header">
+                        <h2 class="section-title">📰 Gestion du Blog LootZone</h2>
+                        <p class="section-sub">Créez, publiez et modifiez les articles, guides de jeux, sélections rédaction et contenus partenaires</p>
+                    </div>
+
+                    <div class="stats-grid" style="margin-bottom:20px">
+                        <div class="stat-card">
+                            <div class="stat-icon">📰</div>
+                            <div class="stat-label">Total Articles</div>
+                            <div class="stat-value" id="statBlogTotal">0</div>
+                            <div class="stat-sub">Articles enregistrés</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-label">Sélection Rédaction</div>
+                            <div class="stat-value green" id="statBlogFeatured">0</div>
+                            <div class="stat-sub">Mis en avant (Featured)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🤝</div>
+                            <div class="stat-label">Partenaires & Créateurs</div>
+                            <div class="stat-value blue" id="statBlogPartner">0</div>
+                            <div class="stat-sub">Contenus sponsorisés / Streamers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📁</div>
+                            <div class="stat-label">Catégories</div>
+                            <div class="stat-value" id="statBlogCategories">0</div>
+                            <div class="stat-sub">Thématiques disponibles</div>
+                        </div>
+                    </div>
+
+                    <div class="toolbar" style="margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                            <button class="btn btn-green" onclick="openBlogArticleModal()">+ Nouvel Article</button>
+                            <button class="btn btn-outline" onclick="openBlogCategoriesModal()">🏷️ Gérer les Catégories</button>
+                            <a href="../blog.html" target="_blank" class="btn btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">
+                                🌐 Voir la page Blog
+                            </a>
+                        </div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                            <select id="blogFilterCategory" class="form-control" style="width:170px;padding:8px 12px;background:var(--dark3);border:1px solid var(--border);color:var(--text);border-radius:8px" onchange="filterBlogList()">
+                                <option value="all">Toutes catégories</option>
+                            </select>
+                            <select id="blogFilterType" class="form-control" style="width:160px;padding:8px 12px;background:var(--dark3);border:1px solid var(--border);color:var(--text);border-radius:8px" onchange="filterBlogList()">
+                                <option value="all">Tous types</option>
+                                <option value="featured">⭐ Sélection Rédaction</option>
+                                <option value="partner">🤝 Partenaires / Créateurs</option>
+                            </select>
+                            <input type="text" id="blogSearchInput" placeholder="Rechercher titre, jeu..." style="padding:8px 14px;background:var(--dark3);border:1px solid var(--border);color:var(--text);border-radius:8px;outline:none;font-size:13px;width:200px" oninput="filterBlogList()">
+                            <button class="btn btn-outline" onclick="loadBlogArticles()">🔄 Rafraîchir</button>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:70px">Couverture</th>
+                                    <th>Titre & Extrait</th>
+                                    <th>Jeu & Catégorie</th>
+                                    <th>Badges</th>
+                                    <th>Auteur</th>
+                                    <th>Vues</th>
+                                    <th>Date</th>
+                                    <th style="text-align:right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="blogArticlesBody">
+                                <tr>
+                                    <td colspan="8" style="text-align:center;padding:30px;color:var(--text3)">Chargement des articles...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <!-- ━━━━━━━━━━━━━━ SECTION: VENTES PRODUITS ━━━━━━━━━━━━━━ -->
                 <div class="section" id="section-ventes">
                     <div class="section-header">
@@ -1101,6 +1184,161 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+
+                <!-- MODAL: ARTICLE DE BLOG -->
+                <div class="modal-overlay" id="modalBlogArticle" onclick="if(event.target===this)closeBlogArticleModal()">
+                    <div class="modal-box" style="max-width:760px;max-height:90vh;overflow-y:auto">
+                        <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                            <h3 class="modal-title" id="blogModalTitle" style="margin:0">📰 Nouvel Article de Blog</h3>
+                            <button class="modal-close" onclick="closeBlogArticleModal()" style="background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer">×</button>
+                        </div>
+                        <form id="blogArticleForm" onsubmit="saveBlogArticle(event)">
+                            <input type="hidden" id="blogArticleId" value="">
+
+                            <div class="form-group" style="margin-bottom:14px">
+                                <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Titre de l'article *</label>
+                                <input type="text" id="blogTitle" class="form-control" placeholder="Ex: Top 5 Astuces pour Free Fire en 2026" required oninput="autoGenerateBlogSlug(this.value)">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:14px">
+                                <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Slug URL (auto-généré ou personnalisé)</label>
+                                <input type="text" id="blogSlug" class="form-control" placeholder="top-5-astuces-free-fire-2026">
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+                                <div class="form-group">
+                                    <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Catégorie *</label>
+                                    <select id="blogCategorySelect" class="form-control" required>
+                                        <option value="">Sélectionner une catégorie...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Jeu associé (Hub)</label>
+                                    <input type="text" id="blogGameName" class="form-control" list="gamesDatalist" placeholder="Ex: Free Fire, FC 26, Genshin...">
+                                    <datalist id="gamesDatalist">
+                                        <option value="Free Fire">
+                                        <option value="FC 26">
+                                        <option value="PUBG Mobile">
+                                        <option value="Roblox">
+                                        <option value="Genshin Impact">
+                                        <option value="Call of Duty Mobile">
+                                        <option value="Mobile Legends">
+                                    </datalist>
+                                </div>
+                            </div>
+
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+                                <div class="form-group">
+                                    <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Auteur</label>
+                                    <input type="text" id="blogAuthorName" class="form-control" placeholder="Ex: Rédaction LootZone" value="Équipe LootZone">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Temps de lecture</label>
+                                    <input type="text" id="blogReadTime" class="form-control" placeholder="Ex: 4 min" value="4 min">
+                                </div>
+                            </div>
+
+                            <!-- Couverture et Upload Supabase Storage -->
+                            <div class="form-group" style="margin-bottom:14px;background:var(--dark4);padding:14px;border-radius:10px;border:1px solid var(--border)">
+                                <label class="form-label" style="display:block;font-size:12px;color:var(--text);margin-bottom:6px;font-weight:600">🖼️ Image de couverture (Supabase Storage / URL)</label>
+                                <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+                                    <input type="text" id="blogImageUrl" class="form-control" placeholder="https://... ou téléchargez ci-contre" style="flex:1" oninput="updateBlogImagePreview(this.value)">
+                                    <label class="btn btn-outline" style="cursor:pointer;white-space:nowrap;margin:0">
+                                        📁 Uploader image
+                                        <input type="file" id="blogImageFileInput" accept="image/*" style="display:none" onchange="uploadBlogImageFile(this)">
+                                    </label>
+                                </div>
+                                <div id="blogImageUploadStatus" style="font-size:12px;color:var(--text3);margin-bottom:6px"></div>
+                                <div id="blogImagePreviewWrap" style="display:none;width:100%;height:140px;border-radius:8px;overflow:hidden;background:#000">
+                                    <img id="blogImagePreview" src="" alt="Aperçu" style="width:100%;height:100%;object-fit:cover">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:14px">
+                                <label class="form-label" style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:600">Résumé court / Extrait</label>
+                                <textarea id="blogExcerpt" class="form-control" rows="2" placeholder="Accroche courte apparaissant sur les cartes du blog..."></textarea>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom:14px">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                                    <label class="form-label" style="font-size:12px;color:var(--text2);font-weight:600;margin:0">Contenu de l'article (Supporte HTML/Titres/Listes) *</label>
+                                    <div style="display:flex;gap:6px">
+                                        <button type="button" class="btn btn-outline btn-sm" style="font-size:11px;padding:2px 6px" onclick="insertBlogTag('<h3>', '</h3>')">H3</button>
+                                        <button type="button" class="btn btn-outline btn-sm" style="font-size:11px;padding:2px 6px" onclick="insertBlogTag('<strong>', '</strong>')">Gras</button>
+                                        <button type="button" class="btn btn-outline btn-sm" style="font-size:11px;padding:2px 6px" onclick="insertBlogTag('<p>', '</p>')">Paragraphe</button>
+                                        <button type="button" class="btn btn-outline btn-sm" style="font-size:11px;padding:2px 6px" onclick="insertBlogTag('<blockquote>', '</blockquote>')">Citation</button>
+                                    </div>
+                                </div>
+                                <textarea id="blogContent" class="form-control" rows="10" placeholder="Rédigez ici le contenu de l'article..." required style="font-family:inherit;line-height:1.5"></textarea>
+                            </div>
+
+                            <div style="display:flex;gap:20px;margin-bottom:20px;background:var(--dark3);padding:12px 16px;border-radius:10px;border:1px solid var(--border)">
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;user-select:none">
+                                    <input type="checkbox" id="blogIsFeatured" style="width:16px;height:16px;accent-color:var(--green)">
+                                    <span>⭐ <strong>Sélection de la rédaction</strong> (Section Featured en haut)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;user-select:none">
+                                    <input type="checkbox" id="blogIsPartner" style="width:16px;height:16px;accent-color:#3b82f6">
+                                    <span>🤝 <strong>Contenu Partenaire / Créateurs</strong> (Section Partenaires)</span>
+                                </label>
+                            </div>
+
+                            <div style="display:flex;justify-content:flex-end;gap:10px">
+                                <button type="button" class="btn btn-outline" onclick="closeBlogArticleModal()">Annuler</button>
+                                <button type="submit" class="btn btn-green" id="btnSaveBlogArticle">💾 Enregistrer l'article</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- MODAL: GESTION DES CATÉGORIES DE BLOG -->
+                <div class="modal-overlay" id="modalBlogCategories" onclick="if(event.target===this)closeBlogCategoriesModal()">
+                    <div class="modal-box" style="max-width:560px">
+                        <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                            <h3 class="modal-title" style="margin:0">🏷️ Catégories de Blog</h3>
+                            <button class="modal-close" onclick="closeBlogCategoriesModal()" style="background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer">×</button>
+                        </div>
+                        
+                        <!-- Liste des catégories existantes -->
+                        <div style="margin-bottom:20px;max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:8px">
+                            <table style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Icône</th>
+                                        <th>Nom</th>
+                                        <th>Slug</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blogCategoriesListBody">
+                                    <tr><td colspan="3" style="text-align:center;padding:15px;color:var(--text3)">Chargement...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Formulaire ajout catégorie -->
+                        <form id="blogCategoryForm" onsubmit="saveBlogCategory(event)" style="background:var(--dark4);padding:14px;border-radius:10px;border:1px solid var(--border)">
+                            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">➕ Ajouter une nouvelle catégorie</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+                                <div>
+                                    <label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px">Nom *</label>
+                                    <input type="text" id="newCatName" class="form-control" placeholder="Ex: Guides de Jeux" required oninput="document.getElementById('newCatSlug').value=this.value.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px">Slug</label>
+                                    <input type="text" id="newCatSlug" class="form-control" placeholder="guides-de-jeux">
+                                </div>
+                            </div>
+                            <div style="margin-bottom:12px">
+                                <label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px">Icône / Emoji (ex: 🎮, ⚡, 🎁 ou URL d'icône)</label>
+                                <input type="text" id="newCatIcon" class="form-control" placeholder="🎮 ou https://...">
+                            </div>
+                            <div style="display:flex;justify-content:flex-end;gap:10px">
+                                <button type="button" class="btn btn-outline" onclick="closeBlogCategoriesModal()">Fermer</button>
+                                <button type="submit" class="btn btn-green">Ajouter Catégorie</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
