@@ -168,81 +168,252 @@
         </button>
     </header>
 
-    <main class="hero-section">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-tag">
-                    <span class="tag-pulse"></span>
-                    Recharge 100% Instantanée &amp; Prix Réduits
+    <main class="lootbar-hero-section" id="lootzoneHero">
+        <!-- 3D Coverflow Banner Carousel -->
+        <div class="hero-coverflow-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="Offres et Recharges en Vedette">
+            
+            <!-- Flèches de navigation circulaires épurées -->
+            <button type="button" class="carousel-arrow carousel-arrow-prev" aria-label="Slide précédent" title="Précédent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button type="button" class="carousel-arrow carousel-arrow-next" aria-label="Slide suivant" title="Suivant">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+
+            <!-- Stage 3D des slides -->
+            <div class="carousel-stage">
+                
+                <!-- Slide 1 : Rising from the Moonlit Fog (Anime RPG Gaming) -->
+                <div class="carousel-slide is-active" data-index="0">
+                    <div class="slide-cyber-hud">
+                        <span class="hud-corner hud-tl"></span>
+                        <span class="hud-corner hud-tr"></span>
+                        <span class="hud-corner hud-bl"></span>
+                        <span class="hud-corner hud-br"></span>
+                        <div class="hud-edge-top">
+                            <span class="hud-code">NEVERNESS // EVENT 2026</span>
+                            <span class="hud-hashes">/// /// ///</span>
+                        </div>
+                    </div>
+                    <img src="img/banner_moonlit_fog.jpg" alt="Rising from the Moonlit Fog" class="slide-bg-img" loading="eager">
+                    <div class="slide-vignette-mask"></div>
+
+                    <!-- Layout en 3 colonnes : Personnage Gauche | Contenu Central | Personnage Droite -->
+                    <div class="slide-gaming-grid">
+                        <div class="gaming-char-left" aria-hidden="true">
+                            <div class="char-light-glow cyan-glow"></div>
+                        </div>
+
+                        <div class="gaming-center-block">
+                            <h2 class="slide-title-italic">
+                                <span class="title-row-1">Rising from</span>
+                                <span class="title-row-2">the Moonlit Fog</span>
+                            </h2>
+                            <div class="slide-discount-badge">
+                                <span class="badge-upto">UP TO</span>
+                                <span class="badge-huge-percent">24%</span>
+                                <span class="badge-off">OFF</span>
+                            </div>
+                            <a href="catalog.html?cat=jeux" class="slide-cta-pill">
+                                <span>TOP UP NOW</span>
+                                <span class="cta-arrows">&raquo;</span>
+                            </a>
+                        </div>
+
+                        <div class="gaming-char-right" aria-hidden="true">
+                            <div class="char-light-glow magenta-glow"></div>
+                        </div>
+                    </div>
                 </div>
-                <h1 class="hero-title">Obtenez vos Cartes et<br>Crédits en Quelques Clics !</h1>
-                <p class="hero-subtitle">
-                    Achetez vos produits numériques préférés, comme des cartes Apple, des crédits Free Fire, et des UC
-                    PUBG, en toute simplicité. Rapide, sécurisé, et instantané.
-                </p>
-                <div class="hero-buttons-wrap">
-                    <a href="#shop-products" class="btn-main">Explorer les Produits &darr;</a>
-                    <a href="catalog.html?cat=jeux" class="btn-secondary-electric">Recharger un Jeu &rarr;</a>
+
+                <!-- Slide 2 : Battle Royale Mega Pass (Free Fire & PUBG) -->
+                <div class="carousel-slide is-next" data-index="1">
+                    <div class="slide-cyber-hud">
+                        <span class="hud-corner hud-tl"></span>
+                        <span class="hud-corner hud-tr"></span>
+                        <span class="hud-corner hud-bl"></span>
+                        <span class="hud-corner hud-br"></span>
+                    </div>
+                    <img src="img/banner_battle_royale.jpg" alt="Battle Royale Mega Pass" class="slide-bg-img" loading="lazy">
+                    <div class="slide-vignette-mask"></div>
+                    <div class="slide-gaming-grid">
+                        <div class="gaming-char-left" aria-hidden="true"></div>
+                        <div class="gaming-center-block">
+                            <h2 class="slide-title-italic">
+                                <span class="title-row-1">Battle Royale</span>
+                                <span class="title-row-2">Mega Pass 2026</span>
+                            </h2>
+                            <div class="slide-discount-badge">
+                                <span class="badge-upto">BONUS</span>
+                                <span class="badge-huge-percent">+20%</span>
+                                <span class="badge-off">DIAMANTS</span>
+                            </div>
+                            <a href="topup.html?id=2" class="slide-cta-pill">
+                                <span>RECHARGER</span>
+                                <span class="cta-arrows">&raquo;</span>
+                            </a>
+                        </div>
+                        <div class="gaming-char-right" aria-hidden="true"></div>
+                    </div>
                 </div>
+
+                <!-- Slide 3 : EA Sports FC 26 & eFootball -->
+                <div class="carousel-slide is-far-next" data-index="2">
+                    <div class="slide-cyber-hud">
+                        <span class="hud-corner hud-tl"></span>
+                        <span class="hud-corner hud-tr"></span>
+                        <span class="hud-corner hud-bl"></span>
+                        <span class="hud-corner hud-br"></span>
+                    </div>
+                    <img src="img/banner_ea_sports.jpg" alt="EA Sports FC 26 & eFootball" class="slide-bg-img" loading="lazy">
+                    <div class="slide-vignette-mask"></div>
+                    <div class="slide-gaming-grid">
+                        <div class="gaming-char-left" aria-hidden="true"></div>
+                        <div class="gaming-center-block">
+                            <h2 class="slide-title-italic">
+                                <span class="title-row-1">EA Sports FC 26</span>
+                                <span class="title-row-2">Ultimate Coins</span>
+                            </h2>
+                            <div class="slide-discount-badge">
+                                <span class="badge-upto">PACK MOIS</span>
+                                <span class="badge-huge-percent">-15%</span>
+                                <span class="badge-off">RÉDUC</span>
+                            </div>
+                            <a href="topup.html?id=21" class="slide-cta-pill">
+                                <span>BOOSTER L'ÉQUIPE</span>
+                                <span class="cta-arrows">&raquo;</span>
+                            </a>
+                        </div>
+                        <div class="gaming-char-right" aria-hidden="true"></div>
+                    </div>
+                </div>
+
+                <!-- Slide 4 : Cartes Cadeaux (Apple, Steam, PSN, Xbox) -->
+                <div class="carousel-slide is-hidden" data-index="3">
+                    <div class="slide-cyber-hud">
+                        <span class="hud-corner hud-tl"></span>
+                        <span class="hud-corner hud-tr"></span>
+                        <span class="hud-corner hud-bl"></span>
+                        <span class="hud-corner hud-br"></span>
+                    </div>
+                    <img src="img/banner_gift_cards.jpg" alt="Cartes Cadeaux Officielles" class="slide-bg-img" loading="lazy">
+                    <div class="slide-vignette-mask"></div>
+                    <div class="slide-gaming-grid">
+                        <div class="gaming-char-left" aria-hidden="true"></div>
+                        <div class="gaming-center-block">
+                            <h2 class="slide-title-italic">
+                                <span class="title-row-1">Cartes Cadeaux</span>
+                                <span class="title-row-2">100% Officielles</span>
+                            </h2>
+                            <div class="slide-discount-badge">
+                                <span class="badge-upto">ÉPARGNEZ</span>
+                                <span class="badge-huge-percent">-12%</span>
+                                <span class="badge-off">APPLE / STEAM</span>
+                            </div>
+                            <a href="catalog.html?cat=cartes" class="slide-cta-pill">
+                                <span>COMMANDER</span>
+                                <span class="cta-arrows">&raquo;</span>
+                            </a>
+                        </div>
+                        <div class="gaming-char-right" aria-hidden="true"></div>
+                    </div>
+                </div>
+
+                <!-- Slide 5 : Next-Gen Clés de Jeux (Crimson Desert, Forza 6) -->
+                <div class="carousel-slide is-prev" data-index="4">
+                    <div class="slide-cyber-hud">
+                        <span class="hud-corner hud-tl"></span>
+                        <span class="hud-corner hud-tr"></span>
+                        <span class="hud-corner hud-bl"></span>
+                        <span class="hud-corner hud-br"></span>
+                    </div>
+                    <img src="img/banner_nextgen_keys.jpg" alt="Clés de Jeux Next-Gen" class="slide-bg-img" loading="lazy">
+                    <div class="slide-vignette-mask"></div>
+                    <div class="slide-gaming-grid">
+                        <div class="gaming-char-left" aria-hidden="true"></div>
+                        <div class="gaming-center-block">
+                            <h2 class="slide-title-italic">
+                                <span class="title-row-1">Clés PC &amp; Consoles</span>
+                                <span class="title-row-2">Sorties Exclusives</span>
+                            </h2>
+                            <div class="slide-discount-badge">
+                                <span class="badge-upto">OFFRE HOT</span>
+                                <span class="badge-huge-percent">-30%</span>
+                                <span class="badge-off">CRIMSON DESERT</span>
+                            </div>
+                            <a href="catalog.html?cat=game-cd-key" class="slide-cta-pill">
+                                <span>DÉCOUVRIR LES CLÉS</span>
+                                <span class="cta-arrows">&raquo;</span>
+                            </a>
+                        </div>
+                        <div class="gaming-char-right" aria-hidden="true"></div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="hero-images">
-                <div class="hero-single-image">
-                    <img src="img/payment_banner.png" alt="Paiement Natcash Moncash">
-                </div>
-            </div>
+            <!-- Indicateurs sous forme de barres de progression animées -->
+            <div class="carousel-dots" aria-label="Pagination carrousel"></div>
+        </div>
+
+        <!-- Barre de Navigation Rapide épurée (Style LootBar) sur une seule ligne -->
+        <div class="quick-nav-bar" id="quickNavBar" role="navigation" aria-label="Catégories rapides LootZone">
+            <!-- 1. [Icône Orange] Recharge de jeu -->
+            <a href="#grid-jeux" class="quick-nav-item" data-target="#grid-jeux">
+                <span class="quick-nav-icon icon-bg-orange">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </span>
+                <span class="quick-nav-label">Recharge de jeu</span>
+            </a>
+
+            <!-- 2. [Icône Jaune] Pièces de jeu -->
+            <a href="#grid-jeux" class="quick-nav-item" data-target="#grid-jeux">
+                <span class="quick-nav-icon icon-bg-yellow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+                    </svg>
+                </span>
+                <span class="quick-nav-label">Pièces de jeu</span>
+            </a>
+
+            <!-- 3. [Icône Rose] Carte Cadeau -->
+            <a href="#grid-cartes" class="quick-nav-item" data-target="#grid-cartes">
+                <span class="quick-nav-icon icon-bg-pink">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.5 2.5 0 0 0-5 0c0 .35.07.69.18 1H11a2.5 2.5 0 0 0-5 0c0 .35.07.69.18 1H4a2 2 0 0 0-2 2v2a1 1 0 0 0 1 1h1v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8h1a1 1 0 0 0 1-1V8a2 2 0 0 0-2-2zM9 5a1 1 0 0 1 2 0c0 .4-.2.8-.5 1H8.5c-.3-.2-.5-.6-.5-1a1 1 0 0 1 1-1zm6 0a1 1 0 0 1 2 0c0 .4-.2.8-.5 1h-2c-.3-.2-.5-.6-.5-1a1 1 0 0 1 1-1zM4 8h7v2H4V8zm7 12H6v-8h5v8zm2 0h5v-8h-5v8zm7-10h-7V8h7v2z"/>
+                    </svg>
+                </span>
+                <span class="quick-nav-label">Carte Cadeau</span>
+            </a>
+
+            <!-- 4. [Icône Violette + Badge HOT] Clé de jeu -->
+            <a href="catalog.html?cat=game-cd-key" class="quick-nav-item with-hot-badge">
+                <span class="quick-nav-icon icon-bg-purple">
+                    <span class="quick-hot-badge">HOT</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                    </svg>
+                </span>
+                <span class="quick-nav-label">Clé de jeu</span>
+            </a>
+
+            <!-- 5. [Icône Rouge/T-Shirt] Loot Shop -->
+            <a href="catalog.html?cat=shopping" class="quick-nav-item">
+                <span class="quick-nav-icon icon-bg-red">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                    </svg>
+                </span>
+                <span class="quick-nav-label">Loot Shop</span>
+            </a>
         </div>
     </main>
-
-    <div class="lootbar-trust-strip">
-        <div class="trust-strip-container">
-            <div class="trust-item">
-                <div class="trust-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
-                </div>
-                <div class="trust-texts">
-                    <span class="trust-title">Livraison Express</span>
-                    <span class="trust-desc">Recharge directe en moins de 3 min</span>
-                </div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                </div>
-                <div class="trust-texts">
-                    <span class="trust-title">Paiements Sécurisés</span>
-                    <span class="trust-desc">Moncash, Natcash &amp; Cartes</span>
-                </div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                </div>
-                <div class="trust-texts">
-                    <span class="trust-title">Garantie 100% Officiel</span>
-                    <span class="trust-desc">Partenaires et codes certifiés</span>
-                </div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </div>
-                <div class="trust-texts">
-                    <span class="trust-title">Assistance 24/7</span>
-                    <span class="trust-desc">Support WhatsApp réactif</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <section class="products-section" id="shop-products">
         <div class="section-container">
@@ -1851,6 +2022,7 @@
     <script src="js/auth.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/wishlist.js"></script>
+    <script src="js/hero-carousel.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const globalSearch = document.getElementById('globalSearchInput');
