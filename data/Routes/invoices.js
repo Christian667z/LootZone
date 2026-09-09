@@ -84,7 +84,7 @@ router.get('/pdf/:commandeId', requireAuth, requireMinRole('employe'), async (re
     doc.roundedRect(14, 14, 50, 22, 4, 4, 'F');
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(14); doc.setFont('helvetica', 'bold');
-    doc.text('ASTA-SHOPS', 39, 27, { align: 'center' });
+    doc.text('LOOTZONE', 39, 27, { align: 'center' });
 
     doc.setTextColor(240, 240, 240);
     doc.setFontSize(20); doc.setFont('helvetica', 'bold');
@@ -152,15 +152,15 @@ router.get('/pdf/:commandeId', requireAuth, requireMinRole('employe'), async (re
     doc.text('l\'authenticité', W - 43, 211, { align: 'center' });
 
     doc.setFontSize(8); doc.setTextColor(136, 136, 136);
-    doc.text('Cette facture certifie un achat effectué sur la plateforme Asta-Shops.', 28, 178);
+    doc.text('Cette facture certifie un achat effectué sur la plateforme LootZone.', 28, 178);
     doc.text('En cas de litige, contactez notre support avec ce numéro de facture.', 28, 184);
 
     doc.setFillColor(15, 15, 15);
     doc.rect(14, pageH - 28, W - 28, 14, 'F');
     doc.setFontSize(8); doc.setTextColor(85, 85, 85);
-    doc.text('© Asta-Shops — Plateforme de produits numériques | Haiti', W / 2, pageH - 20, { align: 'center' });
+    doc.text('© LootZone — Plateforme de produits numériques | Haiti', W / 2, pageH - 20, { align: 'center' });
     doc.setTextColor(34, 197, 94);
-    doc.text('asta-shops.com', W / 2, pageH - 15, { align: 'center' });
+    doc.text('lootzone.com', W / 2, pageH - 15, { align: 'center' });
 
     const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
     res.setHeader('Content-Type', 'application/pdf');

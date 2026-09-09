@@ -1024,7 +1024,7 @@
             if (applyCouponBtn) {
                 applyCouponBtn.addEventListener('click', () => {
                     const code = couponInput.value.trim().toUpperCase();
-                    if (code === "ASTA30") {
+                    if (code === "LOOT30" || code === "ASTA30") {
                         activeDiscount = 30;
                         alert("Code promo appliqué ! Vous bénéficiez de -30% de réduction.");
                         saveCart();
