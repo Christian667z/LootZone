@@ -342,6 +342,7 @@ function updateNavAccount(user, profile) {
     btn.title = 'Mon profil';
     btn.classList.remove('login-btn');
     btn.classList.add('logged-in');
+    btn.classList.add('guest-only');
     btn.onclick = null;
     const avatarUrl = profile?.avatar_url || profile?.avatar;
     const displayName = ((profile?.prenom || '') + ' ' + (profile?.nom || '')).trim() || user?.email?.split('@')[0] || 'Profil';
@@ -356,6 +357,7 @@ function updateNavAccount(user, profile) {
     btn.setAttribute('aria-label', 'Log in / Sign up');
     btn.title = 'Log in / Sign up';
     btn.classList.add('login-btn');
+    btn.classList.add('guest-only');
     btn.classList.remove('logged-in');
     btn.innerHTML = `<span class="auth-btn-label">Log in / Sign up</span>`;
     btn.onclick = (e) => {
@@ -371,6 +373,109 @@ function updateNavAccount(user, profile) {
       }
     };
   }
+}
+
+// ─── Mise à jour dynamique de la visibilité du Header (Supabase Auth) ────────
+function updateHeaderAuthState(isLoggedIn, user, profile) {
+  const headers = document.querySelectorAll('header.navbar, header');
+  headers.forEach(h => {
+    if (isLoggedIn) {
+      h.classList.add('user-logged-in');
+    } else {
+      h.classList.remove('user-logged-in');
+    }
+  });
+
+  if (isLoggedIn) {
+    document.body.classList.add('user-logged-in');
+  } else {
+    document.body.classList.remove('user-logged-in');
+  }
+
+  if (isLoggedIn && user) {
+    const displayName = ((profile?.prenom || '') + ' ' + (profile?.nom || '')).trim() || user?.email?.split('@')[0] || 'Mon Compte';
+    const initial = displayName.charAt(0).toUpperCase();
+    const avatarUrl = profile?.avatar_url || profile?.avatar;
+
+    const navUserNames = document.querySelectorAll('#navUserName');
+    navUserNames.forEach(el => { el.textContent = displayName; });
+
+    const navUserInitials = document.querySelectorAll('#navUserInitial');
+    navUserInitials.forEach(el => { el.textContent = initial; });
+
+    const navUserAvatars = document.querySelectorAll('#navUserAvatar');
+    navUserAvatars.forEach(el => {
+      if (avatarUrl) {
+        el.innerHTML = `<img src="${escHtml(avatarUrl)}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      } else {
+        el.innerHTML = `<span class="user-avatar-initials">${initial}</span>`;
+      }
+    });
+
+    const dropdownUserNames = document.querySelectorAll('#dropdownUserName');
+    dropdownUserNames.forEach(el => { el.textContent = displayName; });
+
+    const dropdownUserEmails = document.querySelectorAll('#dropdownUserEmail');
+    dropdownUserEmails.forEach(el => { el.textContent = user.email || ''; });
+
+    const dropdownUserAvatars = document.querySelectorAll('#dropdownUserAvatar');
+    dropdownUserAvatars.forEach(el => {
+      if (avatarUrl) {
+        el.innerHTML = `<img src="${escHtml(avatarUrl)}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      } else {
+        el.innerHTML = `<span>${initial}</span>`;
+      }
+    });
+
+    setupUserMenuEvents();
+  } else {
+    const dropdowns = document.querySelectorAll('.user-dropdown');
+    dropdowns.forEach(d => d.classList.remove('open'));
+  }
+}
+
+function setupUserMenuEvents() {
+  const triggers = document.querySelectorAll('#userMenuTrigger');
+  triggers.forEach((trigger) => {
+    if (!trigger.dataset.menuBound) {
+      trigger.dataset.menuBound = 'true';
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const wrapper = trigger.closest('.user-menu-wrapper');
+        const dropdown = wrapper ? wrapper.querySelector('.user-dropdown') : document.getElementById('userDropdown');
+        if (dropdown) {
+          dropdown.classList.toggle('open');
+        }
+      });
+    }
+  });
+
+  if (!document.body.dataset.userDropdownDocBound) {
+    document.body.dataset.userDropdownDocBound = 'true';
+    document.addEventListener('click', (e) => {
+      const dropdowns = document.querySelectorAll('.user-dropdown');
+      dropdowns.forEach(d => {
+        if (!d.contains(e.target) && !e.target.closest('#userMenuTrigger')) {
+          d.classList.remove('open');
+        }
+      });
+    });
+  }
+
+  const logoutBtns = document.querySelectorAll('#dropdownLogoutBtn');
+  logoutBtns.forEach(btn => {
+    if (!btn.dataset.logoutBound) {
+      btn.dataset.logoutBound = 'true';
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (window.AstaAuth && window.AstaAuth.logout) {
+          await window.AstaAuth.logout();
+        }
+      });
+    }
+  });
 }
 
 // ─── Mise à jour boutons mobile nav ──────────────────────────────────────────
@@ -422,21 +527,24 @@ window.AstaAuth = {
     if (user && profile) {
       updateTopBar(user, profile);
       updateNavAccount(user, profile);
+      updateHeaderAuthState(true, user, profile);
       updateMobileNav(true);
       if (user.email) startClientNotifications(user.email);
     } else {
       renderLoggedOutTopBar();
       updateNavAccount(null, null);
+      updateHeaderAuthState(false, null, null);
       updateMobileNav(false);
     }
 
     try {
       const sb = await getSB();
       sb.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
+        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') && session?.user) {
           const profile = await fetchProfile(session.user.id);
           updateTopBar(session.user, profile);
           updateNavAccount(session.user, profile);
+          updateHeaderAuthState(true, session.user, profile);
           updateMobileNav(true);
           startClientNotifications(session.user.email);
           if (session.access_token) refreshDropdownWallet(session.access_token);
@@ -450,6 +558,7 @@ window.AstaAuth = {
           } catch (_) {}
           renderLoggedOutTopBar();
           updateNavAccount(null, null);
+          updateHeaderAuthState(false, null, null);
           updateMobileNav(false);
         }
       });
@@ -528,6 +637,8 @@ window.AstaAuth = {
     } catch (_) {}
 
     renderLoggedOutTopBar();
+    updateNavAccount(null, null);
+    updateHeaderAuthState(false, null, null);
     updateMobileNav(false);
     window.location.href = 'index.html';
   },

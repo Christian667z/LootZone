@@ -264,6 +264,51 @@ img {
     pointer-events: none;
 }
 
+/* ═════════════════════════════════════════════════════════════════
+   GESTION CONDITIONNELLE DU HEADER (VISITEUR VS CONNECTÉ SUPABASE)
+   ═════════════════════════════════════════════════════════════════ */
+.auth-required {
+    display: none !important;
+}
+
+.user-logged-in .auth-required {
+    display: inline-flex !important;
+}
+
+.user-logged-in div.auth-required,
+.user-logged-in .user-menu-wrapper.auth-required {
+    display: flex !important;
+}
+
+.user-logged-in .guest-only {
+    display: none !important;
+}
+
+/* --- Notifications Header (Style LootBar) --- */
+.notif-btn {
+    position: relative;
+    cursor: pointer;
+}
+
+.notif-badge-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    border: 2px solid #141722;
+    pointer-events: none;
+    box-shadow: none;
+    filter: none;
+    display: block;
+}
+
+.notif-badge-dot.hidden {
+    display: none !important;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -457,6 +502,117 @@ img {
     justify-content: center;
     font-size: 0.75rem;
     font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GESTION DYNAMIQUE DU HEADER SELON L'ÉTAT DE CONNEXION (SUPABASE AUTH)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. ÉTAT DÉCONNECTÉ (PAR DÉFAUT / VISITEUR) */
+.auth-required {
+    display: none !important;
+}
+
+/* 2. ÉTAT CONNECTÉ (UTILISATEUR CONNECTÉ) */
+header.user-logged-in .auth-required,
+.user-logged-in header .auth-required,
+body.user-logged-in .auth-required {
+    display: flex !important;
+}
+
+header.user-logged-in .guest-only,
+.user-logged-in header .guest-only,
+body.user-logged-in .guest-only {
+    display: none !important;
+}
+
+/* --- Bouton & Pastille de Notification (Style LootBar - Enveloppe avec pastille rouge) --- */
+.notif-btn {
+    position: relative;
+}
+
+.notif-badge,
+.notif-badge-dot {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 17px;
+    height: 17px;
+    background-color: #ef4444;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+    border: 2px solid #090a0f;
+    box-shadow: none;
+    text-shadow: none;
+    filter: none;
+    pointer-events: none;
+}
+
+/* --- Menu Profil Utilisateur (Avatar & Dropdown LootZone) --- */
+.user-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-menu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1c202a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 4px 10px 4px 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    outline: none;
+    box-shadow: none;
+}
+
+.user-menu-trigger:hover {
+    border-color: rgba(124, 58, 237, 0.5);
+    background: #252b39;
+    color: #ffffff;
+}
+
+.user-avatar-small {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #7c3aed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1.5px solid #a78bfa;
+}
+
+.user-avatar-initials {
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.user-menu-name {
+    font-weight: 600;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #ffffff;
 }
 
 .nav-user-label {
@@ -5966,10 +6122,10 @@ img {
     top: calc(100% + 10px);
     right: 0;
     width: 280px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, .14);
-    border: 1px solid #f0f0f0;
+    background: #141722;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     z-index: 9999;
     opacity: 0;
     visibility: hidden;
@@ -5988,7 +6144,7 @@ img {
     align-items: center;
     gap: 12px;
     padding: 16px 16px 12px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .user-dropdown-avatar {
@@ -5996,7 +6152,7 @@ img {
     height: 42px;
     border-radius: 50%;
     overflow: hidden;
-    background: #1a1a1a;
+    background: #7c3aed;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6004,7 +6160,7 @@ img {
     font-weight: 700;
     color: #fff;
     flex-shrink: 0;
-    border: 2px solid #00b67a;
+    border: 2px solid #a78bfa;
 }
 
 .user-dropdown-avatar img {
@@ -6016,7 +6172,7 @@ img {
 .user-dropdown-name {
     font-weight: 700;
     font-size: .9rem;
-    color: #1a1a1a;
+    color: #ffffff;
     max-width: 170px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -6040,7 +6196,7 @@ img {
     grid-template-columns: 1fr 1fr;
     padding: 12px 16px;
     gap: 8px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .stat-item {
@@ -6051,12 +6207,12 @@ img {
     display: block;
     font-weight: 700;
     font-size: .95rem;
-    color: #1a1a1a;
+    color: #ffffff;
 }
 
 .stat-label {
     font-size: .72rem;
-    color: #999;
+    color: #94a3b8;
     margin-top: 2px;
     display: block;
 }
@@ -6070,15 +6226,15 @@ img {
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
-    color: #444;
+    color: #cbd5e1;
     font-size: .88rem;
     text-decoration: none;
     transition: all .15s;
 }
 
 .user-dropdown-item:hover {
-    background: #f0fdf9;
-    color: #00b67a;
+    background: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
 }
 
 .user-dropdown-item svg {
@@ -6093,17 +6249,18 @@ img {
     padding: 11px 16px;
     background: none;
     border: none;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     color: #ef4444;
     font-size: .88rem;
     font-family: inherit;
+    font-weight: 600;
     cursor: pointer;
     transition: all .15s;
-    border-radius: 0 0 16px 16px;
+    border-radius: 0 0 14px 14px;
 }
 
 .user-dropdown-logout:hover {
-    background: #fff5f5;
+    background: rgba(239, 68, 68, 0.1);
 }
 /* ── Nav Search Button ─────────────────────────────────────── */
 .nav-search-btn {

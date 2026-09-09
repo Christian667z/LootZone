@@ -1232,16 +1232,16 @@
         </div>
       </div>
 
-      <!-- Wishlist Button -->
-      <a href="#" class="nav-icon wishlist-btn" id="wishlistBtn" aria-label="Favoris" title="Favoris">
+      <!-- Wishlist Button (auth-required) -->
+      <a href="profile.html#favoris" class="nav-icon wishlist-btn auth-required" id="wishlistBtn" aria-label="Favoris" title="Favoris">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
         <span class="wishlist-badge" id="wishlistBadgeCount">0</span>
       </a>
 
-      <!-- Cart Button -->
-      <a href="catalog.html" class="nav-icon cart-btn" aria-label="Panier" title="Panier">
+      <!-- Cart Button (auth-required) -->
+      <a href="catalog.html" class="nav-icon cart-btn auth-required" id="cartBtn" aria-label="Panier" title="Panier">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"></circle>
           <circle cx="20" cy="21" r="1"></circle>
@@ -1257,8 +1257,61 @@
         </button>
       </div>
 
-      <!-- Log in / Sign up Button -->
-      <a href="#" class="header-auth-btn auth-link login-btn" id="navAccountBtn" aria-label="Log in / Sign up">
+      <!-- Notification Button (auth-required - Style LootBar avec pastille rouge) -->
+      <a href="profile.html#messages" class="nav-icon notif-btn auth-required" id="headerNotifBtn" aria-label="Notifications" title="Notifications">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+        <span class="notif-badge-dot" id="headerNotifDot"></span>
+      </a>
+
+      <!-- User Avatar & Dropdown Menu (auth-required) -->
+      <div class="user-menu-wrapper auth-required" id="navUserMenuWrapper">
+        <button class="user-menu-trigger" id="userMenuTrigger" type="button" aria-label="Menu utilisateur" title="Mon compte">
+          <div class="user-avatar-small" id="navUserAvatar">
+            <span class="user-avatar-initials" id="navUserInitial">U</span>
+          </div>
+          <span class="user-menu-name" id="navUserName">Mon Compte</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-header">
+            <div class="user-dropdown-avatar" id="dropdownUserAvatar">
+              <span id="dropdownUserInitial">U</span>
+            </div>
+            <div class="user-dropdown-info">
+              <div class="user-dropdown-name" id="dropdownUserName">Mon Profil</div>
+              <div class="user-dropdown-email" id="dropdownUserEmail" style="font-size:0.75rem;color:#94a3b8;">utilisateur@lootzone.gg</div>
+            </div>
+          </div>
+          <div class="user-dropdown-menu">
+            <a href="profile.html" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Mon profil
+            </a>
+            <a href="profile.html#commandes" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Historique des achats
+            </a>
+            <a href="profile.html#messages" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+              Messages & Notifications
+            </a>
+            <a href="profile.html#favoris" class="user-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              Mes Favoris
+            </a>
+          </div>
+          <button class="user-dropdown-logout" id="dropdownLogoutBtn" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Déconnexion
+          </button>
+        </div>
+      </div>
+
+      <!-- Log in / Sign up Button (guest-only) -->
+      <a href="#" class="header-auth-btn auth-link login-btn guest-only" id="navAccountBtn" aria-label="Log in / Sign up">
         <span class="auth-btn-label">Log in / Sign up</span>
       </a>
 
