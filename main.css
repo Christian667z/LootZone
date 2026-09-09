@@ -556,37 +556,6 @@ img {
     transform: translateY(-1px);
 }
 
-.whatsapp-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: #f1f5f9;
-    font-weight: 500;
-    font-size: 0.95rem;
-    background: rgba(37, 211, 102, 0.1);
-    border: 1px solid rgba(37, 211, 102, 0.3);
-    padding: 5px 12px;
-    border-radius: 999px;
-    transition: all 0.25s ease;
-}
-
-.whatsapp-btn svg {
-    display: block;
-    transition: transform 0.2s ease;
-}
-
-.whatsapp-btn:hover {
-    color: #ffffff;
-    background: rgba(37, 211, 102, 0.2);
-    border-color: #25D366;
-    box-shadow: 0 0 12px rgba(37, 211, 102, 0.35);
-}
-
-.whatsapp-btn:hover svg {
-    transform: scale(1.1);
-}
-
 /* --- Section Hero (Cartes asymétriques) --- */
 .hero-section {
     padding: 60px 40px;
@@ -2081,6 +2050,31 @@ img {
     color: #ffffff;
     border-color: #00b67a;
     transform: translateY(-3px);
+}
+
+.social-icon[aria-label="X (Twitter)"]:hover {
+    background-color: #000000;
+    border-color: #4a5568;
+    color: #ffffff;
+}
+
+.social-icon[aria-label="Instagram"]:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    border-color: #d6249f;
+    color: #ffffff;
+}
+
+.social-icon[aria-label="Facebook"]:hover {
+    background-color: #1877F2;
+    border-color: #1877F2;
+    color: #ffffff;
+}
+
+.social-icon[aria-label="TikTok"]:hover {
+    background-color: #000000;
+    border-color: #fe2c55;
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(254, 44, 85, 0.4);
 }
 
 .social-icon:hover svg {
