@@ -14,7 +14,16 @@ let currentHubReq = null;
 let editingProductId = null;
 
 // ── AUTH GUARD
-if (!TOKEN || !USER) { window.location.href = 'admin-login.html'; }
+// Synchronisation avec AdminAuthGuard si disponible
+if (!TOKEN && window.AdminAuthGuard?.token) {
+    TOKEN = window.AdminAuthGuard.token;
+}
+if (!USER && window.AdminAuthGuard?.user) {
+    USER = window.AdminAuthGuard.user;
+}
+if (!TOKEN && !USER && !window.AdminAuthGuard) {
+    window.location.href = 'admin-login.html';
+}
 
 // ── INIT
 document.addEventListener('DOMContentLoaded', () => {

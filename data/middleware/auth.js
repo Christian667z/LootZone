@@ -1,9 +1,12 @@
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
 
 export const ROLES = {
+    SUPER_ADMIN: 'super_admin',
+    ADMIN: 'admin',
+    STAFF: 'staff',
+    CLIENT: 'client',
     HELPER: 'helper',
     EMPLOYE: 'employe',
-    ADMIN: 'admin',
     ADMINISTRATEUR: 'administrateur',
     MANAGER: 'manager',
     DIRECTEUR: 'directeur'
@@ -12,20 +15,22 @@ export const ROLES = {
 export const ROLE_LEVEL = {
     client: 0,
     helper: 1,
+    staff: 2,
     employe: 2,
     admin: 3,
     administrateur: 3,
     manager: 4,
-    directeur: 5
+    directeur: 5,
+    super_admin: 5
 };
 
 export const SIDEBAR_PERMISSIONS = {
-    tableau_de_bord: ['directeur', 'manager', 'admin', 'administrateur'],
-    catalogue_produits: ['directeur', 'manager', 'admin', 'administrateur'],
-    gestion_commandes: ['directeur', 'manager', 'admin', 'administrateur', 'employe'],
-    hub_partenariats: ['directeur', 'manager', 'admin', 'administrateur'],
-    moderation_equipe: ['directeur', 'admin', 'administrateur'],
-    configuration: ['directeur', 'admin', 'administrateur']
+    tableau_de_bord: ['super_admin', 'directeur', 'manager', 'admin', 'administrateur', 'staff'],
+    catalogue_produits: ['super_admin', 'directeur', 'manager', 'admin', 'administrateur', 'staff'],
+    gestion_commandes: ['super_admin', 'directeur', 'manager', 'admin', 'administrateur', 'staff', 'employe'],
+    hub_partenariats: ['super_admin', 'directeur', 'manager', 'admin', 'administrateur', 'staff'],
+    moderation_equipe: ['super_admin', 'directeur', 'admin', 'administrateur'],
+    configuration: ['super_admin', 'directeur', 'admin', 'administrateur']
 };
 
 // Format attendu : "Bearer <jwt>" ou juste "<jwt>"
@@ -109,8 +114,17 @@ export async function requireAuth(req, res, next) {
  */
 export function requireRole(...roles) {
     const expanded = new Set(roles);
-    if (expanded.has('administrateur')) expanded.add('admin');
-    if (expanded.has('admin')) expanded.add('administrateur');
+    if (expanded.has('administrateur')) { expanded.add('admin'); expanded.add('super_admin'); }
+    if (expanded.has('admin')) { expanded.add('administrateur'); expanded.add('super_admin'); expanded.add('directeur'); }
+    if (expanded.has('staff')) {
+        expanded.add('admin');
+        expanded.add('administrateur');
+        expanded.add('super_admin');
+        expanded.add('directeur');
+        expanded.add('manager');
+        expanded.add('employe');
+        expanded.add('helper');
+    }
 
     return (req, res, next) => {
         if (!req.user) return res.status(401).json({ error: 'Non authentifié' });

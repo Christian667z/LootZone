@@ -231,7 +231,16 @@ router.post('/admin-login', async (req, res) => {
         } catch (_) {}
     }
 
-    const isStaff = profile.role !== 'client';
+    const isStaff = profile.role && profile.role !== 'client';
+    if (!isStaff) {
+        try {
+            await logActivite(profile.id, profile.role, 'Tentative d\'accès non autorisée au Dashboard Admin', null, null, null);
+        } catch (_) {}
+        return res.status(403).json({
+            error: "Accès refusé : Vous n'avez pas les autorisations nécessaires pour accéder à l'administration."
+        });
+    }
+
     const roleLevel = ROLE_LEVEL[profile.role] || 0;
 
     const sidebarPerms = {};
@@ -240,17 +249,18 @@ router.post('/admin-login', async (req, res) => {
     }
 
     try {
-        await logActivite(profile.id, profile.role, isStaff ? 'Connexion au dashboard' : 'Connexion au site client', null, null, null);
+        await logActivite(profile.id, profile.role, 'Connexion au dashboard', null, null, null);
     } catch (_) {}
 
     res.json({
         token: authData.session?.access_token,
         session: authData.session,
         user: { id: profile.id, email: authData.user.email, role: profile.role, nom: profile.nom || '', prenom: profile.prenom || '', avatar: profile.avatar_url || null },
+        profile,
         sidebarPerms,
         roleLevel,
-        isStaff,
-        redirectUrl: isStaff ? (req.headers.referer?.includes('Dashboard') ? 'dashboard.html' : 'Dashboard/dashboard.html') : 'profile.html'
+        isStaff: true,
+        redirectUrl: req.headers.referer?.includes('Dashboard') ? 'dashboard.html' : 'Dashboard/dashboard.html'
     });
 });
 

@@ -28,7 +28,7 @@ const ROOT_DIR = path.join(__dirname, '..');
 
 const app = express();
 app.set('trust proxy', 1);
-const PORT = Number.parseInt(process.env.PORT, 10) || 5000;
+const PORT = 3000;
 
 // ─── ORIGINES AUTORISÉES ────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
@@ -58,11 +58,13 @@ app.use(cors({
             origin.endsWith('.replit.dev') ||
             origin.endsWith('.repl.co') ||
             origin.endsWith('.replit.app') ||
+            origin.endsWith('.run.app') ||
+            origin.endsWith('.google.com') ||
             ALLOWED_ORIGINS.includes(origin)
         ) {
             return callback(null, true);
         }
-        return callback(new Error('CORS: origine non autorisée'));
+        return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -197,13 +199,18 @@ app.get('/api/health', (req, res) => {
 });
 
 // ─── FICHIERS STATIQUES ───────────────────────────────────────────────────────
-app.use(express.static(ROOT_DIR, { maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0 }));
-app.use(express.static(path.join(ROOT_DIR, 'Dashboard'), { maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0 }));
+app.use(express.static(ROOT_DIR, { extensions: ['html'], maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0 }));
+app.use(express.static(path.join(ROOT_DIR, 'Dashboard'), { extensions: ['html'], maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0 }));
 
 app.get('/admin-login', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/admin-login.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
+app.get('/admin/admin-login.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
+app.get('/admin/login', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
+app.get('/admin/dashboard', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
+app.get('/admin/dashboard.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
 app.get('/dashboard', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
 app.get('/dashboard.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
 app.get('/verify/:token', (req, res) => res.sendFile(path.join(ROOT_DIR, 'verify.html')));
@@ -213,6 +220,7 @@ app.get('/payment.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'payment
 
 app.get('/*splat', (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Route API introuvable' });
+    if (path.extname(req.path)) return res.status(404).send('Not found');
     res.sendFile(path.join(ROOT_DIR, 'index.html'));
 });
 
