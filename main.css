@@ -400,6 +400,108 @@ img {
     font-weight: 700;
 }
 
+/* ── Header utilisé par les pages secondaires (messages, profil, etc.) ──
+   Ces pages utilisent .site-header au lieu de .navbar. Sans ces règles,
+   les menus déroulants restent dans le flux et le texte blanc se retrouve
+   sur le fond clair des pages LootBar. */
+.site-header {
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 30px;
+    background: #0d0b18;
+    border-bottom: 1px solid #2d264f;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 18px rgba(13, 11, 24, 0.18);
+}
+
+.site-header .logo-link {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+.site-header .logo-img {
+    width: auto;
+    height: 48px;
+    max-width: 180px;
+    object-fit: contain;
+}
+
+.site-header .main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.site-header .nav-links {
+    gap: 8px;
+}
+
+.site-header .nav-links > li {
+    position: relative;
+}
+
+.site-header .nav-links > li > a {
+    white-space: nowrap;
+}
+
+.site-header .nav-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+    min-width: 215px;
+    padding: 8px;
+    background: #141722;
+    border: 1px solid #2d264f;
+    border-radius: 10px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+}
+
+.site-header .has-dropdown:hover .nav-dropdown,
+.site-header .has-dropdown:focus-within .nav-dropdown {
+    display: flex;
+}
+
+.site-header .dropdown-item {
+    display: block;
+    padding: 9px 11px;
+    border-radius: 7px;
+    color: #e2e8f0;
+    font-size: 0.88rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-header .dropdown-item:hover,
+.site-header .dropdown-item:focus-visible {
+    background: rgba(124, 58, 237, 0.16);
+    color: #c084fc;
+}
+
+.site-header .dropdown-divider {
+    height: 1px;
+    margin: 6px 2px;
+    background: #2d264f;
+}
+
+.site-header .nav-actions {
+    gap: 12px;
+}
+
+.site-header .mobile-menu-toggle {
+    flex-shrink: 0;
+}
+
 .nav-chevron {
     margin-left: 6px;
     font-size: 0.75rem;
