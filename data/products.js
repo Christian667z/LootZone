@@ -101,7 +101,7 @@ const products = [
 
     {
         id: 22,
-        name: "The Show 26",
+        name: "MLB The Show 26 Stubs",
         category: "jeux",
         img: "img/the_show_26.jpg",
         desc: "Achetez vos Stubs et crédits MLB The Show 26 pour débloquer les meilleurs packs et joueurs de baseball.",
@@ -135,7 +135,7 @@ const products = [
 
     {
         id: 24,
-        name: "Madden NFL 27 Coins",
+        name: "Crédits Madden NFL 27",
         category: "jeux",
         img: "img/madden_nfl_27.jpg",
         desc: "Rechargez vos Madden NFL 27 Coins (MUT). Bâtissez votre équipe All-Pro ultime rapidement et en toute sécurité.",
@@ -152,7 +152,7 @@ const products = [
 
     {
         id: 25,
-        name: "Madden NFL 26 Coins",
+        name: "Crédits Madden NFL 26",
         category: "jeux",
         img: "img/madden_nfl_26.jpg",
         desc: "Achetez des Madden NFL 26 Coins MUT au prix le plus bas. Service garanti et livraison ultra-rapide.",

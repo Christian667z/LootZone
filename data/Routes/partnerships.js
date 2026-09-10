@@ -13,7 +13,36 @@ const BADGE_TYPES = {
     'alliance': { label: "Demande d'Alliance", color: '#f59e0b', bg: '#fef3c7' }
 };
 
-let demoRequests = [];
+let demoRequests = [
+    {
+        id: 'part-1',
+        type: 'partenaire',
+        nom: 'Kamel Gaming',
+        email: 'kamel.gaming@gmail.com',
+        structure: 'Kamel Gaming Studio',
+        reseaux: { youtube: 'https://youtube.com/@kamelgaming', twitter: '@kamelgaming' },
+        abonnes: '75 000',
+        volume_vente: '150 commandes/mois',
+        message: 'Nous souhaitons proposer vos cartes cadeaux et recharges gaming à notre communauté.',
+        statut: 'en_attente',
+        messages_chat: [],
+        created_at: new Date(Date.now() - 86400000).toISOString()
+    },
+    {
+        id: 'part-2',
+        type: 'createur',
+        nom: 'Sarah Stream',
+        email: 'sarah.stream@twitch.tv',
+        structure: 'Twitch Partner',
+        reseaux: { twitch: 'https://twitch.tv/sarahstream', tiktok: '@sarahstream' },
+        abonnes: '120 000',
+        volume_vente: 'Affiliation & code créateur',
+        message: 'Intéressée par le programme créateurs pour du sponsoring stream régulier.',
+        statut: 'en_cours',
+        messages_chat: [],
+        created_at: new Date(Date.now() - 43200000).toISOString()
+    }
+];
 let demoDraftMessages = [];
 
 router.get('/', requireAuth, requireMinRole('manager'), async (req, res) => {

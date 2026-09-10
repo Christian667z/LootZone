@@ -5,7 +5,11 @@ import { logActivite } from './logs.js';
 
 const router = express.Router();
 
-let demoStaff = [];
+let demoStaff = [
+    { id: 'demo-1', email: 'directeur@lootzone.gg', nom: 'Directeur', prenom: 'Admin', role: 'directeur', statut_presence: 'en_ligne', created_at: new Date().toISOString() },
+    { id: 'demo-2', email: 'manager@lootzone.gg', nom: 'Valentin', prenom: 'Marc', role: 'manager', statut_presence: 'en_ligne', created_at: new Date().toISOString() },
+    { id: 'demo-3', email: 'support@lootzone.gg', nom: 'Jean', prenom: 'Pierre', role: 'employe', statut_presence: 'occupe', created_at: new Date().toISOString() }
+];
 
 router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     if (DEMO_MODE) return res.json({ staff: demoStaff });

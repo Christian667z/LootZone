@@ -207,9 +207,9 @@
                 </div>
             </div>
 
-            <!-- Log in / Sign up Button (guest-only) -->
-            <a href="#" class="header-auth-btn auth-link login-btn guest-only" id="navAccountBtn" aria-label="Log in / Sign up">
-                <span class="auth-btn-label">Log in / Sign up</span>
+            <!-- Bouton Connexion / Inscription (visiteur) -->
+            <a href="#" class="header-auth-btn auth-link login-btn guest-only" id="navAccountBtn" aria-label="Connexion / Inscription" data-i18n-aria="nav.login">
+                <span class="auth-btn-label" data-i18n="nav.login">Connexion / Inscription</span>
             </a>
         </div>
 
@@ -420,6 +420,19 @@
 
             <!-- Section Principale de Contenu -->
             <section class="catalog-content">
+                <!-- Fil d'Ariane (Breadcrumb Style Photo 2) -->
+                <nav class="catalog-breadcrumb" aria-label="Fil d'Ariane">
+                    <a href="index.html" class="breadcrumb-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span>Accueil</span>
+                    </a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current" id="breadcrumb-category">Jeux de crédit</span>
+                </nav>
+
                 <!-- En-tête du catalogue -->
                 <div class="catalog-content-header">
                     <div class="title-section">
@@ -694,12 +707,16 @@
         // Mise à jour de la grille et des textes
         function updateView() {
             // Mettre à jour les titres de catégories dynamiquement depuis la sidebar
-            let titleText = "Catalogue";
+            let titleText = "Jeux de crédit";
             const currentItem = document.querySelector(`.sidebar-item[data-category="${activeCategory}"]`);
             if (currentItem) {
                 titleText = currentItem.querySelector('.sidebar-text').textContent;
             }
-            catalogTitle.textContent = titleText;
+
+            // Mettre à jour le fil d'Ariane et le titre principal (Style Photo 2)
+            const breadcrumbEl = document.getElementById('breadcrumb-category');
+            if (breadcrumbEl) breadcrumbEl.textContent = titleText;
+            catalogTitle.textContent = `Achetez ${titleText} sur LootZone`;
 
             // Filtrer les produits
             let filtered = products.filter(p => p.category === activeCategory);
@@ -732,11 +749,12 @@
 
             catalogGrid.innerHTML = filtered.map(p => {
                 const discountHtml = p.discount ? `<span class="card-discount">${p.discount}</span>` : '';
-                const salesText = p.sales ? (p.sales.includes('Sold') || p.sales.includes('Vendu') ? p.sales : `${p.sales} Sold`) : '10k+ Sold';
+                const rawSales = p.sales ? p.sales.replace(/ sold/i, '').replace(/ vendu/i, '').trim() : '10k+';
+                const salesText = `${rawSales} Vendu`;
                 return `
-                <div class="premium-game-card" style="cursor:pointer;" onclick="window.location.href='topup.html?id=${p.id}'">
+                <div class="premium-game-card" style="cursor:pointer;" onclick="window.location.href='topup.html?id=${p.id}'" title="${p.name}">
                     <div class="card-image-wrapper">
-                        <img src="${p.img}" alt="${p.name}" loading="lazy">
+                        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='LootZone_img-removebg-preview.png';">
                         ${discountHtml}
                     </div>
                     <div class="card-details">
@@ -792,10 +810,13 @@
                 });
             }
 
-            function openAuth() {
+            function openAuth(tab) {
                 if (authModal) {
                     authModal.classList.add('active');
                     document.body.style.overflow = 'hidden';
+                    const targetTab = tab || 'login';
+                    authModal.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === targetTab));
+                    authModal.querySelectorAll('.auth-column').forEach(c => c.classList.toggle('active', c.id === 'tab-' + targetTab));
                 }
             }
 
@@ -806,14 +827,40 @@
                 }
             }
             window.closeAuthModal = closeAuth;
+            window.openAuth = openAuth;
 
-            loginBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openAuth(); }));
-            registerBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openAuth(); }));
+            // Compte créé mais confirmation nécessaire ou retour enregistrement
+            if (new URLSearchParams(window.location.search).get('registered') === '1') {
+                history.replaceState(null, '', window.location.pathname);
+                openAuth('login');
+                const errEl = document.getElementById('login-error');
+                if (errEl) {
+                    errEl.style.background = '#f0fdf9';
+                    errEl.style.color = '#059669';
+                    errEl.style.borderColor = '#c8f0e0';
+                    errEl.innerHTML = '✓ Compte créé avec succès ! Connectez-vous maintenant.';
+                    errEl.style.display = 'block';
+                }
+            }
+
+            loginBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openAuth('login'); }));
+            registerBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openAuth('register'); }));
 
             if (closeAuthModal) closeAuthModal.addEventListener('click', closeAuth);
             if (authModal) {
                 authModal.addEventListener('click', (e) => {
                     if (e.target === authModal) closeAuth();
+                });
+                // Auth tab switching
+                authModal.querySelectorAll('.auth-tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const tab = btn.getAttribute('data-tab');
+                        authModal.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+                        authModal.querySelectorAll('.auth-column').forEach(c => c.classList.remove('active'));
+                        btn.classList.add('active');
+                        const col = authModal.querySelector('#tab-' + tab);
+                        if (col) col.classList.add('active');
+                    });
                 });
             }
 
@@ -1198,7 +1245,142 @@
                 btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
             } else {
                 input.type = 'password';
-                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+            }
+        }
+
+        // ── Traduction des erreurs Supabase ──────────────────────────────────────
+        function translateAuthError(message, email) {
+            const m = (message || '').toLowerCase();
+            if (m.includes('invalid login credentials') || m.includes('invalid_credentials') || m.includes('wrong password'))
+                return { text: 'E-mail ou mot de passe incorrect. Vérifiez vos identifiants.', resend: false };
+            if (m.includes('email not confirmed') || m.includes('email_not_confirmed') || m.includes('not confirmed'))
+                return { text: `Votre e-mail n'a pas encore été confirmé.<br><small>Consultez votre boîte mail (et spams). <a href="#" style="color:#00b67a;font-weight:700;" onclick="resendConfirmEmail(event,'${email}')">Renvoyer l'e-mail de confirmation →</a></small>`, resend: true };
+            if (m.includes('user already registered') || m.includes('already registered') || m.includes('already exists'))
+                return { text: 'Un compte existe déjà avec cet e-mail. Essayez de vous connecter.', resend: false };
+            if (m.includes('password') && (m.includes('weak') || m.includes('short') || m.includes('characters')))
+                return { text: 'Mot de passe trop faible. Utilisez au moins 6 caractères.', resend: false };
+            if (m.includes('rate') || m.includes('too many') || m.includes('exceeded'))
+                return { text: 'Trop de tentatives. Attendez quelques minutes avant de réessayer.', resend: false };
+            if (m.includes('network') || m.includes('fetch') || m.includes('failed to fetch') || m.includes('connexion réseau'))
+                return { text: 'Problème de connexion réseau. Vérifiez votre connexion internet.', resend: false };
+            if (m.includes('unexpected end of json') || m.includes('json') || m.includes('erreur serveur') || m.includes('erreur de communication'))
+                return { text: 'Erreur de communication avec le serveur. Réessayez dans quelques instants.', resend: false };
+            if (m.includes('signup') && m.includes('disabled'))
+                return { text: 'Les inscriptions sont temporairement désactivées.', resend: false };
+            if (m.includes('user not found') || m.includes('no user'))
+                return { text: 'Aucun compte trouvé avec cet e-mail.', resend: false };
+            return { text: message || 'Une erreur est survenue. Réessayez.', resend: false };
+        }
+
+        // Renvoyer e-mail de confirmation
+        async function resendConfirmEmail(e, email) {
+            e.preventDefault();
+            const btn = e.target;
+            btn.textContent = 'Envoi...'; btn.style.pointerEvents = 'none';
+            try {
+                await window.AstaAuth.resendConfirmation(email);
+                btn.textContent = '✓ E-mail renvoyé !'; btn.style.color = '#059669';
+            } catch (err) {
+                btn.textContent = 'Erreur, réessayez'; btn.style.color = '#dc2626';
+                btn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Mot de passe oublié
+        async function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            if (!email) {
+                const errEl = document.getElementById('login-error');
+                errEl.innerHTML = 'Entrez votre e-mail ci-dessus puis cliquez "Mot de passe perdu".';
+                errEl.style.display = 'block';
+                return;
+            }
+            const link = e.target;
+            link.textContent = 'Envoi...'; link.style.pointerEvents = 'none';
+            try {
+                await window.AstaAuth.resetPassword(email);
+                const errEl = document.getElementById('login-error');
+                errEl.style.background = '#f0fdf9';
+                errEl.style.color = '#059669';
+                errEl.style.borderColor = '#c8f0e0';
+                errEl.innerHTML = '✓ E-mail de réinitialisation envoyé ! Vérifiez votre boîte mail.';
+                errEl.style.display = 'block';
+            } catch (err) {
+                const translated = translateAuthError(err.message, email);
+                const errEl = document.getElementById('login-error');
+                errEl.innerHTML = translated.text;
+                errEl.style.display = 'block';
+            } finally {
+                link.textContent = 'Mot de passe perdu ?'; link.style.pointerEvents = 'auto';
+            }
+        }
+
+        // ── Connexion via Supabase ────────────────────────────────────────────
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errEl = document.getElementById('login-error');
+            const btn = document.getElementById('loginSubmitBtn');
+            errEl.style.display = 'none';
+            errEl.style.background = '#fef2f2'; errEl.style.color = '#dc2626'; errEl.style.borderColor = '#fecaca';
+            if (!email || !password) {
+                errEl.innerHTML = 'Veuillez remplir l\'e-mail et le mot de passe.';
+                errEl.style.display = 'block';
+                return;
+            }
+            btn.disabled = true; btn.textContent = 'Connexion...';
+            try {
+                const resData = await window.AstaAuth.login(email, password);
+                window.closeAuthModal?.();
+                const profile = resData?.profile || await window.AstaAuth.getProfile();
+                const isStaff = ['helper', 'employe', 'administrateur', 'manager', 'directeur'].includes(profile?.role);
+                if (isStaff) {
+                    setTimeout(() => window.location.href = 'Dashboard/dashboard.html', 400);
+                } else {
+                    setTimeout(() => window.location.reload(), 400);
+                }
+            } catch (err) {
+                const translated = translateAuthError(err.message, email);
+                errEl.innerHTML = translated.text;
+                errEl.style.display = 'block';
+            } finally {
+                btn.disabled = false; btn.textContent = 'Se connecter';
+            }
+        }
+
+        // ── Inscription via Supabase ──────────────────────────────────────────
+        async function handleRegister(e) {
+            e.preventDefault();
+            const prenom = document.getElementById('register-prenom').value.trim();
+            const nom = document.getElementById('register-nom').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const errEl = document.getElementById('register-error');
+            const sucEl = document.getElementById('register-success');
+            const btn = document.getElementById('registerSubmitBtn');
+            errEl.style.display = 'none'; sucEl.style.display = 'none';
+            if (!prenom || !email || !password) {
+                errEl.textContent = 'Prénom, e-mail et mot de passe sont obligatoires.';
+                errEl.style.display = 'block'; return;
+            }
+            if (password.length < 6) {
+                errEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+                errEl.style.display = 'block'; return;
+            }
+            btn.disabled = true; btn.textContent = 'Création...';
+            try {
+                const result = await window.AstaAuth.register(email, password, nom, prenom);
+                window.closeAuthModal?.();
+                setTimeout(() => window.location.reload(), 400);
+            } catch (err) {
+                const translated = translateAuthError(err.message, email);
+                errEl.innerHTML = translated.text;
+                errEl.style.display = 'block';
+            } finally {
+                btn.disabled = false; btn.textContent = 'Créer mon compte';
             }
         }
     </script>
@@ -1208,15 +1390,20 @@
         <div class="auth-modal-container">
             <button class="auth-modal-close" id="closeAuthModal" aria-label="Fermer">×</button>
 
+            <!-- Onglets de navigation -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" data-tab="login">Se connecter</button>
+                <button class="auth-tab-btn" data-tab="register">S'inscrire</button>
+            </div>
+
             <div class="auth-modal-columns">
                 <!-- Colonne Se Connecter -->
-                <div class="auth-column">
+                <div class="auth-column active" id="tab-login">
                     <h2 class="auth-column-title">Se connecter</h2>
-                    <form class="auth-form"
-                        onsubmit="event.preventDefault(); alert('Connexion réussie !'); closeAuthModal();">
+                    <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
                         <div class="form-group">
-                            <label for="login-email">Identifiant ou e-mail <span class="required">*</span></label>
-                            <input type="text" id="login-email" required placeholder="Votre e-mail ou identifiant">
+                            <label for="login-email">E-mail <span class="required">*</span></label>
+                            <input type="email" id="login-email" name="email" required placeholder="Votre adresse e-mail" autocomplete="email">
                         </div>
                         <div class="form-group">
                             <label for="login-password">Mot de passe <span class="required">*</span></label>
@@ -1227,7 +1414,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="eye-icon">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                 </button>
@@ -1237,18 +1424,22 @@
                             <label class="checkbox-label">
                                 <input type="checkbox"> Se souvenir de moi
                             </label>
-                            <a href="#" class="forgot-password-link">Mot de passe perdu ?</a>
+                            <a href="#" class="forgot-password-link" onclick="handleForgotPassword(event)">Mot de passe
+                                perdu ?</a>
                         </div>
-                        <button type="submit" class="btn-auth-submit">Se connecter</button>
+                        <div id="login-error"
+                            style="display:none;background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:10px;border:1px solid #fecaca;">
+                        </div>
+                        <button type="submit" class="btn-auth-submit" id="loginSubmitBtn">Se connecter</button>
                     </form>
 
                     <div class="auth-divider">
-                        <span>Or Login Using</span>
+                        <span>Ou se connecter avec</span>
                     </div>
 
                     <div class="auth-social-buttons">
                         <!-- Google -->
-                        <button class="social-btn google" aria-label="Google">
+                        <button class="social-btn google" aria-label="Google" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1256,7 +1447,7 @@
                             </svg>
                         </button>
                         <!-- Facebook -->
-                        <button class="social-btn facebook" aria-label="Facebook">
+                        <button class="social-btn facebook" aria-label="Facebook" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1264,7 +1455,7 @@
                             </svg>
                         </button>
                         <!-- Apple -->
-                        <button class="social-btn apple" aria-label="Apple">
+                        <button class="social-btn apple" aria-label="Apple" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1272,7 +1463,7 @@
                             </svg>
                         </button>
                         <!-- X -->
-                        <button class="social-btn x" aria-label="X (Twitter)">
+                        <button class="social-btn x" aria-label="X (Twitter)" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1283,30 +1474,56 @@
                 </div>
 
                 <!-- Ligne de séparation au milieu -->
-                <div class="auth-vertical-divider"></div>
+                <div class="auth-vertical-divider" style="display:none;"></div>
 
                 <!-- Colonne S'inscrire -->
-                <div class="auth-column">
+                <div class="auth-column" id="tab-register">
                     <h2 class="auth-column-title">S'inscrire</h2>
-                    <form class="auth-form"
-                        onsubmit="event.preventDefault(); alert('Inscription réussie !'); closeAuthModal();">
+                    <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label for="register-prenom">Prénom <span class="required">*</span></label>
+                            <input type="text" id="register-prenom" name="prenom" required placeholder="Votre prénom" autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-nom">Nom</label>
+                            <input type="text" id="register-nom" name="nom" placeholder="Votre nom" autocomplete="family-name">
+                        </div>
                         <div class="form-group">
                             <label for="register-email">Adresse e-mail <span class="required">*</span></label>
-                            <input type="email" id="register-email" required placeholder="Votre adresse e-mail">
+                            <input type="email" id="register-email" name="email" required placeholder="Votre adresse e-mail" autocomplete="email">
                         </div>
-                        <p class="auth-info-text">
-                            Un lien permettant de définir un nouveau mot de passe sera envoyé à votre adresse e-mail.
-                        </p>
-                        <button type="submit" class="btn-auth-submit">S'inscrire</button>
+                        <div class="form-group">
+                            <label for="register-password">Mot de passe <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="register-password" name="password" required placeholder="Minimum 6 caractères" autocomplete="new-password">
+                                <button type="button" class="password-toggle-btn"
+                                    onclick="togglePasswordVisibility('register-password', this)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="eye-icon">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="register-error"
+                            style="display:none;background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:10px;border:1px solid #fecaca;">
+                        </div>
+                        <div id="register-success"
+                            style="display:none;background:#f0fdf9;color:#059669;padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:10px;border:1px solid #c8f0e0;">
+                            ✓ Compte créé ! Vérifiez votre e-mail pour confirmer.
+                        </div>
+                        <button type="submit" class="btn-auth-submit" id="registerSubmitBtn">Créer mon compte</button>
                     </form>
 
                     <div class="auth-divider">
-                        <span>Or Register Using</span>
+                        <span>Ou s'inscrire avec</span>
                     </div>
 
                     <div class="auth-social-buttons">
                         <!-- Google -->
-                        <button class="social-btn google" aria-label="Google">
+                        <button class="social-btn google" aria-label="Google" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1314,7 +1531,7 @@
                             </svg>
                         </button>
                         <!-- Facebook -->
-                        <button class="social-btn facebook" aria-label="Facebook">
+                        <button class="social-btn facebook" aria-label="Facebook" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1322,7 +1539,7 @@
                             </svg>
                         </button>
                         <!-- Apple -->
-                        <button class="social-btn apple" aria-label="Apple">
+                        <button class="social-btn apple" aria-label="Apple" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1330,7 +1547,7 @@
                             </svg>
                         </button>
                         <!-- X -->
-                        <button class="social-btn x" aria-label="X (Twitter)">
+                        <button class="social-btn x" aria-label="X (Twitter)" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="currentColor">
                                 <path
@@ -1497,7 +1714,7 @@
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <polyline points="12 6 12 12 16 14"></polyline>
                                 </svg>
-                                Support 24/7 disponible
+                                Assistance rapide disponible
                             </div>
                             <div class="pom-trust-item">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00b67a"

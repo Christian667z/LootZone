@@ -5,7 +5,11 @@ import { logActivite } from './logs.js';
 
 const router = express.Router();
 
-let demoStock = [];
+let demoStock = [
+    { id: 1, produit_id: 21, produit_nom: 'FC 26 Coins', denom_label: '500k Coins', code: 'FC26-500K-XYZ9-ABCD', statut: 'disponible', vendu_at: null, commande_id: null, created_at: new Date().toISOString() },
+    { id: 2, produit_id: 1, produit_nom: 'Free Fire Diamants', denom_label: '1080 Diamants', code: 'FF-1080-DIAM-9876', statut: 'disponible', vendu_at: null, commande_id: null, created_at: new Date().toISOString() },
+    { id: 3, produit_id: 2, produit_nom: 'PUBG Mobile UC', denom_label: '660 UC', code: 'PUBG-660-UC-5432', statut: 'disponible', vendu_at: null, commande_id: null, created_at: new Date().toISOString() }
+];
 
 router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     const { produit_id } = req.query;

@@ -176,13 +176,18 @@ app.get('/api/health', (req, res) => {
 
 // ─── FICHIERS STATIQUES ───────────────────────────────────────────────────────
 app.use(express.static(ROOT_DIR));
+app.use(express.static(path.join(ROOT_DIR, 'Dashboard')));
 
 app.get('/admin-login', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
+app.get('/admin-login.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/login.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/dashboard', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
+app.get('/dashboard.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'dashboard.html')));
 app.get('/verify/:token', (req, res) => res.sendFile(path.join(ROOT_DIR, 'verify.html')));
 app.get('/topup', (req, res) => res.sendFile(path.join(ROOT_DIR, 'topup.html')));
+app.get('/payment', (req, res) => res.sendFile(path.join(ROOT_DIR, 'payment.html')));
+app.get('/payment.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'payment.html')));
 
 app.get('/*splat', (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Route API introuvable' });

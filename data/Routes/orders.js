@@ -16,7 +16,74 @@ function generateOrderId() {
     return `LZ-${year}-${seq}`;
 }
 
-let demoOrders = [];
+let demoOrders = [
+    {
+        id: 'LZ-2026-1001',
+        client_id: 'client-1',
+        client_email: 'joueur1@gmail.com',
+        client_nom: 'Alexandre M.',
+        produit_id: 21,
+        produit_nom: 'FC 26 Coins',
+        categorie: 'jeux',
+        denom_label: '500k Coins',
+        eur: 19.99,
+        htg: 2699,
+        methode_paiement: 'moncash',
+        player_id: 'AlexFut26',
+        server: 'Europe',
+        statut: 'livree',
+        locked_by: null,
+        locked_at: null,
+        risk_score: 10,
+        risk_flags: [],
+        created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+        updated_at: new Date(Date.now() - 3600000).toISOString()
+    },
+    {
+        id: 'LZ-2026-1002',
+        client_id: 'client-2',
+        client_email: 'sarah.k@yahoo.fr',
+        client_nom: 'Sarah K.',
+        produit_id: 1,
+        produit_nom: 'Free Fire Diamants',
+        categorie: 'jeux',
+        denom_label: '1080 Diamants',
+        eur: 9.99,
+        htg: 1350,
+        methode_paiement: 'natcash',
+        player_id: 'SarahFF_99',
+        server: null,
+        statut: 'en_cours',
+        locked_by: 'demo-1',
+        locked_at: new Date().toISOString(),
+        risk_score: 15,
+        risk_flags: [],
+        created_at: new Date(Date.now() - 1800000).toISOString(),
+        updated_at: new Date().toISOString()
+    },
+    {
+        id: 'LZ-2026-1003',
+        client_id: 'client-3',
+        client_email: 'gamer77@outlook.com',
+        client_nom: 'David T.',
+        produit_id: 2,
+        produit_nom: 'PUBG Mobile UC',
+        categorie: 'jeux',
+        denom_label: '660 UC',
+        eur: 10.99,
+        htg: 1485,
+        methode_paiement: 'carte_bancaire',
+        player_id: '5129481023',
+        server: 'Global',
+        statut: 'en_attente',
+        locked_by: null,
+        locked_at: null,
+        risk_score: 20,
+        risk_flags: [],
+        created_at: new Date(Date.now() - 600000).toISOString(),
+        updated_at: new Date().toISOString()
+    }
+];
 
 function calcRiskScore(order, allOrders) {
     let score = 0;
@@ -178,7 +245,7 @@ router.get('/me', async (req, res) => {
 });
 
 router.post('/public', async (req, res) => {
-    const { client_id, client_email, client_nom, produit_id, produit_nom, categorie, denom_label, eur, htg, methode_paiement, player_id, server } = req.body;
+    const { client_id, client_email, client_nom, produit_id, produit_nom, categorie, denom_label, eur, htg, methode_paiement, player_id, server, sender_name, sender_phone, transaction_id, coupon_code } = req.body;
     if (!client_email || !produit_id || !eur) return res.status(400).json({ error: 'Données incomplètes' });
 
     // Validation sécurité — format email
@@ -194,7 +261,7 @@ router.post('/public', async (req, res) => {
         return res.status(400).json({ error: 'Montant HTG invalide' });
 
     // Validation sécurité — méthode de paiement
-    const validMethods = ['moncash', 'natcash', 'carte_bancaire', 'wallet'];
+    const validMethods = ['moncash', 'natcash', 'carte_bancaire', 'wallet', 'moncash_pay'];
     if (methode_paiement && !validMethods.includes(methode_paiement))
         return res.status(400).json({ error: 'Méthode de paiement invalide' });
 
@@ -216,6 +283,10 @@ router.post('/public', async (req, res) => {
             methode_paiement,
             player_id: player_id || null,
             server: server || null,
+            sender_name: sender_name || null,
+            sender_phone: sender_phone || null,
+            transaction_id: transaction_id || null,
+            coupon_code: coupon_code || null,
             statut,
             locked_by: null, locked_at: null,
             risk_score: score, risk_flags: flags,
@@ -236,6 +307,39 @@ router.post('/public', async (req, res) => {
     }).select().single();
     if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
     res.json({ success: true, order_id: data.id, statut });
+});
+
+router.post('/:id/review', async (req, res) => {
+    const { id } = req.params;
+    const { rating, comment, user_name } = req.body;
+    const cleanRating = Math.max(1, Math.min(5, parseInt(rating, 10) || 5));
+    const cleanComment = (comment || '').trim().slice(0, 1000);
+
+    if (DEMO_MODE) {
+        const order = demoOrders.find(o => o.id === id);
+        if (order) {
+            order.review = {
+                rating: cleanRating,
+                comment: cleanComment,
+                user_name: user_name || order.client_nom,
+                created_at: new Date().toISOString()
+            };
+        }
+        return res.json({ success: true, message: 'Avis enregistré avec succès !' });
+    }
+
+    // Supabase mode
+    try {
+        await supabaseAdmin.from('reviews').insert({
+            order_id: id,
+            rating: cleanRating,
+            comment: cleanComment,
+            user_name: user_name || 'Client LootZone',
+            created_at: new Date().toISOString()
+        });
+    } catch (_) {}
+
+    res.json({ success: true, message: 'Avis enregistré avec succès !' });
 });
 
 export default router;

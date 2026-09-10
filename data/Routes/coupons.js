@@ -9,6 +9,8 @@ export let demoCoupons = [
     {
         id: '1',
         code: 'ASTA30',
+        title: 'Super Réduction Asta 30%',
+        description: '30% de réduction immédiate sans minimum d\'achat.',
         discount_type: 'percent',
         discount_value: 30,
         min_order_amount: 0,
@@ -21,6 +23,8 @@ export let demoCoupons = [
     {
         id: '2',
         code: 'WELCOME10',
+        title: 'Coupon de Bienvenue 10%',
+        description: '10% de réduction pour toute recharge dès $10.',
         discount_type: 'percent',
         discount_value: 10,
         min_order_amount: 10,
@@ -29,8 +33,42 @@ export let demoCoupons = [
         is_active: true,
         expires_at: null,
         created_at: new Date().toISOString()
+    },
+    {
+        id: '3',
+        code: 'LERICHE20',
+        title: 'Promo Partenaire Leriche',
+        description: '20% de remise spéciale sur les paiements Moncash/Natcash.',
+        discount_type: 'percent',
+        discount_value: 20,
+        min_order_amount: 5,
+        usage_limit: 200,
+        usage_count: 31,
+        is_active: true,
+        expires_at: null,
+        created_at: new Date().toISOString()
+    },
+    {
+        id: '4',
+        code: 'LOOT5',
+        title: 'Bon Réduction $5',
+        description: '$5.00 offerts sur votre recharge.',
+        discount_type: 'fixed',
+        discount_value: 5,
+        min_order_amount: 15,
+        usage_limit: 150,
+        usage_count: 42,
+        is_active: true,
+        expires_at: null,
+        created_at: new Date().toISOString()
     }
 ];
+
+// Public GET /api/coupons/public - Liste des coupons actifs disponibles pour les clients
+router.get('/public', (req, res) => {
+    const active = demoCoupons.filter(c => c.is_active);
+    res.json(active);
+});
 
 // 1. GET /api/coupons - List all coupons (Staff auth required)
 router.get('/', requireAuth, async (req, res) => {

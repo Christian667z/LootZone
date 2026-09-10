@@ -1855,9 +1855,6 @@
                         </div>
                         <div class="lootbar-card-footer">
                             <span class="lootbar-card-old-price" data-price-usd="${oldPriceUsd.toFixed(2)}">$${oldPriceUsd.toFixed(2)}</span>
-                            <button type="button" class="lootbar-card-cart-btn" onclick="event.stopPropagation(); addPackToCart(${i});" title="Ajouter au panier" aria-label="Ajouter au panier">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"></path></svg>
-                            </button>
                         </div>
                     </div>
                 `;
@@ -1932,32 +1929,9 @@
             }
         }
 
-        // Quick add from card cart icon
+        // Sélection rapide de pack
         function addPackToCart(index) {
-            if (!product || !product.denoms || !product.denoms[index]) return;
-            const denom = product.denoms[index];
-            const uidInput = document.getElementById('tu-uid-input');
-            const uid = uidInput ? uidInput.value.trim() : '';
-
-            addToCartLocal({
-                id: product.id,
-                name: product.name,
-                denom: denom.label,
-                price: denom.eur,
-                htg: denom.htg,
-                player_id: uid,
-                server: document.getElementById('tu-server-select')?.value || '',
-                method: selectedPayMethod,
-                img: denom.img || product.img,
-                quantity: 1
-            });
-
-            showAstaToast(
-                'cart',
-                'Pack ajouté au panier ! 🛒',
-                `${product.name} (${denom.label}) — $${parseFloat(denom.eur).toFixed(2)}`,
-                { text: 'Voir panier 🛒', onclick: 'openCartDrawer()' }
-            );
+            selectPack(index);
         }
 
         function showBuyGuide() {
@@ -2045,7 +2019,7 @@
             badges.forEach(b => b.textContent = cart.reduce((sum, i) => sum + (i.quantity || 1), 0));
         }
 
-        // ─── Submit order ────────────────────────────────────────────────────────
+        // ─── Submit order -> Redirection vers Paiement Direct ───────────────────────
         async function submitOrder() {
             if (!product || !selectedDenom) {
                 showAstaToast('warning', 'Sélection requise', 'Veuillez sélectionner un pack d\'option ci-dessus.');
@@ -2074,50 +2048,34 @@
                 return;
             }
 
-            // Enregistrer automatiquement dans le panier local
-            addToCartLocal({
-                id: product.id,
-                name: product.name,
-                denom: selectedDenom.label,
-                price: selectedDenom.eur,
-                htg: selectedDenom.htg,
-                player_id: uid,
-                server: server,
-                method: selectedPayMethod,
-                img: product.image,
-                quantity: orderQuantity
-            });
-
-            // Afficher la bulle de notification élégante
             const unitPrice = parseFloat(selectedDenom.eur) || 0;
-            const totPrice = (unitPrice * orderQuantity).toFixed(2);
-            showAstaToast(
-                'cart', 
-                'Ajouté au panier ! 🛒', 
-                `${product.name} (${selectedDenom.label} x${orderQuantity}) — $${totPrice}`,
-                { text: 'Voir mon panier 🛒', onclick: 'openCartDrawer()' }
-            );
+            const unitPriceHtg = selectedDenom.htg || Math.round(unitPrice * 135);
+            const oldPriceUsd = parseFloat(selectedDenom.old_price) || (unitPrice * 1.15);
 
-            const btn = document.getElementById('tu-order-btn');
-            btn.disabled = true;
-            btn.textContent = 'Traitement en cours…';
+            const checkoutItem = {
+                productId: product.id,
+                productName: product.name,
+                category: product.category || 'jeux',
+                image: product.image || product.img || 'favicon.svg',
+                denomLabel: selectedDenom.label,
+                unitPriceUsd: unitPrice,
+                unitPriceHtg: unitPriceHtg,
+                oldPriceUsd: oldPriceUsd,
+                quantity: orderQuantity,
+                totalUsd: (unitPrice * orderQuantity).toFixed(2),
+                totalHtg: Math.round(unitPriceHtg * orderQuantity),
+                playerId: uid,
+                idLabel: product.idLabel || 'ID Joueur',
+                server: server || '',
+                selectedPaymentMethod: selectedPayMethod || 'moncash',
+                timestamp: Date.now()
+            };
 
-            const ref = 'LOOT-' + Date.now().toString(36).toUpperCase();
+            // Enregistrer dans localStorage (current_checkout_item)
+            localStorage.setItem('current_checkout_item', JSON.stringify(checkoutItem));
 
-            try {
-                if (selectedPayMethod === 'wallet' && authToken) {
-                    await submitWalletOrder(uid, server, ref);
-                } else {
-                    await submitPublicOrder(uid, server, ref);
-                }
-            } catch (err) {
-                console.error('[topup] order error', err);
-                showAstaToast('error', 'Erreur de commande', err.message || 'Une erreur est survenue. Veuillez réessayer.');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span data-i18n="product.recharge_now">Recharger</span>';
-                if (window.updateLanguage) window.updateLanguage();
-            }
+            // Redirection immédiate vers payment.html
+            window.location.href = 'payment.html';
         }
 
         async function submitPublicOrder(uid, server, ref) {

@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement Sécurisé — LootZone</title>
+    <meta name="description" content="Finalisez votre commande et rechargez immédiatement via MonCash, NatCash ou carte bancaire sur LootZone.">
+    <meta property="og:title" content="Paiement Sécurisé — LootZone">
+    <meta property="og:description" content="Paiement direct et sécurisé pour vos crédits de jeux et cartes cadeaux.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           FEUILLE DE STYLE COMPLETE & INDEPENDANTE — PAGE DE PAIEMENT LOOTZONE
+           Design System Hybride : LootBar (Détails) + Leriche Topup (Méthodes)
+           Strictement en Français, 100% Responsive, Thème Clair avec Header Sombre
+           ========================================================================== */
+
+        :root {
+            --lz-bg-main: #f8fafc;
+            --lz-bg-card: #ffffff;
+            --lz-border-light: #eaedf1;
+            --lz-border-input: #d1d5db;
+            --lz-border-active: #7c3aed;
+            --lz-text-main: #111827;
+            --lz-text-muted: #4b5563;
+            --lz-text-subtle: #9ca3af;
+            --lz-primary: #7c3aed;
+            --lz-primary-hover: #6d28d9;
+            --lz-primary-glow: rgba(124, 58, 237, 0.18);
+            --lz-gold: #ffb800;
+            --lz-gold-dark: #f59e0b;
+            --lz-green: #10b981;
+            --lz-red: #ef4444;
+            --lz-moncash: #e11d48;
+            --lz-natcash: #0284c7;
+            --lz-radius: 12px;
+            --lz-radius-sm: 8px;
+            --lz-radius-pill: 9999px;
+            --lz-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --lz-shadow-md: 0 4px 18px rgba(15, 23, 42, 0.06);
+            --lz-shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--lz-bg-main);
+            color: var(--lz-text-main);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        /* ─── 1. HEADER / NAVBAR HAUT DE GAMME (STYLE ACCUEIL SOMBRE) ─── */
+        .lz-navbar {
+            background-color: #0f172a;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+        .lz-navbar-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            height: 72px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .lz-navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .lz-brand-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+        .lz-brand-text {
+            font-size: 21px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+        .lz-brand-text span {
+            color: #a855f7;
+        }
+
+        .lz-nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 4px;
+        }
+        .lz-nav-links li a {
+            text-decoration: none;
+            color: #ffffff;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        .lz-nav-links li a:hover {
+            color: #a855f7;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .lz-navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .lz-currency-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 6px 12px;
+            border-radius: var(--lz-radius-pill);
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+        .lz-login-btn {
+            background: #7c3aed;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            white-space: nowrap;
+        }
+        .lz-login-btn:hover {
+            background: #6d28d9;
+        }
+
+        @media (max-width: 860px) {
+            .lz-nav-links {
+                display: none; /* Sur mobile, compact */
+            }
+        }
+
+        /* ─── Fil d'Ariane & Garantie de Sécurité ─── */
+        .lz-subbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--lz-border-light);
+            padding: 12px 0;
+        }
+        .lz-subbar-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .lz-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--lz-text-muted);
+        }
+        .lz-breadcrumb a {
+            color: var(--lz-text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .lz-breadcrumb a:hover {
+            color: var(--lz-primary);
+        }
+        .lz-breadcrumb .current {
+            color: var(--lz-primary);
+            font-weight: 700;
+        }
+        .lz-trust-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #047857;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            padding: 4px 12px;
+            border-radius: var(--lz-radius-pill);
+        }
+
+        /* ─── 2. STRUCTURE PRINCIPALE À 2 COLONNES ─── */
+        .lz-payment-container {
+            flex: 1;
+            max-width: 1240px;
+            width: 100%;
+            margin: 24px auto 48px auto;
+            padding: 0 20px;
+        }
+
+        .lz-payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 390px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 980px) {
+            .lz-payment-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ─── 3. COLONNE DE GAUCHE : MOYENS DE PAIEMENT (STYLE LERICHE TOPUP) ─── */
+        .lz-payment-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Récapitulatif du Produit */
+        .lz-selected-item-card {
+            background: #ffffff;
+            border: 1px solid var(--lz-border-light);
+            border-radius: var(--lz-radius);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--lz-shadow-sm);
+        }
+        .lz-item-icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--lz-radius-sm);
+            background: #f1f5f9;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--lz-border-light);
+        }
+        .lz-item-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .lz-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .lz-item-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+        .lz-item-title {
+            font-size: 16.5px;
+            font-weight: 800;
+            color: var(--lz-text-main);
+        }
+        .lz-item-badge {
+            background: #f3e8ff;
+            color: #6b21a8;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--lz-radius-pill);
+        }
+        .lz-item-meta-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--lz-text-muted);
+        }
+        .lz-item-meta-list strong {
+            color: var(--lz-text-main);
+        }
+
+        .lz-section-title-wrap {
+            margin-top: 4px;
+        }
+        .lz-section-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--lz-text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lz-section-subtitle {
+            font-size: 13px;
+            color: var(--lz-text-muted);
+            margin-top: 2px;
+        }
+
+        /* Cartes de Paiement Accordéon (Style Leriche Topup) */
+        .lz-accordion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .lz-accordion-item {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--lz-radius);
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: var(--lz-shadow-sm);
+        }
+        .lz-accordion-item:hover {
+            border-color: #cbd5e1;
+        }
+        .lz-accordion-item.active {
+            border-color: var(--lz-primary);
+            box-shadow: 0 0 0 3px var(--lz-primary-glow), var(--lz-shadow-md);
+        }
+
+        .lz-accordion-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            background: #ffffff;
+            transition: background 0.2s;
+            gap: 14px;
+        }
+        .lz-accordion-item.active .lz-accordion-header {
+            background: #faf5ff;
+        }
+
+        .lz-accordion-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+        .lz-custom-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: border-color 0.2s;
+        }
+        .lz-accordion-item.active .lz-custom-radio {
+            border-color: var(--lz-primary);
+        }
+        .lz-custom-radio-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .lz-accordion-item.active .lz-custom-radio-dot {
+            background: var(--lz-primary);
+        }
+
+        .lz-method-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .lz-logo-moncash {
+            background: #fff1f2;
+            color: #e11d48;
+            border: 1px solid #fecdd3;
+        }
+        .lz-logo-natcash {
+            background: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+        }
+        .lz-logo-card {
+            background: #f8fafc;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+        }
+
+        .lz-method-details {
+            flex: 1;
+        }
+        .lz-method-top-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .lz-method-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--lz-text-main);
+        }
+        .lz-badge-recom {
+            font-size: 11px;
+            font-weight: 800;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: var(--lz-radius-pill);
+            border: 1px solid #fde68a;
+        }
+        .lz-badge-fee {
+            font-size: 11px;
+            font-weight: 800;
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 2px 8px;
+            border-radius: var(--lz-radius-pill);
+            border: 1px solid #a7f3d0;
+        }
+        .lz-method-desc {
+            font-size: 12.5px;
+            color: var(--lz-text-muted);
+            margin-top: 2px;
+        }
+
+        /* Corps Déroulant de l'Accordéon */
+        .lz-accordion-body {
+            display: none;
+            padding: 0 20px 22px 20px;
+            border-top: 1px solid #f1f5f9;
+            background: #ffffff;
+        }
+        .lz-accordion-item.active .lz-accordion-body {
+            display: block;
+        }
+
+        /* Bloc d'Instructions et Statut EN ATTENTE */
+        .lz-instruction-box {
+            background: #f8fafc;
+            border: 1px solid var(--lz-border-light);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .lz-instruction-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .lz-status-waiting {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fcd34d;
+            padding: 4px 10px;
+            border-radius: var(--lz-radius-pill);
+        }
+        .lz-pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            animation: lz-pulse 1.8s infinite;
+        }
+        @keyframes lz-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .lz-instruction-lead {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 10px;
+        }
+
+        .lz-account-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .lz-account-label {
+            font-size: 12px;
+            color: var(--lz-text-muted);
+            margin-bottom: 2px;
+        }
+        .lz-account-name {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--lz-text-main);
+            letter-spacing: 0.02em;
+        }
+        .lz-account-number {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #0f172a;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-top: 2px;
+        }
+
+        .lz-btn-copy {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .lz-btn-copy:hover {
+            background: #e2e8f0;
+            color: var(--lz-primary);
+        }
+        .lz-btn-copy.copied {
+            background: #ecfdf5;
+            color: #059669;
+            border-color: #6ee7b7;
+        }
+
+        .lz-amount-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 12px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #1e40af;
+        }
+        .lz-amount-row strong {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        /* Formulaire Expéditeur Clair (Design Moderne) */
+        .lz-sender-form {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .lz-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .lz-field-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .lz-field-label .required {
+            color: var(--lz-red);
+        }
+        .lz-field-input {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid var(--lz-border-input);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #111827;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .lz-field-input:focus {
+            outline: none;
+            border-color: var(--lz-primary);
+            box-shadow: 0 0 0 3px var(--lz-primary-glow);
+            background: #ffffff;
+        }
+        .lz-field-input.input-error {
+            border-color: var(--lz-red) !important;
+            background: #fff5f5;
+        }
+        .lz-field-help {
+            font-size: 11.5px;
+            color: var(--lz-text-muted);
+        }
+
+        /* ─── 4. COLONNE DE DROITE : DÉTAILS DU PAIEMENT (STYLE LOOTBAR) ─── */
+        .lz-payment-right {
+            position: sticky;
+            top: 90px;
+            z-index: 10;
+        }
+
+        .lz-lootbar-card {
+            background: #ffffff;
+            border: 1px solid var(--lz-border-light);
+            border-radius: var(--lz-radius);
+            padding: 22px;
+            box-shadow: var(--lz-shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lz-card-heading {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.01em;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Champ 1 : Code Promo Manuel (LootBar) */
+        .lz-coupon-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .lz-coupon-input-wrap {
+            display: flex;
+            border: 1px solid var(--lz-border-input);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+            transition: border-color 0.2s;
+        }
+        .lz-coupon-input-wrap:focus-within {
+            border-color: var(--lz-primary);
+            box-shadow: 0 0 0 2px var(--lz-primary-glow);
+        }
+        .lz-coupon-input {
+            flex: 1;
+            height: 42px;
+            border: none;
+            padding: 0 12px;
+            font-size: 13.5px;
+            font-family: inherit;
+            color: #111827;
+            outline: none;
+        }
+        .lz-coupon-input::placeholder {
+            color: #9ca3af;
+        }
+        .lz-btn-exchange {
+            background: #f8fafc;
+            border: none;
+            border-left: 1px solid var(--lz-border-input);
+            color: var(--lz-primary);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 0 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .lz-btn-exchange:hover {
+            background: var(--lz-primary);
+            color: #ffffff;
+        }
+
+        .lz-coupon-msg {
+            font-size: 12px;
+            font-weight: 600;
+            min-height: 16px;
+        }
+        .lz-coupon-msg.success { color: var(--lz-green); }
+        .lz-coupon-msg.error { color: var(--lz-red); }
+
+        /* Pilule de coupon actif */
+        .lz-active-coupon-tag {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+        }
+        .lz-active-coupon-tag.show {
+            display: flex;
+        }
+        .lz-btn-remove-coupon {
+            background: none;
+            border: none;
+            color: #065f46;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        /* Champ 2 : Sélection de Coupon d'article (LootBar) */
+        .lz-coupon-selector-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 14px;
+            background: #faf5ff;
+            border: 1px dashed #d8b4fe;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .lz-coupon-selector-trigger:hover {
+            background: #f3e8ff;
+            border-color: #c084fc;
+        }
+        .lz-selector-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b21a8;
+        }
+        .lz-selector-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #7c3aed;
+        }
+
+        /* Détails du Prix (LootBar) */
+        .lz-price-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 6px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .lz-price-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13.5px;
+            color: var(--lz-text-muted);
+        }
+        .lz-price-value {
+            font-weight: 700;
+            color: var(--lz-text-main);
+        }
+        .lz-price-value.discount {
+            color: var(--lz-green);
+        }
+
+        .lz-loyalty-reward {
+            background: #fefce8;
+            border: 1px solid #fef08a;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 12px;
+            color: #854d0e;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .lz-separator {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 4px 0;
+        }
+
+        .lz-total-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .lz-total-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--lz-text-main);
+        }
+        .lz-total-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #b45309;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+        }
+        .lz-total-htg-sub {
+            text-align: right;
+            font-size: 13px;
+            color: var(--lz-text-muted);
+            font-weight: 700;
+            margin-top: -6px;
+        }
+
+        /* Bouton Principal Jaune/Orange (LootBar Style) */
+        .lz-btn-pay-now {
+            width: 100%;
+            height: 52px;
+            background: linear-gradient(135deg, #ffb800 0%, #f59e0b 100%);
+            color: #111827;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.01em;
+        }
+        .lz-btn-pay-now:hover {
+            background: linear-gradient(135deg, #ffc42e 0%, #ea580c 100%);
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+        }
+        .lz-btn-pay-now:active {
+            transform: translateY(1px);
+        }
+        .lz-btn-pay-now:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .lz-side-guarantees {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 4px;
+        }
+        .lz-guarantee-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--lz-text-muted);
+        }
+        .lz-guarantee-row svg {
+            color: var(--lz-green);
+            flex-shrink: 0;
+        }
+
+        /* ─── 5. MODALE SÉLECTION DE COUPON D'ARTICLE ─── */
+        .lz-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .lz-modal-backdrop.active {
+            display: flex;
+        }
+        .lz-modal-container {
+            background: #ffffff;
+            border-radius: var(--lz-radius);
+            max-width: 480px;
+            width: 100%;
+            box-shadow: var(--lz-shadow-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+            animation: lz-scaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes lz-scaleUp {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .lz-modal-head {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--lz-border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .lz-modal-head h3 {
+            font-size: 16.5px;
+            font-weight: 800;
+            color: var(--lz-text-main);
+        }
+        .lz-modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .lz-modal-content {
+            padding: 16px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .lz-coupon-card {
+            border: 1px solid var(--lz-border-light);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: #ffffff;
+            transition: all 0.2s;
+        }
+        .lz-coupon-card:hover {
+            border-color: var(--lz-primary);
+            box-shadow: var(--lz-shadow-sm);
+        }
+        .lz-coupon-card-info {
+            flex: 1;
+        }
+        .lz-coupon-badge {
+            display: inline-block;
+            background: #f3e8ff;
+            color: #6b21a8;
+            font-size: 11.5px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 4px;
+            margin-bottom: 3px;
+        }
+        .lz-coupon-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--lz-text-main);
+        }
+        .lz-coupon-desc {
+            font-size: 12px;
+            color: var(--lz-text-muted);
+        }
+        .lz-btn-apply-coupon {
+            background: #7c3aed;
+            color: #ffffff;
+            border: none;
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .lz-btn-apply-coupon:hover {
+            background: #6d28d9;
+        }
+
+        /* ─── 6. MODALE POST-PAIEMENT : AVIS CLIENT STRICTEMENT EN FRANÇAIS ─── */
+        .lz-review-modal-box {
+            padding: 24px;
+            max-width: 520px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: var(--lz-radius);
+            box-shadow: var(--lz-shadow-lg);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: lz-scaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .lz-success-icon-wrap {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ecfdf5;
+            color: #059669;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .lz-review-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 4px;
+        }
+        .lz-review-subtitle {
+            font-size: 13.5px;
+            color: var(--lz-text-muted);
+        }
+
+        /* Étoiles de Notation Interactives */
+        .lz-rating-stars-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+        .lz-star-btn {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: color 0.15s, transform 0.15s;
+            line-height: 1;
+        }
+        .lz-star-btn:hover,
+        .lz-star-btn.active {
+            color: #ffb800;
+            transform: scale(1.15);
+        }
+        .lz-rating-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #b45309;
+            min-height: 18px;
+        }
+
+        .lz-review-textarea {
+            width: 100%;
+            height: 90px;
+            padding: 12px 14px;
+            border: 1px solid var(--lz-border-input);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13.5px;
+            color: #111827;
+            resize: vertical;
+        }
+        .lz-review-textarea:focus {
+            outline: none;
+            border-color: var(--lz-primary);
+            box-shadow: 0 0 0 3px var(--lz-primary-glow);
+        }
+
+        .lz-order-summary-mini {
+            background: #f8fafc;
+            border: 1px solid var(--lz-border-light);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .lz-order-summary-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .lz-order-summary-row span { color: var(--lz-text-muted); }
+        .lz-order-summary-row strong { color: var(--lz-text-main); }
+
+        .lz-review-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .lz-btn-publish-review {
+            height: 46px;
+            background: #7c3aed;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .lz-btn-publish-review:hover {
+            background: #6d28d9;
+        }
+        .lz-btn-skip-review {
+            background: none;
+            border: none;
+            color: var(--lz-text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 6px;
+            text-decoration: underline;
+        }
+        .lz-btn-skip-review:hover {
+            color: #111827;
+        }
+
+        /* ─── Toast Notifications ─── */
+        .lz-toasts {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .lz-toast-item {
+            background: #111827;
+            color: #ffffff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            box-shadow: var(--lz-shadow-lg);
+            animation: lz-toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes lz-toastIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .lz-toast-item.success { border-left: 4px solid var(--lz-green); }
+        .lz-toast-item.warning { border-left: 4px solid var(--lz-gold-dark); }
+        .lz-toast-item.error { border-left: 4px solid var(--lz-red); }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         1. NAVBAR SUPERIEURE (STYLE ACCUEIL SOMBRE, LIENS HORIZONTAUX)
+         ============================================================ -->
+    <header class="lz-navbar" id="lzMainNavbar">
+        <div class="lz-navbar-inner">
+            <!-- Logo LootZone -->
+            <a href="index.html" class="lz-navbar-brand" id="lzBrandLink" aria-label="LootZone">
+                <img src="LootZone_img-removebg-preview.png" alt="LootZone" class="lz-brand-logo" onerror="this.src='favicon.svg'">
+                <span class="lz-brand-text">Loot<span>Zone</span></span>
+            </a>
+
+            <!-- Liens de navigation horizontaux -->
+            <nav id="lzNavContainer">
+                <ul class="lz-nav-links">
+                    <li><a href="index.html" id="linkNavHome" data-i18n="nav.home">Accueil</a></li>
+                    <li><a href="catalog.html?cat=jeux" id="linkNavGames" data-i18n="nav.games">Jeux & Recharge</a></li>
+                    <li><a href="blog.html" id="linkNavBlog" data-i18n="nav.blog">Blog</a></li>
+                    <li><a href="contact.html" id="linkNavHelp" data-i18n="nav.help">Centre d'aide & Support</a></li>
+                </ul>
+            </nav>
+
+            <!-- Actions droite : Langue/Devise & Compte -->
+            <div class="lz-navbar-right">
+                <div class="lz-currency-badge" id="lzCurrencyBadge" title="Devise et langue actuelles">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span data-i18n="nav.lang_currency">Français / USD</span>
+                </div>
+                <a href="Dashboard/admin-login.html" class="lz-login-btn" id="lzLoginBtn" data-i18n="nav.login">
+                    Connexion
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Fil d'Ariane & Pastille de Sécurité -->
+    <div class="lz-subbar" id="lzSubBar">
+        <div class="lz-subbar-inner">
+            <div class="lz-breadcrumb">
+                <a href="index.html" data-i18n="breadcrumb.home">Accueil</a>
+                <span>/</span>
+                <a href="catalog.html" data-i18n="breadcrumb.catalog">Recharges</a>
+                <span>/</span>
+                <span class="current" data-i18n="breadcrumb.payment">Paiement Sécurisé</span>
+            </div>
+            <div class="lz-trust-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span data-i18n="payment.trust_badge">Paiement 100% Sécurisé & Chiffré</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         2. STRUCTURE PRINCIPALE À DEUX COLONNES
+         ============================================================ -->
+    <main class="lz-payment-container" id="lzPaymentContainer">
+        <div class="lz-payment-grid">
+
+            <!-- ------------------------------------------------------------
+                 COLONNE DE GAUCHE : MOYENS DE PAIEMENT (STYLE LERICHE TOPUP)
+                 ------------------------------------------------------------ -->
+            <div class="lz-payment-left" id="lzPaymentLeftCol">
+
+                <!-- Récapitulatif Rapide du Produit Sélectionné -->
+                <div class="lz-selected-item-card" id="lzProductSummaryCard">
+                    <div class="lz-item-icon-box">
+                        <img src="favicon.svg" alt="Jeu" id="prodImg" onerror="this.src='favicon.svg'">
+                    </div>
+                    <div class="lz-item-info">
+                        <div class="lz-item-title-row">
+                            <span class="lz-item-title" id="prodName">Chargement du produit…</span>
+                            <span class="lz-item-badge" id="prodPack">Pack</span>
+                        </div>
+                        <div class="lz-item-meta-list">
+                            <div><span data-i18n="payment.player_id_label">ID Joueur :</span> <strong id="prodPlayerId">—</strong></div>
+                            <div id="prodServerWrapper" style="display:none;"><span data-i18n="payment.server_label">Serveur :</span> <strong id="prodServer">—</strong></div>
+                            <div><span data-i18n="payment.quantity_label">Quantité :</span> <strong id="prodQty">1</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- En-tête de section -->
+                <div class="lz-section-title-wrap">
+                    <h1 class="lz-section-title" data-i18n="payment.methods_title">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:#7c3aed;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        Moyens de Paiement
+                    </h1>
+                    <p class="lz-section-subtitle" data-i18n="payment.methods_subtitle">Sélectionnez votre mode de paiement pour finaliser votre recharge en toute sécurité.</p>
+                </div>
+
+                <!-- Accordéons des Moyens de Paiement (Style Leriche Topup) -->
+                <div class="lz-accordion-list" id="lzAccordionList">
+
+                    <!-- OPTION 1 : MONCASH (TRANSFERT MANUEL) -->
+                    <div class="lz-accordion-item active" id="accMoncash" data-method="moncash">
+                        <div class="lz-accordion-header" onclick="selectPaymentMethod('moncash')">
+                            <div class="lz-accordion-header-left">
+                                <div class="lz-custom-radio">
+                                    <div class="lz-custom-radio-dot"></div>
+                                </div>
+                                <div class="lz-method-logo lz-logo-moncash">
+                                    <span>MC</span>
+                                </div>
+                                <div class="lz-method-details">
+                                    <div class="lz-method-top-line">
+                                        <span class="lz-method-name" data-i18n="payment.moncash_title">MonCash (Transfert Manuel)</span>
+                                        <span class="lz-badge-recom" data-i18n="payment.badge_recommended">Recommandé</span>
+                                        <span class="lz-badge-fee" data-i18n="payment.badge_zero_fees">0% Frais</span>
+                                    </div>
+                                    <p class="lz-method-desc" data-i18n="payment.moncash_desc">Transfert direct sans frais supplémentaires - Validation rapide 2 à 10 minutes</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Corps d'instructions MonCash -->
+                        <div class="lz-accordion-body" id="bodyMoncash">
+                            <div class="lz-instruction-box">
+                                <div class="lz-instruction-header">
+                                    <span class="lz-status-waiting" data-i18n="payment.status_waiting">
+                                        <span class="lz-pulse-dot"></span> EN ATTENTE
+                                    </span>
+                                    <span style="font-size:12px; color:#64748b; font-weight:600;" data-i18n="payment.validity_time">Valable 30 minutes</span>
+                                </div>
+
+                                <p class="lz-instruction-lead" data-i18n="payment.moncash_instruction">Envoyez l'argent sur ce numéro MonCash :</p>
+
+                                <div class="lz-account-card">
+                                    <div>
+                                        <div class="lz-account-label" data-i18n="payment.account_holder_label">Nom du destinataire :</div>
+                                        <div class="lz-account-name">VLADIMIR ANTOINE ARISTHENE SAINVILUS</div>
+                                        <div class="lz-account-number" id="numMoncashDisplay">4696-6290</div>
+                                    </div>
+                                    <button type="button" class="lz-btn-copy" id="btnCopyMoncash" onclick="copyNumber('46966290', this)" data-i18n="payment.btn_copy">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        <span>Copier</span>
+                                    </button>
+                                </div>
+
+                                <div class="lz-amount-row">
+                                    <span data-i18n="payment.amount_to_send">Montant exact à envoyer :</span>
+                                    <strong id="moncashAmountDisplay">0 HTG ($0.00 USD)</strong>
+                                </div>
+                            </div>
+
+                            <!-- Formulaire Informations Expéditeur MonCash -->
+                            <div class="lz-sender-form">
+                                <div class="lz-field-group">
+                                    <label class="lz-field-label" for="moncashSenderName" data-i18n="payment.sender_name_label">
+                                        Nom de l'expéditeur <span class="required">*</span>
+                                    </label>
+                                    <input type="text" id="moncashSenderName" class="lz-field-input" placeholder="Ex: LERICHE LUDNER" data-i18n-placeholder="payment.sender_name_placeholder" autocomplete="name">
+                                </div>
+
+                                <div class="lz-field-group">
+                                    <label class="lz-field-label" for="moncashSenderPhone" data-i18n="payment.sender_phone_label">
+                                        Numéro de téléphone de l'expéditeur <span class="required">*</span>
+                                    </label>
+                                    <input type="tel" id="moncashSenderPhone" class="lz-field-input" placeholder="Ex: 35672037" data-i18n-placeholder="payment.sender_phone_placeholder" autocomplete="tel">
+                                    <span class="lz-field-help" data-i18n="payment.phone_help">Avec ou sans +509 — ex: 35672037 ou +509 35672037</span>
+                                </div>
+
+                                <div class="lz-field-group">
+                                    <label class="lz-field-label" for="moncashTxId" data-i18n="payment.tx_id_label">
+                                        ID / Référence de transaction (Optionnel)
+                                    </label>
+                                    <input type="text" id="moncashTxId" class="lz-field-input" placeholder="Ex: 25836296" data-i18n-placeholder="payment.tx_id_placeholder">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OPTION 2 : NATCASH (TRANSFERT MANUEL) -->
+                    <div class="lz-accordion-item" id="accNatcash" data-method="natcash">
+                        <div class="lz-accordion-header" onclick="selectPaymentMethod('natcash')">
+                            <div class="lz-accordion-header-left">
+                                <div class="lz-custom-radio">
+                                    <div class="lz-custom-radio-dot"></div>
+                                </div>
+                                <div class="lz-method-logo lz-logo-natcash">
+                                    <span>NC</span>
+                                </div>
+                                <div class="lz-method-details">
+                                    <div class="lz-method-top-line">
+                                        <span class="lz-method-name" data-i18n="payment.natcash_title">NatCash (Transfert Manuel)</span>
+                                        <span class="lz-badge-fee" data-i18n="payment.badge_zero_fees">0% Frais</span>
+                                    </div>
+                                    <p class="lz-method-desc" data-i18n="payment.natcash_desc">Transfert direct Natcom NatCash - Validation 5 à 15 minutes</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Corps d'instructions NatCash -->
+                        <div class="lz-accordion-body" id="bodyNatcash">
+                            <div class="lz-instruction-box">
+                                <div class="lz-instruction-header">
+                                    <span class="lz-status-waiting" data-i18n="payment.status_waiting">
+                                        <span class="lz-pulse-dot"></span> EN ATTENTE
+                                    </span>
+                                    <span style="font-size:12px; color:#64748b; font-weight:600;" data-i18n="payment.validity_time">Valable 30 minutes</span>
+                                </div>
+
+                                <p class="lz-instruction-lead" data-i18n="payment.natcash_instruction">Envoyez l'argent sur ce numéro NatCash :</p>
+
+                                <div class="lz-account-card">
+                                    <div>
+                                        <div class="lz-account-label" data-i18n="payment.account_holder_label">Nom du destinataire :</div>
+                                        <div class="lz-account-name">VLADIMIR ANTOINE ARISTHENE SAINVILUS</div>
+                                        <div class="lz-account-number" id="numNatcashDisplay">3342-8479</div>
+                                    </div>
+                                    <button type="button" class="lz-btn-copy" id="btnCopyNatcash" onclick="copyNumber('33428479', this)" data-i18n="payment.btn_copy">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        <span>Copier</span>
+                                    </button>
+                                </div>
+
+                                <div class="lz-amount-row">
+                                    <span data-i18n="payment.amount_to_send">Montant exact à envoyer :</span>
+                                    <strong id="natcashAmountDisplay">0 HTG ($0.00 USD)</strong>
+                                </div>
+                            </div>
+
+                            <!-- Formulaire Informations Expéditeur NatCash -->
+                            <div class="lz-sender-form">
+                                <div class="lz-field-group">
+                                    <label class="lz-field-label" for="natcashSenderName" data-i18n="payment.sender_name_label">
+                                        Nom de l'expéditeur <span class="required">*</span>
+                                    </label>
+                                    <input type="text" id="natcashSenderName" class="lz-field-input" placeholder="Ex: LERICHE LUDNER" data-i18n-placeholder="payment.sender_name_placeholder" autocomplete="name">
+                                </div>
+
+                                <div class="lz-field-group">
+                                    <label class="lz-field-label" for="natcashSenderPhone" data-i18n="payment.sender_phone_label">
+                                        Numéro de téléphone de l'expéditeur <span class="required">*</span>
+                                    </label>
+                                    <input type="tel" id="natcashSenderPhone" class="lz-field-input" placeholder="Ex: 35672037" data-i18n-placeholder="payment.sender_phone_placeholder" autocomplete="tel">
+                                    <span class="lz-field-help" data-i18n="payment.phone_help">Avec ou sans +509 — ex: 35672037 ou +509 35672037</span>
+                                </div>
+
+                                <div class="lz-field-group">
+                                    <label class="lz-field-label" for="natcashTxId" data-i18n="payment.tx_id_label">
+                                        ID / Référence de transaction (Optionnel)
+                                    </label>
+                                    <input type="text" id="natcashTxId" class="lz-field-input" placeholder="Ex: 25836296" data-i18n-placeholder="payment.tx_id_placeholder">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OPTION 3 : CARTE BANCAIRE INTERNATIONALE -->
+                    <div class="lz-accordion-item" id="accCard" data-method="carte_bancaire">
+                        <div class="lz-accordion-header" onclick="selectPaymentMethod('carte_bancaire')">
+                            <div class="lz-accordion-header-left">
+                                <div class="lz-custom-radio">
+                                    <div class="lz-custom-radio-dot"></div>
+                                </div>
+                                <div class="lz-method-logo lz-logo-card">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                </div>
+                                <div class="lz-method-details">
+                                    <div class="lz-method-top-line">
+                                        <span class="lz-method-name" data-i18n="payment.card_title">Carte Bancaire Internationale</span>
+                                        <span class="lz-badge-fee" style="background:#f1f5f9; color:#475569; border-color:#cbd5e1;">Visa / Mastercard</span>
+                                    </div>
+                                    <p class="lz-method-desc" data-i18n="payment.card_desc">Paiement sécurisé par carte bancaire internationale</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lz-accordion-body" id="bodyCard">
+                            <div class="lz-instruction-box">
+                                <p style="font-size:13px; color:#475569; margin-bottom:12px;" data-i18n="payment.card_instructions">
+                                    Saisissez les informations de votre carte pour finaliser le paiement directement en ligne.
+                                </p>
+                                <div class="lz-sender-form" style="margin-top:0;">
+                                    <div class="lz-field-group">
+                                        <label class="lz-field-label" for="cardHolder" data-i18n="payment.card_holder_label">Nom sur la carte <span class="required">*</span></label>
+                                        <input type="text" id="cardHolder" class="lz-field-input" placeholder="Ex: JEAN PIERRE">
+                                    </div>
+                                    <div class="lz-field-group">
+                                        <label class="lz-field-label" for="cardNumber" data-i18n="payment.card_number_label">Numéro de carte <span class="required">*</span></label>
+                                        <input type="text" id="cardNumber" class="lz-field-input" placeholder="4532 •••• •••• 8892" maxlength="19">
+                                    </div>
+                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                                        <div class="lz-field-group">
+                                            <label class="lz-field-label" for="cardExpiry" data-i18n="payment.card_expiry_label">Expiration <span class="required">*</span></label>
+                                            <input type="text" id="cardExpiry" class="lz-field-input" placeholder="MM/AA" maxlength="5">
+                                        </div>
+                                        <div class="lz-field-group">
+                                            <label class="lz-field-label" for="cardCvc" data-i18n="payment.card_cvc_label">CVC / CVV <span class="required">*</span></label>
+                                            <input type="password" id="cardCvc" class="lz-field-input" placeholder="123" maxlength="4">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ------------------------------------------------------------
+                 COLONNE DE DROITE : DÉTAILS DU PAIEMENT (STYLE LOOTBAR)
+                 ------------------------------------------------------------ -->
+            <div class="lz-payment-right" id="lzPaymentRightCol">
+                <div class="lz-lootbar-card" id="lzLootbarCard">
+
+                    <h2 class="lz-card-heading" data-i18n="payment.summary_title">Détails du paiement</h2>
+
+                    <!-- Champ 1 : Code Promo Manuel -->
+                    <div class="lz-coupon-box">
+                        <div class="lz-coupon-input-wrap">
+                            <input type="text" id="couponCodeInput" class="lz-coupon-input" placeholder="Code de coupon" data-i18n-placeholder="payment.coupon_placeholder" autocomplete="off" spellcheck="false">
+                            <button type="button" class="lz-btn-exchange" id="btnExchangeCoupon" onclick="applyCouponManual()" data-i18n="payment.btn_exchange">Échanger</button>
+                        </div>
+                        <div id="couponFeedbackMsg" class="lz-coupon-msg"></div>
+
+                        <!-- Pilule coupon actif -->
+                        <div id="activeCouponTag" class="lz-active-coupon-tag">
+                            <div>
+                                <span style="font-size:11px; text-transform:uppercase; background:#bbf7d0; padding:1px 6px; border-radius:4px; margin-right:6px;">ACTIF</span>
+                                <span id="activeCouponLabel">ASTA30 (-30%)</span>
+                            </div>
+                            <button type="button" class="lz-btn-remove-coupon" onclick="removeAppliedCoupon()" title="Retirer ce coupon">&times;</button>
+                        </div>
+                    </div>
+
+                    <!-- Champ 2 : Sélection de coupon de compte -->
+                    <div class="lz-coupon-selector-trigger" id="couponSelectorTrigger" onclick="openCouponsModal()">
+                        <div class="lz-selector-left">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 5H3a2 2 0 0 0-2 2v3a2 2 0 0 1 0 4v3a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2v-3a2 2 0 0 1 0-4V7a2 2 0 0 0-2-2z"></path><path d="M9 5v14"></path></svg>
+                            <span id="couponTriggerLabel" data-i18n="payment.select_coupon_trigger">Sélectionner un coupon d'article (4 disponibles)</span>
+                        </div>
+                        <div class="lz-selector-right">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+
+                    <!-- Détails du Prix -->
+                    <div class="lz-price-breakdown">
+                        <div class="lz-price-line">
+                            <span data-i18n="payment.price_label">Prix</span>
+                            <span class="lz-price-value" id="priceBaseVal">USD $0.00</span>
+                        </div>
+
+                        <div class="lz-price-line" id="discountLine" style="display:none;">
+                            <span data-i18n="payment.discount_label">Remise coupon</span>
+                            <span class="lz-price-value discount" id="priceDiscountVal">-$0.00</span>
+                        </div>
+
+                        <div class="lz-price-line">
+                            <span data-i18n="payment.service_fee_label">Frais de service</span>
+                            <span class="lz-price-value" id="priceServiceFeeVal">+$0.00</span>
+                        </div>
+
+                        <!-- Récompense Fidélité Points LootBar -->
+                        <div class="lz-loyalty-reward" id="loyaltyRewardBox">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <span id="loyaltyRewardText">Gagner des points 100 (d'une valeur de $1.00)</span>
+                        </div>
+
+                        <div class="lz-separator"></div>
+
+                        <!-- Montant Total à Payer -->
+                        <div class="lz-total-row">
+                            <span class="lz-total-label" data-i18n="payment.total_label">Payer le montant :</span>
+                            <span class="lz-total-number" id="priceTotalVal">USD $0.00</span>
+                        </div>
+                        <div class="lz-total-htg-sub" id="priceTotalHtgSub">
+                            ~ 0 HTG
+                        </div>
+                    </div>
+
+                    <!-- Bouton Principal Jaune/Orange (LootBar Style) -->
+                    <button type="button" class="lz-btn-pay-now" id="btnPayImmediate" onclick="handleImmediatePayment()">
+                        <span data-i18n="payment.btn_pay_immediate">Payer immédiatement</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <!-- Garanties et Sécurité -->
+                    <div class="lz-side-guarantees">
+                        <div class="lz-guarantee-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            <span data-i18n="payment.guarantee_ssl">Cryptage SSL 256-bit — Transactions 100% sécurisées</span>
+                        </div>
+                        <div class="lz-guarantee-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            <span data-i18n="payment.guarantee_delivery">Livraison directe sur votre compte de jeu</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ============================================================
+         MODALE : SÉLECTIONNER UN COUPON D'ARTICLE
+         ============================================================ -->
+    <div class="lz-modal-backdrop" id="modalCouponsBackdrop" onclick="closeCouponsModalOnOutside(event)">
+        <div class="lz-modal-container">
+            <div class="lz-modal-head">
+                <h3 data-i18n="modal.coupons_title">Coupons Disponibles</h3>
+                <button type="button" class="lz-modal-close-btn" onclick="closeCouponsModal()">&times;</button>
+            </div>
+            <div class="lz-modal-content" id="modalCouponsList">
+                <div style="text-align:center; padding:20px; color:#64748b;">Chargement des coupons…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODALE POST-PAIEMENT : AVIS CLIENT (STRICTEMENT EN FRANÇAIS)
+         ============================================================ -->
+    <div class="lz-modal-backdrop" id="modalReviewBackdrop">
+        <div class="lz-review-modal-box">
+            <div class="lz-success-icon-wrap">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+
+            <div>
+                <h3 class="lz-review-title" id="reviewGameTitle" data-i18n="review.title">
+                    Merci pour votre achat ! Laissez votre avis sur votre commande
+                </h3>
+                <p class="lz-review-subtitle" data-i18n="review.subtitle">
+                    Votre commande a été enregistrée avec succès. Donnez une note à votre expérience pour aider les autres joueurs.
+                </p>
+            </div>
+
+            <!-- Récapitulatif commande -->
+            <div class="lz-order-summary-mini">
+                <div class="lz-order-summary-row">
+                    <span data-i18n="review.order_ref">Numéro de commande :</span>
+                    <strong id="revOrderRef">#LZ-2026-0000</strong>
+                </div>
+                <div class="lz-order-summary-row">
+                    <span data-i18n="review.item">Produit :</span>
+                    <strong id="revProduct">—</strong>
+                </div>
+                <div class="lz-order-summary-row">
+                    <span data-i18n="review.amount">Montant :</span>
+                    <strong id="revAmount">—</strong>
+                </div>
+            </div>
+
+            <!-- Étoiles de notation interactives (1 à 5 étoiles) -->
+            <div>
+                <div class="lz-rating-stars-wrap" id="starsContainer">
+                    <button type="button" class="lz-star-btn active" data-rating="1" onclick="setRating(1)">★</button>
+                    <button type="button" class="lz-star-btn active" data-rating="2" onclick="setRating(2)">★</button>
+                    <button type="button" class="lz-star-btn active" data-rating="3" onclick="setRating(3)">★</button>
+                    <button type="button" class="lz-star-btn active" data-rating="4" onclick="setRating(4)">★</button>
+                    <button type="button" class="lz-star-btn active" data-rating="5" onclick="setRating(5)">★</button>
+                </div>
+                <div class="lz-rating-label" id="ratingLabelText" data-i18n="review.rating_5">5 / 5 — Excellent !</div>
+            </div>
+
+            <!-- Zone de texte pour le commentaire -->
+            <textarea id="reviewCommentInput" class="lz-review-textarea" placeholder="Partagez votre avis sur la rapidité et la qualité du service..." data-i18n-placeholder="review.comment_placeholder"></textarea>
+
+            <!-- Actions de la modale d'avis -->
+            <div class="lz-review-actions">
+                <button type="button" class="lz-btn-publish-review" id="btnPublishReview" onclick="submitUserReview()" data-i18n="review.btn_publish">
+                    Publier mon avis
+                </button>
+                <button type="button" class="lz-btn-skip-review" onclick="skipUserReview()" data-i18n="review.btn_skip">
+                    Ignorer / Plus tard
+                </button>
+            </div>
+
+            <!-- Lien direct pour confirmation WhatsApp optionnelle -->
+            <div style="border-top:1px solid #f1f5f9; padding-top:12px;">
+                <a href="#" id="linkWhatsAppSupport" target="_blank" style="font-size:12.5px; color:#16a34a; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    <span>Besoin d'aide immédiate ? Contactez le support WhatsApp (+509 4696-6290)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteneur Toast Notifications -->
+    <div class="lz-toasts" id="toastBox"></div>
+
+    <!-- ============================================================
+         LOGIQUE JAVASCRIPT COMPLETE & MODULAIRE (STRICTEMENT EN FRANÇAIS)
+         ============================================================ -->
+    <script>
+        // ─── État Global ───
+        let currentItem = null;
+        let selectedMethod = 'moncash';
+        let currentCoupon = null;
+        let couponList = [];
+        let exchangeRateHtg = 135; // 1 USD = 135 HTG
+        let selectedUserRating = 5;
+        let lastCreatedOrderId = null;
+
+        // Informations Destinataires Officielles
+        const DESTINATAIRE_NOM = 'VLADIMIR ANTOINE ARISTHENE SAINVILUS';
+        const NUMERO_MONCASH = '4696-6290';
+        const NUMERO_NATCASH = '3342-8479';
+        const WHATSAPP_SUPPORT = '50946966290';
+
+        // ─── Initialisation au Chargement ───
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadCheckoutData();
+            await fetchPublicConfig();
+            await loadCoupons();
+            renderPaymentPage();
+        });
+
+        // 1. Récupération des données produit
+        function loadCheckoutData() {
+            const stored = localStorage.getItem('current_checkout_item');
+            if (stored) {
+                try {
+                    currentItem = JSON.parse(stored);
+                } catch (e) {
+                    console.error('Erreur de lecture de current_checkout_item', e);
+                }
+            }
+
+            // Fallback si l'utilisateur accède directement
+            if (!currentItem) {
+                const params = new URLSearchParams(window.location.search);
+                const pName = params.get('name') || params.get('product') || 'Free Fire';
+                const pDenom = params.get('denom') || '1080 Diamants';
+                const pPrice = parseFloat(params.get('price')) || 9.99;
+                const pUid = params.get('player_id') || params.get('uid') || 'Joueur_99';
+                const pServer = params.get('server') || '';
+                const pQty = parseInt(params.get('qty'), 10) || 1;
+
+                currentItem = {
+                    productId: params.get('id') || '1',
+                    productName: pName,
+                    denomLabel: pDenom,
+                    unitPriceUsd: pPrice,
+                    quantity: pQty,
+                    playerId: pUid,
+                    server: pServer,
+                    image: 'favicon.svg',
+                    category: 'jeux'
+                };
+            }
+        }
+
+        // 2. Récupération du taux de change officiel
+        async function fetchPublicConfig() {
+            try {
+                const res = await fetch('/api/config/public');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.taux_eur_htg) {
+                        exchangeRateHtg = Number(data.taux_eur_htg) || 135;
+                    }
+                }
+            } catch (_) {}
+        }
+
+        // 3. Récupération des coupons de réduction
+        async function loadCoupons() {
+            try {
+                const res = await fetch('/api/coupons/public');
+                if (res.ok) {
+                    couponList = await res.json();
+                }
+            } catch (_) {
+                couponList = [
+                    { id: '1', code: 'ASTA30', title: 'Super Réduction Asta 30%', description: '30% de réduction immédiate sans minimum d\'achat.', discount_type: 'percent', discount_value: 30 },
+                    { id: '2', code: 'WELCOME10', title: 'Coupon Bienvenue 10%', description: '10% de remise dès $10 d\'achat.', discount_type: 'percent', discount_value: 10, min_order_amount: 10 },
+                    { id: '3', code: 'LERICHE20', title: 'Partenaire 20%', description: '20% de remise spéciale sur MonCash et NatCash.', discount_type: 'percent', discount_value: 20 },
+                    { id: '4', code: 'LOOT5', title: 'Bon Réduction $5', description: '$5.00 offerts dès $15 de recharge.', discount_type: 'fixed', discount_value: 5, min_order_amount: 15 }
+                ];
+            }
+
+            const labelEl = document.getElementById('couponTriggerLabel');
+            if (labelEl) {
+                labelEl.textContent = `Sélectionner un coupon d'article (${couponList.length} disponibles) >`;
+            }
+        }
+
+        // 4. Rendu de la vue
+        function renderPaymentPage() {
+            if (!currentItem) return;
+
+            // Bloc produit en haut à gauche
+            const nameEl = document.getElementById('prodName');
+            const packEl = document.getElementById('prodPack');
+            const uidEl = document.getElementById('prodPlayerId');
+            const qtyEl = document.getElementById('prodQty');
+            const imgEl = document.getElementById('prodImg');
+            const srvWrap = document.getElementById('prodServerWrapper');
+            const srvEl = document.getElementById('prodServer');
+
+            if (nameEl) nameEl.textContent = currentItem.productName || 'Recharge de Jeu';
+            if (packEl) packEl.textContent = currentItem.denomLabel || 'Option';
+            if (uidEl) uidEl.textContent = currentItem.playerId || 'Non renseigné';
+            if (qtyEl) qtyEl.textContent = `x${currentItem.quantity || 1}`;
+            if (imgEl && currentItem.image) imgEl.src = currentItem.image;
+
+            if (currentItem.server) {
+                if (srvWrap) srvWrap.style.display = 'block';
+                if (srvEl) srvEl.textContent = currentItem.server;
+            } else if (srvWrap) {
+                srvWrap.style.display = 'none';
+            }
+
+            selectPaymentMethod('moncash');
+            calculateTotals();
+        }
+
+        // 5. Sélection de méthode de paiement (Accordéon)
+        function selectPaymentMethod(method) {
+            selectedMethod = method;
+            document.querySelectorAll('.lz-accordion-item').forEach(el => {
+                const isMatch = el.getAttribute('data-method') === method;
+                el.classList.toggle('active', isMatch);
+            });
+            calculateTotals();
+        }
+
+        // 6. Calculs et mise à jour des prix (Style LootBar)
+        function calculateTotals() {
+            if (!currentItem) return;
+
+            const unitPrice = parseFloat(currentItem.unitPriceUsd) || 0;
+            const qty = parseInt(currentItem.quantity, 10) || 1;
+            const subtotal = unitPrice * qty;
+
+            let discount = 0;
+            if (currentCoupon) {
+                if (currentCoupon.discount_type === 'percent') {
+                    discount = (subtotal * Number(currentCoupon.discount_value)) / 100;
+                } else {
+                    discount = Number(currentCoupon.discount_value);
+                }
+            }
+            discount = Math.min(subtotal, Math.max(0, discount));
+
+            const serviceFee = 0.00; // Pas de frais
+            const finalTotalUsd = Math.max(0, subtotal - discount + serviceFee);
+            const finalTotalHtg = Math.round(finalTotalUsd * exchangeRateHtg);
+
+            // Points de fidélité LootBar (10 points par dollar, valeur 1% = $0.01)
+            const loyaltyPoints = Math.round(finalTotalUsd * 10);
+            const loyaltyVal = (loyaltyPoints * 0.01).toFixed(2);
+
+            // Colonne de droite
+            const baseEl = document.getElementById('priceBaseVal');
+            const discLine = document.getElementById('discountLine');
+            const discValEl = document.getElementById('priceDiscountVal');
+            const feeEl = document.getElementById('priceServiceFeeVal');
+            const rewardEl = document.getElementById('loyaltyRewardText');
+            const totalValEl = document.getElementById('priceTotalVal');
+            const totalHtgEl = document.getElementById('priceTotalHtgSub');
+
+            if (baseEl) baseEl.textContent = `USD $${subtotal.toFixed(2)}`;
+            if (feeEl) feeEl.textContent = `+$${serviceFee.toFixed(2)}`;
+            if (rewardEl) rewardEl.textContent = `Gagner des points ${loyaltyPoints} (d'une valeur de $${loyaltyVal})`;
+            if (totalValEl) totalValEl.textContent = `USD $${finalTotalUsd.toFixed(2)}`;
+            if (totalHtgEl) totalHtgEl.textContent = `~ ${finalTotalHtg.toLocaleString('fr-FR')} HTG`;
+
+            if (discount > 0) {
+                if (discLine) discLine.style.display = 'flex';
+                if (discValEl) discValEl.textContent = `-$${discount.toFixed(2)}`;
+            } else if (discLine) {
+                discLine.style.display = 'none';
+            }
+
+            // Colonne de gauche (MonCash & NatCash)
+            const moncashDisp = document.getElementById('moncashAmountDisplay');
+            const natcashDisp = document.getElementById('natcashAmountDisplay');
+            const labelStr = `${finalTotalHtg.toLocaleString('fr-FR')} HTG ($${finalTotalUsd.toFixed(2)} USD)`;
+
+            if (moncashDisp) moncashDisp.textContent = labelStr;
+            if (natcashDisp) natcashDisp.textContent = labelStr;
+        }
+
+        // ─── 7. Gestion des Coupons (Style LootBar) ───
+        async function applyCouponManual() {
+            const input = document.getElementById('couponCodeInput');
+            const code = input ? input.value.trim().toUpperCase() : '';
+            const msgEl = document.getElementById('couponFeedbackMsg');
+
+            if (!code) {
+                setCouponMsg('error', 'Veuillez saisir un code de coupon.');
+                return;
+            }
+
+            const unitPrice = parseFloat(currentItem?.unitPriceUsd) || 0;
+            const qty = parseInt(currentItem?.quantity, 10) || 1;
+            const currentAmount = unitPrice * qty;
+
+            const btn = document.getElementById('btnExchangeCoupon');
+            if (btn) btn.textContent = '…';
+
+            try {
+                const res = await fetch('/api/coupons/validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, amount: currentAmount })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.valid) {
+                    currentCoupon = data;
+                    setCouponMsg('success', `✓ ${data.message || 'Coupon appliqué avec succès !'}`);
+                    showCouponTag(data);
+                    calculateTotals();
+                    showToast('success', `Code ${code} appliqué avec succès !`);
+                } else {
+                    setCouponMsg('error', data.error || 'Code de coupon invalide ou expiré.');
+                }
+            } catch (_) {
+                const found = couponList.find(c => c.code === code);
+                if (found) {
+                    currentCoupon = found;
+                    setCouponMsg('success', `✓ Code ${found.code} appliqué !`);
+                    showCouponTag(found);
+                    calculateTotals();
+                    showToast('success', `Code ${found.code} appliqué !`);
+                } else {
+                    setCouponMsg('error', 'Code de coupon invalide ou expiré.');
+                }
+            } finally {
+                if (btn) btn.textContent = 'Échanger';
+            }
+        }
+
+        function setCouponMsg(type, text) {
+            const el = document.getElementById('couponFeedbackMsg');
+            if (el) {
+                el.className = `lz-coupon-msg ${type}`;
+                el.textContent = text;
+            }
+        }
+
+        function showCouponTag(c) {
+            const tag = document.getElementById('activeCouponTag');
+            const label = document.getElementById('activeCouponLabel');
+            if (tag && label) {
+                const discText = c.discount_type === 'percent' ? `-${c.discount_value}%` : `-$${c.discount_value}`;
+                label.textContent = `${c.code} (${discText})`;
+                tag.classList.add('show');
+            }
+        }
+
+        function removeAppliedCoupon() {
+            currentCoupon = null;
+            const tag = document.getElementById('activeCouponTag');
+            const input = document.getElementById('couponCodeInput');
+            const msgEl = document.getElementById('couponFeedbackMsg');
+            if (tag) tag.classList.remove('show');
+            if (input) input.value = '';
+            if (msgEl) msgEl.textContent = '';
+            calculateTotals();
+            showToast('warning', 'Coupon retiré.');
+        }
+
+        function openCouponsModal() {
+            const modal = document.getElementById('modalCouponsBackdrop');
+            const list = document.getElementById('modalCouponsList');
+            if (!modal || !list) return;
+
+            if (!couponList || couponList.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:20px; color:#64748b;">Aucun coupon disponible actuellement.</div>';
+            } else {
+                list.innerHTML = couponList.map(c => {
+                    const badge = c.discount_type === 'percent' ? `-${c.discount_value}%` : `-$${c.discount_value}`;
+                    const minText = c.min_order_amount ? `• Dès $${c.min_order_amount} d'achat` : '';
+                    return `
+                        <div class="lz-coupon-card">
+                            <div class="lz-coupon-card-info">
+                                <span class="lz-coupon-badge">${badge}</span>
+                                <div class="lz-coupon-name">${escapeHtml(c.title || c.code)}</div>
+                                <div class="lz-coupon-desc">${escapeHtml(c.description || '')} ${minText}</div>
+                            </div>
+                            <button type="button" class="lz-btn-apply-coupon" onclick="chooseModalCoupon('${c.code}')">
+                                Appliquer
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeCouponsModal() {
+            const modal = document.getElementById('modalCouponsBackdrop');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function closeCouponsModalOnOutside(e) {
+            if (e.target.id === 'modalCouponsBackdrop') {
+                closeCouponsModal();
+            }
+        }
+
+        function chooseModalCoupon(code) {
+            const input = document.getElementById('couponCodeInput');
+            if (input) input.value = code;
+            closeCouponsModal();
+            applyCouponManual();
+        }
+
+        // ─── 8. Copie dans le Presse-Papier ───
+        function copyNumber(text, btn) {
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = btn.innerHTML;
+                btn.classList.add('copied');
+                btn.innerHTML = `
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Copié ! ✓</span>
+                `;
+                showToast('success', `Numéro ${text} copié dans le presse-papier !`);
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = orig;
+                }, 2500);
+            }).catch(() => {
+                showToast('success', `Numéro ${text} copié !`);
+            });
+        }
+
+        // ─── 9. Validation & Soumission du Paiement ("Payer Immédiatement") ───
+        async function handleImmediatePayment() {
+            if (!currentItem) {
+                showToast('error', 'Erreur produit. Veuillez recharger la page.');
+                return;
+            }
+
+            let senderName = '';
+            let senderPhone = '';
+            let txId = '';
+
+            if (selectedMethod === 'moncash') {
+                const nameInput = document.getElementById('moncashSenderName');
+                const phoneInput = document.getElementById('moncashSenderPhone');
+                const txInput = document.getElementById('moncashTxId');
+
+                senderName = nameInput ? nameInput.value.trim() : '';
+                senderPhone = phoneInput ? phoneInput.value.trim() : '';
+                txId = txInput ? txInput.value.trim() : '';
+
+                if (!senderName) {
+                    highlightError(nameInput, 'Veuillez saisir le nom de l\'expéditeur MonCash.');
+                    return;
+                }
+                if (!senderPhone) {
+                    highlightError(phoneInput, 'Veuillez saisir le numéro de téléphone MonCash.');
+                    return;
+                }
+            } else if (selectedMethod === 'natcash') {
+                const nameInput = document.getElementById('natcashSenderName');
+                const phoneInput = document.getElementById('natcashSenderPhone');
+                const txInput = document.getElementById('natcashTxId');
+
+                senderName = nameInput ? nameInput.value.trim() : '';
+                senderPhone = phoneInput ? phoneInput.value.trim() : '';
+                txId = txInput ? txInput.value.trim() : '';
+
+                if (!senderName) {
+                    highlightError(nameInput, 'Veuillez saisir le nom de l\'expéditeur NatCash.');
+                    return;
+                }
+                if (!senderPhone) {
+                    highlightError(phoneInput, 'Veuillez saisir le numéro de téléphone NatCash.');
+                    return;
+                }
+            } else if (selectedMethod === 'carte_bancaire') {
+                const holder = document.getElementById('cardHolder')?.value.trim();
+                const cardNum = document.getElementById('cardNumber')?.value.trim();
+                if (!holder || !cardNum) {
+                    showToast('warning', 'Veuillez renseigner les détails de votre carte bancaire.');
+                    return;
+                }
+                senderName = holder;
+                senderPhone = 'Carte Bancaire';
+            }
+
+            // Calcul montant final
+            const unitPrice = parseFloat(currentItem.unitPriceUsd) || 0;
+            const qty = parseInt(currentItem.quantity, 10) || 1;
+            const subtotal = unitPrice * qty;
+
+            let discount = 0;
+            if (currentCoupon) {
+                if (currentCoupon.discount_type === 'percent') {
+                    discount = (subtotal * Number(currentCoupon.discount_value)) / 100;
+                } else {
+                    discount = Number(currentCoupon.discount_value);
+                }
+            }
+            discount = Math.min(subtotal, Math.max(0, discount));
+            const finalUsd = (Math.max(0, subtotal - discount)).toFixed(2);
+            const finalHtg = Math.round(finalUsd * exchangeRateHtg);
+
+            // Bouton en état chargement
+            const payBtn = document.getElementById('btnPayImmediate');
+            if (payBtn) {
+                payBtn.disabled = true;
+                payBtn.innerHTML = `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: lz-spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
+                    <span>Traitement en cours…</span>
+                `;
+            }
+
+            const tempOrderRef = 'LZ-' + Date.now().toString(36).toUpperCase();
+
+            const orderPayload = {
+                client_email: 'client@lootzone.com',
+                client_nom: senderName || 'Client LootZone',
+                produit_id: currentItem.productId || 1,
+                produit_nom: currentItem.productName || 'Recharge de Jeu',
+                categorie: currentItem.category || 'jeux',
+                denom_label: `${currentItem.denomLabel || 'Pack'} (x${qty})`,
+                eur: finalUsd,
+                htg: finalHtg,
+                methode_paiement: selectedMethod,
+                player_id: currentItem.playerId,
+                server: currentItem.server || null,
+                sender_name: senderName,
+                sender_phone: senderPhone,
+                transaction_id: txId,
+                coupon_code: currentCoupon ? currentCoupon.code : null
+            };
+
+            try {
+                const res = await fetch('/api/orders/public', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderPayload)
+                });
+                const data = await res.json();
+                lastCreatedOrderId = (data && data.order_id) ? data.order_id : tempOrderRef;
+
+                // Nettoyage checkout item
+                localStorage.removeItem('current_checkout_item');
+
+                // Ouverture de la modale post-paiement d'avis client (Strictement en français)
+                openReviewModal(lastCreatedOrderId, currentItem, finalHtg, finalUsd, senderName, senderPhone);
+            } catch (err) {
+                lastCreatedOrderId = tempOrderRef;
+                openReviewModal(tempOrderRef, currentItem, finalHtg, finalUsd, senderName, senderPhone);
+            } finally {
+                if (payBtn) {
+                    payBtn.disabled = false;
+                    payBtn.innerHTML = `
+                        <span data-i18n="payment.btn_pay_immediate">Payer immédiatement</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    `;
+                }
+            }
+        }
+
+        function highlightError(input, msg) {
+            if (input) {
+                input.classList.add('input-error');
+                input.focus();
+                setTimeout(() => input.classList.remove('input-error'), 2500);
+            }
+            showToast('warning', msg);
+        }
+
+        // ─── 10. Modale d'Avis Client Post-Paiement (Strictement en Français) ───
+        function openReviewModal(orderId, item, htg, usd, senderName, senderPhone) {
+            const modal = document.getElementById('modalReviewBackdrop');
+            const titleEl = document.getElementById('reviewGameTitle');
+            const refEl = document.getElementById('revOrderRef');
+            const prodEl = document.getElementById('revProduct');
+            const amtEl = document.getElementById('revAmount');
+            const waLink = document.getElementById('linkWhatsAppSupport');
+
+            if (titleEl) {
+                titleEl.textContent = `Merci pour votre achat ! Laissez votre avis sur ${item.productName || 'votre jeu'}`;
+            }
+            if (refEl) refEl.textContent = `#${orderId}`;
+            if (prodEl) prodEl.textContent = `${item.productName} (${item.denomLabel} x${item.quantity || 1})`;
+            if (amtEl) amtEl.textContent = `${htg.toLocaleString('fr-FR')} HTG ($${usd} USD)`;
+
+            // Lien de support WhatsApp pré-rempli
+            const methodLabel = selectedMethod === 'moncash' ? 'MonCash Manuel' : (selectedMethod === 'natcash' ? 'NatCash Manuel' : 'Carte Bancaire');
+            const waMessage = 
+                `Bonjour LootZone,\n` +
+                `Je viens de valider ma commande #${orderId} pour ${item.productName} (${item.denomLabel}).\n` +
+                `ID Joueur: ${item.playerId}\n` +
+                `Montant: ${htg.toLocaleString('fr-FR')} HTG ($${usd} USD)\n` +
+                `Méthode: ${methodLabel}\n` +
+                `Expéditeur: ${senderName} (${senderPhone})\n` +
+                `Merci de valider ma recharge !`;
+
+            if (waLink) {
+                waLink.href = `https://wa.me/${WHATSAPP_SUPPORT}?text=${encodeURIComponent(waMessage)}`;
+            }
+
+            if (modal) modal.classList.add('active');
+        }
+
+        function setRating(val) {
+            selectedUserRating = val;
+            const buttons = document.querySelectorAll('.lz-star-btn');
+            buttons.forEach((btn, index) => {
+                btn.classList.toggle('active', index < val);
+            });
+
+            const labelEl = document.getElementById('ratingLabelText');
+            const labels = {
+                1: '1 / 5 — Décevant',
+                2: '2 / 5 — Moyen',
+                3: '3 / 5 — Correct',
+                4: '4 / 5 — Très bon',
+                5: '5 / 5 — Excellent !'
+            };
+            if (labelEl) labelEl.textContent = labels[val] || `${val} / 5`;
+        }
+
+        async function submitUserReview() {
+            const comment = document.getElementById('reviewCommentInput')?.value.trim() || '';
+            const btn = document.getElementById('btnPublishReview');
+
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Enregistrement…';
+            }
+
+            try {
+                if (lastCreatedOrderId) {
+                    await fetch(`/api/orders/${lastCreatedOrderId}/review`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            rating: selectedUserRating,
+                            comment: comment,
+                            user_name: currentItem?.playerId || 'Client'
+                        })
+                    });
+                }
+            } catch (_) {}
+
+            showToast('success', 'Merci pour votre avis ! Votre commande est en cours de traitement.');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1800);
+        }
+
+        function skipUserReview() {
+            showToast('success', 'Commande enregistrée avec succès. Redirection vers l\'accueil…');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        // ─── Toasts & Utilitaires ───
+        function showToast(type, text) {
+            const box = document.getElementById('toastBox');
+            if (!box) return;
+            const toast = document.createElement('div');
+            toast.className = `lz-toast-item ${type}`;
+            toast.textContent = text;
+            box.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.25s ease';
+                setTimeout(() => toast.remove(), 250);
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+    </script>
+    <style>
+        @keyframes lz-spin { 100% { transform: rotate(360deg); } }
+    </style>
+</body>
+</html>
