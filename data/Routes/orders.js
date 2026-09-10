@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import { randomInt } from 'crypto';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
 import { requireAuth, requireMinRole } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
@@ -12,8 +13,17 @@ const RISK_THRESHOLD_WINDOW_MS = 2 * 60 * 60 * 1000;
 
 function generateOrderId() {
     const year = new Date().getFullYear();
-    const seq = String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0');
+    const seq = String(randomInt(1000, 10000)).padStart(4, '0');
     return `LZ-${year}-${seq}`;
+}
+
+function parsePage(value, fallback, max) {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? Math.min(parsed, max) : fallback;
+}
+
+function cleanText(value, maxLength = 200) {
+    return typeof value === 'string' ? value.trim().slice(0, maxLength) : value;
 }
 
 let demoOrders = [
@@ -128,7 +138,9 @@ router.get('/stats', requireAuth, requireMinRole('employe'), async (req, res) =>
 });
 
 router.get('/', requireAuth, requireMinRole('employe'), async (req, res) => {
-    const { statut, page = 1, limit = 20 } = req.query;
+    const { statut } = req.query;
+    const page = parsePage(req.query.page, 1, 100000);
+    const limit = parsePage(req.query.limit, 20, 100);
     const offset = (page - 1) * limit;
 
     if (DEMO_MODE) {
@@ -246,7 +258,7 @@ router.get('/me', async (req, res) => {
 
 router.post('/public', async (req, res) => {
     const { client_id, client_email, client_nom, produit_id, produit_nom, categorie, denom_label, eur, htg, methode_paiement, player_id, server, sender_name, sender_phone, transaction_id, coupon_code } = req.body;
-    if (!client_email || !produit_id || !eur) return res.status(400).json({ error: 'Données incomplètes' });
+    if (!client_email || !produit_id || eur === undefined || eur === null) return res.status(400).json({ error: 'Données incomplètes' });
 
     // Validation sécurité — format email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -266,27 +278,37 @@ router.post('/public', async (req, res) => {
         return res.status(400).json({ error: 'Méthode de paiement invalide' });
 
     // Validation player_id — pas de HTML ni injection
-    if (player_id && player_id.length > 200)
+    if (player_id && (typeof player_id !== 'string' || player_id.length > 200))
         return res.status(400).json({ error: 'ID joueur trop long' });
 
+    if (server && (typeof server !== 'string' || server.length > 100))
+        return res.status(400).json({ error: 'Serveur invalide' });
+
+    const safeEmail = client_email.trim().toLowerCase();
+    const safeProductName = cleanText(produit_nom, 200);
+    const safeCategory = cleanText(categorie, 80);
+    const safeDenom = cleanText(denom_label, 120);
+    if (!safeProductName || !safeDenom) return res.status(400).json({ error: 'Produit incomplet' });
+
     const orderId = generateOrderId();
-    const { score, flags } = calcRiskScore({ client_id, eur, categorie: categorie || 'default' }, demoOrders);
+    const effectiveClientId = client_id || safeEmail;
+    const { score, flags } = calcRiskScore({ client_id: effectiveClientId, eur: eurNum, categorie: safeCategory || 'default' }, demoOrders);
     const statut = score >= 70 ? 'risque_eleve' : 'en_attente';
 
     if (DEMO_MODE) {
         const order = {
             id: orderId,
-            client_id: client_id || uuidv4(),
-            client_email, client_nom,
-            produit_id, produit_nom, categorie,
-            denom_label, eur, htg,
+            client_id: effectiveClientId || uuidv4(),
+            client_email: safeEmail, client_nom: cleanText(client_nom, 160),
+            produit_id, produit_nom: safeProductName, categorie: safeCategory,
+            denom_label: safeDenom, eur: eurNum, htg: htg === undefined ? null : htgNum,
             methode_paiement,
-            player_id: player_id || null,
-            server: server || null,
-            sender_name: sender_name || null,
-            sender_phone: sender_phone || null,
-            transaction_id: transaction_id || null,
-            coupon_code: coupon_code || null,
+            player_id: cleanText(player_id, 200) || null,
+            server: cleanText(server, 100) || null,
+            sender_name: cleanText(sender_name, 160) || null,
+            sender_phone: cleanText(sender_phone, 40) || null,
+            transaction_id: cleanText(transaction_id, 120) || null,
+            coupon_code: cleanText(coupon_code, 80) || null,
             statut,
             locked_by: null, locked_at: null,
             risk_score: score, risk_flags: flags,
@@ -298,11 +320,11 @@ router.post('/public', async (req, res) => {
     }
 
     const { data, error } = await supabaseAdmin.from('commandes').insert({
-        id: orderId, client_id, client_email, client_nom,
-        produit_id, produit_nom, categorie,
-        denom_label, eur, htg, methode_paiement,
-        player_id: player_id || null,
-        server: server || null,
+        id: orderId, client_id, client_email: safeEmail, client_nom: cleanText(client_nom, 160),
+        produit_id, produit_nom: safeProductName, categorie: safeCategory,
+        denom_label: safeDenom, eur: eurNum, htg: htg === undefined ? null : htgNum, methode_paiement,
+        player_id: cleanText(player_id, 200) || null,
+        server: cleanText(server, 100) || null,
         statut, risk_score: score, risk_flags: flags
     }).select().single();
     if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
@@ -313,31 +335,51 @@ router.post('/:id/review', async (req, res) => {
     const { id } = req.params;
     const { rating, comment, user_name } = req.body;
     const cleanRating = Math.max(1, Math.min(5, parseInt(rating, 10) || 5));
-    const cleanComment = (comment || '').trim().slice(0, 1000);
+    const cleanComment = typeof comment === 'string' ? comment.trim().slice(0, 1000) : '';
+    const cleanUserName = typeof user_name === 'string' ? user_name.trim().slice(0, 120) : '';
 
     if (DEMO_MODE) {
         const order = demoOrders.find(o => o.id === id);
+        if (!order) return res.status(404).json({ error: 'Commande introuvable' });
+        if (order.statut !== 'livree') return res.status(409).json({ error: 'Un avis est possible après la livraison.' });
+        if (order.review) return res.status(409).json({ error: 'Un avis existe déjà pour cette commande.' });
         if (order) {
             order.review = {
                 rating: cleanRating,
                 comment: cleanComment,
-                user_name: user_name || order.client_nom,
+                user_name: cleanUserName || order.client_nom,
                 created_at: new Date().toISOString()
             };
         }
         return res.json({ success: true, message: 'Avis enregistré avec succès !' });
     }
 
-    // Supabase mode
-    try {
-        await supabaseAdmin.from('reviews').insert({
+    // Supabase mode: only delivered orders may be reviewed, once.
+    const { data: order, error: orderError } = await supabaseAdmin
+        .from('commandes')
+        .select('id, statut, client_nom')
+        .eq('id', id)
+        .maybeSingle();
+    if (orderError) return res.status(500).json({ error: 'Impossible de vérifier la commande.' });
+    if (!order) return res.status(404).json({ error: 'Commande introuvable' });
+    if (order.statut !== 'livree') return res.status(409).json({ error: 'Un avis est possible après la livraison.' });
+
+    const { data: existingReview, error: reviewLookupError } = await supabaseAdmin
+        .from('reviews')
+        .select('id')
+        .eq('order_id', id)
+        .maybeSingle();
+    if (reviewLookupError) return res.status(500).json({ error: 'Impossible de vérifier l\'avis.' });
+    if (existingReview) return res.status(409).json({ error: 'Un avis existe déjà pour cette commande.' });
+
+    const { error: reviewError } = await supabaseAdmin.from('reviews').insert({
             order_id: id,
             rating: cleanRating,
             comment: cleanComment,
-            user_name: user_name || 'Client LootZone',
+            user_name: cleanUserName || order.client_nom || 'Client LootZone',
             created_at: new Date().toISOString()
         });
-    } catch (_) {}
+    if (reviewError) return res.status(500).json({ error: 'Impossible d\'enregistrer l\'avis.' });
 
     res.json({ success: true, message: 'Avis enregistré avec succès !' });
 });

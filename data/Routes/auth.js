@@ -256,8 +256,14 @@ router.post('/admin-login', async (req, res) => {
 
 router.post('/logout', requireAuth, async (req, res) => {
     if (!DEMO_MODE) {
-        await supabaseAdmin.auth.admin.signOut(req.user.id);
-        await logActivite(req.user.id, req.user.role, 'Déconnexion du dashboard', null, null, null);
+        // Les JWT Supabase sont stateless côté API. La session locale est
+        // supprimée par le navigateur; admin.signOut n'est disponible qu'avec
+        // une vraie clé service_role et ne doit jamais faire tomber la route.
+        try {
+            await logActivite(req.user.id, req.user.role, 'Déconnexion du dashboard', null, null, null);
+        } catch (err) {
+            console.warn('[auth/logout] Journalisation impossible:', err.message);
+        }
     }
     res.json({ success: true });
 });
@@ -275,8 +281,8 @@ router.post('/register', async (req, res) => {
     if (!email || !password || !prenom) {
         return res.status(400).json({ error: 'Prénom, e-mail et mot de passe sont requis.' });
     }
-    if (password.length < 6) {
-        return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 6 caractères.' });
+    if (typeof password !== 'string' || password.length < 8) {
+        return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 8 caractères.' });
     }
 
     if (DEMO_MODE) {

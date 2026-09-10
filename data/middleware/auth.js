@@ -43,12 +43,17 @@ function extractToken(req) {
 
 export async function requireAuth(req, res, next) {
     if (DEMO_MODE) {
+        const demoToken = req.headers.authorization?.replace(/^Bearer\s+/i, '');
+        if (!demoToken || !demoToken.startsWith('demo-token-')) {
+            return res.status(401).json({ error: 'Token manquant ou invalide' });
+        }
+        const isDemoStaff = demoToken === 'demo-token-lootzone-admin';
         req.user = {
-            id: 'demo-user',
-            email: 'demo@lootzone.gg',
-            role: 'directeur',
-            nom: 'Démo',
-            prenom: 'Directeur'
+            id: isDemoStaff ? 'demo-admin-1' : 'demo-user-1',
+            email: isDemoStaff ? 'admin@lootzone.gg' : 'demo@lootzone.gg',
+            role: isDemoStaff ? 'directeur' : 'client',
+            nom: isDemoStaff ? 'LootZone' : 'Démo',
+            prenom: isDemoStaff ? 'Directeur' : 'Client'
         };
         return next();
     }
@@ -60,6 +65,9 @@ export async function requireAuth(req, res, next) {
 
     let user;
     try {
+        if (!supabaseAdmin) {
+            return res.status(503).json({ error: 'Service d\'authentification indisponible' });
+        }
         const { data, error } = await supabaseAdmin.auth.getUser(token);
         if (error || !data?.user) {
             return res.status(401).json({ error: 'Session expirée ou invalide' });

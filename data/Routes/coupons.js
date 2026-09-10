@@ -88,7 +88,10 @@ router.post('/validate', async (req, res) => {
     }
 
     const cleanCode = code.trim().toUpperCase();
-    const orderAmount = Number(amount) || 0;
+    const orderAmount = Number(amount);
+    if (!Number.isFinite(orderAmount) || orderAmount < 0 || orderAmount > 100000) {
+        return res.status(400).json({ valid: false, error: 'Montant de commande invalide.' });
+    }
 
     let coupon = null;
 
@@ -130,10 +133,11 @@ router.post('/validate', async (req, res) => {
     // Calculate reduction
     let discountAmount = 0;
     if (coupon.discount_type === 'percent') {
-        discountAmount = (orderAmount * Number(coupon.discount_value)) / 100;
+        discountAmount = Math.min(orderAmount, (orderAmount * Number(coupon.discount_value)) / 100);
     } else {
-        discountAmount = Number(coupon.discount_value);
+        discountAmount = Math.min(orderAmount, Number(coupon.discount_value));
     }
+    discountAmount = Number(discountAmount.toFixed(2));
 
     res.json({
         valid: true,
@@ -151,12 +155,15 @@ router.post('/validate', async (req, res) => {
 router.post('/', requireAuth, requireRole('directeur', 'manager', 'administrateur'), async (req, res) => {
     const { code, discount_type, discount_value, min_order_amount, usage_limit, expires_at } = req.body;
 
-    if (!code || !discount_value || isNaN(discount_value) || Number(discount_value) <= 0) {
+    if (!code || typeof code !== 'string' || !Number.isFinite(Number(discount_value)) || Number(discount_value) <= 0) {
         return res.status(400).json({ error: 'Code et valeur de réduction valides requis.' });
     }
 
     const cleanCode = code.trim().toUpperCase();
     const type = discount_type === 'fixed' ? 'fixed' : 'percent';
+    if (type === 'percent' && Number(discount_value) > 100) {
+        return res.status(400).json({ error: 'Une réduction en pourcentage ne peut pas dépasser 100%.' });
+    }
 
     const newCoupon = {
         id: String(Date.now()),

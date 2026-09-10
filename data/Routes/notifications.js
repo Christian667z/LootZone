@@ -1,5 +1,6 @@
 import express from 'express';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
+import { requireAuth, requireMinRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -58,8 +59,10 @@ const SYSTEM_MESSAGES = [
 
 // Helper pour extraire l'utilisateur courant
 async function resolveUser(req) {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    const queryEmail = (req.query.email || req.body?.email || '').trim().toLowerCase();
+    const token = req.headers.authorization?.replace(/^Bearer\s+/i, '');
+    const queryEmail = typeof (req.query.email || req.body?.email) === 'string'
+        ? (req.query.email || req.body?.email).trim().toLowerCase()
+        : '';
 
     if (!token && !queryEmail) return null;
 
@@ -82,14 +85,6 @@ async function resolveUser(req) {
                 };
             }
         } catch (_) {}
-    }
-
-    if (queryEmail) {
-        return {
-            id: 'email-' + queryEmail,
-            email: queryEmail,
-            role: 'client'
-        };
     }
 
     return null;
@@ -317,7 +312,7 @@ router.post('/mark-read', async (req, res) => {
  * POST /api/notifications/create-real
  * Permet de déclencher une vraie notification (ex: lors d'une commande ou pour tester)
  */
-router.post('/create-real', async (req, res) => {
+router.post('/create-real', requireAuth, requireMinRole('employe'), async (req, res) => {
     try {
         const { target_email, title, message, status, amount, code_livre } = req.body;
         const newNotif = {

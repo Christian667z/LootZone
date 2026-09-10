@@ -504,7 +504,9 @@
         if (!user || !user.email) return;
 
         try {
-            const evtSource = new EventSource(`/api/events/client?email=${encodeURIComponent(user.email)}`);
+            const token = getAuthToken();
+            if (!token) return;
+            const evtSource = new EventSource(`/api/events/client?email=${encodeURIComponent(user.email)}&token=${encodeURIComponent(token)}`);
             evtSource.addEventListener('commande_livree', () => {
                 // Secouer la cloche immédiatement pour attirer l'attention lors d'un nouveau message
                 triggerBellShake();

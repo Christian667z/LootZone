@@ -44,8 +44,10 @@ router.get('/me', requireAuth, async (req, res) => {
 // ═══════════════════════════════════════════════════════════════
 router.get('/transactions', requireAuth, async (req, res) => {
     const userId = req.user.id;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const parsedPage = Number.parseInt(req.query.page, 10);
+    const parsedLimit = Number.parseInt(req.query.limit, 10);
+    const page = Number.isInteger(parsedPage) && parsedPage > 0 ? Math.min(parsedPage, 100000) : 1;
+    const limit = Number.isInteger(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 100) : 20;
     const offset = (page - 1) * limit;
 
     if (DEMO_MODE) {
@@ -69,9 +71,9 @@ router.get('/transactions', requireAuth, async (req, res) => {
 // ═══════════════════════════════════════════════════════════════
 router.post('/recharge', requireAuth, async (req, res) => {
     const userId = req.user.id;
-    const { montant, methode } = req.body;
+    const { montant, methode } = req.body || {};
 
-    if (!montant || isNaN(montant) || montant < 1) {
+    if (!Number.isFinite(Number(montant)) || Number(montant) < 1 || Number(montant) > 100000) {
         return res.status(400).json({ error: 'Montant invalide (minimum $1).' });
     }
     if (!methode) {
@@ -253,14 +255,34 @@ router.post('/pay-order', requireAuth, async (req, res) => {
     const userId = req.user.id;
     const { produit_id, produit_nom, categorie, denom_label, eur, htg, player_id, server, client_nom } = req.body;
 
-    if (!produit_nom || !denom_label || !eur || isNaN(eur)) {
+    if (!produit_nom || !denom_label || !Number.isFinite(Number(eur)) || Number(eur) <= 0 || Number(eur) > 10000) {
         return res.status(400).json({ error: 'Informations de commande manquantes.' });
     }
 
     const amount = parseFloat(parseFloat(eur).toFixed(2));
 
     if (DEMO_MODE) {
-        return res.json({ success: true, order_id: 'LZ-DEMO-WALLET', new_balance: 0 });
+        const currentBalance = Number(demoBalances[userId] || 0);
+        if (currentBalance < amount) {
+            return res.status(402).json({
+                error: `Solde insuffisant. Votre solde : $${currentBalance.toFixed(2)}, requis : $${amount.toFixed(2)}.`,
+                balance: currentBalance
+            });
+        }
+        const orderId = `LZ-DEMO-WALLET-${Date.now()}`;
+        const newBalance = Number((currentBalance - amount).toFixed(2));
+        demoBalances[userId] = newBalance;
+        demoTransactions.unshift({
+            id: crypto.randomUUID(),
+            user_id: userId,
+            type: 'debit',
+            montant: amount,
+            methode: 'wallet',
+            statut: 'valide',
+            note: `Paiement commande ${orderId} — ${produit_nom} (${denom_label})`,
+            created_at: new Date().toISOString()
+        });
+        return res.json({ success: true, order_id: orderId, new_balance: newBalance });
     }
 
     // Vérifier le solde du client
@@ -336,8 +358,8 @@ router.post('/credit-manual', requireAuth, requireMinRole('employe'), async (req
     const staffId = req.user.id;
     const { email, montant, note } = req.body;
 
-    if (!email || !email.includes('@')) return res.status(400).json({ error: 'Email invalide.' });
-    if (!montant || isNaN(montant) || montant < 0.01) return res.status(400).json({ error: 'Montant invalide (min $0.01).' });
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Email invalide.' });
+    if (!Number.isFinite(Number(montant)) || Number(montant) < 0.01 || Number(montant) > 100000) return res.status(400).json({ error: 'Montant invalide (entre $0.01 et $100000).' });
 
     const amt = parseFloat(parseFloat(montant).toFixed(2));
 

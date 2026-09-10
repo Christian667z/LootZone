@@ -21,14 +21,14 @@ import couponsRoutes from './Routes/coupons.js';
 import blogsRoutes from './Routes/blogs.js';
 import notificationsRoutes from './Routes/notifications.js';
 import { startRealtime, registerSSEClient, registerClientSSE } from './Routes/realtime.js';
-import { checkSupabaseConnection, DEMO_MODE } from './supabase.js';
+import { checkSupabaseConnection, DEMO_MODE, supabaseAdmin } from './supabase.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
 
 const app = express();
 app.set('trust proxy', 1);
-const PORT = 3000;
+const PORT = Number.parseInt(process.env.PORT, 10) || 5000;
 
 // ─── ORIGINES AUTORISÉES ────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
@@ -62,14 +62,14 @@ app.use(cors({
         ) {
             return callback(null, true);
         }
-        return callback(null, true);
+        return callback(new Error('CORS: origine non autorisée'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json({ limit: '5mb' }));
+app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // ─── RATE LIMITING ───────────────────────────────────────────────────────────
@@ -129,7 +129,23 @@ app.use('/api/notifications', notificationsRoutes);
 // ─── SSE CLIENT PUBLIC (notifications commande) ───────────────────────────────
 app.get('/api/events/client', async (req, res) => {
     const email = req.query.email;
-    if (!email) return res.status(400).json({ error: 'Email manquant' });
+    const token = req.query.token || req.headers.authorization?.replace(/^Bearer\s+/i, '');
+    if (!email || typeof email !== 'string') return res.status(400).json({ error: 'Email manquant' });
+    if (!token) return res.status(401).json({ error: 'Token manquant' });
+
+    const normalizedEmail = email.trim().toLowerCase();
+    if (DEMO_MODE) {
+        if (!token.startsWith('demo-token-')) return res.status(401).json({ error: 'Token invalide' });
+    } else {
+        try {
+            const { data, error } = await supabaseAdmin?.auth.getUser(token) || {};
+            if (error || !data?.user || data.user.email?.toLowerCase() !== normalizedEmail) {
+                return res.status(401).json({ error: 'Session invalide' });
+            }
+        } catch (_) {
+            return res.status(401).json({ error: 'Session invalide' });
+        }
+    }
 
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -142,13 +158,16 @@ app.get('/api/events/client', async (req, res) => {
         try { res.write(': ping\n\n'); } catch (_) { clearInterval(keepAlive); }
     }, 25000);
     req.on('close', () => clearInterval(keepAlive));
-    registerClientSSE(email, res);
+    registerClientSSE(normalizedEmail, res);
 });
 
 // ─── SSE (Server-Sent Events) ─────────────────────────────────────────────────
 app.get('/api/events', (req, res) => {
     const token = req.query.token || req.headers.authorization?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ error: 'Token manquant' });
+    if (!token || (DEMO_MODE && !token.startsWith('demo-token-'))) return res.status(401).json({ error: 'Token manquant ou invalide' });
+    if (DEMO_MODE && token !== 'demo-token-lootzone-admin') {
+        return res.status(403).json({ error: 'Accès réservé au staff' });
+    }
 
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -178,8 +197,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // ─── FICHIERS STATIQUES ───────────────────────────────────────────────────────
-app.use(express.static(ROOT_DIR));
-app.use(express.static(path.join(ROOT_DIR, 'Dashboard')));
+app.use(express.static(ROOT_DIR, { maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0 }));
+app.use(express.static(path.join(ROOT_DIR, 'Dashboard'), { maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0 }));
 
 app.get('/admin-login', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
 app.get('/admin-login.html', (req, res) => res.sendFile(path.join(ROOT_DIR, 'Dashboard', 'admin-login.html')));
@@ -199,6 +218,9 @@ app.get('/*splat', (req, res) => {
 
 // ─── GESTION DES ERREURS ──────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({ error: 'JSON invalide dans la requête' });
+    }
     if (err.message?.startsWith('CORS')) {
         return res.status(403).json({ error: err.message });
     }
@@ -207,14 +229,28 @@ app.use((err, req, res, next) => {
 });
 
 // ─── DÉMARRAGE ────────────────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', async () => {
+const server = app.listen(PORT, '0.0.0.0', async () => {
     console.log(`\n╔══════════════════════════════════════════════════╗`);
     console.log(`║   🟢 LOOTZONE Backend v2.1 — Port ${PORT}         ║`);
-    console.log(`║   Mode: ${process.env.SUPABASE_URL ? 'Production (Supabase)     ' : 'Démo (sans Supabase)     '}    ║`);
+        console.log(`║   Mode: ${DEMO_MODE ? 'Démo (sans Supabase)     ' : 'Production (Supabase)     '}    ║`);
     console.log(`╚══════════════════════════════════════════════════╝\n`);
 
     await checkSupabaseConnection();
     startRealtime();
 });
+
+server.on('error', (err) => {
+    console.error(`[Serveur] Impossible de démarrer sur le port ${PORT}:`, err.message);
+    process.exitCode = 1;
+});
+
+function shutdown(signal) {
+    console.log(`[Serveur] Arrêt demandé (${signal})`);
+    server.close(() => process.exit(0));
+    setTimeout(() => process.exit(1), 10000).unref();
+}
+
+process.once('SIGTERM', () => shutdown('SIGTERM'));
+process.once('SIGINT', () => shutdown('SIGINT'));
 
 export default app;

@@ -402,7 +402,7 @@ async function refreshDropdownWallet(token) {
 
 // ─── Notifications commande temps réel ───────────────────────────────────────
 let _clientSSE = null;
-function startClientNotifications(email) {
+function startClientNotifications(email, accessToken) {
   if (_clientSSE) { _clientSSE.close(); _clientSSE = null; }
   if (!email) return;
 
@@ -410,7 +410,9 @@ function startClientNotifications(email) {
     Notification.requestPermission();
   }
 
-  const url = `/api/events/client?email=${encodeURIComponent(email)}`;
+  const token = accessToken || localStorage.getItem('as_token') || '';
+  if (!token) return;
+  const url = `/api/events/client?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`;
   _clientSSE = new EventSource(url);
 
   _clientSSE.addEventListener('commande_livree', (e) => {
@@ -646,7 +648,7 @@ window.AstaAuth = {
       updateNavAccount(user, profile);
       updateHeaderAuthState(true, user, profile);
       updateMobileNav(true);
-      if (user.email) startClientNotifications(user.email);
+      if (user.email) startClientNotifications(user.email, localStorage.getItem('as_token'));
     } else {
       renderLoggedOutTopBar();
       updateNavAccount(null, null);
@@ -677,7 +679,7 @@ window.AstaAuth = {
             updateNavAccount(session.user, profile);
             updateHeaderAuthState(true, session.user, profile);
             updateMobileNav(true);
-            startClientNotifications(session.user.email);
+            startClientNotifications(session.user.email, session.access_token);
             if (session.access_token) refreshDropdownWallet(session.access_token);
           } else if (event === 'SIGNED_OUT') {
             try {

@@ -6,6 +6,13 @@ import { logActivite } from './logs.js';
 const router = express.Router();
 
 const VALID_CATEGORIES = ['jeux', 'payment-cards', 'gift-cards', 'game-console', 'game-cd-key', 'video-streaming', 'music', 'shopping', 'telco-prepaid', 'tools', 'software', 'social-app'];
+const DB_FIELD_NAMES = {
+    needsServer: 'needs_server',
+    serverOptions: 'server_options',
+    idLabel: 'id_label',
+    idPlaceholder: 'id_placeholder',
+    discountTiers: 'discount_tiers'
+};
 
 let demoProducts = null;
 
@@ -89,7 +96,10 @@ router.post('/', requireAuth, requireMinRole('administrateur'), async (req, res)
 
 router.put('/:id', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     const id = req.params.id;
-    const updates = req.body;
+    const allowedFields = ['name', 'category', 'img', 'desc', 'discount', 'rating', 'sales', 'recommended', 'date', 'price', 'needsServer', 'serverOptions', 'idLabel', 'idPlaceholder', 'denoms', 'discount_tiers'];
+    const updates = Object.fromEntries(Object.entries(req.body || {}).filter(([key]) => allowedFields.includes(key)));
+    if (!Object.keys(updates).length) return res.status(400).json({ error: 'Aucune modification valide' });
+    if (updates.category && !VALID_CATEGORIES.includes(updates.category)) return res.status(400).json({ error: 'Catégorie invalide' });
 
     if (DEMO_MODE) {
         const products = await getProducts();
@@ -97,15 +107,16 @@ router.put('/:id', requireAuth, requireMinRole('administrateur'), async (req, re
         if (idx === -1) return res.status(404).json({ error: 'Produit introuvable' });
         const old = { ...products[idx] };
         Object.assign(products[idx], updates);
-        await saveProductsToFile(demoProducts);
+        await saveProductsToFile(products);
         await logActivite(req.user.id, req.user.role, `Modification produit #${id} — ${products[idx].name}`, `produit:${id}`, JSON.stringify(old), JSON.stringify(updates));
         return res.json({ success: true, product: products[idx] });
     }
 
     const { data: old } = await supabaseAdmin.from('products').select('*').eq('id', id).single();
-    const { data, error } = await supabaseAdmin.from('products').update(updates).eq('id', id).select().single();
+    const dbUpdates = Object.fromEntries(Object.entries(updates).map(([key, value]) => [DB_FIELD_NAMES[key] || key, value]));
+    const { data, error } = await supabaseAdmin.from('products').update(dbUpdates).eq('id', id).select().single();
     if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
-    await logActivite(req.user.id, req.user.role, `Modification produit #${id} — ${data.name}`, `produit:${id}`, JSON.stringify(old), JSON.stringify(updates));
+    await logActivite(req.user.id, req.user.role, `Modification produit #${id} — ${data.name}`, `produit:${id}`, JSON.stringify(old), JSON.stringify(dbUpdates));
     res.json({ success: true, product: data });
 });
 

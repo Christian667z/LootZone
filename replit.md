@@ -20,6 +20,15 @@ The app starts automatically via the **Start application** workflow (`npm run de
 | `SUPABASE_ANON_KEY` | Replit secret |
 | `SUPABASE_SERVICE_ROLE_KEY` | Replit secret |
 
+If `SUPABASE_URL` is set without a matching `SUPABASE_ANON_KEY` or
+`SUPABASE_SERVICE_ROLE_KEY`, the backend starts explicitly in demo mode with
+in-memory data. Demo authentication uses the token returned by `/api/auth/login`
+for client requests and the token returned by `/api/auth/admin-login` for staff
+requests. Never expose `SUPABASE_SERVICE_ROLE_KEY` in client-side code.
+
+The server listens on `PORT` when provided and defaults to `5000`, which is the
+port expected by the Replit webview.
+
 ## Key directories
 
 - `data/server.js` — Express entry point
