@@ -1,5 +1,5 @@
 import express from 'express';
-import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
+import { supabaseAdmin, supabaseAnon, supabaseClient, DEMO_MODE } from '../supabase.js';
 import { requireAuth, ROLE_LEVEL, SIDEBAR_PERMISSIONS } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
 
@@ -14,31 +14,139 @@ function generateUserCode() {
     return code;
 }
 
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
+
+        const client = supabaseClient;
+        if (!client) {
+            return res.status(500).json({ error: 'Service d\'authentification indisponible' });
+        }
+
+        const cleanEmail = email.trim().toLowerCase();
+        const { data: authData, error: authErr } = await client.auth.signInWithPassword({ email: cleanEmail, password });
+        if (authErr) {
+            const msg = authErr.message || '';
+            const msgLower = msg.toLowerCase();
+            if (msgLower.includes('email not confirmed')) {
+                return res.status(403).json({
+                    error: 'Email non confirmé. Veuillez vérifier vos emails ou exécuter le script SQL d\'auto-confirmation.',
+                    code: 'email_not_confirmed'
+                });
+            }
+            if (msgLower.includes('invalid login credentials') || msgLower.includes('invalid_credentials') || authErr.code === 'invalid_credentials') {
+                return res.status(401).json({ error: 'Identifiants incorrects. Vérifiez votre adresse e-mail et votre mot de passe.' });
+            }
+            return res.status(400).json({ error: msg || 'Erreur lors de la connexion' });
+        }
+
+        // Récupérer le profil
+        let profile = null;
+        try {
+            const { data: profData } = await client
+                .from('profiles')
+                .select('*')
+                .eq('id', authData.user.id)
+                .maybeSingle();
+            profile = profData;
+        } catch (_) {}
+
+        // Si le profil n'existe pas encore, le créer automatiquement
+        if (!profile) {
+            const meta = authData.user.user_metadata || {};
+            profile = {
+                id: authData.user.id,
+                email: authData.user.email,
+                nom: meta.nom || '',
+                prenom: meta.prenom || '',
+                user_code: generateUserCode(),
+                role: meta.role || 'client',
+                statut_presence: 'en_ligne'
+            };
+            try {
+                await client.from('profiles').upsert(profile, { onConflict: 'id' });
+            } catch (_) {}
+        }
+
+        const isStaff = profile?.role && profile.role !== 'client';
+        const roleLevel = ROLE_LEVEL[profile?.role] || 0;
+
+        const sidebarPerms = {};
+        for (const [section, roles] of Object.entries(SIDEBAR_PERMISSIONS)) {
+            sidebarPerms[section] = roles.includes(profile?.role);
+        }
+
+        try {
+            await logActivite(profile.id, profile.role, isStaff ? 'Connexion au dashboard' : 'Connexion au site client', null, null, null);
+        } catch (_) {}
+
+        return res.json({
+            token: authData.session?.access_token,
+            session: authData.session,
+            user: {
+                id: profile.id,
+                email: authData.user.email,
+                role: profile.role,
+                nom: profile.nom || '',
+                prenom: profile.prenom || '',
+                avatar: profile.avatar_url || null,
+                user_code: profile.user_code || ''
+            },
+            profile,
+            sidebarPerms,
+            roleLevel,
+            isStaff,
+            redirectUrl: isStaff ? (req.headers.referer?.includes('Dashboard') ? 'dashboard.html' : 'Dashboard/dashboard.html') : 'profile.html'
+        });
+    } catch (err) {
+        console.error('[auth/login] Erreur:', err);
+        return res.status(500).json({ error: 'Erreur lors de la connexion. Réessayez.' });
+    }
+});
+
 router.post('/admin-login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
 
-    if (DEMO_MODE) {
-        return res.json({
-            token: 'demo-token-' + Date.now(),
-            user: { id: 'demo-1', email, role: 'directeur', nom: 'Directeur Démo', prenom: '' },
-            sidebarPerms: SIDEBAR_PERMISSIONS,
-            roleLevel: 5
-        });
+    const client = supabaseClient;
+    if (!client) {
+        return res.status(500).json({ error: 'Service d\'authentification indisponible' });
     }
 
-    const { data: authData, error: authErr } = await supabaseAdmin.auth.signInWithPassword({ email, password });
-    if (authErr) return res.status(401).json({ error: 'Identifiants incorrects' });
+    const cleanEmail = email.trim().toLowerCase();
+    const { data: authData, error: authErr } = await client.auth.signInWithPassword({ email: cleanEmail, password });
+    if (authErr) {
+        const msg = authErr.message || '';
+        const msgLower = msg.toLowerCase();
+        if (msgLower.includes('email not confirmed')) {
+            return res.status(403).json({ error: 'Email non confirmé. Veuillez confirmer votre adresse e-mail ou exécuter le script SQL d\'auto-confirmation.', code: 'email_not_confirmed' });
+        }
+        return res.status(401).json({ error: 'Identifiants incorrects' });
+    }
 
-    const { data: profile, error: profErr } = await supabaseAdmin
+    let profile = null;
+    const { data: profData } = await client
         .from('profiles')
         .select('*')
         .eq('id', authData.user.id)
-        .single();
+        .maybeSingle();
+    profile = profData;
 
-    if (profErr || !profile) {
-        await supabaseAdmin.auth.admin.signOut(authData.user.id);
-        return res.status(403).json({ error: 'Profil introuvable' });
+    if (!profile) {
+        const meta = authData.user.user_metadata || {};
+        profile = {
+            id: authData.user.id,
+            email: authData.user.email,
+            nom: meta.nom || '',
+            prenom: meta.prenom || '',
+            user_code: generateUserCode(),
+            role: meta.role || 'directeur',
+            statut_presence: 'en_ligne'
+        };
+        try {
+            await client.from('profiles').upsert(profile, { onConflict: 'id' });
+        } catch (_) {}
     }
 
     const isStaff = profile.role !== 'client';
@@ -49,10 +157,13 @@ router.post('/admin-login', async (req, res) => {
         sidebarPerms[section] = roles.includes(profile.role);
     }
 
-    await logActivite(profile.id, profile.role, isStaff ? 'Connexion au dashboard' : 'Connexion au site client', null, null, null);
+    try {
+        await logActivite(profile.id, profile.role, isStaff ? 'Connexion au dashboard' : 'Connexion au site client', null, null, null);
+    } catch (_) {}
 
     res.json({
-        token: authData.session.access_token,
+        token: authData.session?.access_token,
+        session: authData.session,
         user: { id: profile.id, email: authData.user.email, role: profile.role, nom: profile.nom || '', prenom: profile.prenom || '', avatar: profile.avatar_url || null },
         sidebarPerms,
         roleLevel,
@@ -86,16 +197,35 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 6 caractères.' });
     }
 
-    if (DEMO_MODE) {
-        return res.json({ success: true, demo: true });
+    const client = supabaseClient;
+    if (!client) {
+        return res.status(500).json({ error: 'Service Supabase non disponible' });
     }
 
-    const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: { nom: nom || '', prenom }
-    });
+    const cleanEmail = email.trim().toLowerCase();
+    let createdUser = null;
+    let createErr = null;
+
+    if (supabaseAdmin?.auth?.admin?.createUser) {
+        const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+            email: cleanEmail,
+            password,
+            email_confirm: true,
+            user_metadata: { nom: nom || '', prenom }
+        });
+        createdUser = created?.user;
+        createErr = error;
+    } else {
+        const { data: created, error } = await client.auth.signUp({
+            email: cleanEmail,
+            password,
+            options: {
+                data: { nom: nom || '', prenom }
+            }
+        });
+        createdUser = created?.user;
+        createErr = error;
+    }
 
     if (createErr) {
         const errMsg = createErr.message || createErr.code || createErr.name || 'Erreur inconnue lors de la création du compte.';
@@ -110,24 +240,33 @@ router.post('/register', async (req, res) => {
         if (errLower.includes('password') && (errLower.includes('weak') || errLower.includes('short'))) {
             return res.status(400).json({ error: 'Mot de passe trop faible. Utilisez au moins 6 caractères variés.' });
         }
+        if (errLower.includes('invalid') && errLower.includes('email')) {
+            return res.status(400).json({ error: 'Adresse email invalide.' });
+        }
         return res.status(400).json({ error: errMsg });
     }
 
-    const { error: profErr } = await supabaseAdmin.from('profiles').upsert({
-        id: created.user.id,
-        email,
-        nom: nom || '',
-        prenom,
-        user_code: generateUserCode(),
-        role: 'client',
-        statut_presence: 'deconnecte'
-    }, { onConflict: 'id' });
+    if (createdUser?.id) {
+        const { error: profErr } = await client.from('profiles').upsert({
+            id: createdUser.id,
+            email: cleanEmail,
+            nom: nom || '',
+            prenom,
+            user_code: generateUserCode(),
+            role: 'client',
+            statut_presence: 'deconnecte'
+        }, { onConflict: 'id' });
 
-    if (profErr) {
-        console.error('[register] Erreur création profil :', profErr.message);
+        if (profErr) {
+            console.error('[register] Erreur création profil :', profErr.message);
+        }
     }
 
-    res.json({ success: true });
+    res.json({
+        success: true,
+        user: createdUser ? { id: createdUser.id, email: createdUser.email } : null,
+        needsConfirmation: !supabaseAdmin && !createdUser?.email_confirmed_at
+    });
 });
 
 router.post('/setup-profile', async (req, res) => {
@@ -135,14 +274,15 @@ router.post('/setup-profile', async (req, res) => {
     if (!token) return res.status(401).json({ error: 'Token manquant' });
     if (DEMO_MODE) return res.json({ success: true, message: 'Mode démo' });
 
-    const { data: { user }, error: authErr } = await supabaseAdmin.auth.getUser(token);
+    const client = supabaseClient;
+    const { data: { user }, error: authErr } = await client.auth.getUser(token);
     if (authErr || !user) return res.status(401).json({ error: 'Token invalide' });
 
-    const { data: existing } = await supabaseAdmin.from('profiles').select('id').eq('id', user.id).maybeSingle();
+    const { data: existing } = await client.from('profiles').select('id').eq('id', user.id).maybeSingle();
     if (existing) return res.json({ success: true, message: 'Profil déjà existant' });
 
     const meta = user.user_metadata || {};
-    const { error } = await supabaseAdmin.from('profiles').insert({
+    const { error } = await client.from('profiles').insert({
         id: user.id,
         email: user.email,
         nom: meta.nom || meta.last_name || '',
@@ -167,7 +307,8 @@ router.patch('/staff/:id/status', requireAuth, async (req, res) => {
 
     if (DEMO_MODE) return res.json({ success: true, status });
 
-    const { error } = await supabaseAdmin.from('profiles').update({ statut_presence: status }).eq('id', req.user.id);
+    const client = supabaseClient;
+    const { error } = await client.from('profiles').update({ statut_presence: status }).eq('id', req.user.id);
     if (error) return res.status(500).json({ error: 'Erreur lors de la mise à jour du statut' });
     res.json({ success: true, status });
 });

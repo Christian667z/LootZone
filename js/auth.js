@@ -581,42 +581,140 @@ window.AstaAuth = {
 
   async login(email, password) {
     const sb = await getSB();
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    return data;
+    const cleanEmail = (email || '').trim().toLowerCase();
+    let authData = null;
+    let lastError = null;
+
+    // 1. Tenter la connexion directe Supabase Client
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email: cleanEmail, password });
+      if (error) throw error;
+      authData = data;
+    } catch (err) {
+      lastError = err;
+    }
+
+    // 2. Si le client Supabase rencontre un problème (ou en cas d'erreur réseau/session), tenter /api/auth/login
+    if (!authData) {
+      try {
+        const resp = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: cleanEmail, password })
+        });
+        const json = await resp.json();
+        if (resp.ok && json.session) {
+          // Synchroniser la session dans le client Supabase
+          if (json.session.access_token && json.session.refresh_token) {
+            try {
+              await sb.auth.setSession({
+                access_token: json.session.access_token,
+                refresh_token: json.session.refresh_token
+              });
+            } catch (_) {}
+          }
+          authData = json;
+          lastError = null;
+        } else if (resp.status === 403 && json.code === 'email_not_confirmed') {
+          const err = new Error('Email not confirmed');
+          err.code = 'email_not_confirmed';
+          throw err;
+        } else if (!resp.ok && !lastError) {
+          throw new Error(json.error || 'Identifiants incorrects.');
+        }
+      } catch (backendErr) {
+        if (!lastError || backendErr.message === 'Email not confirmed') {
+          lastError = backendErr;
+        }
+      }
+    }
+
+    if (lastError && !authData) {
+      throw lastError;
+    }
+
+    // Sauvegarder les données de session et rafraîchir l'interface
+    if (authData?.user) {
+      try {
+        const profile = authData.profile || await fetchProfile(authData.user.id);
+        authData.profile = profile;
+        if (profile?.role && profile.role !== 'client') {
+          localStorage.setItem('as_token', authData.session?.access_token || authData.token || '');
+          localStorage.setItem('as_user', JSON.stringify({
+            id: profile.id,
+            email: authData.user.email,
+            role: profile.role,
+            nom: profile.nom || '',
+            prenom: profile.prenom || '',
+            avatar: profile.avatar_url || null
+          }));
+        }
+        if (profile?.user_code) {
+          localStorage.setItem('asta_user_code', profile.user_code);
+        }
+        if (profile?.wallet_balance !== undefined) {
+          localStorage.setItem('asta_wallet_balance', String(profile.wallet_balance));
+        }
+        updateHeaderAuthState(true, authData.user, profile);
+        updateNavAccount(authData.user, profile);
+        updateTopBar(authData.user, profile);
+      } catch (_) {}
+    }
+
+    return authData;
   },
 
   async register(email, password, nom, prenom) {
+    const cleanEmail = (email || '').trim().toLowerCase();
     let res;
     try {
       res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, nom, prenom })
+        body: JSON.stringify({ email: cleanEmail, password, nom, prenom })
       });
     } catch (_networkErr) {
-      throw new Error('Problème de connexion réseau. Vérifiez votre connexion internet.');
+      // Si le backend est inaccessible, fallback sur Supabase client
+      const sb = await getSB();
+      const { data, error } = await sb.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: { data: { nom: nom || '', prenom } }
+      });
+      if (error) throw error;
+      return data;
     }
-    let json;
+
+    let json = {};
     try {
       const text = await res.text();
       json = text ? JSON.parse(text) : {};
-    } catch (_) {
-      throw new Error(res.ok
-        ? 'Erreur de communication avec le serveur. Réessayez.'
-        : `Erreur serveur (${res.status}). Réessayez dans quelques instants.`);
-    }
+    } catch (_) {}
+
     if (!res.ok) {
       const errMsg = json.error || json.message || `Erreur serveur (${res.status}). Réessayez dans quelques instants.`;
       throw new Error(errMsg);
     }
+
+    // Connexion automatique après l'inscription
     const sb = await getSB();
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) {
-      window.location.href = 'index.html?registered=1';
-      return null;
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email: cleanEmail, password });
+      if (error) {
+        if (error.message?.toLowerCase().includes('email not confirmed')) {
+          const confErr = new Error('Email not confirmed');
+          confErr.code = 'email_not_confirmed';
+          throw confErr;
+        }
+        return { user: json.user };
+      }
+      return data;
+    } catch (loginErr) {
+      if (loginErr.code === 'email_not_confirmed' || loginErr.message?.toLowerCase().includes('email not confirmed')) {
+        throw loginErr;
+      }
+      return { user: json.user };
     }
-    return data;
   },
 
   async resendConfirmation(email) {

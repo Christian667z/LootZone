@@ -20,7 +20,7 @@ import walletRoutes from './Routes/wallet.js';
 import couponsRoutes from './Routes/coupons.js';
 import blogsRoutes from './Routes/blogs.js';
 import { startRealtime, registerSSEClient, registerClientSSE } from './Routes/realtime.js';
-import { checkSupabaseConnection } from './supabase.js';
+import { checkSupabaseConnection, DEMO_MODE } from './supabase.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
@@ -106,6 +106,7 @@ const registerLimiter = rateLimit({
 
 app.use('/api', apiLimiter);
 app.use('/api/auth/admin-login', loginLimiter);
+app.use('/api/auth/login', loginLimiter);
 app.use('/api/auth/register', registerLimiter);
 app.use('/api/orders/public', orderPublicLimiter);
 
@@ -169,7 +170,7 @@ app.get('/api/health', (req, res) => {
     res.json({
         status: 'ok',
         version: '2.1.0',
-        mode: process.env.SUPABASE_URL ? 'production' : 'demo',
+        mode: DEMO_MODE ? 'demo' : 'production',
         timestamp: new Date().toISOString()
     });
 });

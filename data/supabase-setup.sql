@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
---  ASTA-SHOPS — CONFIGURATION SUPABASE COMPLÈTE
+--  ASTA-SHOPS / LOOTZONE — CONFIGURATION SUPABASE COMPLÈTE
 --  Copier-coller ce fichier dans : Supabase → SQL Editor → Run
 --  Idempotent — sans danger si re-exécuté
 -- ═══════════════════════════════════════════════════════════════
@@ -10,6 +10,31 @@
 create extension if not exists "uuid-ossp";
 
 -- ═══════════════════════════════════════════════════════════════
+--  0. AUTO-CONFIRMATION DES EMAILS (auth.users)
+--  Permet à tous les utilisateurs de se connecter sans blocage "Email not confirmed"
+-- ═══════════════════════════════════════════════════════════════
+create or replace function public.auto_confirm_new_user()
+returns trigger language plpgsql security definer
+set search_path = public, auth
+as $$
+begin
+  if new.email_confirmed_at is null then
+    new.email_confirmed_at := now();
+  end if;
+  return new;
+end; $$;
+
+drop trigger if exists on_auth_user_auto_confirm on auth.users;
+create trigger on_auth_user_auto_confirm
+  before insert on auth.users
+  for each row execute function public.auto_confirm_new_user();
+
+-- Débloquer tous les utilisateurs existants
+update auth.users
+set email_confirmed_at = now()
+where email_confirmed_at is null;
+
+-- ═══════════════════════════════════════════════════════════════
 --  1. PROFILES
 -- ═══════════════════════════════════════════════════════════════
 create table if not exists profiles (
@@ -17,39 +42,61 @@ create table if not exists profiles (
   email           text,
   nom             text,
   prenom          text,
-  role            text        not null default 'client'
-    check (role in ('client','helper','employe','administrateur','manager','directeur','partenaire')),
-  statut_presence text        default 'deconnecte'
-    check (statut_presence in ('en_ligne','occupe','deconnecte')),
+  role            text        not null default 'client',
+  statut_presence text        default 'deconnecte',
   avatar_url      text,
   affiliate_code  text        unique,
+  user_code       text        unique,
+  wallet_balance  numeric(10,2) default 0,
+  points          int          default 0,
+  vip_niveau      text         default 'membre',
+  birthday        date,
+  pseudo          text,
+  total_depenses  numeric(12,2) default 0,
   created_at      timestamptz default now(),
   updated_at      timestamptz default now()
 );
 
-alter table profiles add column if not exists wallet_balance numeric(10,2) default 0;
-alter table profiles add column if not exists points        int          default 0;
-alter table profiles add column if not exists vip_niveau    text         default 'membre';
-alter table profiles add column if not exists birthday      date;
-alter table profiles add column if not exists pseudo        text;
-alter table profiles add column if not exists total_depenses numeric(12,2) default 0;
+alter table profiles add column if not exists user_code       text;
+alter table profiles add column if not exists wallet_balance  numeric(10,2) default 0;
+alter table profiles add column if not exists points          int          default 0;
+alter table profiles add column if not exists vip_niveau      text         default 'membre';
+alter table profiles add column if not exists birthday        date;
+alter table profiles add column if not exists pseudo          text;
+alter table profiles add column if not exists total_depenses  numeric(12,2) default 0;
+alter table profiles add column if not exists statut_presence text         default 'deconnecte';
+alter table profiles add column if not exists avatar_url      text;
+alter table profiles add column if not exists affiliate_code  text;
+
+alter table profiles drop constraint if exists profiles_role_check;
+alter table profiles add constraint profiles_role_check
+  check (role in ('client','helper','employe','administrateur','admin','manager','directeur','partenaire','alliance','recruteur','influenceur','vendeur','vip'));
+
+alter table profiles drop constraint if exists profiles_statut_presence_check;
+alter table profiles add constraint profiles_statut_presence_check
+  check (statut_presence in ('en_ligne','occupe','deconnecte'));
 
 alter table profiles enable row level security;
 
 drop policy if exists "Tout utilisateur connecté peut lire les profils" on profiles;
-create policy "Tout utilisateur connecté peut lire les profils"
+drop policy if exists "Staff peut lire les profils" on profiles;
+drop policy if exists "Lecture des profils" on profiles;
+create policy "Lecture des profils"
   on profiles for select
-  using (auth.uid() is not null);
+  using (true);
 
 drop policy if exists "Chacun modifie son propre profil" on profiles;
-create policy "Chacun modifie son propre profil"
+drop policy if exists "Staff peut modifier son propre profil" on profiles;
+drop policy if exists "Modification profil" on profiles;
+create policy "Modification profil"
   on profiles for update
-  using (auth.uid() = id);
+  using (auth.uid() = id or auth.role() = 'service_role');
 
 drop policy if exists "Service role peut insérer profils" on profiles;
-create policy "Service role peut insérer profils"
+drop policy if exists "Insertion profil" on profiles;
+create policy "Insertion profil"
   on profiles for insert
-  with check (auth.uid() is not null or auth.role() = 'service_role');
+  with check (auth.uid() = id or auth.role() = 'service_role' or auth.uid() is not null);
 
 -- ─────────────────────────────────────────────────────────────
 --  TRIGGER auto-création profil
@@ -58,16 +105,35 @@ create or replace function handle_new_user()
 returns trigger language plpgsql security definer
 set search_path = public
 as $$
+declare
+  generated_code text;
 begin
-  insert into public.profiles (id, email, nom, prenom, role)
+  generated_code := upper(substring(replace(gen_random_uuid()::text, '-', '') from 1 for 6));
+
+  insert into public.profiles (
+    id,
+    email,
+    nom,
+    prenom,
+    user_code,
+    role,
+    statut_presence
+  )
   values (
     new.id,
     new.email,
     coalesce(new.raw_user_meta_data->>'nom', new.raw_user_meta_data->>'last_name', ''),
     coalesce(new.raw_user_meta_data->>'prenom', new.raw_user_meta_data->>'first_name', ''),
-    coalesce(new.raw_user_meta_data->>'role', 'client')
+    coalesce(new.raw_user_meta_data->>'user_code', generated_code),
+    coalesce(new.raw_user_meta_data->>'role', 'client'),
+    'deconnecte'
   )
-  on conflict (id) do nothing;
+  on conflict (id) do update set
+    email = excluded.email,
+    nom = coalesce(nullif(excluded.nom, ''), profiles.nom),
+    prenom = coalesce(nullif(excluded.prenom, ''), profiles.prenom),
+    updated_at = now();
+
   return new;
 end; $$;
 
@@ -77,6 +143,20 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function handle_new_user();
+
+-- Backfill profils manquants pour les utilisateurs existants
+insert into public.profiles (id, email, nom, prenom, user_code, role)
+select
+  u.id,
+  u.email,
+  coalesce(u.raw_user_meta_data->>'nom', ''),
+  coalesce(u.raw_user_meta_data->>'prenom', split_part(u.email, '@', 1)),
+  upper(substring(replace(gen_random_uuid()::text, '-', '') from 1 for 6)),
+  coalesce(u.raw_user_meta_data->>'role', 'client')
+from auth.users u
+left join public.profiles p on p.id = u.id
+where p.id is null
+on conflict (id) do nothing;
 
 -- ─────────────────────────────────────────────────────────────
 --  TRIGGER sync VIP
