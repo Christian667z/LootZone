@@ -10,31 +10,34 @@ const VALID_CATEGORIES = ['jeux', 'payment-cards', 'gift-cards', 'game-console',
 let demoProducts = null;
 
 async function getProducts() {
-    if (DEMO_MODE) {
-        if (!demoProducts) {
-            try {
-                const { readFileSync } = await import('fs');
-                const { fileURLToPath } = await import('url');
-                const path = await import('path');
-                const __dirname = path.dirname(fileURLToPath(import.meta.url));
-                const raw = readFileSync(path.join(__dirname, '../products.js'), 'utf8');
-                const idx = raw.indexOf('const products =');
-                if (idx !== -1) {
-                    const fn = new Function(raw.substring(idx) + '\nreturn products;');
-                    demoProducts = fn();
-                } else {
-                    demoProducts = [];
-                }
-            } catch (err) {
-                console.error('[products] Erreur chargement products.js:', err.message);
+    if (!DEMO_MODE && supabaseAdmin) {
+        try {
+            const { data, error } = await supabaseAdmin.from('products').select('*').order('id');
+            if (!error && data && data.length > 0) return data;
+        } catch (err) {
+            console.warn('[products] Supabase non disponible ou vide, repli sur products.js:', err.message);
+        }
+    }
+    if (!demoProducts) {
+        try {
+            const { readFileSync } = await import('fs');
+            const { fileURLToPath } = await import('url');
+            const path = await import('path');
+            const __dirname = path.dirname(fileURLToPath(import.meta.url));
+            const raw = readFileSync(path.join(__dirname, '../products.js'), 'utf8');
+            const idx = raw.indexOf('const products =');
+            if (idx !== -1) {
+                const fn = new Function(raw.substring(idx) + '\nreturn products;');
+                demoProducts = fn();
+            } else {
                 demoProducts = [];
             }
+        } catch (err) {
+            console.error('[products] Erreur chargement products.js:', err.message);
+            demoProducts = [];
         }
-        return demoProducts;
     }
-    const { data, error } = await supabaseAdmin.from('products').select('*').order('id');
-    if (error) throw error;
-    return data;
+    return demoProducts;
 }
 
 async function saveProductsToFile(products) {

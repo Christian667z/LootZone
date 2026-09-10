@@ -7,14 +7,13 @@ if (!globalThis.WebSocket) {
     globalThis.WebSocket = ws;
 }
 
-const DEFAULT_SUPABASE_URL = 'https://bdezshjorwdxzojuecja.supabase.co';
-const DEFAULT_SUPABASE_ANON_KEY = 'sb_publishable_PDxfwtviufPwC92pVHdNaA_G01ZE50h';
+const supabaseUrl = process.env.SUPABASE_URL || null;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || null;
 
-const supabaseUrl = process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
-
-if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+if (!supabaseUrl) {
+    console.info('[Supabase] Aucune variable SUPABASE_URL détectée. Fonctionnement en mode Démo (mock en mémoire).');
+} else if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     console.info('[Supabase] SUPABASE_SERVICE_ROLE_KEY non fournie. Fonctionnement en mode Client/Anon.');
 }
 
@@ -53,7 +52,10 @@ export const DEMO_MODE = !supabaseClient;
  */
 export async function checkSupabaseConnection() {
     const client = supabaseAdmin || supabaseAnon;
-    if (!client) return false;
+    if (!client) {
+        console.log('[Supabase] Mode démo actif (mock en mémoire) — aucune base externe configurée.');
+        return false;
+    }
     try {
         const { error } = await client.from('site_config').select('id').limit(1).single();
         if (error && error.code !== 'PGRST116') {

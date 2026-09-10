@@ -284,10 +284,65 @@ img {
     display: none !important;
 }
 
-/* --- Notifications Header (Style LootBar) --- */
+/* --- Notifications Header & Bell Shake Animation --- */
 .notif-btn {
     position: relative;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cloche de notification : pivot par le sommet pour un balancement naturel */
+.notif-btn svg,
+.notif-bell-icon {
+    transform-origin: 50% 0%;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-block;
+    will-change: transform;
+}
+
+/* Keyframes de secousse subtile de la cloche */
+@keyframes notifBellShake {
+    0% {
+        transform: rotate(0deg);
+    }
+    12% {
+        transform: rotate(14deg);
+    }
+    24% {
+        transform: rotate(-12deg);
+    }
+    36% {
+        transform: rotate(10deg);
+    }
+    48% {
+        transform: rotate(-8deg);
+    }
+    60% {
+        transform: rotate(5deg);
+    }
+    72% {
+        transform: rotate(-3deg);
+    }
+    84% {
+        transform: rotate(1deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Classe déclenchée à l'arrivée d'un nouveau message */
+.notif-btn.shake-bell svg,
+.notif-bell-icon.notif-bell-shake,
+.notif-btn.has-new-alert svg {
+    animation: notifBellShake 0.9s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Balancement subtil au survol quand des notifications sont non lues */
+.notif-btn.has-unread:hover svg {
+    animation: notifBellShake 0.75s ease-in-out;
 }
 
 .notif-badge-dot {
@@ -300,9 +355,15 @@ img {
     border-radius: 50%;
     border: 2px solid #141722;
     pointer-events: none;
-    box-shadow: none;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.8);
     filter: none;
-    display: block;
+    display: none !important; /* Par défaut caché : n'apparaît QUE si vraie notification non lue */
+}
+
+.notif-badge-dot.has-unread,
+.notif-badge-dot.active,
+.notif-btn.has-unread .notif-badge-dot {
+    display: block !important;
 }
 
 .notif-badge-dot.hidden {
@@ -688,8 +749,7 @@ body.user-logged-in .guest-only {
     position: relative;
 }
 
-.notif-badge,
-.notif-badge-dot {
+.notif-badge {
     position: absolute;
     top: -5px;
     right: -5px;
@@ -700,16 +760,21 @@ body.user-logged-in .guest-only {
     font-size: 0.65rem;
     font-weight: 800;
     border-radius: 999px;
-    display: flex;
+    display: none !important;
     align-items: center;
     justify-content: center;
     padding: 0 4px;
     line-height: 1;
     border: 2px solid #090a0f;
-    box-shadow: none;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
     text-shadow: none;
     filter: none;
     pointer-events: none;
+}
+
+.notif-badge.has-unread,
+.notif-btn.has-unread .notif-badge {
+    display: flex !important;
 }
 
 /* --- Menu Profil Utilisateur (Avatar & Dropdown LootZone) --- */
@@ -6501,4 +6566,518 @@ body.user-logged-in .guest-only {
 a, button, .product-card, .promo-card, .btn-primary, .btn-secondary, .cart-icon, .nav-links a, .nav-item {
     transition: all 0.2s ease-in-out;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   CENTRE DE NOTIFICATIONS & MESSAGES (Style LootBar)
+   ═══════════════════════════════════════════════════════════════════ */
+.msg-page-body {
+    background-color: #f5f6fa !important;
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+.msg-page-wrap {
+    min-height: calc(100vh - 80px);
+    padding-bottom: 70px;
+}
+
+.msg-container {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Fil d'Ariane (Breadcrumb) */
+.msg-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: #6b7280;
+    padding: 20px 0 16px 0;
+}
+
+.msg-breadcrumb a {
+    color: #4b5563;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s ease;
+}
+
+.msg-breadcrumb a:hover {
+    color: #f59e0b;
+}
+
+.msg-breadcrumb .sep {
+    color: #9ca3af;
+    font-size: 0.82rem;
+}
+
+.msg-breadcrumb .current {
+    color: #111827;
+    font-weight: 600;
+}
+
+/* Bannière push notifications */
+.msg-push-banner {
+    background-color: #fffbeb;
+    border: 1px solid #fef08a;
+    border-radius: 8px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.msg-push-banner.dismissed {
+    display: none !important;
+}
+
+.msg-push-text {
+    font-size: 0.88rem;
+    color: #1f2937;
+    line-height: 1.45;
+}
+
+.msg-push-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.msg-push-btn {
+    background-color: #f59e0b;
+    color: #111827;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 0.86rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.msg-push-btn:hover {
+    background-color: #d97706;
+    color: #ffffff;
+}
+
+.msg-push-close {
+    background: none;
+    border: none;
+    font-size: 1.35rem;
+    color: #9ca3af;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.15s ease;
+}
+
+.msg-push-close:hover {
+    color: #111827;
+}
+
+/* Grille 2 colonnes */
+.msg-layout {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .msg-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Sidebar gauche */
+.msg-sidebar-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.msg-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.96rem;
+    transition: background 0.15s ease;
+    border-left: 4px solid transparent;
+}
+
+.msg-nav-item.active {
+    background: #fffdf5;
+    border-left-color: #f59e0b;
+    color: #111827;
+    font-weight: 700;
+}
+
+.msg-nav-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #18181b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f59e0b;
+    flex-shrink: 0;
+}
+
+.msg-nav-label {
+    flex: 1;
+}
+
+.msg-nav-badge {
+    background-color: #ef4444;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    line-height: 1.2;
+}
+
+/* Carte principale droite */
+.msg-main-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Onglets en haut */
+.msg-tabs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eaedf1;
+    padding: 0 24px;
+    min-height: 58px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.msg-tabs-list {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 58px;
+}
+
+.msg-tab-btn {
+    background: none;
+    border: none;
+    height: 100%;
+    position: relative;
+    font-size: 0.96rem;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    transition: color 0.15s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.msg-tab-btn:hover {
+    color: #111827;
+}
+
+.msg-tab-btn.active {
+    color: #111827;
+    font-weight: 700;
+}
+
+.msg-tab-btn .tab-indicator {
+    display: none;
+}
+
+.msg-tab-btn.active .tab-indicator {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 3px;
+    background-color: #f59e0b;
+    border-radius: 3px 3px 0 0;
+}
+
+.msg-actions-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.msg-mark-all-read-btn {
+    background: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+}
+
+.msg-mark-all-read-btn:hover {
+    border-color: #f59e0b;
+    color: #f59e0b;
+    background-color: #fffdf5;
+}
+
+/* Contenu des onglets */
+.msg-tab-content {
+    display: none;
+    padding: 24px;
+    flex: 1;
+}
+
+.msg-tab-content.active {
+    display: block;
+}
+
+/* État vide (Empty State) */
+.msg-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 380px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.msg-empty-icon-wrap {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.msg-empty-text {
+    font-size: 0.95rem;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+/* Items de notification */
+.msg-item-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: all 0.15s ease;
+    background: #ffffff;
+}
+
+.msg-item-card:hover {
+    border-color: #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.msg-item-card.unread {
+    background: #fffdf5;
+    border-color: #fde68a;
+}
+
+.msg-item-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.msg-item-icon.trade {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.msg-item-icon.games {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.msg-item-icon.system {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.msg-item-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.msg-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.msg-item-title {
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.msg-item-date {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.msg-item-desc {
+    font-size: 0.88rem;
+    color: #4b5563;
+    margin-bottom: 10px;
+    line-height: 1.45;
+}
+
+.msg-item-code-box {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.msg-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.msg-status-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.msg-status-tag.livree {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.msg-status-tag.en_cours {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.msg-status-tag.en_attente {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.msg-status-tag.annulee {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.msg-item-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #f59e0b;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s ease;
+}
+
+.msg-item-link:hover {
+    color: #d97706;
+    text-decoration: underline;
+}
+
+/* Badge Flottant Support 24/7 */
+.floating-support-badge {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+    background: #ffffff;
+    border-radius: 999px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    padding: 6px 10px 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid #f1f5f9;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-support-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+}
+
+.support-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.support-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f59e0b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111827;
+}
+
 

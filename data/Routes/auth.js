@@ -19,6 +19,36 @@ router.post('/login', async (req, res) => {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
 
+        if (DEMO_MODE) {
+            const cleanEmail = (email || '').trim().toLowerCase();
+            const isStaff = cleanEmail.includes('admin') || cleanEmail.includes('directeur') || cleanEmail.includes('staff') || cleanEmail.includes('manager');
+            const role = isStaff ? 'directeur' : 'client';
+            const demoUser = {
+                id: 'demo-user-1',
+                email: cleanEmail,
+                nom: isStaff ? 'Admin' : 'Client',
+                prenom: isStaff ? 'Directeur' : 'Demo',
+                role,
+                avatar: null,
+                user_code: 'LOOT99',
+                statut_presence: 'en_ligne'
+            };
+            const sidebarPerms = {};
+            for (const [section, roles] of Object.entries(SIDEBAR_PERMISSIONS)) {
+                sidebarPerms[section] = roles.includes(role);
+            }
+            return res.json({
+                token: 'demo-token-lootzone-xyz',
+                session: { access_token: 'demo-token-lootzone-xyz', user: demoUser },
+                user: demoUser,
+                profile: demoUser,
+                sidebarPerms,
+                roleLevel: ROLE_LEVEL[role] || 0,
+                isStaff,
+                redirectUrl: isStaff ? (req.headers.referer?.includes('Dashboard') ? 'dashboard.html' : 'Dashboard/dashboard.html') : 'profile.html'
+            });
+        }
+
         const client = supabaseClient;
         if (!client) {
             return res.status(500).json({ error: 'Service d\'authentification indisponible' });
@@ -133,6 +163,34 @@ router.post('/admin-login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
 
+    if (DEMO_MODE) {
+        const cleanEmail = (email || '').trim().toLowerCase();
+        const demoUser = {
+            id: 'demo-admin-1',
+            email: cleanEmail || 'admin@lootzone.gg',
+            nom: 'LootZone',
+            prenom: 'Directeur',
+            role: 'directeur',
+            avatar: null,
+            user_code: 'DIR001',
+            statut_presence: 'en_ligne'
+        };
+        const sidebarPerms = {};
+        for (const [section, roles] of Object.entries(SIDEBAR_PERMISSIONS)) {
+            sidebarPerms[section] = true;
+        }
+        return res.json({
+            token: 'demo-token-lootzone-admin',
+            session: { access_token: 'demo-token-lootzone-admin', user: demoUser },
+            user: demoUser,
+            profile: demoUser,
+            sidebarPerms,
+            roleLevel: 5,
+            isStaff: true,
+            redirectUrl: req.headers.referer?.includes('Dashboard') ? 'dashboard.html' : 'Dashboard/dashboard.html'
+        });
+    }
+
     const client = supabaseClient;
     if (!client) {
         return res.status(500).json({ error: 'Service d\'authentification indisponible' });
@@ -219,6 +277,20 @@ router.post('/register', async (req, res) => {
     }
     if (password.length < 6) {
         return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 6 caractères.' });
+    }
+
+    if (DEMO_MODE) {
+        return res.json({
+            success: true,
+            user: {
+                id: 'demo-user-' + Date.now(),
+                email: email.trim().toLowerCase(),
+                nom: nom || '',
+                prenom,
+                role: 'client'
+            },
+            message: 'Compte créé avec succès (mode démo).'
+        });
     }
 
     const client = supabaseClient;
