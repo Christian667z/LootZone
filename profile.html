@@ -15,6 +15,25 @@
     .profile-page {
       background: #f8f9fa;
       min-height: calc(100vh - 140px);
+      color: #1a1a2e;
+    }
+
+    /* Reset Navbar icons to prevent any parent padding leak */
+    .navbar .nav-icon {
+      width: 38px !important;
+      height: 38px !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+    }
+    .navbar .nav-icon svg {
+      width: 20px !important;
+      height: 20px !important;
+      display: block !important;
+      flex-shrink: 0 !important;
     }
 
     .profile-breadcrumb {
@@ -320,11 +339,12 @@
       font-size: .95rem;
       font-weight: 600;
       margin-bottom: 4px;
+      color: #111827;
     }
 
     .avatar-upload-info p {
       font-size: .82rem;
-      color: #888;
+      color: #4b5563;
       margin-bottom: 10px;
     }
 
@@ -1076,24 +1096,25 @@
     }
 
     /* ═══════════════════ NOT LOGGED IN ═══════════════════ */
-    .auth-required {
+    .profile-auth-prompt {
       text-align: center;
       padding: 80px 20px;
     }
 
-    .auth-required-icon {
+    .profile-auth-prompt-icon {
       font-size: 3.5rem;
       margin-bottom: 20px;
     }
 
-    .auth-required h2 {
+    .profile-auth-prompt h2 {
       font-size: 1.5rem;
       font-weight: 700;
       margin-bottom: 10px;
+      color: #111827;
     }
 
-    .auth-required p {
-      color: #888;
+    .profile-auth-prompt p {
+      color: #6b7280;
       margin-bottom: 24px;
     }
 
@@ -1338,8 +1359,8 @@
       <!-- ─── VUE NON CONNECTÉ ─── -->
       <div id="notLoggedIn" style="grid-column:1/-1;display:none">
         <div class="sidebar-card">
-          <div class="auth-required">
-            <div class="auth-required-icon">🔒</div>
+          <div class="profile-auth-prompt">
+            <div class="profile-auth-prompt-icon">🔒</div>
             <h2>Accès réservé aux membres</h2>
             <p>Connectez-vous pour accéder à votre profil, vos commandes et vos avantages VIP.</p>
             <a href="index.html" class="btn-login-cta">
@@ -1972,7 +1993,7 @@
         }
         if ($('sidebarVipRing')) { $('sidebarVipRing').textContent = lvl.badge || lvl.label.charAt(0); $('sidebarVipRing').style.background = lvl.color; }
         if ($('sidebarName')) $('sidebarName').textContent = `${profile?.prenom || ''} ${profile?.nom || ''}`.trim() || nom;
-        const uCode = window.getAstaUserCode ? window.getAstaUserCode(user) : 'AS8F3K';
+        const uCode = profile?.user_code || (window.getAstaUserCode ? window.getAstaUserCode(user) : 'AS8F3K');
         if ($('sidebarEmail')) $('sidebarEmail').innerHTML = (user?.email || '—') + `<div style="font-size:11.5px;font-weight:800;color:#00b67a;margin-top:3px;">ID: ${uCode}</div>`;
         if ($('sidebarVipPill')) { $('sidebarVipPill').textContent = `${lvl.icon} ${lvl.label}`; $('sidebarVipPill').style.background = lvl.color; }
         if ($('sidebarPts')) $('sidebarPts').textContent = `${pts.toLocaleString()} points`;
@@ -2075,7 +2096,13 @@
         return;
       }
 
-      const profile = await window.AstaAuth.getProfile();
+      let profile = await window.AstaAuth.getProfile();
+      if (!profile) {
+        try {
+          const cached = sessionStorage.getItem('current_user_profile') || localStorage.getItem('as_user');
+          if (cached) profile = JSON.parse(cached);
+        } catch (_) {}
+      }
       const pts = profile?.points || 0;
 
       hide($('notLoggedIn'));

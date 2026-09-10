@@ -18,8 +18,8 @@ if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     console.info('[Supabase] SUPABASE_SERVICE_ROLE_KEY non fournie. Fonctionnement en mode Client/Anon.');
 }
 
-export const supabaseAdmin = supabaseUrl && supabaseServiceKey
-    ? createClient(supabaseUrl, supabaseServiceKey, {
+export const supabaseAdmin = supabaseUrl && (supabaseServiceKey || supabaseAnonKey)
+    ? createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey, {
         auth: {
             autoRefreshToken: false,
             persistSession: false

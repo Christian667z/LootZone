@@ -82,25 +82,141 @@ function escHtml(str) {
 
 // ─── Client Supabase ─────────────────────────────────────────────────────────
 let _sb = null;
+let _sbPromise = null;
+
 async function getSB() {
   if (_sb) return _sb;
-  if (!window.supabase?.createClient) {
-    await new Promise((res, rej) => {
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-      s.onload = res; s.onerror = rej;
-      document.head.appendChild(s);
-    });
-  }
-  _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  return _sb;
+  if (_sbPromise) return _sbPromise;
+
+  _sbPromise = (async () => {
+    try {
+      if (typeof window !== 'undefined' && window._astaSupabase) {
+        _sb = window._astaSupabase;
+        return _sb;
+      }
+
+      if (!window.supabase?.createClient) {
+        await new Promise((resolve) => {
+          const existing = document.querySelector('script[src*="supabase-js"]');
+          if (existing) {
+            if (window.supabase?.createClient) return resolve();
+            existing.addEventListener('load', () => resolve(), { once: true });
+            existing.addEventListener('error', () => resolve(), { once: true });
+            setTimeout(resolve, 2000);
+            return;
+          }
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+          s.onload = () => resolve();
+          s.onerror = () => resolve();
+          document.head.appendChild(s);
+          setTimeout(resolve, 3000);
+        });
+      }
+
+      if (window.supabase?.createClient) {
+        _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
+        window._astaSupabase = _sb;
+      }
+    } catch (err) {
+      console.warn('[AstaAuth] Initialisation Supabase:', err);
+    }
+    return _sb;
+  })();
+
+  const result = await _sbPromise;
+  _sbPromise = null;
+  return result;
 }
 
 // ─── Profil depuis Supabase ───────────────────────────────────────────────────
 async function fetchProfile(userId) {
+  if (!userId) return null;
   const sb = await getSB();
-  const { data } = await sb.from('profiles').select('*').eq('id', userId).single();
-  return data;
+  if (!sb || typeof sb.from !== 'function') {
+    try {
+      const stored = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+      if (stored) return JSON.parse(stored);
+    } catch (_) {}
+    return null;
+  }
+
+  try {
+    const { data } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
+    if (data) {
+      // Si le profil existe mais qu'il manque nom/prénom/rôle, vérifier la session pour combler
+      if (!data.prenom || !data.nom || !data.role) {
+        try {
+          const { data: { session } } = await sb.auth.getSession();
+          if (session?.user?.id === userId && session.user.user_metadata) {
+            const meta = session.user.user_metadata;
+            const updates = {};
+            if (!data.prenom && (meta.prenom || meta.first_name)) {
+              updates.prenom = meta.prenom || meta.first_name;
+              data.prenom = updates.prenom;
+            }
+            if (!data.nom && (meta.nom || meta.last_name)) {
+              updates.nom = meta.nom || meta.last_name;
+              data.nom = updates.nom;
+            }
+            if ((!data.role || data.role === 'client') && meta.role && meta.role !== 'client') {
+              updates.role = meta.role;
+              data.role = updates.role;
+            }
+            if (Object.keys(updates).length > 0) {
+              await sb.from('profiles').update(updates).eq('id', userId);
+            }
+          }
+        } catch (_) {}
+      }
+      return data;
+    }
+  } catch (err) {
+    console.warn('[fetchProfile] Erreur lecture Supabase:', err);
+  }
+
+  // Fallback : tentative de récupération / initialisation via metadata session
+  try {
+    if (sb?.auth?.getSession) {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user?.id === userId) {
+        const meta = session.user.user_metadata || {};
+        const fallbackProf = {
+          id: userId,
+          email: session.user.email,
+          prenom: meta.prenom || meta.first_name || session.user.email?.split('@')[0] || 'Membre',
+          nom: meta.nom || meta.last_name || '',
+          role: meta.role || 'client',
+          user_code: meta.user_code || (window.getAstaUserCode ? window.getAstaUserCode() : 'ASTA69'),
+          points: 0,
+          wallet_balance: 0
+        };
+
+        // Tenter d'insérer le profil dans la table
+        try {
+          await sb.from('profiles').upsert({
+            id: userId,
+            email: session.user.email,
+            prenom: fallbackProf.prenom,
+            nom: fallbackProf.nom,
+            role: fallbackProf.role,
+            user_code: fallbackProf.user_code,
+            statut_presence: 'deconnecte'
+          }, { onConflict: 'id' });
+        } catch (_) {}
+
+        return fallbackProf;
+      }
+    }
+  } catch (_) {}
+
+  return null;
 }
 
 // ─── Mise à jour de la top-bar ────────────────────────────────────────────────
@@ -540,42 +656,44 @@ window.AstaAuth = {
 
     try {
       const sb = await getSB();
-      sb.auth.onAuthStateChange(async (event, session) => {
-        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') && session?.user) {
-          const profile = await fetchProfile(session.user.id);
-          if (session.access_token && profile && profile.role && profile.role !== 'client') {
+      if (sb?.auth) {
+        sb.auth.onAuthStateChange(async (event, session) => {
+          if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') && session?.user) {
+            const profile = await fetchProfile(session.user.id);
+            if (session.access_token && profile && profile.role && profile.role !== 'client') {
+              try {
+                localStorage.setItem('as_token', session.access_token);
+                localStorage.setItem('as_user', JSON.stringify({
+                  id: profile.id,
+                  email: session.user.email,
+                  role: profile.role,
+                  nom: profile.nom || '',
+                  prenom: profile.prenom || '',
+                  avatar: profile.avatar_url || null
+                }));
+              } catch (_) {}
+            }
+            updateTopBar(session.user, profile);
+            updateNavAccount(session.user, profile);
+            updateHeaderAuthState(true, session.user, profile);
+            updateMobileNav(true);
+            startClientNotifications(session.user.email);
+            if (session.access_token) refreshDropdownWallet(session.access_token);
+          } else if (event === 'SIGNED_OUT') {
             try {
-              localStorage.setItem('as_token', session.access_token);
-              localStorage.setItem('as_user', JSON.stringify({
-                id: profile.id,
-                email: session.user.email,
-                role: profile.role,
-                nom: profile.nom || '',
-                prenom: profile.prenom || '',
-                avatar: profile.avatar_url || null
-              }));
+              localStorage.removeItem('as_token');
+              localStorage.removeItem('as_user');
+              localStorage.removeItem('as_perms');
+              localStorage.removeItem('as_level');
+              localStorage.removeItem('asta_wallet_balance');
             } catch (_) {}
+            renderLoggedOutTopBar();
+            updateNavAccount(null, null);
+            updateHeaderAuthState(false, null, null);
+            updateMobileNav(false);
           }
-          updateTopBar(session.user, profile);
-          updateNavAccount(session.user, profile);
-          updateHeaderAuthState(true, session.user, profile);
-          updateMobileNav(true);
-          startClientNotifications(session.user.email);
-          if (session.access_token) refreshDropdownWallet(session.access_token);
-        } else if (event === 'SIGNED_OUT') {
-          try {
-            localStorage.removeItem('as_token');
-            localStorage.removeItem('as_user');
-            localStorage.removeItem('as_perms');
-            localStorage.removeItem('as_level');
-            localStorage.removeItem('asta_wallet_balance');
-          } catch (_) {}
-          renderLoggedOutTopBar();
-          updateNavAccount(null, null);
-          updateHeaderAuthState(false, null, null);
-          updateMobileNav(false);
-        }
-      });
+        });
+      }
     } catch (_) {}
   },
 
@@ -586,12 +704,14 @@ window.AstaAuth = {
     let lastError = null;
 
     // 1. Tenter la connexion directe Supabase Client
-    try {
-      const { data, error } = await sb.auth.signInWithPassword({ email: cleanEmail, password });
-      if (error) throw error;
-      authData = data;
-    } catch (err) {
-      lastError = err;
+    if (sb?.auth) {
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email: cleanEmail, password });
+        if (error) throw error;
+        authData = data;
+      } catch (err) {
+        lastError = err;
+      }
     }
 
     // 2. Si le client Supabase rencontre un problème (ou en cas d'erreur réseau/session), tenter /api/auth/login
@@ -636,29 +756,56 @@ window.AstaAuth = {
     // Sauvegarder les données de session et rafraîchir l'interface
     if (authData?.user) {
       try {
-        const profile = authData.profile || await fetchProfile(authData.user.id);
-        authData.profile = profile;
-        if (profile?.role && profile.role !== 'client') {
-          localStorage.setItem('as_token', authData.session?.access_token || authData.token || '');
-          localStorage.setItem('as_user', JSON.stringify({
-            id: profile.id,
+        let profile = authData.profile || await fetchProfile(authData.user.id);
+        if (!profile) {
+          const meta = authData.user.user_metadata || {};
+          profile = {
+            id: authData.user.id,
             email: authData.user.email,
-            role: profile.role,
-            nom: profile.nom || '',
-            prenom: profile.prenom || '',
-            avatar: profile.avatar_url || null
-          }));
+            prenom: meta.prenom || meta.first_name || authData.user.email?.split('@')[0] || 'Membre',
+            nom: meta.nom || meta.last_name || '',
+            role: meta.role || 'client',
+            user_code: meta.user_code || (window.getAstaUserCode ? window.getAstaUserCode() : 'ASTA69'),
+            points: 0,
+            wallet_balance: 0
+          };
         }
+        authData.profile = profile;
+
+        const sessionUser = {
+          id: profile.id || authData.user.id,
+          email: authData.user.email,
+          role: profile.role || 'client',
+          nom: profile.nom || '',
+          prenom: profile.prenom || '',
+          avatar: profile.avatar_url || null,
+          user_code: profile.user_code || ''
+        };
+
+        const token = authData.session?.access_token || authData.token || '';
+        if (token) localStorage.setItem('as_token', token);
+        localStorage.setItem('as_user', JSON.stringify(sessionUser));
+        localStorage.setItem('asta_current_user', JSON.stringify(sessionUser));
+        try { sessionStorage.setItem('current_user_profile', JSON.stringify(profile)); } catch (_) {}
+
         if (profile?.user_code) {
           localStorage.setItem('asta_user_code', profile.user_code);
         }
         if (profile?.wallet_balance !== undefined) {
           localStorage.setItem('asta_wallet_balance', String(profile.wallet_balance));
         }
+
         updateHeaderAuthState(true, authData.user, profile);
         updateNavAccount(authData.user, profile);
         updateTopBar(authData.user, profile);
-      } catch (_) {}
+
+        // Notifier les autres modules de la mise à jour de session
+        try {
+          window.dispatchEvent(new CustomEvent('asta_auth_changed', { detail: { user: authData.user, profile } }));
+        } catch (_) {}
+      } catch (saveErr) {
+        console.warn('[AstaAuth.login] Erreur init session:', saveErr);
+      }
     }
 
     return authData;
@@ -676,6 +823,7 @@ window.AstaAuth = {
     } catch (_networkErr) {
       // Si le backend est inaccessible, fallback sur Supabase client
       const sb = await getSB();
+      if (!sb?.auth) throw new Error('Client d\'authentification indisponible');
       const { data, error } = await sb.auth.signUp({
         email: cleanEmail,
         password,
@@ -698,6 +846,7 @@ window.AstaAuth = {
 
     // Connexion automatique après l'inscription
     const sb = await getSB();
+    if (!sb?.auth) return { user: json.user };
     try {
       const { data, error } = await sb.auth.signInWithPassword({ email: cleanEmail, password });
       if (error) {
@@ -719,12 +868,14 @@ window.AstaAuth = {
 
   async resendConfirmation(email) {
     const sb = await getSB();
+    if (!sb?.auth) throw new Error('Client d\'authentification indisponible');
     const { error } = await sb.auth.resend({ type: 'signup', email });
     if (error) throw error;
   },
 
   async resetPassword(email) {
     const sb = await getSB();
+    if (!sb?.auth) throw new Error('Client d\'authentification indisponible');
     const redirectTo = window.location.origin + '/reset-password.html';
     const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
     if (error) throw error;
@@ -733,7 +884,7 @@ window.AstaAuth = {
   async logout() {
     try {
       const sb = await getSB();
-      await sb.auth.signOut();
+      if (sb?.auth) await sb.auth.signOut();
     } catch (e) {
       console.warn('SignOut error:', e);
     }
@@ -757,19 +908,22 @@ window.AstaAuth = {
 
   async getSession() {
     const sb = await getSB();
+    if (!sb?.auth) return null;
     const { data: { session } } = await sb.auth.getSession();
     return session;
   },
 
   async getProfile() {
     const sb = await getSB();
+    if (!sb?.auth) return null;
     const { data: { session } } = await sb.auth.getSession();
-    if (!session) return null;
+    if (!session?.user) return null;
     return fetchProfile(session.user.id);
   },
 
   async updateProfile(updates) {
     const sb = await getSB();
+    if (!sb?.auth || !sb?.from) throw new Error('Client Supabase non initialisé');
     const { data: { session } } = await sb.auth.getSession();
     if (!session) throw new Error('Non connecté');
     const { data, error } = await sb.from('profiles').update(updates).eq('id', session.user.id).select().single();
@@ -779,12 +933,14 @@ window.AstaAuth = {
 
   async updatePassword(newPassword) {
     const sb = await getSB();
+    if (!sb?.auth) throw new Error('Client Supabase non initialisé');
     const { error } = await sb.auth.updateUser({ password: newPassword });
     if (error) throw error;
   },
 
   async uploadAvatar(file) {
     const sb = await getSB();
+    if (!sb?.auth || !sb?.storage || typeof sb.storage.from !== 'function') throw new Error('Stockage Supabase non disponible');
     const { data: { session } } = await sb.auth.getSession();
     if (!session) throw new Error('Non connecté');
     const ext = file.name.split('.').pop();
@@ -795,6 +951,10 @@ window.AstaAuth = {
     await this.updateProfile({ avatar_url: publicUrl });
     return publicUrl;
   },
+
+  getClient: getSB,
+  getSB: getSB,
+  fetchProfile: fetchProfile,
 
   VIP_LEVELS: window.VIP_LEVELS,
   getVipLevel: window.getVipLevel,

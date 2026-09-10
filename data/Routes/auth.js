@@ -52,21 +52,45 @@ router.post('/login', async (req, res) => {
             profile = profData;
         } catch (_) {}
 
+        const meta = authData.user.user_metadata || {};
+        const metaPrenom = meta.prenom || meta.first_name || '';
+        const metaNom = meta.nom || meta.last_name || '';
+        const metaRole = meta.role || 'client';
+
         // Si le profil n'existe pas encore, le créer automatiquement
         if (!profile) {
-            const meta = authData.user.user_metadata || {};
             profile = {
                 id: authData.user.id,
                 email: authData.user.email,
-                nom: meta.nom || '',
-                prenom: meta.prenom || '',
+                nom: metaNom,
+                prenom: metaPrenom || authData.user.email.split('@')[0],
                 user_code: generateUserCode(),
-                role: meta.role || 'client',
+                role: metaRole,
                 statut_presence: 'en_ligne'
             };
             try {
                 await client.from('profiles').upsert(profile, { onConflict: 'id' });
             } catch (_) {}
+        } else {
+            // Mettre à jour les champs manquants si le profil avait des champs vides
+            const updates = {};
+            if ((!profile.prenom || profile.prenom === '') && metaPrenom) {
+                updates.prenom = metaPrenom;
+                profile.prenom = metaPrenom;
+            }
+            if ((!profile.nom || profile.nom === '') && metaNom) {
+                updates.nom = metaNom;
+                profile.nom = metaNom;
+            }
+            if ((!profile.role || profile.role === 'client') && metaRole && metaRole !== 'client') {
+                updates.role = metaRole;
+                profile.role = metaRole;
+            }
+            if (Object.keys(updates).length > 0) {
+                try {
+                    await client.from('profiles').update(updates).eq('id', profile.id);
+                } catch (_) {}
+            }
         }
 
         const isStaff = profile?.role && profile.role !== 'client';

@@ -108,20 +108,49 @@ CREATE POLICY "Insertion profil"
   WITH CHECK (auth.uid() = id OR auth.role() = 'service_role' OR auth.uid() IS NOT NULL);
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- 4. TRIGGER SUR AUTH.USERS POUR CRÉATION AUTOMATIQUE DU PROFIL
+-- 4. TRIGGER SUR AUTH.USERS POUR CRÉATION AUTOMATIQUE DU PROFIL (PRENOM, NOM, ROLE)
 -- ─────────────────────────────────────────────────────────────────────────────
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, auth
 AS $$
 DECLARE
   generated_code TEXT;
+  extracted_prenom TEXT;
+  extracted_nom TEXT;
+  extracted_role TEXT;
 BEGIN
   -- Génère un code unique de 6 caractères (ex: 8F2A9C)
   generated_code := UPPER(SUBSTRING(REPLACE(gen_random_uuid()::text, '-', '') FROM 1 FOR 6));
 
+  -- 1. Extraction robuste du prénom
+  extracted_prenom := COALESCE(
+    NULLIF(TRIM(NEW.raw_user_meta_data->>'prenom'), ''),
+    NULLIF(TRIM(NEW.raw_user_meta_data->>'first_name'), ''),
+    NULLIF(TRIM(NEW.raw_user_meta_data->>'given_name'), ''),
+    NULLIF(TRIM(SPLIT_PART(COALESCE(NEW.raw_user_meta_data->>'name', ''), ' ', 1)), ''),
+    NULLIF(TRIM(SPLIT_PART(NEW.email, '@', 1)), ''),
+    'Membre'
+  );
+
+  -- 2. Extraction robuste du nom
+  extracted_nom := COALESCE(
+    NULLIF(TRIM(NEW.raw_user_meta_data->>'nom'), ''),
+    NULLIF(TRIM(NEW.raw_user_meta_data->>'last_name'), ''),
+    NULLIF(TRIM(NEW.raw_user_meta_data->>'family_name'), ''),
+    NULLIF(TRIM(SUBSTRING(COALESCE(NEW.raw_user_meta_data->>'name', '') FROM POSITION(' ' IN COALESCE(NEW.raw_user_meta_data->>'name', '')) + 1)), ''),
+    ''
+  );
+
+  -- 3. Extraction robuste du rôle (défaut 'client')
+  extracted_role := COALESCE(
+    NULLIF(LOWER(TRIM(NEW.raw_user_meta_data->>'role')), ''),
+    'client'
+  );
+
+  -- Insérer ou mettre à jour le profil
   INSERT INTO public.profiles (
     id,
     email,
@@ -129,21 +158,35 @@ BEGIN
     prenom,
     user_code,
     role,
-    statut_presence
+    statut_presence,
+    created_at,
+    updated_at
   )
   VALUES (
     NEW.id,
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'nom', NEW.raw_user_meta_data->>'last_name', ''),
-    COALESCE(NEW.raw_user_meta_data->>'prenom', NEW.raw_user_meta_data->>'first_name', ''),
-    COALESCE(NEW.raw_user_meta_data->>'user_code', generated_code),
-    COALESCE(NEW.raw_user_meta_data->>'role', 'client'),
-    'deconnecte'
+    extracted_nom,
+    extracted_prenom,
+    COALESCE(NULLIF(TRIM(NEW.raw_user_meta_data->>'user_code'), ''), generated_code),
+    extracted_role,
+    'deconnecte',
+    NOW(),
+    NOW()
   )
   ON CONFLICT (id) DO UPDATE SET
     email = EXCLUDED.email,
-    nom = COALESCE(NULLIF(EXCLUDED.nom, ''), profiles.nom),
-    prenom = COALESCE(NULLIF(EXCLUDED.prenom, ''), profiles.prenom),
+    nom = CASE
+      WHEN EXCLUDED.nom <> '' THEN EXCLUDED.nom
+      ELSE profiles.nom
+    END,
+    prenom = CASE
+      WHEN EXCLUDED.prenom <> '' THEN EXCLUDED.prenom
+      ELSE profiles.prenom
+    END,
+    role = CASE
+      WHEN EXCLUDED.role IS NOT NULL AND EXCLUDED.role <> 'client' THEN EXCLUDED.role
+      ELSE COALESCE(profiles.role, EXCLUDED.role)
+    END,
     updated_at = NOW();
 
   RETURN NEW;
@@ -154,25 +197,52 @@ REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM public, anon, authentic
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
+  AFTER INSERT OR UPDATE OF raw_user_meta_data ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- 5. CRÉATION RÉTROACTIVE DES PROFILS MANQUANTS
+-- 5. CRÉATION & SYNCHRONISATION RÉTROACTIVE DES PROFILS MANQUANTS
 -- ─────────────────────────────────────────────────────────────────────────────
 INSERT INTO public.profiles (id, email, nom, prenom, user_code, role)
 SELECT
   u.id,
   u.email,
-  COALESCE(u.raw_user_meta_data->>'nom', ''),
-  COALESCE(u.raw_user_meta_data->>'prenom', SPLIT_PART(u.email, '@', 1)),
+  COALESCE(u.raw_user_meta_data->>'nom', u.raw_user_meta_data->>'last_name', ''),
+  COALESCE(u.raw_user_meta_data->>'prenom', u.raw_user_meta_data->>'first_name', SPLIT_PART(u.email, '@', 1)),
   UPPER(SUBSTRING(REPLACE(gen_random_uuid()::text, '-', '') FROM 1 FOR 6)),
-  COALESCE(u.raw_user_meta_data->>'role', 'client')
+  COALESCE(NULLIF(LOWER(TRIM(u.raw_user_meta_data->>'role')), ''), 'client')
 FROM auth.users u
 LEFT JOIN public.profiles p ON p.id = u.id
 WHERE p.id IS NULL
 ON CONFLICT (id) DO NOTHING;
+
+-- Synchroniser nom, prénom et rôle pour les profils existants incomplets
+UPDATE public.profiles p
+SET
+  nom = CASE 
+    WHEN (p.nom IS NULL OR p.nom = '') AND (u.raw_user_meta_data->>'nom' IS NOT NULL OR u.raw_user_meta_data->>'last_name' IS NOT NULL)
+    THEN COALESCE(u.raw_user_meta_data->>'nom', u.raw_user_meta_data->>'last_name', '')
+    ELSE p.nom
+  END,
+  prenom = CASE 
+    WHEN (p.prenom IS NULL OR p.prenom = '')
+    THEN COALESCE(u.raw_user_meta_data->>'prenom', u.raw_user_meta_data->>'first_name', SPLIT_PART(u.email, '@', 1))
+    ELSE p.prenom
+  END,
+  role = CASE 
+    WHEN (p.role IS NULL OR p.role = 'client') AND u.raw_user_meta_data->>'role' IS NOT NULL
+    THEN LOWER(TRIM(u.raw_user_meta_data->>'role'))
+    ELSE COALESCE(p.role, 'client')
+  END,
+  user_code = CASE
+    WHEN p.user_code IS NULL OR p.user_code = ''
+    THEN UPPER(SUBSTRING(REPLACE(gen_random_uuid()::text, '-', '') FROM 1 FOR 6))
+    ELSE p.user_code
+  END,
+  updated_at = NOW()
+FROM auth.users u
+WHERE p.id = u.id;
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- RÉSULTAT

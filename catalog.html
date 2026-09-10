@@ -1335,8 +1335,99 @@
             try {
                 const resData = await window.AstaAuth.login(email, password);
                 window.closeAuthModal?.();
-                const profile = resData?.profile || await window.AstaAuth.getProfile();
-                const isStaff = ['helper', 'employe', 'administrateur', 'manager', 'directeur'].includes(profile?.role);
+
+                // ── Récupération explicite des données de profil (prenom, nom, role) depuis la table 'profiles' ──
+                const user = resData?.user || (await window.AstaAuth.getSession())?.user;
+                if (!user) throw new Error('Utilisateur introuvable après authentification.');
+
+                let profile = null;
+                try {
+                    const sb = await window.AstaAuth.getClient();
+                    if (sb && typeof sb.from === 'function') {
+                        const { data: profileData, error: profileError } = await sb
+                            .from('profiles')
+                            .select('id, email, prenom, nom, role, user_code, avatar_url, wallet_balance, points')
+                            .eq('id', user.id)
+                            .maybeSingle();
+
+                        if (!profileError && profileData) {
+                            profile = profileData;
+                        }
+                    }
+                } catch (dbErr) {
+                    console.warn('[handleLogin] Erreur lecture table profiles:', dbErr);
+                }
+
+                // Fallback de secours si profil en cours de réplication
+                if (!profile && window.AstaAuth?.getProfile) {
+                    profile = await window.AstaAuth.getProfile();
+                }
+                if (!profile) {
+                    const meta = user.user_metadata || {};
+                    profile = {
+                        id: user.id,
+                        email: user.email,
+                        prenom: meta.prenom || meta.first_name || user.email.split('@')[0] || 'Membre',
+                        nom: meta.nom || meta.last_name || '',
+                        role: meta.role || 'client',
+                        user_code: meta.user_code || (window.getAstaUserCode ? window.getAstaUserCode(user) : 'ASTA69'),
+                        wallet_balance: 0,
+                        points: 0
+                    };
+                }
+
+                // ── Stockage explicite dans le localStorage pour initialiser la session utilisateur ──
+                localStorage.setItem('user_prenom', profile.prenom || '');
+                localStorage.setItem('user_nom', profile.nom || '');
+                localStorage.setItem('user_role', profile.role || 'client');
+                localStorage.setItem('as_prenom', profile.prenom || '');
+                localStorage.setItem('as_nom', profile.nom || '');
+                localStorage.setItem('as_role', profile.role || 'client');
+                localStorage.setItem('asta_user_prenom', profile.prenom || '');
+                localStorage.setItem('asta_user_nom', profile.nom || '');
+                localStorage.setItem('asta_user_role', profile.role || 'client');
+                if (profile.user_code) {
+                    localStorage.setItem('asta_user_code', profile.user_code);
+                    localStorage.setItem('user_code', profile.user_code);
+                }
+                if (profile.wallet_balance !== undefined) {
+                    localStorage.setItem('asta_wallet_balance', String(profile.wallet_balance));
+                }
+
+                const userSession = {
+                    id: profile.id || user.id,
+                    email: profile.email || user.email,
+                    prenom: profile.prenom || '',
+                    nom: profile.nom || '',
+                    role: profile.role || 'client',
+                    user_code: profile.user_code || '',
+                    avatar: profile.avatar_url || null,
+                    wallet_balance: profile.wallet_balance || 0,
+                    points: profile.points || 0
+                };
+
+                localStorage.setItem('as_user', JSON.stringify(userSession));
+                localStorage.setItem('asta_current_user', JSON.stringify(userSession));
+                localStorage.setItem('user', JSON.stringify(userSession));
+
+                const token = resData?.session?.access_token || resData?.token || (await window.AstaAuth.getSession())?.access_token;
+                if (token) {
+                    localStorage.setItem('as_token', token);
+                    localStorage.setItem('token', token);
+                }
+                try {
+                    sessionStorage.setItem('current_user_profile', JSON.stringify(profile));
+                } catch (_) {}
+
+                // Actualiser immédiatement les composants d'interface
+                if (window.AstaAuth?.updateTopBar) {
+                    window.AstaAuth.updateTopBar(user, profile);
+                }
+                if (window.AstaAuth?.updateNavAccount) {
+                    window.AstaAuth.updateNavAccount(user, profile);
+                }
+
+                const isStaff = ['helper', 'employe', 'administrateur', 'manager', 'directeur', 'admin'].includes(profile?.role);
                 if (isStaff) {
                     setTimeout(() => window.location.href = 'Dashboard/dashboard.html', 400);
                 } else {

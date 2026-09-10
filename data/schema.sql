@@ -110,12 +110,37 @@ create policy "Insertion profil"
 -- ─────────────────────────────────────────────────────────────
 create or replace function handle_new_user()
 returns trigger language plpgsql security definer
-set search_path = public
+set search_path = public, auth
 as $$
 declare
   generated_code text;
+  extracted_prenom text;
+  extracted_nom text;
+  extracted_role text;
 begin
   generated_code := upper(substring(replace(gen_random_uuid()::text, '-', '') from 1 for 6));
+
+  extracted_prenom := coalesce(
+    nullif(trim(new.raw_user_meta_data->>'prenom'), ''),
+    nullif(trim(new.raw_user_meta_data->>'first_name'), ''),
+    nullif(trim(new.raw_user_meta_data->>'given_name'), ''),
+    nullif(trim(split_part(coalesce(new.raw_user_meta_data->>'name', ''), ' ', 1)), ''),
+    nullif(trim(split_part(new.email, '@', 1)), ''),
+    'Membre'
+  );
+
+  extracted_nom := coalesce(
+    nullif(trim(new.raw_user_meta_data->>'nom'), ''),
+    nullif(trim(new.raw_user_meta_data->>'last_name'), ''),
+    nullif(trim(new.raw_user_meta_data->>'family_name'), ''),
+    nullif(trim(substring(coalesce(new.raw_user_meta_data->>'name', '') from position(' ' in coalesce(new.raw_user_meta_data->>'name', '')) + 1)), ''),
+    ''
+  );
+
+  extracted_role := coalesce(
+    nullif(lower(trim(new.raw_user_meta_data->>'role')), ''),
+    'client'
+  );
 
   insert into public.profiles (
     id,
@@ -124,21 +149,35 @@ begin
     prenom,
     user_code,
     role,
-    statut_presence
+    statut_presence,
+    created_at,
+    updated_at
   )
   values (
     new.id,
     new.email,
-    coalesce(new.raw_user_meta_data->>'nom', new.raw_user_meta_data->>'last_name', ''),
-    coalesce(new.raw_user_meta_data->>'prenom', new.raw_user_meta_data->>'first_name', ''),
-    coalesce(new.raw_user_meta_data->>'user_code', generated_code),
-    coalesce(new.raw_user_meta_data->>'role', 'client'),
-    'deconnecte'
+    extracted_nom,
+    extracted_prenom,
+    coalesce(nullif(trim(new.raw_user_meta_data->>'user_code'), ''), generated_code),
+    extracted_role,
+    'deconnecte',
+    now(),
+    now()
   )
   on conflict (id) do update set
     email = excluded.email,
-    nom = coalesce(nullif(excluded.nom, ''), profiles.nom),
-    prenom = coalesce(nullif(excluded.prenom, ''), profiles.prenom),
+    nom = case
+      when excluded.nom <> '' then excluded.nom
+      else profiles.nom
+    end,
+    prenom = case
+      when excluded.prenom <> '' then excluded.prenom
+      else profiles.prenom
+    end,
+    role = case
+      when excluded.role is not null and excluded.role <> 'client' then excluded.role
+      else coalesce(profiles.role, excluded.role)
+    end,
     updated_at = now();
 
   return new;
@@ -149,7 +188,7 @@ revoke execute on function handle_new_user() from public, anon, authenticated;
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
-  after insert on auth.users
+  after insert or update of raw_user_meta_data on auth.users
   for each row execute function handle_new_user();
 
 -- Backfill profils manquants pour les utilisateurs existants
@@ -157,10 +196,10 @@ insert into public.profiles (id, email, nom, prenom, user_code, role)
 select
   u.id,
   u.email,
-  coalesce(u.raw_user_meta_data->>'nom', ''),
-  coalesce(u.raw_user_meta_data->>'prenom', split_part(u.email, '@', 1)),
+  coalesce(u.raw_user_meta_data->>'nom', u.raw_user_meta_data->>'last_name', ''),
+  coalesce(u.raw_user_meta_data->>'prenom', u.raw_user_meta_data->>'first_name', split_part(u.email, '@', 1)),
   upper(substring(replace(gen_random_uuid()::text, '-', '') from 1 for 6)),
-  coalesce(u.raw_user_meta_data->>'role', 'client')
+  coalesce(nullif(lower(trim(u.raw_user_meta_data->>'role')), ''), 'client')
 from auth.users u
 left join public.profiles p on p.id = u.id
 where p.id is null
