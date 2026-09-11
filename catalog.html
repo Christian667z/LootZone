@@ -564,6 +564,9 @@
     <script src="js/currency.js"></script>
     <script src="js/notifications.js"></script>
     <script src="js/wishlist.js"></script>
+    <script src="js/formatStats.js"></script>
+    <script src="js/platform-badges.js"></script>
+    <script src="js/product-stats-hydrator.js"></script>
 
     <!-- Script d'interactivité -->
     <script src="data/products.js"></script>
@@ -750,21 +753,31 @@
 
             catalogGrid.innerHTML = filtered.map(p => {
                 const discountHtml = p.discount ? `<span class="card-discount">${p.discount}</span>` : '';
-                const rawSales = p.sales ? p.sales.replace(/ sold/i, '').replace(/ vendu/i, '').trim() : '10k+';
-                const salesText = `${rawSales} Vendu`;
+                const liveStats = window.LootZoneStats ? window.LootZoneStats.get(p.id) : null;
+                const ratingDisplay = liveStats && liveStats.avg_rating !== null ? `<span class="text-amber-500">★ ${liveStats.avg_rating.toFixed(1)}</span>` : (p.rating ? `<span class="text-amber-500">★ ${p.rating.toFixed(1)}</span>` : '<span class="badge-new">Nouveau</span>');
+                const salesDisplay = liveStats && typeof window.formatSales === 'function' 
+                    ? window.formatSales(liveStats.total_sales) 
+                    : (p.sales || '0 Vendu');
+                
+                // Badge de plateforme vectorielle officielle
+                const platformLabel = (typeof window.detectProductPlatformLabel === 'function' ? window.detectProductPlatformLabel(p) : (p.platform || ''));
+                const platformBadgeHtml = platformLabel && typeof window.renderPlatformBadge === 'function'
+                    ? `<div class="card-platform-row" style="margin-top: 4px; margin-bottom: 6px;">${window.renderPlatformBadge(platformLabel)}</div>`
+                    : '';
+
                 return `
-                <div class="premium-game-card" style="cursor:pointer;" onclick="window.location.href='topup.html?id=${p.id}'" title="${p.name}">
+                <div class="premium-game-card product-card" data-product-id="${p.id}" style="cursor:pointer;" onclick="window.location.href='topup.html?id=${p.id}'" title="${p.name}">
                     <div class="card-image-wrapper">
                         <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='LootZone_img-removebg-preview.png';">
                         ${discountHtml}
                     </div>
                     <div class="card-details">
                         <h3 class="card-title">${p.name}</h3>
-                        <div class="card-footer-stats">
-                            <span class="card-star">★</span>
-                            <span class="card-rating">${(p.rating || 5.0).toFixed(1)}</span>
-                            <span class="card-divider">|</span>
-                            <span class="card-sold">${salesText}</span>
+                        ${platformBadgeHtml}
+                        <div class="product-stats-badge card-footer-stats flex items-center gap-2 text-sm">
+                            <span class="product-rating-val card-rating">${ratingDisplay}</span>
+                            <span class="card-divider stats-divider">|</span>
+                            <span class="product-sales-val card-sold">${salesDisplay}</span>
                         </div>
                     </div>
                 </div>

@@ -766,7 +766,15 @@
 
         // C. Description & Plateforme
         setElementText('tu-desc-text', p.desc || 'Recharge officielle garantie. Les crédits sont ajoutés directement sur votre compte.');
-        setElementText('tu-platform-val', getPlatformLabel(p.category));
+        const detectedPlat = (typeof window.detectProductPlatformLabel === 'function' ? window.detectProductPlatformLabel(p) : (p.platform || null));
+        const platEl = document.getElementById('tu-platform-val');
+        if (platEl) {
+            if (detectedPlat && typeof window.renderPlatformBadge === 'function') {
+                platEl.innerHTML = window.renderPlatformBadge(detectedPlat);
+            } else {
+                platEl.textContent = getPlatformLabel(p.category);
+            }
+        }
 
         // D. Sélecteur de serveur conditionnel
         const serverWrap = document.getElementById('tu-server-wrap');
@@ -918,8 +926,12 @@
         const clockEl = document.getElementById('lootbar-promo-clock');
         if (!clockEl) return;
 
+        if (window._promoTimerInterval) {
+            clearInterval(window._promoTimerInterval);
+        }
+
         let seconds = CONFIG.defaultPromoSeconds;
-        setInterval(() => {
+        window._promoTimerInterval = setInterval(() => {
             seconds = Math.max(0, seconds - 1);
             const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
             const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');

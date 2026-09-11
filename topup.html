@@ -998,7 +998,7 @@
         </div>
 
         <!-- LootBar Main Product Section -->
-        <div class="lootbar-product-container" id="tu-main">
+        <div class="lootbar-product-container product-card" id="tu-main" data-product-id="">
             <!-- ── Top Hero Game Banner (Style LootBar) ── -->
             <div class="lootbar-hero-header" id="lootbar-hero-header">
                 <div class="lootbar-hero-main">
@@ -1010,12 +1010,13 @@
                             <span id="tu-game-title">Jeu</span>
                             <span data-i18n="product.game_topup" style="color:#6b7280;font-weight:700;font-size:1.1rem;">Recharge de jeu</span>
                         </h1>
-                        <div class="lootbar-rating-row">
+                        <div class="lootbar-rating-row product-stats-badge flex items-center gap-2 text-sm">
                             <div class="lootbar-stars-wrap" id="tu-stars">
                                 ★★★★★
                             </div>
-                            <span class="lootbar-rating-badge" id="tu-rating-val">5.0</span>
-                            <span class="lootbar-sales-text" id="tu-sales-val">100k+ <span data-i18n="product.sold">Vendu</span></span>
+                            <span class="lootbar-rating-badge product-rating-val" id="tu-rating-val"><span class="badge-new">Nouveau</span></span>
+                            <span>|</span>
+                            <span class="lootbar-sales-text product-sales-val" id="tu-sales-val">0 Vendu</span>
                         </div>
                         <div class="lootbar-trust-tags">
                             <span class="lootbar-trust-tag">
@@ -1639,6 +1640,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/notifications.js"></script>
+    <script src="js/platform-badges.js"></script>
     <script src="data/products.js"></script>
     <script>
         // ─── State ──────────────────────────────────────────────────────────────
@@ -1698,8 +1700,11 @@
         function startPromoTimer() {
             const clockEl = document.getElementById('lootbar-promo-clock');
             if (!clockEl) return;
+            if (window._topupPromoTimer) {
+                clearInterval(window._topupPromoTimer);
+            }
             let seconds = 7000;
-            setInterval(() => {
+            window._topupPromoTimer = setInterval(() => {
                 seconds = Math.max(0, seconds - 1);
                 const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
                 const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
@@ -1760,15 +1765,34 @@
             const titleEl = document.getElementById('tu-game-title');
             if (titleEl) titleEl.textContent = p.name;
 
+            const tuMain = document.getElementById('tu-main');
+            if (tuMain) {
+                tuMain.setAttribute('data-product-id', p.id);
+                tuMain.removeAttribute('data-stats-loaded');
+            }
+
             const starsEl = document.getElementById('tu-stars');
             if (starsEl) starsEl.innerHTML = renderStars(p.rating || 5.0);
 
             const ratingValEl = document.getElementById('tu-rating-val');
-            if (ratingValEl) ratingValEl.textContent = (p.rating || 5.0).toFixed(1);
+            if (ratingValEl) {
+                const liveStats = window.LootZoneStats ? window.LootZoneStats.get(p.id) : null;
+                if (liveStats && liveStats.avg_rating !== null) {
+                    ratingValEl.textContent = liveStats.avg_rating.toFixed(1);
+                } else if (p.rating) {
+                    ratingValEl.textContent = p.rating.toFixed(1);
+                } else {
+                    ratingValEl.innerHTML = '<span class="badge-new">Nouveau</span>';
+                }
+            }
 
             const salesValEl = document.getElementById('tu-sales-val');
             if (salesValEl) {
-                salesValEl.innerHTML = `${p.sales || '100k+'} <span data-i18n="product.sold">Vendu</span>`;
+                const liveStats = window.LootZoneStats ? window.LootZoneStats.get(p.id) : null;
+                const formattedSales = liveStats && typeof window.formatSales === 'function'
+                    ? window.formatSales(liveStats.total_sales)
+                    : (p.sales || '0 Vendu');
+                salesValEl.innerHTML = formattedSales;
             }
 
             const descText = document.getElementById('tu-desc-text');
@@ -1777,7 +1801,14 @@
             }
 
             const platEl = document.getElementById('tu-platform-val');
-            if (platEl) platEl.textContent = getPlatformLabel(p.category);
+            if (platEl) {
+                const detectedPlat = (typeof window.detectProductPlatformLabel === 'function' ? window.detectProductPlatformLabel(p) : (p.platform || null));
+                if (detectedPlat && typeof window.renderPlatformBadge === 'function') {
+                    platEl.innerHTML = window.renderPlatformBadge(detectedPlat);
+                } else {
+                    platEl.textContent = getPlatformLabel(p.category);
+                }
+            }
 
             // Pack grid
             renderPackGrid(p);
@@ -2386,6 +2417,8 @@
 
     <script src="js/currency.js"></script>
     <script src="js/wishlist.js"></script>
+    <script src="js/formatStats.js"></script>
+    <script src="js/product-stats-hydrator.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // ─── 1. Header Search Bar ───
@@ -2597,6 +2630,7 @@
             }[m]));
         }
     </script>
+    <script src="js/topup-reviews.js"></script>
     <script src="js/maintenance-check.js"></script>
 </body>
 </html>
