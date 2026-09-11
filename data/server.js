@@ -51,20 +51,19 @@ app.use(helmet({
 
 app.use(cors({
     origin: (origin, callback) => {
+        // Requêtes sans origin (Postman, server-to-server, same-origin) → ok
         if (!origin) return callback(null, true);
-        if (
+        const allowed =
             origin.startsWith('http://localhost:') ||
             origin.startsWith('http://127.0.0.1:') ||
             origin.endsWith('.replit.dev') ||
             origin.endsWith('.repl.co') ||
             origin.endsWith('.replit.app') ||
             origin.endsWith('.run.app') ||
-            origin.endsWith('.google.com') ||
-            ALLOWED_ORIGINS.includes(origin)
-        ) {
-            return callback(null, true);
-        }
-        return callback(null, true);
+            ALLOWED_ORIGINS.includes(origin);
+        if (allowed) return callback(null, true);
+        // ⚠️ Origine non autorisée — on rejette proprement
+        return callback(new Error(`CORS: Origine non autorisée — ${origin}`));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

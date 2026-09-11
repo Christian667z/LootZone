@@ -67,10 +67,74 @@ async function saveProductsToFile(products) {
 
 router.get('/', async (req, res) => {
     try {
-        const products = await getProducts();
-        res.json({ products, total: products.length });
+        const page  = Math.max(1, parseInt(req.query.page,  10) || 1);
+        const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
+        const category = req.query.category || null;
+        const search   = (req.query.search || '').trim().toLowerCase();
+
+        let products = await getProducts();
+
+        // Filtres optionnels
+        if (category) products = products.filter(p => p.category === category);
+        if (search)   products = products.filter(p =>
+            (p.name || '').toLowerCase().includes(search) ||
+            (p.desc || '').toLowerCase().includes(search)
+        );
+
+        const total = products.length;
+        const start = (page - 1) * limit;
+        const paged = products.slice(start, start + limit);
+
+        res.json({
+            success: true,
+            data: paged,
+            pagination: { page, limit, total, pages: Math.ceil(total / limit) }
+        });
     } catch (e) {
-        res.status(500).json({ error: 'Erreur interne du serveur' });
+        console.error('[products] GET /:', e.message);
+        res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
+    }
+});
+
+/**
+ * POST /api/products/stats
+ * Corps : { ids: string[] }
+ * Appelle la RPC Supabase `get_product_stats_batch` ou lit la vue `product_stats`.
+ */
+router.post('/stats', async (req, res) => {
+    try {
+        const ids = req.body?.ids;
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ success: false, error: 'ids doit être un tableau non vide' });
+        }
+        // Limite de sécurité
+        const safeIds = ids.slice(0, 200).map(String);
+
+        if (!supabaseAdmin) {
+            return res.json({ success: true, data: [] });
+        }
+
+        let data = null;
+
+        // 1. Tentative RPC batch
+        try {
+            const rpc = await supabaseAdmin.rpc('get_product_stats_batch', { p_ids: safeIds });
+            if (!rpc.error && Array.isArray(rpc.data)) data = rpc.data;
+        } catch (_) {}
+
+        // 2. Fallback sur la vue product_stats
+        if (!data) {
+            const view = await supabaseAdmin
+                .from('product_stats')
+                .select('product_id, total_sales, avg_rating, total_reviews')
+                .in('product_id', safeIds);
+            if (!view.error && Array.isArray(view.data)) data = view.data;
+        }
+
+        res.json({ success: true, data: data || [] });
+    } catch (e) {
+        console.error('[products] POST /stats:', e.message);
+        res.status(500).json({ success: false, error: 'Erreur interne du serveur' });
     }
 });
 

@@ -255,6 +255,9 @@
 
     function updateProductCardElement(cardEl, stats) {
         if (!cardEl || !stats) return;
+        // Guard anti-doublon : si déjà hydraté par product-stats-hydrator.js, on skip
+        // sauf si on est en mode refresh explicite
+        if (cardEl.getAttribute('data-stats-loaded') === 'true' && !cardEl._forceStatsRefresh) return;
 
         const ratingInfo = formatRating(stats.avg_rating);
         const salesText = formatSales(stats.total_sales);
@@ -281,6 +284,9 @@
             soldEl.textContent = salesText;
             soldEl.setAttribute('data-sales-count', stats.total_sales);
         }
+
+        // Marquer comme hydraté
+        cardEl.setAttribute('data-stats-loaded', 'true');
     }
 
     let isApplyingStats = false;
@@ -372,22 +378,9 @@
             applyStatsToAllCards();
         });
 
-        const targetObserverNode = document.getElementById('catalogGrid');
-        if (targetObserverNode && window.MutationObserver) {
-            let mutationTimer = null;
-            const observer = new MutationObserver((mutations) => {
-                const hasNewChildren = mutations.some(m => m.addedNodes && m.addedNodes.length > 0);
-                if (!hasNewChildren) return;
-
-                clearTimeout(mutationTimer);
-                mutationTimer = setTimeout(() => {
-                    if (!isApplyingStats) {
-                        applyStatsToAllCards();
-                    }
-                }, 250);
-            });
-            observer.observe(targetObserverNode, { childList: true, subtree: false });
-        }
+        // NOTE : Le MutationObserver sur #catalogGrid a été retiré volontairement.
+        // Le hook hookCatalogRender() intercepte renderCatalogProducts() directement,
+        // ce qui est plus fiable et ne provoque pas de ré-exécutions en boucle.
     }
 
     // Exposition API globale
@@ -398,8 +391,18 @@
         apply: applyStatsToAllCards,
         get: getStatsForProduct,
         refresh: async function () {
+            // Force refresh : ignore le guard data-stats-loaded
+            document.querySelectorAll('[data-stats-loaded]').forEach(el => {
+                el._forceStatsRefresh = true;
+            });
+            hasLoaded = false;
+            isFetching = false;
+            productStatsCache.clear();
             await fetchProductStats();
             applyStatsToAllCards();
+            document.querySelectorAll('[data-stats-loaded]').forEach(el => {
+                el._forceStatsRefresh = false;
+            });
         }
     };
 
@@ -412,3 +415,4 @@
         init();
     }
 })();
+
