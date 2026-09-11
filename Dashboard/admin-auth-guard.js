@@ -92,111 +92,14 @@
         return window.location.pathname.includes('/Dashboard/') ? '../index.html' : 'index.html';
     }
 
-    // ── 3. CHARGEMENT & INITIALISATION DE SUPABASE ────────────────────
-    async function getSupabase() {
-        if (window.supabase && typeof window.supabase.createClient === 'function') {
-            const url = window.SUPABASE_URL || DEFAULT_SUPABASE_URL;
-            const key = window.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON;
-            return window.supabase.createClient(url, key);
-        }
-
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-            script.onload = () => {
-                if (window.supabase && typeof window.supabase.createClient === 'function') {
-                    const url = window.SUPABASE_URL || DEFAULT_SUPABASE_URL;
-                    const key = window.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON;
-                    resolve(window.supabase.createClient(url, key));
-                } else {
-                    resolve(null);
-                }
-            };
-            script.onerror = () => resolve(null);
-            document.head.appendChild(script);
-        });
-    }
-
     // ── 4. LOGIQUE PRINCIPALE DU GUARD ────────────────────────────────
     async function checkAuthGuard() {
         try {
-            const client = await getSupabase();
-
-            // CAS 1 : Client Supabase disponible
-            if (client) {
-                // 1. Vérification de la session active
-                const { data: sessionData, error: sessionError } = await client.auth.getSession();
-                const session = sessionData?.session;
-
-                if (sessionError || !session || !session.user) {
-                    // Vérifier si un token Démo est stocké en local (fallback pour test)
-                    const localToken = localStorage.getItem('as_token');
-                    if (localToken && localToken.startsWith('demo-token-')) {
-                        console.info('[AdminAuthGuard] Mode Démo actif via localStorage.');
-                        removeOverlay();
-                        return;
-                    }
-
-                    console.warn('[AdminAuthGuard] Aucune session active -> Redirection vers admin-login.html');
-                    window.location.replace(getLoginPath() + '?expired=1');
-                    return;
-                }
-
-                const user = session.user;
-
-                // 2. Requête dans public.profiles pour vérifier le rôle RBAC
-                const { data: profile, error: profileError } = await client
-                    .from('profiles')
-                    .select('id, email, full_name, role, avatar_url')
-                    .eq('id', user.id)
-                    .single();
-
-                const role = profile?.role;
-                const isAuthorizedStaff = role === 'admin' || role === 'staff' || role === 'super_admin';
-
-                // 3. Contrôle d'accès strict :
-                // Si l'utilisateur est un client ou n'a pas de rôle staff -> Déconnexion et redirection accueil
-                if (!isAuthorizedStaff) {
-                    console.warn(`[AdminAuthGuard] Accès refusé pour l'utilisateur ${user.email} avec rôle '${role}'.`);
-                    await client.auth.signOut();
-                    localStorage.removeItem('as_token');
-                    localStorage.removeItem('as_user');
-                    localStorage.removeItem('as_perms');
-                    localStorage.removeItem('as_level');
-
-                    alert("Accès refusé : Vous n'avez pas les autorisations nécessaires pour accéder à l'administration.");
-                    window.location.replace(getHomePath());
-                    return;
-                }
-
-                // 4. Utilisateur autorisé : Exposer les informations globalement
-                window.AdminAuthGuard = {
-                    user,
-                    profile,
-                    role,
-                    token: session.access_token,
-                    async logout() {
-                        if (client) await client.auth.signOut();
-                        localStorage.removeItem('as_token');
-                        localStorage.removeItem('as_user');
-                        localStorage.removeItem('as_perms');
-                        localStorage.removeItem('as_level');
-                        window.location.href = getLoginPath();
-                    }
-                };
-
-                // Mettre à jour l'interface utilisateur (sidebar, nom, badge) si disponibles
-                updateStaffUI(user, profile);
-
-                // Tout est validé, lever l'écran de protection
-                removeOverlay();
-                return;
-            }
-
-            // CAS 2 : Fallback vers l'API Backend Express (/api/auth/me)
+            // Uniquement appel à l'API Backend Express (sécurisé, évite les mismatch de clés)
             const token = localStorage.getItem('as_token');
             if (!token) {
-                window.location.replace(getLoginPath());
+                console.warn('[AdminAuthGuard] Token absent, redirection vers login.');
+                window.location.replace(getLoginPath() + '?expired=1');
                 return;
             }
 
@@ -212,7 +115,7 @@
 
             const data = await response.json();
             const role = data.user?.role;
-            const isAuthorizedStaff = role === 'admin' || role === 'staff' || role === 'super_admin' || role === 'directeur';
+            const isAuthorizedStaff = role === 'admin' || role === 'staff' || role === 'super_admin' || role === 'directeur' || role === 'manager' || role === 'administrateur' || role === 'employe' || role === 'helper';
 
             if (!isAuthorizedStaff) {
                 localStorage.removeItem('as_token');

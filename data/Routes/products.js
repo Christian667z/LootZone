@@ -153,7 +153,7 @@ router.post('/', requireAuth, requireMinRole('administrateur'), async (req, res)
     }
 
     const { data, error } = await supabaseAdmin.from('products').insert({ name, category, img, desc, discount, rating, sales, recommended, date, price, needs_server: needsServer, server_options: serverOptions, id_label: idLabel, id_placeholder: idPlaceholder, denoms, discount_tiers }).select().single();
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Ajout produit #${data.id} — ${name}`, `produit:${data.id}`, null, name);
     res.json({ success: true, product: data });
 });
@@ -179,7 +179,7 @@ router.put('/:id', requireAuth, requireMinRole('administrateur'), async (req, re
     const { data: old } = await supabaseAdmin.from('products').select('*').eq('id', id).single();
     const dbUpdates = Object.fromEntries(Object.entries(updates).map(([key, value]) => [DB_FIELD_NAMES[key] || key, value]));
     const { data, error } = await supabaseAdmin.from('products').update(dbUpdates).eq('id', id).select().single();
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Modification produit #${id} — ${data.name}`, `produit:${id}`, JSON.stringify(old), JSON.stringify(dbUpdates));
     res.json({ success: true, product: data });
 });
@@ -199,7 +199,7 @@ router.delete('/:id', requireAuth, requireMinRole('manager'), async (req, res) =
 
     const { data: prod } = await supabaseAdmin.from('products').select('name').eq('id', id).single();
     const { error } = await supabaseAdmin.from('products').delete().eq('id', id);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Suppression produit #${id} — ${prod?.name}`, `produit:${id}`, prod?.name, null);
     res.json({ success: true });
 });

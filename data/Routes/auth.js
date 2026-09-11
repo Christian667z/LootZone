@@ -37,9 +37,10 @@ router.post('/login', async (req, res) => {
             for (const [section, roles] of Object.entries(SIDEBAR_PERMISSIONS)) {
                 sidebarPerms[section] = roles.includes(role);
             }
+            const demoToken = isStaff ? 'demo-token-lootzone-admin' : 'demo-token-lootzone-client';
             return res.json({
-                token: 'demo-token-lootzone-xyz',
-                session: { access_token: 'demo-token-lootzone-xyz', user: demoUser },
+                token: demoToken,
+                session: { access_token: demoToken, user: demoUser },
                 user: demoUser,
                 profile: demoUser,
                 sidebarPerms,

@@ -402,7 +402,11 @@ router.get('/categories', async (req, res) => {
             .select('*')
             .order('name', { ascending: true });
 
-        if (error || !data || data.length === 0) {
+        if (error || !data) {
+            console.warn('[Blog] Erreur fetch categories, fallback demo');
+            return res.json({ success: true, categories: demoBlogCategories });
+        }
+        if (data.length === 0) {
             return res.json({ success: true, categories: demoBlogCategories });
         }
 

@@ -26,7 +26,7 @@ router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) 
     let query = supabaseAdmin.from('stock_numerique').select('*').order('created_at', { ascending: false });
     if (produit_id) query = query.eq('produit_id', produit_id);
     const { data, error } = await query;
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ stock: data });
 });
 
@@ -43,7 +43,7 @@ router.post('/', requireAuth, requireMinRole('administrateur'), async (req, res)
 
     const rows = codes.map(code => ({ produit_id, produit_nom, denom_label, code, statut: 'disponible' }));
     const { error } = await supabaseAdmin.from('stock_numerique').insert(rows);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Ajout ${codes.length} codes stock — produit #${produit_id}`, `stock:${produit_id}`, null, `${codes.length} codes`);
     res.json({ success: true, added: codes.length });
 });

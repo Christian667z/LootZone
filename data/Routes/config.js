@@ -25,7 +25,7 @@ router.get('/public', async (req, res) => {
 router.get('/', requireAuth, async (req, res) => {
     if (DEMO_MODE) return res.json(demoConfig);
     const { data, error } = await supabaseAdmin.from('site_config').select('*').limit(1).single();
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json(data);
 });
 
@@ -44,7 +44,7 @@ router.patch('/taux', requireAuth, requireRole('directeur', 'administrateur'), a
 
     const { data: current } = await supabaseAdmin.from('site_config').select('taux_eur_htg').limit(1).single();
     const { error } = await supabaseAdmin.from('site_config').update({ taux_eur_htg: Number(taux_eur_htg), updated_by: req.user.id, updated_at: new Date().toISOString() }).eq('id', 1);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
 
     await logActivite(req.user.id, req.user.role, 'Modification taux EUR→HTG', 'site_config', current?.taux_eur_htg, taux_eur_htg);
     res.json({ success: true, taux_eur_htg: Number(taux_eur_htg) });

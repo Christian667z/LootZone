@@ -13,9 +13,9 @@
   <style>
     /* ═══════════════════ PAGE LAYOUT ═══════════════════ */
     .profile-page {
-      background: #f8f9fa;
+      background: #0d0b18;
       min-height: calc(100vh - 140px);
-      color: #1a1a2e;
+      color: #ffffff;
     }
 
     /* Reset Navbar icons to prevent any parent padding leak */
@@ -38,14 +38,14 @@
 
     .profile-breadcrumb {
       padding: 14px 40px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
+      background: #161922;
+      border-bottom: 1px solid #2A2F42;
       font-size: .85rem;
       color: #888;
     }
 
     .profile-breadcrumb a {
-      color: #00b67a;
+      color: #8B5CF6;
       text-decoration: none;
     }
 
@@ -70,11 +70,11 @@
     }
 
     .sidebar-card {
-      background: #fff;
+      background: #161922;
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
-      border: 1px solid #f0f0f0;
+      border: 1px solid #2A2F42;
     }
 
     .sidebar-user-header {
@@ -95,7 +95,7 @@
       height: 80px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid #00b67a;
+      border: 3px solid #8B5CF6;
       background: #2a2a2a;
       display: flex;
       align-items: center;
@@ -110,7 +110,7 @@
       height: 80px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid #00b67a;
+      border: 3px solid #8B5CF6;
     }
 
     .sidebar-vip-ring {
@@ -144,7 +144,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      max-width: 100%;
+      max-width: 200px; margin-left: auto; margin-right: auto;
     }
 
     .sidebar-vip-pill {
@@ -213,15 +213,15 @@
     }
 
     .sidebar-nav-item:hover {
-      background: #f0fdf9;
-      color: #00b67a;
+      background: #251D3A;
+      color: #8B5CF6;
     }
 
     .sidebar-nav-item.active {
-      background: #f0fdf9;
-      color: #00b67a;
+      background: #251D3A;
+      color: #8B5CF6;
       font-weight: 600;
-      border-left: 3px solid #00b67a;
+      border-left: 3px solid #8B5CF6;
     }
 
     .sidebar-nav-item svg {
@@ -230,13 +230,13 @@
 
     .sidebar-nav-sep {
       height: 1px;
-      background: #f0f0f0;
+      background: #2A2F42;
       margin: 4px 16px;
     }
 
     .sidebar-nav-badge {
       margin-left: auto;
-      background: #00b67a;
+      background: #8B5CF6;
       color: #fff;
       border-radius: 10px;
       padding: 2px 7px;
@@ -257,7 +257,7 @@
       background: none;
       width: 100%;
       font-family: inherit;
-      border-top: 1px solid #f0f0f0;
+      border-top: 1px solid #2A2F42;
       transition: all .2s;
     }
 
@@ -273,11 +273,11 @@
     }
 
     .profile-section {
-      background: #fff;
+      background: #161922;
       border-radius: 16px;
       padding: 32px;
       box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
-      border: 1px solid #f0f0f0;
+      border: 1px solid #2A2F42;
       display: none;
     }
 
@@ -288,17 +288,17 @@
     .section-title {
       font-size: 1.15rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: #FFFFFF;
       margin-bottom: 24px;
       padding-bottom: 14px;
-      border-bottom: 2px solid #f0f0f0;
+      border-bottom: 2px solid #2A2F42;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
     .section-title svg {
-      color: #00b67a;
+      color: #8B5CF6;
     }
 
     /* ─── Avatar upload ─── */
@@ -308,7 +308,7 @@
       gap: 24px;
       margin-bottom: 28px;
       padding: 20px;
-      background: #f8fffe;
+      background: #1E2230;
       border-radius: 12px;
       border: 2px dashed #c8f0e0;
     }
@@ -326,7 +326,7 @@
       font-weight: 700;
       color: #666;
       overflow: hidden;
-      border: 3px solid #00b67a;
+      border: 3px solid #8B5CF6;
     }
 
     .avatar-preview img {
@@ -354,8 +354,8 @@
       gap: 6px;
       padding: 8px 16px;
       border-radius: 8px;
-      border: 1.5px solid #00b67a;
-      color: #00b67a;
+      border: 1.5px solid #8B5CF6;
+      color: #8B5CF6;
       background: none;
       font-size: .85rem;
       font-weight: 600;
@@ -364,7 +364,7 @@
     }
 
     .btn-upload:hover {
-      background: #00b67a;
+      background: #8B5CF6;
       color: #fff;
     }
 
@@ -390,38 +390,43 @@
     }
 
     .form-label {
+      color: #E2E8F0;
+      margin-bottom: 8px;
+      display: block;
       font-size: .85rem;
       font-weight: 600;
-      color: #555;
+      
     }
 
     .form-label .req {
-      color: #00b67a;
+      color: #8B5CF6;
     }
 
     .form-input {
       padding: 11px 14px;
-      border: 1.5px solid #e0e0e0;
+      border: 1.5px solid #2A2F42; background: #1E2230;
       border-radius: 10px;
       font-size: .9rem;
-      color: #1a1a1a;
+      color: #FFFFFF;
       outline: none;
       transition: border .2s;
       font-family: inherit;
     }
 
     .form-input:focus {
-      border-color: #00b67a;
-      box-shadow: 0 0 0 3px rgba(0, 183, 122, .1);
+      border-color: #8B5CF6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, .1);
     }
 
     .form-input:disabled {
-      background: #fafafa;
+      background: #1E2230;
       color: #999;
       cursor: not-allowed;
     }
 
     .form-hint {
+      display: block;
+      margin-top: 6px;
       font-size: .78rem;
       color: #999;
     }
@@ -434,7 +439,7 @@
 
     .btn-save {
       padding: 11px 28px;
-      background: #00b67a;
+      background: #8B5CF6;
       color: #fff;
       border: none;
       border-radius: 10px;
@@ -448,7 +453,7 @@
     }
 
     .btn-save:hover {
-      background: #009e6a;
+      background: #7c3aed;
       transform: translateY(-1px);
     }
 
@@ -459,9 +464,11 @@
     }
 
     .btn-cancel {
+      background: #1E2230;
+      color: #94A3B8;
       padding: 11px 22px;
-      background: #f5f5f5;
-      color: #555;
+      
+      
       border: none;
       border-radius: 10px;
       font-size: .9rem;
@@ -474,7 +481,7 @@
       align-items: center;
       gap: 8px;
       padding: 12px 16px;
-      background: #f0fdf9;
+      background: #251D3A;
       border: 1px solid #c8f0e0;
       border-radius: 10px;
       color: #059669;
@@ -583,7 +590,7 @@
       height: 100%;
       border-radius: 4px;
       transition: width .8s ease;
-      background: linear-gradient(90deg, #00b67a, #00e89d);
+      background: linear-gradient(90deg, #8B5CF6, #c084fc);
     }
 
     .vip-perks-grid {
@@ -614,14 +621,14 @@
     .vip-perk-value {
       font-size: 1rem;
       font-weight: 700;
-      color: #00e89d;
+      color: #c084fc;
     }
 
     /* ─── VIP Tier cards ─── */
     .vip-tiers-title {
       font-size: 1rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: #FFFFFF;
       margin: 8px 0 16px;
       display: flex;
       align-items: center;
@@ -652,7 +659,7 @@
     }
 
     .vip-tier-card.current-tier {
-      border-color: #00b67a;
+      border-color: #8B5CF6;
       box-shadow: 0 0 0 3px rgba(0, 183, 122, .15);
     }
 
@@ -740,14 +747,14 @@
     .tier-benefits li::before {
       content: '✓';
       font-weight: 700;
-      color: #00b67a;
+      color: #8B5CF6;
     }
 
     .tier-current-label {
       position: absolute;
       top: 14px;
       right: 14px;
-      background: #00b67a;
+      background: #8B5CF6;
       color: #fff;
       padding: 3px 10px;
       border-radius: 8px;
@@ -781,13 +788,13 @@
       cursor: pointer;
       font-size: .9rem;
       font-weight: 600;
-      color: #1a1a1a;
+      color: #FFFFFF;
       transition: color .2s;
       list-style: none;
     }
 
     .faq-question:hover {
-      color: #00b67a;
+      color: #8B5CF6;
     }
 
     .faq-arrow {
@@ -869,13 +876,13 @@
     .wallet-hero-amount span {
       font-size: 1.3rem;
       font-weight: 600;
-      color: #00b67a;
+      color: #8B5CF6;
       margin-right: 4px;
     }
     .wallet-tabs {
       display: flex;
       gap: 0;
-      border-bottom: 2px solid #f0f0f0;
+      border-bottom: 2px solid #2A2F42;
       margin-bottom: 28px;
     }
     .wallet-tab-btn {
@@ -892,8 +899,8 @@
       font-family: inherit;
     }
     .wallet-tab-btn.active {
-      color: #00b67a;
-      border-bottom-color: #00b67a;
+      color: #8B5CF6;
+      border-bottom-color: #8B5CF6;
     }
     .wallet-tab-pane { display: none; }
     .wallet-tab-pane.active { display: block; }
@@ -901,7 +908,7 @@
     .wallet-field-label {
       font-size: .82rem;
       font-weight: 600;
-      color: #555;
+      
       margin-bottom: 10px;
       display: block;
     }
@@ -921,17 +928,17 @@
       color: #333;
       cursor: pointer;
       transition: all .18s;
-      background: #fafafa;
+      background: #1E2230;
     }
     .wallet-amount-card:hover {
-      border-color: #00b67a;
-      color: #00b67a;
-      background: #f0fdf9;
+      border-color: #8B5CF6;
+      color: #8B5CF6;
+      background: #251D3A;
     }
     .wallet-amount-card.active {
-      border-color: #00b67a;
-      background: #f0fdf9;
-      color: #00b67a;
+      border-color: #8B5CF6;
+      background: #251D3A;
+      color: #8B5CF6;
     }
     .wallet-custom-input {
       display: flex;
@@ -943,13 +950,13 @@
       transition: border-color .2s;
     }
     .wallet-custom-input:focus-within {
-      border-color: #00b67a;
+      border-color: #8B5CF6;
     }
     .wallet-custom-prefix {
       padding: 12px 16px;
-      background: #f5f5f5;
+      
       font-weight: 700;
-      color: #555;
+      
       font-size: 1rem;
       border-right: 2px solid #e0e0e0;
     }
@@ -975,15 +982,15 @@
       cursor: pointer;
       text-align: center;
       transition: all .18s;
-      background: #fafafa;
+      background: #1E2230;
     }
     .wallet-pay-card:hover {
-      border-color: #00b67a;
-      background: #f0fdf9;
+      border-color: #8B5CF6;
+      background: #251D3A;
     }
     .wallet-pay-card.active {
-      border-color: #00b67a;
-      background: #f0fdf9;
+      border-color: #8B5CF6;
+      background: #251D3A;
     }
     .wallet-pay-card img {
       height: 32px;
@@ -1009,7 +1016,7 @@
     .btn-wallet-confirm {
       width: 100%;
       padding: 15px;
-      background: #00b67a;
+      background: #8B5CF6;
       color: #fff;
       border: none;
       border-radius: 12px;
@@ -1020,7 +1027,7 @@
       transition: all .2s;
     }
     .btn-wallet-confirm:hover {
-      background: #009e6a;
+      background: #7c3aed;
       transform: translateY(-1px);
     }
     .btn-wallet-confirm:disabled {
@@ -1051,13 +1058,13 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
-    .wallet-flux-icon.credit { background: #f0fdf9; }
+    .wallet-flux-icon.credit { background: #251D3A; }
     .wallet-flux-icon.debit { background: #fff5f5; }
     .wallet-flux-info { flex: 1; }
     .wallet-flux-label { font-weight: 600; font-size: .9rem; color: #222; }
     .wallet-flux-date { font-size: .78rem; color: #999; margin-top: 2px; }
     .wallet-flux-amount { font-weight: 700; font-size: .95rem; }
-    .wallet-flux-amount.credit { color: #00b67a; }
+    .wallet-flux-amount.credit { color: #8B5CF6; }
     .wallet-flux-amount.debit { color: #ef4444; }
 
     /* Wallet balance in sidebar */
@@ -1075,7 +1082,7 @@
       text-align: center;
       cursor: pointer;
     }
-    .sidebar-wallet-item:hover .sidebar-wallet-val { color: #00b67a; }
+    .sidebar-wallet-item:hover .sidebar-wallet-val { color: #8B5CF6; }
     .sidebar-wallet-val {
       font-size: .95rem;
       font-weight: 700;
@@ -1123,7 +1130,7 @@
       align-items: center;
       gap: 8px;
       padding: 13px 28px;
-      background: #00b67a;
+      background: #8B5CF6;
       color: #fff;
       border: none;
       border-radius: 12px;
@@ -1135,7 +1142,7 @@
     }
 
     .btn-login-cta:hover {
-      background: #009e6a;
+      background: #7c3aed;
       transform: translateY(-2px);
     }
 
@@ -1307,14 +1314,6 @@
             </div>
           </div>
           <div class="user-dropdown-menu">
-            <a href="profile.html" class="user-dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              Mon profil
-            </a>
-            <a href="profile.html#commandes" class="user-dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-              Historique des achats
-            </a>
             <a href="messages.html" class="user-dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
               Messages & Notifications
@@ -1519,7 +1518,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label">ID Utilisateur LootZone (Permanent)</label>
-                <input type="text" class="form-input" id="fieldUserCode" disabled style="font-weight:800;color:#059669;letter-spacing:1px;background:#f8fafc;">
+                <input type="text" class="form-input" id="fieldUserCode" disabled style="font-weight:800;color:#8B5CF6;letter-spacing:1px;background:#1E2230;">
               </div>
               <div class="form-group full">
                 <label class="form-label">Adresse e-mail <span class="req">*</span></label>
@@ -1760,9 +1759,9 @@
   <footer style="background:#1a1a1a;color:#aaa;text-align:center;padding:20px;font-size:.82rem;margin-top:40px;">
     © 2026 LootZone · Tous droits réservés
     <span style="margin:0 8px">·</span>
-    <a href="#" style="color:#00b67a;text-decoration:none">Confidentialité</a>
+    <a href="#" style="color:#8B5CF6;text-decoration:none">Confidentialité</a>
     <span style="margin:0 8px">·</span>
-    <a href="contact.html" style="color:#00b67a;text-decoration:none">Support</a>
+    <a href="contact.html" style="color:#8B5CF6;text-decoration:none">Support</a>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -1871,7 +1870,7 @@
             <div class="tier-pts">${lvl.pts === 0 ? 'Niveau de départ' : `À partir de ${lvl.pts.toLocaleString()} pts`}</div>
             <ul class="tier-benefits">
               ${benefits.map(b => `<li>${b}</li>`).join('')}
-              ${lvl.discount > 0 ? `<li style="color:#00b67a;font-weight:600">-${lvl.discount}% sur toutes les commandes</li>` : ''}
+              ${lvl.discount > 0 ? `<li style="color:#8B5CF6;font-weight:600">-${lvl.discount}% sur toutes les commandes</li>` : ''}
             </ul>
           </div>`;
         }).join('');
@@ -1995,7 +1994,7 @@
         if ($('sidebarVipRing')) { $('sidebarVipRing').textContent = lvl.badge || lvl.label.charAt(0); $('sidebarVipRing').style.background = lvl.color; }
         if ($('sidebarName')) $('sidebarName').textContent = `${profile?.prenom || ''} ${profile?.nom || ''}`.trim() || nom;
         const uCode = profile?.user_code || (window.getAstaUserCode ? window.getAstaUserCode(user) : 'AS8F3K');
-        if ($('sidebarEmail')) $('sidebarEmail').innerHTML = (user?.email || '—') + `<div style="font-size:11.5px;font-weight:800;color:#00b67a;margin-top:3px;">ID: ${uCode}</div>`;
+        if ($('sidebarEmail')) $('sidebarEmail').innerHTML = (user?.email || '—') + `<div style="font-size:11.5px;font-weight:800;color:#8B5CF6;margin-top:3px;">ID: ${uCode}</div>`;
         if ($('sidebarVipPill')) { $('sidebarVipPill').textContent = `${lvl.icon} ${lvl.label}`; $('sidebarVipPill').style.background = lvl.color; }
         if ($('sidebarPts')) $('sidebarPts').textContent = `${pts.toLocaleString()} points`;
         if ($('sidebarPtsWallet')) $('sidebarPtsWallet').textContent = pts.toLocaleString();
@@ -2066,7 +2065,7 @@
                 <div style="color:#aaa;font-size:13px;margin-top:2px;">${o.denom_label || ''}</div>
               </div>
               <div style="text-align:right;min-width:100px;">
-                <div style="font-weight:700;color:#00b67a;font-size:15px;">${o.eur ? o.eur.toFixed(2) + ' €' : '—'}</div>
+                <div style="font-weight:700;color:#8B5CF6;font-size:15px;">${o.eur ? o.eur.toFixed(2) + ' €' : '—'}</div>
                 <div style="color:#888;font-size:12px;">${o.methode_paiement || ''}</div>
               </div>
               <div style="text-align:right;min-width:110px;">

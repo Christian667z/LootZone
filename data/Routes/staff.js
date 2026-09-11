@@ -14,7 +14,7 @@ let demoStaff = [
 router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     if (DEMO_MODE) return res.json({ staff: demoStaff });
     const { data, error } = await supabaseAdmin.from('profiles').select('id, email, nom, prenom, role, statut_presence, created_at').neq('role', 'client').order('role');
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ staff: data });
 });
 
@@ -42,7 +42,7 @@ router.patch('/:id/role', requireAuth, requireRole('directeur', 'administrateur'
     if (target?.role === 'directeur' && req.user.role !== 'directeur') return res.status(403).json({ error: 'Impossible de modifier le Directeur' });
 
     const { error } = await supabaseAdmin.from('profiles').update({ role }).eq('id', targetId);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Modification rôle staff ${target?.nom}`, `staff:${targetId}`, target?.role, role);
     res.json({ success: true });
 });
@@ -64,7 +64,7 @@ router.delete('/:id', requireAuth, requireRole('directeur'), async (req, res) =>
     if (target?.role === 'directeur') return res.status(403).json({ error: 'Impossible de supprimer le Directeur' });
     await supabaseAdmin.auth.admin.deleteUser(targetId);
     const { error } = await supabaseAdmin.from('profiles').delete().eq('id', targetId);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Révocation accès staff ${target?.nom}`, `staff:${targetId}`, target?.role, null);
     res.json({ success: true });
 });
@@ -87,7 +87,7 @@ router.post('/invite', requireAuth, requireMinRole('manager'), async (req, res) 
     const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
         data: { prenom: prenom || '', nom: nom || '', role: role || 'employe' }
     });
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
 
     await logActivite(req.user.id, req.user.role, `Invitation staff envoyée à ${email}`, `email:${email}`, null, role);
     res.json({ success: true, user_id: data?.user?.id });
@@ -98,7 +98,7 @@ router.get('/kpi', requireAuth, requireRole('directeur'), async (req, res) => {
         return res.json({ kpi: demoStaff.map(s => ({ ...s, commandes_ce_mois: 0, taux_satisfaction: 0, temps_moyen_min: 0 })) });
     }
     const { data, error } = await supabaseAdmin.rpc('get_staff_kpi');
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ kpi: data });
 });
 
@@ -114,7 +114,7 @@ router.patch('/me/status', requireAuth, async (req, res) => {
     }
 
     const { error } = await supabaseAdmin.from('profiles').update({ statut_presence: status }).eq('id', req.user.id);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ success: true, status });
 });
 

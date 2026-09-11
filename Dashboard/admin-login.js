@@ -16,36 +16,6 @@
         ? 'http://localhost:3000'
         : window.location.origin;
 
-    let supabaseClient = null;
-
-    /**
-     * Initialise le client Supabase officiel
-     */
-    async function initSupabase() {
-        if (window.supabase && typeof window.supabase.createClient === 'function') {
-            const url = window.SUPABASE_URL || DEFAULT_SUPABASE_URL;
-            const key = window.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON;
-            supabaseClient = window.supabase.createClient(url, key);
-            return supabaseClient;
-        }
-
-        // Si le script Supabase CDN n'est pas encore chargé, le charger dynamiquement
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-            script.onload = () => {
-                if (window.supabase && typeof window.supabase.createClient === 'function') {
-                    const url = window.SUPABASE_URL || DEFAULT_SUPABASE_URL;
-                    const key = window.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON;
-                    supabaseClient = window.supabase.createClient(url, key);
-                }
-                resolve(supabaseClient);
-            };
-            script.onerror = () => resolve(null);
-            document.head.appendChild(script);
-        });
-    }
-
     // ── 2. UTILITAIRES D'AFFICHAGE & UI ────────────────────────────────
     function showAlert(message, type = 'error') {
         const alertBox = document.getElementById('alertBox');
@@ -136,80 +106,6 @@
         setButtonLoading(true);
 
         try {
-            const client = await initSupabase();
-
-            // CAS 1 : Client Supabase disponible (Mode normal de production)
-            if (client) {
-                // A. Connexion via Supabase Auth
-                const { data: authData, error: authError } = await client.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-                if (authError) {
-                    const msg = (authError.message || '').toLowerCase();
-                    if (msg.includes('invalid login credentials') || msg.includes('invalid_credentials')) {
-                        throw new Error('Identifiants incorrects. Vérifiez votre adresse email et votre mot de passe.');
-                    }
-                    if (msg.includes('email not confirmed')) {
-                        throw new Error('Votre email n\'est pas encore confirmé sur Supabase. Exécutez le script SQL d\'auto-confirmation.');
-                    }
-                    throw new Error(authError.message || 'Échec de la connexion à Supabase Auth.');
-                }
-
-                const user = authData?.user;
-                if (!user) throw new Error('Aucun utilisateur renvoyé par le service d\'authentification.');
-
-                // B. Vérification immédiate du rôle dans la table public.profiles
-                const { data: profile, error: profileError } = await client
-                    .from('profiles')
-                    .select('id, email, full_name, role')
-                    .eq('id', user.id)
-                    .single();
-
-                if (profileError || !profile) {
-                    // Si le profil n'a pas pu être récupéré
-                    console.warn('[AdminLogin] Profil introuvable dans public.profiles :', profileError);
-                }
-
-                const role = profile?.role;
-                const isAuthorized = role === 'admin' || role === 'staff' || role === 'super_admin';
-
-                // C. Contrôle RBAC strict :
-                // - Si role === 'admin' ou role === 'staff' (ou 'super_admin') : Redirection
-                // - Si role === 'client' ou non autorisé : Déconnexion immédiate & Message d'erreur
-                if (isAuthorized) {
-                    // Enregistrer les données de session nécessaires pour le dashboard
-                    const token = authData.session?.access_token || '';
-                    localStorage.setItem('as_token', token);
-                    localStorage.setItem('as_user', JSON.stringify({
-                        id: user.id,
-                        email: user.email,
-                        role: role,
-                        nom: profile.full_name || '',
-                        prenom: profile.full_name?.split(' ')[0] || user.email.split('@')[0]
-                    }));
-                    localStorage.setItem('as_level', role === 'super_admin' ? 5 : (role === 'admin' ? 3 : 2));
-
-                    showAlert(`Connexion réussie ! Bienvenue ${profile.full_name || user.email} (${role}). Redirection...`, 'success');
-                    setTimeout(() => {
-                        window.location.href = getDashboardRedirectUrl();
-                    }, 800);
-                    return;
-                } else {
-                    // DÉCONNEXION AUTOMATIQUE SI CLIENT OU NON AUTORISÉ
-                    await client.auth.signOut();
-                    localStorage.removeItem('as_token');
-                    localStorage.removeItem('as_user');
-                    localStorage.removeItem('as_perms');
-                    localStorage.removeItem('as_level');
-
-                    showAlert("Accès refusé : Vous n'avez pas les autorisations nécessaires pour accéder à l'administration.", 'error');
-                    setButtonLoading(false);
-                    return;
-                }
-            }
-
             // CAS 2 : Fallback vers l'API Backend Express (/api/auth/admin-login)
             // Utilisé si le client JS direct est inaccessible ou en mode serveur proxy
             const response = await fetch(`${API_BASE}/api/auth/admin-login`, {

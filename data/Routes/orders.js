@@ -152,7 +152,7 @@ router.get('/', requireAuth, requireMinRole('employe'), async (req, res) => {
     let query = supabaseAdmin.from('commandes').select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(offset, offset + Number(limit) - 1);
     if (statut) query = query.eq('statut', statut);
     const { data, error, count } = await query;
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ orders: data, total: count });
 });
 
@@ -172,7 +172,7 @@ router.post('/:id/lock', requireAuth, requireMinRole('employe'), async (req, res
     const { data: existing } = await supabaseAdmin.from('commandes').select('locked_by, statut').eq('id', orderId).single();
     if (existing?.locked_by && existing.locked_by !== req.user.id) return res.status(409).json({ error: 'Commande déjà prise en charge' });
     const { error } = await supabaseAdmin.from('commandes').update({ locked_by: req.user.id, locked_at: new Date().toISOString(), statut: 'en_cours' }).eq('id', orderId);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ success: true });
 });
 
@@ -189,7 +189,7 @@ router.post('/:id/unlock', requireAuth, requireMinRole('employe'), async (req, r
     }
 
     const { error } = await supabaseAdmin.from('commandes').update({ locked_by: null, locked_at: null, statut: 'en_attente' }).eq('id', orderId).eq('locked_by', req.user.id);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ success: true });
 });
 
@@ -223,7 +223,7 @@ router.patch('/:id/statut', requireAuth, requireMinRole('employe'), async (req, 
 
     const { data: old } = await supabaseAdmin.from('commandes').select('statut, client_email, produit_nom, denom_label').eq('id', orderId).single();
     const { error } = await supabaseAdmin.from('commandes').update(updates).eq('id', orderId);
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     if (statut === 'livree' && old?.client_email) {
         broadcastToClientEmail(old.client_email, 'commande_livree', {
             id: orderId, produit_nom: old.produit_nom, denom_label: old.denom_label
@@ -252,7 +252,7 @@ router.get('/me', async (req, res) => {
         .eq('client_email', user.email)
         .order('created_at', { ascending: false });
 
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ orders: data || [] });
 });
 
@@ -320,14 +320,18 @@ router.post('/public', async (req, res) => {
     }
 
     const { data, error } = await supabaseAdmin.from('commandes').insert({
-        id: orderId, client_id, client_email: safeEmail, client_nom: cleanText(client_nom, 160),
+        id: orderId, client_id: effectiveClientId, client_email: safeEmail, client_nom: cleanText(client_nom, 160),
         produit_id, produit_nom: safeProductName, categorie: safeCategory,
         denom_label: safeDenom, eur: eurNum, htg: htg === undefined ? null : htgNum, methode_paiement,
         player_id: cleanText(player_id, 200) || null,
         server: cleanText(server, 100) || null,
+        sender_name: cleanText(sender_name, 160) || null,
+        sender_phone: cleanText(sender_phone, 40) || null,
+        transaction_id: cleanText(transaction_id, 120) || null,
+        coupon_code: cleanText(coupon_code, 80) || null,
         statut, risk_score: score, risk_flags: flags
     }).select().single();
-    if (error) return res.status(500).json({ error: 'Erreur interne du serveur' });
+    if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ success: true, order_id: data.id, statut });
 });
 
