@@ -75,7 +75,11 @@
                     .eq('id', session.user.id)
                     .single();
 
-                if (profile && (profile.role === 'admin' || profile.role === 'staff' || profile.role === 'super_admin')) {
+                const role = profile?.role;
+                const isStaff = ['admin', 'administrateur', 'staff', 'super_admin', 'directeur', 'manager', 'employe', 'helper'].includes(role);
+                if (profile && isStaff) {
+                    if (session.access_token) localStorage.setItem('as_token', session.access_token);
+                    localStorage.setItem('as_user', JSON.stringify({ ...session.user, ...profile }));
                     showAlert('Session active détectée. Redirection vers l\'administration...', 'success');
                     setTimeout(() => {
                         window.location.href = getDashboardRedirectUrl();

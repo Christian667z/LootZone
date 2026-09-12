@@ -67,8 +67,9 @@ async function saveProductsToFile(products) {
 
 router.get('/', async (req, res) => {
     try {
+        const isAll = req.query.all === 'true';
         const page  = Math.max(1, parseInt(req.query.page,  10) || 1);
-        const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
+        const limit = isAll ? 1000 : Math.min(1000, Math.max(1, parseInt(req.query.limit, 10) || 20));
         const category = req.query.category || null;
         const search   = (req.query.search || '').trim().toLowerCase();
 
@@ -83,10 +84,11 @@ router.get('/', async (req, res) => {
 
         const total = products.length;
         const start = (page - 1) * limit;
-        const paged = products.slice(start, start + limit);
+        const paged = isAll ? products : products.slice(start, start + limit);
 
         res.json({
             success: true,
+            products: paged,
             data: paged,
             pagination: { page, limit, total, pages: Math.ceil(total / limit) }
         });

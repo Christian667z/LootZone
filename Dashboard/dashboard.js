@@ -4,7 +4,7 @@ const API = (window.location.protocol === 'file:')
 let TOKEN = localStorage.getItem('as_token');
 let USER = JSON.parse(localStorage.getItem('as_user') || 'null');
 let PERMS = JSON.parse(localStorage.getItem('as_perms') || '{}');
-let ROLE_LEVEL = parseInt(localStorage.getItem('as_level') || '0');
+let ROLE_LEVEL = parseInt(localStorage.getItem('as_level') || '-1');
 let TAUX = 135;
 let allProducts = [];
 let allOrders = [];
@@ -13,8 +13,48 @@ let allHub = [];
 let currentHubReq = null;
 let editingProductId = null;
 
+// ── AUTH SYNC HELPER
+function getActiveUser() {
+    if (!USER) {
+        try { USER = JSON.parse(localStorage.getItem('as_user') || 'null'); } catch (_) {}
+    }
+    if (!USER && window.AdminAuthGuard?.user) {
+        USER = window.AdminAuthGuard.user;
+    }
+    return USER || { role: 'admin', prenom: 'Admin', nom: '', email: 'staff@lootzone.gg' };
+}
+
+function getActiveRoleLevel(u) {
+    const stored = parseInt(localStorage.getItem('as_level') || '-1');
+    if (stored >= 0) return stored;
+    const role = (u?.role || '').toLowerCase();
+    const roleLevels = {
+        client: 0, helper: 1, staff: 2, employe: 2,
+        admin: 3, administrateur: 3, manager: 4,
+        directeur: 5, super_admin: 5
+    };
+    return roleLevels[role] ?? 3;
+}
+
+function getEffectivePerms(u, level) {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem('as_perms') || '{}'); } catch (_) {}
+    if (stored && Object.keys(stored).length > 0) {
+        return stored;
+    }
+    const role = (u?.role || '').toLowerCase();
+    const isHighStaff = level >= 3 || ['directeur', 'super_admin', 'manager', 'admin', 'administrateur'].includes(role);
+    return {
+        tableau_de_bord: true,
+        catalogue_produits: true,
+        gestion_commandes: true,
+        hub_partenariats: true,
+        moderation_equipe: isHighStaff,
+        configuration: isHighStaff
+    };
+}
+
 // ── AUTH GUARD
-// Synchronisation avec AdminAuthGuard si disponible
 if (!TOKEN && window.AdminAuthGuard?.token) {
     TOKEN = window.AdminAuthGuard.token;
 }
@@ -32,71 +72,109 @@ document.addEventListener('DOMContentLoaded', () => {
     setupTauxInput();
 });
 
+// Écoute de la synchronisation asynchrone par AdminAuthGuard
+window.addEventListener('admin-session-ready', (e) => {
+    const detail = e.detail;
+    if (detail?.user) USER = detail.user;
+    if (detail?.sidebarPerms) PERMS = detail.sidebarPerms;
+    if (detail?.roleLevel !== undefined) ROLE_LEVEL = detail.roleLevel;
+    if (detail?.token) TOKEN = detail.token;
+    initUI();
+    loadAll();
+});
+
 function initUI() {
-    const u = USER;
-    document.getElementById('sidebarAvatar').textContent = (u.prenom?.[0] || u.email[0]).toUpperCase();
-    document.getElementById('sidebarName').textContent = `${u.prenom || ''} ${u.nom || u.email}`.trim();
+    const u = getActiveUser();
+    ROLE_LEVEL = getActiveRoleLevel(u);
+    PERMS = getEffectivePerms(u, ROLE_LEVEL);
+
+    const avatar = document.getElementById('sidebarAvatar');
+    if (avatar) avatar.textContent = ((u.prenom?.[0] || u.email?.[0] || 'A')).toUpperCase();
+
+    const nameEl = document.getElementById('sidebarName');
+    if (nameEl) nameEl.textContent = `${u.prenom || ''} ${u.nom || u.email || 'Staff'}`.trim();
+
     const badge = document.getElementById('sidebarRoleBadge');
-    badge.textContent = u.role.toUpperCase();
-    badge.className = `staff-role-badge role-${u.role}`;
+    if (badge) {
+        const r = u.role || 'staff';
+        badge.textContent = r.toUpperCase();
+        badge.className = `staff-role-badge role-${r}`;
+    }
 
     // Auto-set presence to "en_ligne" on dashboard load
-    api('/api/staff/me/status', { method: 'PATCH', body: JSON.stringify({ status: 'en_ligne' }) });
+    api('/api/staff/me/status', { method: 'PATCH', body: JSON.stringify({ status: 'en_ligne' }) }).catch(() => {});
     document.querySelectorAll('.presence-btn').forEach(b => b.className = 'presence-btn');
     const onlineBtn = document.querySelector('.presence-btn[data-status="en_ligne"]');
     if (onlineBtn) onlineBtn.classList.add('active-online');
 
     // Apply sidebar permissions
     const perms = {
-        tableau_de_bord: PERMS.tableau_de_bord,
-        catalogue_produits: PERMS.catalogue_produits,
-        gestion_commandes: PERMS.gestion_commandes,
-        hub_partenariats: PERMS.hub_partenariats,
-        moderation_equipe: PERMS.moderation_equipe,
-        configuration: PERMS.configuration
+        tableau_de_bord: PERMS.tableau_de_bord ?? true,
+        catalogue_produits: PERMS.catalogue_produits ?? true,
+        gestion_commandes: PERMS.gestion_commandes ?? true,
+        hub_partenariats: PERMS.hub_partenariats ?? true,
+        moderation_equipe: PERMS.moderation_equipe ?? (ROLE_LEVEL >= 3),
+        configuration: PERMS.configuration ?? (ROLE_LEVEL >= 3)
     };
     for (const [key, allowed] of Object.entries(perms)) {
         const el = document.getElementById(`nav-${key}`);
         if (el) el.style.display = allowed ? '' : 'none';
     }
-    if (ROLE_LEVEL >= 5 || u.role === 'directeur') {
-        document.getElementById('nav-kpi').style.display = '';
-        document.getElementById('nav-logs').style.display = '';
-        document.getElementById('nav-wallet').style.display = '';
-        document.getElementById('nav-ventes').style.display = '';
-    } else if (ROLE_LEVEL >= 4 || u.role === 'manager') {
-        document.getElementById('nav-logs').style.display = '';
-        document.getElementById('nav-wallet').style.display = '';
-        document.getElementById('nav-ventes').style.display = '';
-    } else if (ROLE_LEVEL >= 3 || u.role === 'admin' || u.role === 'administrateur') {
-        document.getElementById('nav-wallet').style.display = '';
-        document.getElementById('nav-ventes').style.display = '';
+
+    const isSuperOrDirector = ROLE_LEVEL >= 5 || u.role === 'directeur' || u.role === 'super_admin';
+    const isManager = ROLE_LEVEL >= 4 || u.role === 'manager';
+    const isAdmin = ROLE_LEVEL >= 3 || u.role === 'admin' || u.role === 'administrateur';
+
+    const setVisible = (id, visible) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = visible ? '' : 'none';
+    };
+
+    setVisible('nav-wallet', isSuperOrDirector || isManager || isAdmin);
+    setVisible('nav-ventes', isSuperOrDirector || isManager || isAdmin);
+    setVisible('nav-logs', isSuperOrDirector || isManager || isAdmin);
+    setVisible('nav-kpi', isSuperOrDirector || isManager || isAdmin);
+    setVisible('nav-stock', true);
+    setVisible('nav-coupons', true);
+    setVisible('nav-blog', true);
+
+    // Activer la première section visible si la section actuelle est masquée
+    const activeNav = document.querySelector('.nav-item.active');
+    if (!activeNav || activeNav.style.display === 'none') {
+        const firstNav = document.querySelector('.nav-item:not([style*="none"])');
+        if (firstNav) switchSection(firstNav);
     }
-    // Activate first visible section
-    const firstNav = document.querySelector('.nav-item:not([style*="none"])');
-    if (firstNav) switchSection(firstNav);
 }
 
 async function loadAll() {
-    await Promise.all([
-        loadOrderStats(),
-        loadProducts(),
-        loadOrders(),
-        loadConfig(),
-        loadHub(),
-        loadStaff(),
-        loadLogs(),
-        loadStock(),
-        loadWalletBadge(),
-        loadBlogCategories(),
-        loadBlogArticles()
-    ]);
-    if (ROLE_LEVEL >= 5 || USER?.role === 'directeur') loadKPI();
+    const tasks = [
+        { name: 'OrderStats', fn: loadOrderStats },
+        { name: 'Products', fn: loadProducts },
+        { name: 'Orders', fn: loadOrders },
+        { name: 'Config', fn: loadConfig },
+        { name: 'Hub', fn: loadHub },
+        { name: 'Staff', fn: loadStaff },
+        { name: 'Logs', fn: loadLogs },
+        { name: 'Stock', fn: loadStock },
+        { name: 'WalletBadge', fn: loadWalletBadge },
+        { name: 'BlogCategories', fn: loadBlogCategories },
+        { name: 'BlogArticles', fn: loadBlogArticles }
+    ];
+
+    await Promise.allSettled(tasks.map(t =>
+        t.fn().catch(err => console.warn(`[Dashboard] Erreur dans ${t.name}:`, err))
+    ));
+
+    const u = getActiveUser();
+    if (ROLE_LEVEL >= 3 || ['directeur', 'super_admin', 'manager', 'admin', 'administrateur'].includes(u.role)) {
+        try { await loadKPI(); } catch (e) { console.warn('[Dashboard] Erreur loadKPI:', e); }
+    }
     checkDemoMode();
 }
 
 async function loadWalletBadge() {
-    if (ROLE_LEVEL < 3 && USER?.role !== 'admin' && USER?.role !== 'administrateur') return;
+    const u = getActiveUser();
+    if (ROLE_LEVEL < 2 && !['admin', 'administrateur', 'directeur', 'super_admin', 'manager', 'staff'].includes(u.role)) return;
     const data = await api('/api/wallet/all?statut=en_attente&limit=1');
     if (!data) return;
     const badge = document.getElementById('badgeWallet');
@@ -305,9 +383,9 @@ async function loadOrderStats() {
 
 // ── PRODUCTS
 async function loadProducts() {
-    const data = await api('/api/products');
+    const data = await api('/api/products?all=true&limit=500');
     if (!data) return;
-    allProducts = data.products || [];
+    allProducts = data.products || data.data || (Array.isArray(data) ? data : []);
     renderProducts();
 }
 
@@ -820,7 +898,7 @@ function renderHubCenter() {
     </div>
     <div class="hub-input-area">
       <textarea class="hub-textarea" id="chatInput" rows="2" placeholder="Rédigez votre message..." onkeydown="if(event.ctrlKey&&event.key==='Enter')sendHubMsg()"></textarea>
-      ${USER.role === 'helper' ? `
+      ${(USER?.role === 'helper') ? `
         <button class="btn btn-outline btn-sm" onclick="sendHubMsg(true)" title="Soumettre pour validation">📝 Brouillon</button>
       ` : `
         <button class="btn btn-green" onclick="sendHubMsg()">Envoyer ↑</button>
@@ -828,44 +906,53 @@ function renderHubCenter() {
     </div>
   `;
     const chatArea = document.getElementById('chatArea');
-    chatArea.scrollTop = chatArea.scrollHeight;
+    if (chatArea) chatArea.scrollTop = chatArea.scrollHeight;
 }
 
 function renderHubRight() {
     const r = currentHubReq;
     const right = document.getElementById('hubRightContent');
+    if (!right) return;
+    const u = getActiveUser();
+    const canManageHub = ROLE_LEVEL >= 3 || ['admin', 'administrateur', 'manager', 'directeur', 'super_admin'].includes(u.role);
     right.innerHTML = `
-    <div class="meta-row"><div class="meta-label">Nom / Structure</div><div class="meta-val">${r.nom}${r.structure ? ` — <em>${r.structure}</em>` : ''}</div></div>
-    <div class="meta-row"><div class="meta-label">Email</div><div class="meta-val"><a href="mailto:${r.email}">${r.email}</a></div></div>
-    ${r.abonnes ? `<div class="meta-row"><div class="meta-label">Abonnés</div><div class="meta-val"><strong style="color:var(--green)">${r.abonnes}</strong></div></div>` : ''}
-    ${r.volume_vente ? `<div class="meta-row"><div class="meta-label">Volume de vente</div><div class="meta-val">${r.volume_vente}</div></div>` : ''}
+    <div class="meta-row"><div class="meta-label">Nom / Structure</div><div class="meta-val">${escHtml(r.nom)}${r.structure ? ` — <em>${escHtml(r.structure)}</em>` : ''}</div></div>
+    <div class="meta-row"><div class="meta-label">Email</div><div class="meta-val"><a href="mailto:${escHtml(r.email)}">${escHtml(r.email)}</a></div></div>
+    ${r.abonnes ? `<div class="meta-row"><div class="meta-label">Abonnés</div><div class="meta-val"><strong style="color:var(--green)">${escHtml(r.abonnes)}</strong></div></div>` : ''}
+    ${r.volume_vente ? `<div class="meta-row"><div class="meta-label">Volume de vente</div><div class="meta-val">${escHtml(r.volume_vente)}</div></div>` : ''}
     ${Object.keys(r.reseaux || {}).length ? `
       <div class="meta-row"><div class="meta-label">Réseaux / Liens</div><div class="meta-val">
-        ${Object.entries(r.reseaux).map(([k, v]) => `<a href="${v}" target="_blank">🔗 ${k}</a><br>`).join('')}
+        ${Object.entries(r.reseaux).map(([k, v]) => `<a href="${escHtml(v)}" target="_blank">🔗 ${escHtml(k)}</a><br>`).join('')}
       </div></div>` : ''}
-    <div class="meta-row"><div class="meta-label">Message initial</div><div class="meta-val" style="font-size:12px;color:var(--text2);line-height:1.5">${r.message || '—'}</div></div>
-    ${(ROLE_LEVEL >= 4 && r.statut === 'en_attente') ? `
+    <div class="meta-row"><div class="meta-label">Message initial</div><div class="meta-val" style="font-size:12px;color:var(--text2);line-height:1.5">${escHtml(r.message || '—')}</div></div>
+    ${(canManageHub && r.statut === 'en_attente') ? `
       <div class="hub-actions">
         <button class="btn btn-green" onclick="validatePartnership('${r.id}')">✓ Valider le Partenariat</button>
         <button class="btn btn-red" onclick="rejectPartnership('${r.id}')">✗ Rejeter</button>
       </div>` : ''}
-    ${r.statut === 'valide' ? `<div style="margin-top:14px;background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px;font-size:12px"><strong style="color:var(--green)">✅ Partenariat validé</strong><br>Code affiliation : <code>${r.affiliate_code || '—'}</code></div>` : ''}
-    ${r.statut === 'rejete' ? `<div style="margin-top:14px;background:var(--red-dim);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px;font-size:12px"><strong style="color:var(--red)">✗ Demande rejetée</strong><br>${r.motif_rejet || ''}</div>` : ''}
+    ${r.statut === 'valide' ? `<div style="margin-top:14px;background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px;font-size:12px"><strong style="color:var(--green)">✅ Partenariat validé</strong><br>Code affiliation : <code>${escHtml(r.affiliate_code || '—')}</code></div>` : ''}
+    ${r.statut === 'rejete' ? `<div style="margin-top:14px;background:var(--red-dim);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px;font-size:12px"><strong style="color:var(--red)">✗ Demande rejetée</strong><br>${escHtml(r.motif_rejet || '')}</div>` : ''}
   `;
-    document.getElementById('hubRight').querySelector('.hub-right-title').textContent = 'Fiche Demandeur';
+    const hubRight = document.getElementById('hubRight');
+    if (hubRight) {
+        const titleEl = hubRight.querySelector('.hub-right-title');
+        if (titleEl) titleEl.textContent = 'Fiche Demandeur';
+    }
 }
 
 async function sendHubMsg(isDraft = false) {
     const input = document.getElementById('chatInput');
+    if (!input) return;
     const msg = input.value.trim();
-    if (!msg) return;
+    if (!msg || !currentHubReq) return;
     input.value = '';
+    const u = getActiveUser();
     const data = await api(`/api/partnerships/${currentHubReq.id}/message`, { method: 'POST', body: JSON.stringify({ message: msg, is_draft: isDraft }) });
     if (data?.success) {
         if (isDraft) showToast('green', '📝', 'Brouillon soumis pour validation', '');
         else {
             currentHubReq.messages_chat = currentHubReq.messages_chat || [];
-            currentHubReq.messages_chat.push({ from: 'staff', auteur: `${USER.prenom} ${USER.nom}`, message: msg, created_at: new Date().toISOString() });
+            currentHubReq.messages_chat.push({ from: 'staff', auteur: `${u.prenom || ''} ${u.nom || u.email || 'Staff'}`.trim(), message: msg, created_at: new Date().toISOString() });
             renderHubCenter();
         }
     }
@@ -887,15 +974,19 @@ async function rejectPartnership(id) {
 }
 
 async function checkDraftAlerts() {
-    if (ROLE_LEVEL < 3) return;
+    const u = getActiveUser();
+    if (ROLE_LEVEL < 3 && !['admin', 'administrateur', 'manager', 'directeur', 'super_admin'].includes(u.role)) return;
     const data = await api('/api/partnerships/drafts');
     if (!data) return;
     const count = data.drafts?.length || 0;
-    if (count > 0) {
-        document.getElementById('draftCount').textContent = count;
-        document.getElementById('draftAlert').style.display = 'flex';
-        document.getElementById('badgeDrafts').textContent = count;
-        document.getElementById('badgeDrafts').style.display = '';
+    const countEl = document.getElementById('draftCount');
+    if (countEl) countEl.textContent = count;
+    const alertEl = document.getElementById('draftAlert');
+    if (alertEl) alertEl.style.display = count > 0 ? 'flex' : 'none';
+    const badge = document.getElementById('badgeDrafts');
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? '' : 'none';
     }
 }
 
@@ -921,8 +1012,11 @@ async function loadStaff() {
 
 function renderStaff() {
     const grid = document.getElementById('staffGrid');
+    if (!grid) return;
     const invBtn = document.getElementById('inviteStaffBtn');
-    if (invBtn) invBtn.style.display = ROLE_LEVEL >= 4 ? '' : 'none';
+    const u = getActiveUser();
+    const canInvite = ROLE_LEVEL >= 3 || ['admin', 'administrateur', 'manager', 'directeur', 'super_admin'].includes(u.role);
+    if (invBtn) invBtn.style.display = canInvite ? '' : 'none';
     if (!allStaff.length) { grid.innerHTML = `<div style="color:var(--text3)">Aucun membre trouvé</div>`; return; }
     const colors = { directeur: '#f59e0b', manager: '#8b5cf6', administrateur: '#3b82f6', employe: '#22c55e', helper: '#9ca3af' };
     grid.innerHTML = allStaff.map(s => {
@@ -1072,12 +1166,18 @@ async function loadKPI() {
     const data = await api('/api/staff/kpi');
     if (!data) return;
     const grid = document.getElementById('kpiGrid');
-    grid.innerHTML = (data.kpi || []).map(k => `
+    if (!grid) return;
+    const list = data.kpi || [];
+    if (!list.length) {
+        grid.innerHTML = `<div style="color:var(--text3);padding:20px;grid-column:1/-1;text-align:center">Aucune métrique KPI enregistrée ce mois-ci.</div>`;
+        return;
+    }
+    grid.innerHTML = list.map(k => `
     <div class="kpi-card">
-      <div class="kpi-name">${k.prenom || ''} ${k.nom || ''}</div>
-      <div class="kpi-role"><span class="staff-role-badge role-${k.role}">${k.role.toUpperCase()}</span></div>
+      <div class="kpi-name">${escHtml(k.prenom || '')} ${escHtml(k.nom || '')}</div>
+      <div class="kpi-role"><span class="staff-role-badge role-${k.role}">${(k.role || 'staff').toUpperCase()}</span></div>
       <div class="kpi-metric"><span>Commandes ce mois</span><span class="val">${k.commandes_ce_mois || 0}</span></div>
-      <div class="kpi-metric"><span>Satisfaction client</span><span class="val">${k.taux_satisfaction ? k.taux_satisfaction.toFixed(1) + '★' : '—'}</span></div>
+      <div class="kpi-metric"><span>Satisfaction client</span><span class="val">${k.taux_satisfaction ? Number(k.taux_satisfaction).toFixed(1) + '★' : '—'}</span></div>
       <div class="kpi-metric"><span>Temps moyen livraison</span><span class="val">${k.temps_moyen_min ? Math.round(k.temps_moyen_min) + ' min' : '—'}</span></div>
     </div>
   `).join('');
@@ -1085,12 +1185,15 @@ async function loadKPI() {
 
 // ── LOGS
 async function loadLogs() {
-    if (ROLE_LEVEL < 4) return;
+    const u = getActiveUser();
+    const canView = ROLE_LEVEL >= 3 || ['admin', 'administrateur', 'manager', 'directeur', 'super_admin'].includes(u.role);
+    if (!canView) return;
     const search = document.getElementById('searchLog')?.value || '';
     const params = search ? `?action=${encodeURIComponent(search)}` : '';
     const data = await api(`/api/logs${params}`);
     if (!data) return;
     const tbody = document.getElementById('logsBody');
+    if (!tbody) return;
     const logs = data.logs || [];
     if (!logs.length) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Aucun log trouvé</td></tr>`; return; }
     tbody.innerHTML = logs.map(l => `
@@ -1098,9 +1201,9 @@ async function loadLogs() {
       <td>${formatDate(l.created_at)}</td>
       <td style="font-size:12px">${l.staff_id?.slice(0, 8) || '—'}...</td>
       <td><span class="staff-role-badge role-${l.staff_role}">${(l.staff_role || '').toUpperCase()}</span></td>
-      <td class="log-action">${l.action}</td>
-      <td class="old-val">${l.ancienne_valeur ? l.ancienne_valeur.slice(0, 40) : '—'}</td>
-      <td class="new-val">${l.nouvelle_valeur ? l.nouvelle_valeur.slice(0, 40) : '—'}</td>
+      <td class="log-action">${escHtml(l.action)}</td>
+      <td class="old-val">${l.ancienne_valeur ? escHtml(l.ancienne_valeur.slice(0, 40)) : '—'}</td>
+      <td class="new-val">${l.nouvelle_valeur ? escHtml(l.nouvelle_valeur.slice(0, 40)) : '—'}</td>
     </tr>
   `).join('');
 }
@@ -1110,14 +1213,15 @@ async function loadStock() {
     const data = await api('/api/stock');
     if (!data) return;
     const tbody = document.getElementById('stockBody');
-    const stock = data.stock || [];
+    if (!tbody) return;
+    const stock = data.stock || (Array.isArray(data) ? data : []);
     if (!stock.length) { tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🔑</div><p>Aucun code chargé</p></div></td></tr>`; return; }
     tbody.innerHTML = stock.map(s => `
     <tr>
       <td style="font-size:11px;color:var(--text3)">#${s.id}</td>
       <td>${escHtml(s.produit_nom) || '—'}</td>
-      <td style="font-size:12px">${s.denom_label || '—'}</td>
-      <td><code style="font-size:11px;color:var(--blue)">${s.statut === 'vendu' ? '****-****-****-****' : s.code}</code></td>
+      <td style="font-size:12px">${escHtml(s.denom_label) || '—'}</td>
+      <td><code style="font-size:11px;color:var(--blue)">${s.statut === 'vendu' ? '****-****-****-****' : escHtml(s.code)}</code></td>
       <td>${s.statut === 'disponible' ? '<span class="badge badge-livree">Disponible</span>' : '<span class="badge badge-annulee">Vendu</span>'}</td>
       <td style="font-size:11px;color:var(--text3)">${s.vendu_at ? formatDate(s.vendu_at) : '—'}</td>
     </tr>
@@ -1265,15 +1369,16 @@ async function loadProductSales() {
     if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Chargement...</td></tr>`;
 
     const [prodData, ordData] = await Promise.all([
-        api('/api/products'),
-        api('/api/orders')
+        api('/api/products?all=true&limit=500'),
+        api('/api/orders?limit=1000')
     ]);
     if (!prodData || !ordData) return;
 
-    const products = prodData.products || [];
+    const products = prodData.products || prodData.data || (Array.isArray(prodData) ? prodData : []);
     const orders = (ordData.orders || []).filter(o => o.statut === 'livree');
 
-    document.getElementById('ventesStatProduits').textContent = products.length;
+    const statProduits = document.getElementById('ventesStatProduits');
+    if (statProduits) statProduits.textContent = products.length;
 
     ventesData = products.map(p => {
         const prodOrders = orders.filter(o => {

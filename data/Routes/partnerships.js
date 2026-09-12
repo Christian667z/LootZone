@@ -45,7 +45,7 @@ let demoRequests = [
 ];
 let demoDraftMessages = [];
 
-router.get('/', requireAuth, requireMinRole('manager'), async (req, res) => {
+router.get('/', requireAuth, requireMinRole('staff'), async (req, res) => {
     if (DEMO_MODE) return res.json({ requests: demoRequests, badge_types: BADGE_TYPES });
     const { data, error } = await supabaseAdmin.from('partenariat_requests').select('*').order('created_at', { ascending: false });
     if (error) {

@@ -124,19 +124,32 @@
                 return;
             }
 
+            // Synchronisation systématique dans le localStorage
+            if (data.user) localStorage.setItem('as_user', JSON.stringify(data.user));
+            if (data.sidebarPerms) localStorage.setItem('as_perms', JSON.stringify(data.sidebarPerms));
+            if (data.roleLevel !== undefined) localStorage.setItem('as_level', String(data.roleLevel));
+
             window.AdminAuthGuard = {
                 user: data.user,
                 profile: data.user,
+                sidebarPerms: data.sidebarPerms,
+                roleLevel: data.roleLevel,
                 role: role,
                 token: token,
                 async logout() {
                     localStorage.removeItem('as_token');
+                    localStorage.removeItem('as_user');
+                    localStorage.removeItem('as_perms');
+                    localStorage.removeItem('as_level');
                     window.location.href = getLoginPath();
                 }
             };
 
             updateStaffUI(data.user, data.user);
             removeOverlay();
+
+            // Notifier le dashboard de la synchronisation de session
+            window.dispatchEvent(new CustomEvent('admin-session-ready', { detail: data }));
 
         } catch (err) {
             console.error('[AdminAuthGuard] Erreur inattendue :', err);
