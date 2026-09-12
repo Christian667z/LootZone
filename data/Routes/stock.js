@@ -11,7 +11,7 @@ let demoStock = [
     { id: 3, produit_id: 2, produit_nom: 'PUBG Mobile UC', denom_label: '660 UC', code: 'PUBG-660-UC-5432', statut: 'disponible', vendu_at: null, commande_id: null, created_at: new Date().toISOString() }
 ];
 
-router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
+router.get('/', requireAuth, requireMinRole('employe'), async (req, res) => {
     const { produit_id } = req.query;
     if (DEMO_MODE) {
         let stock = [...demoStock];

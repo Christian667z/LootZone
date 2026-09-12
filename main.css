@@ -836,13 +836,17 @@ img {
 /* 2. ÉTAT CONNECTÉ (UTILISATEUR CONNECTÉ) */
 header.user-logged-in .auth-required,
 .user-logged-in header .auth-required,
-body.user-logged-in .auth-required {
+body.user-logged-in .auth-required,
+html.user-logged-in body .auth-required,
+html.user-logged-in header .auth-required {
     display: flex !important;
 }
 
 header.user-logged-in .guest-only,
 .user-logged-in header .guest-only,
-body.user-logged-in .guest-only {
+body.user-logged-in .guest-only,
+html.user-logged-in body .guest-only,
+html.user-logged-in header .guest-only {
     display: none !important;
 }
 

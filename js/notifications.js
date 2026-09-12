@@ -497,32 +497,110 @@
     /**
      * Écoute SSE pour recevoir en temps réel les notifications de commandes livrées
      */
-    let sseInitialized = false;
+    let sseEventSource = null;
+    let sseReconnectTimeout = null;
+    let sseRetryDelay = 3000;
+
     function initRealtimeSSE() {
-        if (sseInitialized) return;
+        if (sseEventSource) {
+            try { sseEventSource.close(); } catch (_) {}
+            sseEventSource = null;
+        }
+        if (sseReconnectTimeout) {
+            clearTimeout(sseReconnectTimeout);
+            sseReconnectTimeout = null;
+        }
+
         const user = getCurrentUser();
         if (!user || !user.email) return;
 
         try {
             const token = getAuthToken();
             if (!token) return;
-            const evtSource = new EventSource(`/api/events/client?email=${encodeURIComponent(user.email)}&token=${encodeURIComponent(token)}`);
-            evtSource.addEventListener('commande_livree', () => {
-                // Secouer la cloche immédiatement pour attirer l'attention lors d'un nouveau message
-                triggerBellShake();
-                // Actualiser immédiatement la vérification de la base de données
-                checkUserAccountUnreadNotifications();
-            });
-            evtSource.addEventListener('nouvelle_notification', () => {
-                // Secouer la cloche immédiatement lors d'une nouvelle notification reçue
-                triggerBellShake();
-                checkUserAccountUnreadNotifications();
-            });
-            evtSource.onerror = () => {
-                evtSource.close();
-                sseInitialized = false;
+
+            const url = `/api/events/client?email=${encodeURIComponent(user.email)}&token=${encodeURIComponent(token)}`;
+            sseEventSource = new EventSource(url);
+
+            sseEventSource.onopen = () => {
+                sseRetryDelay = 3000;
             };
-            sseInitialized = true;
+
+            sseEventSource.addEventListener('commande_livree', (e) => {
+                triggerBellShake();
+                checkUserAccountUnreadNotifications();
+                try {
+                    const data = e.data ? JSON.parse(e.data) : {};
+                    const title = '🎮 Commande livrée !';
+                    const body = `${data.produit_nom || 'Votre produit'} ${data.denom_label ? '— ' + data.denom_label : ''} est prêt !`;
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification(title, { body, icon: 'favicon.svg' });
+                    }
+                    if (window.AstaAuth?.showClientToast) {
+                        window.AstaAuth.showClientToast(title, body);
+                    }
+                } catch (_) {}
+            });
+
+            sseEventSource.addEventListener('nouvelle_notification', (e) => {
+                triggerBellShake();
+                checkUserAccountUnreadNotifications();
+                try {
+                    const data = e.data ? JSON.parse(e.data) : {};
+                    const title = data.title || '🔔 Notification de compte';
+                    const body = data.message || 'Vous avez reçu un nouveau message.';
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification(title, { body, icon: 'favicon.svg' });
+                    }
+                    if (window.AstaAuth?.showClientToast) {
+                        window.AstaAuth.showClientToast(title, body);
+                    }
+                } catch (_) {}
+            });
+
+            sseEventSource.addEventListener('wallet_credit', (e) => {
+                triggerBellShake();
+                checkUserAccountUnreadNotifications();
+                try {
+                    const data = e.data ? JSON.parse(e.data) : {};
+                    if (data.new_balance !== undefined) {
+                        localStorage.setItem('asta_wallet_balance', String(data.new_balance));
+                        const stat = document.getElementById('dropdownWalletStat');
+                        if (stat) stat.textContent = `$${parseFloat(data.new_balance).toFixed(2)}`;
+                    }
+                    const title = '💰 Portefeuille crédité !';
+                    const body = `Votre solde a été augmenté de $${data.amount || 0}. Nouveau solde : $${parseFloat(data.new_balance || 0).toFixed(2)}`;
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification(title, { body, icon: 'favicon.svg' });
+                    }
+                    if (window.AstaAuth?.showClientToast) {
+                        window.AstaAuth.showClientToast(title, body);
+                    }
+                } catch (_) {}
+            });
+
+            sseEventSource.addEventListener('commande_statut_change', (e) => {
+                triggerBellShake();
+                checkUserAccountUnreadNotifications();
+                try {
+                    const data = e.data ? JSON.parse(e.data) : {};
+                    const statutLabel = data.statut === 'en_cours' ? 'en cours de traitement' : data.statut === 'livree' ? 'livrée' : data.statut === 'annulee' ? 'annulée' : data.statut;
+                    const title = `📦 Commande #${data.id} ${statutLabel}`;
+                    const body = `${data.produit_nom || 'Produit'} (${data.denom_label || ''})`;
+                    if (window.AstaAuth?.showClientToast) {
+                        window.AstaAuth.showClientToast(title, body);
+                    }
+                } catch (_) {}
+            });
+
+            sseEventSource.onerror = () => {
+                try { sseEventSource.close(); } catch (_) {}
+                sseEventSource = null;
+                if (sseReconnectTimeout) clearTimeout(sseReconnectTimeout);
+                sseReconnectTimeout = setTimeout(() => {
+                    initRealtimeSSE();
+                }, sseRetryDelay);
+                sseRetryDelay = Math.min(sseRetryDelay * 1.5, 30000);
+            };
         } catch (_) {}
     }
 
@@ -604,10 +682,14 @@
         createRealTestNotification: async function () {
             const user = getCurrentUser();
             const email = user?.email || 'test@lootzone.gg';
+            const token = getAuthToken();
             try {
                 const res = await fetch('/api/notifications/create-real', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    },
                     body: JSON.stringify({
                         target_email: email,
                         title: 'Recharge Diamants confirmée',

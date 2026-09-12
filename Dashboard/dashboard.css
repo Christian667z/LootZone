@@ -743,7 +743,8 @@ select.filter-select:focus {
     z-index: 100;
 }
 
-.modal-overlay.open {
+.modal-overlay.open,
+.modal-overlay.active {
     display: flex;
 }
 
@@ -1321,11 +1322,13 @@ select.filter-select:focus {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
-.toast.green {
+.toast.green,
+.toast.success {
     border-color: rgba(34, 197, 94, 0.4);
 }
 
-.toast.red {
+.toast.red,
+.toast.error {
     border-color: rgba(239, 68, 68, 0.4);
 }
 

@@ -80,32 +80,52 @@ export async function requireAuth(req, res, next) {
         user = data.user;
     } catch (err) {
         console.error('[Auth] Erreur getUser :', err.message);
-        return res.status(500).json({ error: 'Erreur d\'authentification' });
+        return res.status(401).json({ error: 'Session expirée ou invalide' });
     }
 
-    let profile;
+    let profile = null;
     try {
         const { data, error } = await supabaseAdmin
             .from('profiles')
-            .select('id, email, nom, prenom, role, statut_presence, avatar_url')
+            .select('id, email, nom, prenom, role, statut_presence, avatar_url, wallet_balance, points, user_code')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
-        if (error || !data) {
-            return res.status(403).json({ error: 'Profil introuvable' });
+        if (!error && data) {
+            profile = data;
         }
-        profile = data;
     } catch (err) {
-        console.error('[Auth] Erreur récupération profil :', err.message);
-        return res.status(500).json({ error: 'Erreur lors de la vérification du profil' });
+        console.warn('[Auth] Erreur récupération profil :', err.message);
     }
 
-    // Bloquer les clients — espace réservé au staff uniquement
-    if (profile.role === 'client') {
-        return res.status(403).json({ error: 'Accès réservé au staff' });
+    if (!profile) {
+        const meta = user.user_metadata || {};
+        profile = {
+            id: user.id,
+            email: user.email,
+            nom: meta.nom || meta.last_name || '',
+            prenom: meta.prenom || meta.first_name || user.email?.split('@')[0] || 'Client',
+            role: meta.role || 'client',
+            user_code: meta.user_code || ('LZ' + (user.id || '').replace(/-/g, '').slice(0, 4).toUpperCase()),
+            statut_presence: 'en_ligne'
+        };
+        try {
+            await supabaseAdmin.from('profiles').upsert(profile, { onConflict: 'id' });
+        } catch (_) {}
     }
 
     req.user = { id: user.id, email: user.email, ...profile };
+    next();
+}
+
+/**
+ * Vérifie que l'utilisateur est un membre du personnel (non client).
+ */
+export function requireStaff(req, res, next) {
+    if (!req.user) return res.status(401).json({ error: 'Non authentifié' });
+    if (req.user.role === 'client') {
+        return res.status(403).json({ error: 'Accès réservé au staff' });
+    }
     next();
 }
 
@@ -116,6 +136,8 @@ export function requireRole(...roles) {
     const expanded = new Set(roles);
     if (expanded.has('administrateur')) { expanded.add('admin'); expanded.add('super_admin'); }
     if (expanded.has('admin')) { expanded.add('administrateur'); expanded.add('super_admin'); expanded.add('directeur'); }
+    if (expanded.has('directeur')) { expanded.add('super_admin'); }
+    if (expanded.has('manager')) { expanded.add('super_admin'); }
     if (expanded.has('staff')) {
         expanded.add('admin');
         expanded.add('administrateur');
@@ -128,6 +150,7 @@ export function requireRole(...roles) {
 
     return (req, res, next) => {
         if (!req.user) return res.status(401).json({ error: 'Non authentifié' });
+        if (req.user.role === 'super_admin') return next();
         if (!expanded.has(req.user.role)) {
             return res.status(403).json({
                 error: `Accès refusé — rôle requis : ${roles.join(' ou ')}`

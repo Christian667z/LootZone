@@ -1636,9 +1636,10 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/wishlist.js"></script>
     <script src="js/notifications.js"></script>
     <script src="js/platform-badges.js"></script>
     <script src="data/products.js"></script>
@@ -1717,20 +1718,40 @@
         async function loadProduct(id) {
             let prod = null;
 
-            // Try from in-page products array first (fast, no network)
-            if (typeof products !== 'undefined' && Array.isArray(products)) {
-                prod = products.find(p => p.id === id);
-            }
-
-            // Fallback: fetch from API
-            if (!prod) {
-                try {
-                    const res = await fetch(API_BASE + '/api/products');
-                    if (res.ok) {
-                        const data = await res.json();
-                        prod = (data.products || data).find(p => p.id === id);
+            // 1. Tenter depuis l'API pour récupérer les prix, réductions et dénominations à jour du Dashboard
+            try {
+                const res = await fetch(API_BASE + '/api/products?all=true');
+                if (res.ok) {
+                    const data = await res.json();
+                    const list = data.products || data.data || [];
+                    const found = list.find(p => p.id === id || String(p.id) === String(id));
+                    if (found) {
+                        prod = {
+                            id: found.id,
+                            name: found.name,
+                            category: found.category,
+                            img: found.img,
+                            desc: found.desc || '',
+                            discount: found.discount || '',
+                            rating: found.rating || 5.0,
+                            sales: found.sales || '0',
+                            recommended: Boolean(found.recommended),
+                            date: found.date || '',
+                            price: found.price || 0,
+                            needsServer: Boolean(found.needs_server ?? found.needsServer),
+                            serverOptions: found.server_options ?? found.serverOptions ?? [],
+                            idLabel: found.id_label ?? found.idLabel ?? 'ID du joueur',
+                            idPlaceholder: found.id_placeholder ?? found.idPlaceholder ?? 'Ex: 123456789',
+                            denoms: found.denoms || [],
+                            discountTiers: found.discount_tiers ?? found.discountTiers ?? []
+                        };
                     }
-                } catch (_) {}
+                }
+            } catch (_) {}
+
+            // 2. Repli sur le tableau local si l'API est inaccessible
+            if (!prod && typeof products !== 'undefined' && Array.isArray(products)) {
+                prod = products.find(p => p.id === id || String(p.id) === String(id));
             }
 
             if (!prod) {

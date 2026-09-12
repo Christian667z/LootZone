@@ -283,6 +283,18 @@ function startSSE() {
         loadHub();
     });
 
+    es.addEventListener('nouvelle_recharge_wallet', e => {
+        try {
+            const r = JSON.parse(e.data);
+            showToast('purple', '💰', 'Recharge Portefeuille reçue', `Demande de $${r.montant || ''} via ${r.methode || ''}`);
+        } catch (_) {
+            showToast('purple', '💰', 'Recharge Portefeuille reçue', 'Nouvelle demande en attente');
+        }
+        playNotifSound('order');
+        loadWalletBadge();
+        if (currentSection === 'section-wallet') loadWalletTx(currentWalletFilter);
+    });
+
     es.onerror = () => {
         setTimeout(() => startSSE(), 5000);
     };
@@ -398,20 +410,27 @@ function renderProducts() {
     );
     const tbody = document.getElementById('productsBody');
     if (!prods.length) { tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📦</div><p>Aucun produit trouvé</p></div></td></tr>`; return; }
-    tbody.innerHTML = prods.map(p => `
-    <tr>
+    tbody.innerHTML = prods.map(p => {
+        const isActive = p.is_active !== false;
+        return `
+    <tr style="${isActive ? '' : 'opacity:0.65'}">
       <td style="font-size:11px;color:var(--text3)">#${p.id}</td>
       <td><img src="${p.img || ''}" alt="" style="width:36px;height:36px;object-fit:cover;border-radius:7px;background:var(--dark5)" onerror="this.style.display='none'"></td>
-      <td><strong>${escHtml(p.name)}</strong>${p.recommended ? ' <span style="color:var(--green);font-size:10px">★ Recommandé</span>' : ''}</td>
+      <td>
+        <strong>${escHtml(p.name)}</strong>${p.recommended ? ' <span style="color:var(--green);font-size:10px">★ Recommandé</span>' : ''}
+        <br>${isActive ? '<span class="badge badge-livree" style="font-size:10px;padding:1px 6px">Actif</span>' : '<span class="badge badge-annulee" style="font-size:10px;padding:1px 6px">Inactif</span>'}
+      </td>
       <td><span style="background:var(--dark5);padding:3px 8px;border-radius:6px;font-size:11px">${p.category}</span></td>
       <td>${p.price ? `<strong>$${p.price}</strong>` : '—'}</td>
       <td style="font-size:11px;color:var(--text3)">${(p.denoms || []).length} options</td>
-      <td>
-        <button class="btn btn-outline btn-sm" onclick='editProduct("${p.id}")'>✏️ Éditer</button>
-        ${ROLE_LEVEL >= 4 ? `<button class="btn btn-red btn-sm" onclick='deleteProduct("${p.id}","${escHtml(p.name).replace(/'/g, "\\'")}")'>🗑</button>` : ''}
+      <td style="white-space:nowrap">
+        <button class="btn btn-outline btn-sm" onclick='editProduct("${p.id}")' title="Éditer">✏️</button>
+        <button class="btn btn-outline btn-sm" onclick='toggleProductActive("${p.id}", ${!isActive})' title="${isActive ? 'Désactiver le produit' : 'Activer le produit'}">${isActive ? '⏸️' : '▶️'}</button>
+        ${ROLE_LEVEL >= 4 ? `<button class="btn btn-red btn-sm" onclick='deleteProduct("${p.id}","${escHtml(p.name).replace(/'/g, "\\'")}")' title="Supprimer">🗑</button>` : ''}
       </td>
     </tr>
-  `).join('');
+  `;
+    }).join('');
 }
 
 function editProduct(id) {
@@ -426,9 +445,11 @@ function editProduct(id) {
     document.getElementById('pDiscount').value = p.discount || '';
     document.getElementById('pRating').value = p.rating || 5.0;
     document.getElementById('pSales').value = p.sales || '';
-    document.getElementById('pIdLabel').value = p.idLabel || '';
-    document.getElementById('pIdPh').value = p.idPlaceholder || '';
+    document.getElementById('pIdLabel').value = p.idLabel || p.id_label || '';
+    document.getElementById('pIdPh').value = p.idPlaceholder || p.id_placeholder || '';
     document.getElementById('pRecommended').checked = !!p.recommended;
+    const activeCheck = document.getElementById('pIsActive');
+    if (activeCheck) activeCheck.checked = p.is_active !== false;
     renderDenomsForm(p.denoms || []);
     document.getElementById('productModalOverlay').classList.add('open');
 }
@@ -437,6 +458,8 @@ function openProductModal() {
     editingProductId = null;
     document.getElementById('productModalTitle').textContent = 'Nouveau produit';
     document.getElementById('productForm').reset();
+    const activeCheck = document.getElementById('pIsActive');
+    if (activeCheck) activeCheck.checked = true;
     renderDenomsForm([{ label: '', eur: '', htg: '' }]);
     document.getElementById('productModalOverlay').classList.add('open');
 }
@@ -503,6 +526,7 @@ async function saveProduct(e) {
         idLabel: document.getElementById('pIdLabel').value,
         idPlaceholder: document.getElementById('pIdPh').value,
         recommended: document.getElementById('pRecommended').checked,
+        is_active: document.getElementById('pIsActive') ? document.getElementById('pIsActive').checked : true,
         price: denoms[0]?.eur || 0,
         denoms
     };
@@ -516,6 +540,19 @@ async function saveProduct(e) {
         loadProducts();
     } else {
         showToast('red', '❌', 'Erreur', data?.error || 'Erreur inconnue');
+    }
+}
+
+async function toggleProductActive(id, newStatus) {
+    const data = await api(`/api/products/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ is_active: newStatus })
+    });
+    if (data?.success) {
+        showToast('green', '✅', 'Statut produit mis à jour', newStatus ? 'Produit activé' : 'Produit désactivé');
+        loadProducts();
+    } else {
+        showToast('red', '❌', 'Erreur', data?.error || 'Impossible de modifier le statut');
     }
 }
 
@@ -589,12 +626,13 @@ function renderOrders(orders) {
       <td>
         ${o.locked_by ? `<span class="order-lock-banner">🔒 ${escHtml(o.locked_by)}</span>` : '<span style="color:var(--text3);font-size:11px">Libre</span>'}
       </td>
-      <td>
-        ${o.statut === 'en_attente' ? `<button class="btn btn-green btn-sm" onclick="lockOrder('${o.id}')">▶ Prendre</button>` : ''}
-        ${o.statut === 'en_cours' ? `<button class="btn btn-green btn-sm" onclick="deliverOrder('${escHtml(o.id)}','${escHtml(o.player_id||'')}','${escHtml(o.produit_nom||'')}','${escHtml(o.denom_label||'')}')">✓ Livrer</button>` : ''}
-        ${o.statut === 'en_cours' ? `<button class="btn btn-outline btn-sm" onclick="unlockOrder('${o.id}')">🔓 Libérer</button>` : ''}
-        ${o.statut === 'livree' ? `<button class="btn btn-outline btn-sm" onclick="genInvoice('${o.id}')">📄 Facture</button>` : ''}
-        ${o.statut === 'risque_eleve' && ROLE_LEVEL >= 3 ? `<button class="btn btn-outline btn-sm" onclick="approveRisk('${o.id}')">✅ Valider</button>` : ''}
+      <td style="white-space:nowrap">
+        ${o.statut === 'en_attente' ? `<button class="btn btn-green btn-sm" onclick="lockOrder('${escHtml(o.id)}')">▶ Prendre</button>` : ''}
+        ${o.statut === 'en_cours' ? `<button class="btn btn-green btn-sm" onclick="deliverOrder('${escHtml(o.id)}')">✓ Livrer</button>` : ''}
+        ${o.statut === 'en_cours' ? `<button class="btn btn-outline btn-sm" onclick="unlockOrder('${escHtml(o.id)}')">🔓 Libérer</button>` : ''}
+        ${(o.statut === 'en_attente' || o.statut === 'en_cours') && ROLE_LEVEL >= 2 ? `<button class="btn btn-outline btn-sm" style="color:var(--red);border-color:var(--red)" onclick="cancelOrder('${escHtml(o.id)}')">✕ Annuler</button>` : ''}
+        ${o.statut === 'livree' ? `<button class="btn btn-outline btn-sm" onclick="genInvoice('${escHtml(o.id)}')">📄 Facture</button>` : ''}
+        ${o.statut === 'risque_eleve' && ROLE_LEVEL >= 3 ? `<button class="btn btn-outline btn-sm" onclick="approveRisk('${escHtml(o.id)}')">✅ Valider</button>` : ''}
       </td>
     </tr>
   `).join('');
@@ -617,12 +655,40 @@ async function unlockOrder(id) {
     if (data?.success) { showToast('green', '🔓', 'Commande libérée', id); loadOrders(); }
 }
 
-async function deliverOrder(id, playerId, produitNom, denomLabel) {
-    const playerInfo = playerId ? `\nID Joueur : ${playerId}` : '';
-    const msg = `Livraison — ${produitNom} (${denomLabel})${playerInfo}\n\nCode d'activation envoyé (optionnel) :`;
-    const code = prompt(msg) || undefined;
-    const data = await api(`/api/orders/${id}/statut`, { method: 'PATCH', body: JSON.stringify({ statut: 'livree', code_envoye: code }) });
-    if (data?.success) { showToast('green', '✅', 'Commande livrée !', id); loadOrders(); loadOrderStats(); }
+async function deliverOrder(id) {
+    const o = allOrders.find(x => String(x.id) === String(id));
+    const playerInfo = o?.player_id ? `\nID Joueur : ${o.player_id}` : '';
+    const prodInfo = o ? ` — ${o.produit_nom || ''} (${o.denom_label || ''})` : '';
+    const msg = `Livraison${prodInfo}${playerInfo}\n\nCode d'activation envoyé (optionnel) :`;
+    const code = prompt(msg);
+    if (code === null) return;
+    const cleanCode = code.trim() || undefined;
+    const data = await api(`/api/orders/${id}/statut`, {
+        method: 'PATCH',
+        body: JSON.stringify({ statut: 'livree', code_envoye: cleanCode })
+    });
+    if (data?.success) {
+        showToast('green', '✅', 'Commande livrée !', id);
+        loadOrders();
+        loadOrderStats();
+    } else {
+        showToast('red', '❌', data?.error || 'Erreur lors de la livraison', id);
+    }
+}
+
+async function cancelOrder(id) {
+    if (!confirm(`Annuler définitivement la commande #${id} ?`)) return;
+    const data = await api(`/api/orders/${id}/statut`, {
+        method: 'PATCH',
+        body: JSON.stringify({ statut: 'annulee' })
+    });
+    if (data?.success) {
+        showToast('green', '🗑️', 'Commande annulée', id);
+        loadOrders();
+        loadOrderStats();
+    } else {
+        showToast('red', '❌', data?.error || 'Erreur annulation', id);
+    }
 }
 
 async function approveRisk(id) {
@@ -823,10 +889,17 @@ async function updateTaux() {
 }
 
 async function updateMaintenance() {
-    const mode = document.getElementById('toggleMaintenance').checked;
+    const toggle = document.getElementById('toggleMaintenance');
+    const mode = toggle.checked;
     const data = await api('/api/config/maintenance', { method: 'PATCH', body: JSON.stringify({ maintenance_mode: mode }) });
-    document.getElementById('maintenanceLabel').textContent = mode ? '⚠️ Activé — site inaccessible' : 'Désactivé';
-    showToast(mode ? 'red' : 'green', mode ? '⚠️' : '✅', `Mode maintenance ${mode ? 'activé' : 'désactivé'}`, '');
+    if (data?.success) {
+        document.getElementById('maintenanceLabel').textContent = mode ? '⚠️ Activé — site inaccessible' : 'Désactivé';
+        showToast(mode ? 'red' : 'green', mode ? '⚠️' : '✅', `Mode maintenance ${mode ? 'activé' : 'désactivé'}`, '');
+    } else {
+        toggle.checked = !mode;
+        document.getElementById('maintenanceLabel').textContent = !mode ? '⚠️ Activé — site inaccessible' : 'Désactivé';
+        showToast('red', '❌', 'Erreur', data?.error || 'Impossible de modifier le mode maintenance');
+    }
 }
 
 // ── HUB PARTENARIATS
@@ -858,10 +931,10 @@ function renderHubList() {
         const bc = BADGE_COLORS[r.type] || {};
         const statusC = r.statut === 'valide' ? 'var(--green)' : r.statut === 'rejete' ? 'var(--red)' : 'var(--text3)';
         return `
-      <div class="hub-req-item ${currentHubReq?.id === r.id ? 'active' : ''}" onclick="selectHubReq('${r.id}')">
-        <div><span class="type-badge" style="background:${bc.bg};color:${bc.color}">${TYPE_LABELS[r.type] || r.type}</span></div>
-        <div class="hub-req-name">${r.nom}</div>
-        <div class="hub-req-preview" style="color:${statusC}">${r.statut.toUpperCase()} · ${formatDate(r.created_at)}</div>
+      <div class="hub-req-item ${currentHubReq?.id === r.id ? 'active' : ''}" onclick="selectHubReq('${escHtml(r.id)}')">
+        <div><span class="type-badge" style="background:${bc.bg};color:${bc.color}">${TYPE_LABELS[r.type] || escHtml(r.type)}</span></div>
+        <div class="hub-req-name">${escHtml(r.nom)}</div>
+        <div class="hub-req-preview" style="color:${statusC}">${escHtml(r.statut.toUpperCase())} · ${formatDate(r.created_at)}</div>
       </div>
     `;
     }).join('');
@@ -882,16 +955,16 @@ function renderHubCenter() {
     center.innerHTML = `
     <div class="hub-center-header">
       <span class="type-badge" style="background:${bc.bg};color:${bc.color}">${TYPE_LABELS[r.type]}</span>
-      <strong style="font-size:14px">${r.nom}</strong>
-      <span style="font-size:11px;color:var(--text3);margin-left:auto">${r.email}</span>
+      <strong style="font-size:14px">${escHtml(r.nom)}</strong>
+      <span style="font-size:11px;color:var(--text3);margin-left:auto">${escHtml(r.email)}</span>
     </div>
     <div class="hub-chat-area" id="chatArea">
       ${(r.messages_chat || []).length === 0
             ? `<div style="text-align:center;color:var(--text3);font-size:13px;padding:40px">Commencez la conversation ↓</div>`
             : (r.messages_chat || []).map(m => `
           <div class="chat-msg ${m.from === 'staff' ? 'staff' : 'client'}">
-            ${m.message}
-            <div class="msg-meta">${m.auteur || 'Client'} · ${formatDate(m.created_at)}</div>
+            ${escHtml(m.message)}
+            <div class="msg-meta">${escHtml(m.auteur || 'Client')} · ${formatDate(m.created_at)}</div>
           </div>
         `).join('')
         }
@@ -993,8 +1066,12 @@ async function checkDraftAlerts() {
 async function loadDraftMessages() {
     const data = await api('/api/partnerships/drafts');
     if (!data?.drafts?.length) return showToast('green', '📝', 'Aucun brouillon en attente', '');
-    const list = data.drafts.map(d => `• [${d.helper_nom || 'Helper'}] : "${d.message.slice(0, 80)}..." → <button onclick="approveDraft('${d.id}')" class="btn btn-green btn-sm">✓ Approuver</button>`).join('\n');
-    alert(`Brouillons en attente :\n\n${data.drafts.map(d => `[${d.helper_nom}] : ${d.message}`).join('\n\n')}`);
+    const drafts = data.drafts;
+    const first = drafts[0];
+    const ok = confirm(`Brouillons en attente (${drafts.length}) :\n\nDe : ${first.helper_nom || 'Helper'}\nMessage : "${first.message}"\n\nApprouver et envoyer ce message immédiatement ?`);
+    if (ok) {
+        await approveDraft(first.id);
+    }
 }
 
 async function approveDraft(id) {
@@ -1468,11 +1545,17 @@ function initCurrencyRates() {
         const code = item.dataset.code;
         const def = item.dataset.default;
         const input = item.querySelector('.currency-rate-input');
-        if (input) input.value = saved[code] !== undefined ? saved[code] : def;
+        if (input) {
+            if (code === 'HTG' && TAUX) {
+                input.value = TAUX;
+            } else {
+                input.value = saved[code] !== undefined ? saved[code] : def;
+            }
+        }
     });
 }
 
-function saveCurrencyRates() {
+async function saveCurrencyRates() {
     const rates = {};
     document.querySelectorAll('.currency-rate-item').forEach(item => {
         const code = item.dataset.code;
@@ -1480,6 +1563,21 @@ function saveCurrencyRates() {
         if (input && input.value) rates[code] = parseFloat(input.value);
     });
     localStorage.setItem('asta_currency_rates', JSON.stringify(rates));
+
+    if (rates['HTG'] && rates['HTG'] > 0) {
+        const res = await api('/api/config/taux', {
+            method: 'PATCH',
+            body: JSON.stringify({ taux_eur_htg: rates['HTG'] })
+        });
+        if (res?.success) {
+            TAUX = rates['HTG'];
+            const tauxDisplay = document.getElementById('tauxDisplay');
+            const tauxInput = document.getElementById('tauxInput');
+            if (tauxDisplay) tauxDisplay.textContent = TAUX;
+            if (tauxInput) tauxInput.value = TAUX;
+        }
+    }
+
     showToast('green', '✅', 'Taux enregistrés', `${Object.keys(rates).length} devises sauvegardées`);
 }
 
@@ -1493,9 +1591,13 @@ async function logout() {
 
 // ── TOAST
 function showToast(type, icon, title, sub) {
+    let normalizedType = type;
+    if (type === 'success') normalizedType = 'green';
+    if (type === 'error') normalizedType = 'red';
     const container = document.getElementById('toastContainer');
+    if (!container) return;
     const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
+    toast.className = `toast ${normalizedType}`;
     toast.innerHTML = `<span class="toast-icon">${icon}</span><div class="toast-text"><div class="toast-title">${title}</div>${sub ? `<div class="toast-sub">${sub}</div>` : ''}</div>`;
     container.appendChild(toast);
     setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity .3s'; setTimeout(() => toast.remove(), 300); }, 3500);
@@ -1927,7 +2029,8 @@ function openBlogArticleModal() {
     document.getElementById('blogImageUploadStatus').textContent = '';
     updateBlogImagePreview('');
 
-    document.getElementById('modalBlogArticle').classList.add('active');
+    const modal = document.getElementById('modalBlogArticle');
+    if (modal) modal.classList.add('open');
 }
 
 function editBlogArticle(id) {
@@ -1950,11 +2053,16 @@ function editBlogArticle(id) {
     document.getElementById('blogImageUploadStatus').textContent = '';
     updateBlogImagePreview(a.image_url);
 
-    document.getElementById('modalBlogArticle').classList.add('active');
+    const modal = document.getElementById('modalBlogArticle');
+    if (modal) modal.classList.add('open');
 }
 
 function closeBlogArticleModal() {
-    document.getElementById('modalBlogArticle').classList.remove('active');
+    const modal = document.getElementById('modalBlogArticle');
+    if (modal) {
+        modal.classList.remove('open');
+        modal.classList.remove('active');
+    }
 }
 
 async function saveBlogArticle(e) {
@@ -2037,11 +2145,16 @@ async function deleteBlogArticle(id, title) {
 
 function openBlogCategoriesModal() {
     renderBlogCategoriesTable();
-    document.getElementById('modalBlogCategories').classList.add('active');
+    const modal = document.getElementById('modalBlogCategories');
+    if (modal) modal.classList.add('open');
 }
 
 function closeBlogCategoriesModal() {
-    document.getElementById('modalBlogCategories').classList.remove('active');
+    const modal = document.getElementById('modalBlogCategories');
+    if (modal) {
+        modal.classList.remove('open');
+        modal.classList.remove('active');
+    }
 }
 
 async function saveBlogCategory(e) {

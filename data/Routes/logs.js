@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
-import { requireAuth, requireRole } from '../middleware/auth.js';
+import { requireAuth, requireRole, requireMinRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ export async function logActivite(staffId, staffRole, action, cible, ancienneVal
     await supabaseAdmin.from('logs_activite').insert({ staff_id: staffId, staff_role: staffRole, action, cible, ancienne_valeur: ancienneValeur ? String(ancienneValeur) : null, nouvelle_valeur: nouvelleValeur ? String(nouvelleValeur) : null });
 }
 
-router.get('/', requireAuth, requireRole('directeur', 'manager'), async (req, res) => {
+router.get('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     const { page = 1, limit = 50, staff_id, action } = req.query;
     const offset = (page - 1) * limit;
 

@@ -1,6 +1,8 @@
 import express from 'express';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
 import { requireAuth, requireMinRole } from '../middleware/auth.js';
+import { broadcastToClientEmail } from './realtime.js';
+import { demoOrders } from './orders.js';
 
 const router = express.Router();
 
@@ -76,7 +78,8 @@ async function resolveUser(req) {
 
     if (token && supabaseAdmin && !DEMO_MODE) {
         try {
-            const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+            const { data, error } = await supabaseAdmin.auth.getUser(token);
+            const user = data?.user;
             if (!error && user) {
                 return {
                     id: user.id,
@@ -111,15 +114,14 @@ router.get('/me', async (req, res) => {
             let userOrders = [];
 
             if (DEMO_MODE || !supabaseAdmin) {
-                // Charger depuis les commandes démo si pertinent
-                try {
-                    const { default: ordersRouter } = await import('./orders.js');
-                    // On filtre les commandes correspondantes à cet email
-                    // En démo, si c'est l'admin ou le compte démo, charger les commandes associées
-                    userOrders = [
-                        // Ne charger de commandes que si l'email correspond
-                    ];
-                } catch (_) {}
+                const userEmail = (user.email || '').toLowerCase();
+                userOrders = demoOrders.filter(o =>
+                    (o.client_email || '').toLowerCase() === userEmail ||
+                    (user.id && o.client_id === user.id)
+                );
+                if (userOrders.length === 0 && (userEmail.includes('admin') || userEmail.includes('demo'))) {
+                    userOrders = demoOrders.slice(0, 5);
+                }
             } else {
                 try {
                     let orderQuery = supabaseAdmin
@@ -331,6 +333,18 @@ router.post('/create-real', requireAuth, requireMinRole('employe'), async (req, 
         };
 
         customNotifications.unshift(newNotif);
+
+        if (newNotif.target_email) {
+            broadcastToClientEmail(newNotif.target_email, 'nouvelle_notification', newNotif);
+            if (newNotif.status === 'livree') {
+                broadcastToClientEmail(newNotif.target_email, 'commande_livree', {
+                    id: newNotif.id,
+                    produit_nom: newNotif.title,
+                    denom_label: newNotif.message,
+                    code_livre: newNotif.code_livre
+                });
+            }
+        }
 
         res.json({ success: true, notification: newNotif });
     } catch (err) {

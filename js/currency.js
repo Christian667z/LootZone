@@ -232,16 +232,32 @@
             const data = await res.json();
             if (data && data.result === 'success' && data.rates) {
                 currentRates = Object.assign({}, FALLBACK_RATES, data.rates);
-                localStorage.setItem(CACHE_KEY_RATES, JSON.stringify({
-                    rates: currentRates,
-                    timestamp: Date.now()
-                }));
-                // Rafraîchir les prix une fois les taux du jour reçus
-                updateAllPrices();
             }
         } catch (err) {
             console.warn('[LootZone Currency] API live inaccessible, utilisation des taux de secours:', err.message);
         }
+
+        // Synchroniser le taux configuré par l'administrateur dans le Dashboard
+        try {
+            const configRes = await fetch('/api/config/public');
+            if (configRes.ok) {
+                const configData = await configRes.json();
+                if (configData && configData.taux_eur_htg) {
+                    const customTaux = Number(configData.taux_eur_htg);
+                    if (Number.isFinite(customTaux) && customTaux > 0) {
+                        const eurRate = currentRates.EUR || 0.92;
+                        currentRates.HTG = parseFloat((customTaux * eurRate).toFixed(2));
+                    }
+                }
+            }
+        } catch (_) {}
+
+        localStorage.setItem(CACHE_KEY_RATES, JSON.stringify({
+            rates: currentRates,
+            timestamp: Date.now()
+        }));
+        // Rafraîchir les prix une fois les taux reçus
+        updateAllPrices();
     }
 
     /**

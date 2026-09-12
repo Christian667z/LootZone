@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
-import { requireAuth, requireRole } from '../middleware/auth.js';
+import { requireAuth, requireRole, requireStaff } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
 
 const router = express.Router();
@@ -22,7 +22,7 @@ router.get('/public', async (req, res) => {
     res.json(data);
 });
 
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAuth, requireStaff, async (req, res) => {
     if (DEMO_MODE) return res.json(demoConfig);
     const { data, error } = await supabaseAdmin.from('site_config').select('*').limit(1).single();
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }

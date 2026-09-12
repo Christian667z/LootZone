@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabaseAdmin, supabaseAnon, supabaseClient, DEMO_MODE } from '../supabase.js';
-import { requireAuth, ROLE_LEVEL, SIDEBAR_PERMISSIONS } from '../middleware/auth.js';
+import { requireAuth, requireStaff, ROLE_LEVEL, SIDEBAR_PERMISSIONS } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
 
 const router = express.Router();
@@ -388,7 +388,8 @@ router.post('/setup-profile', async (req, res) => {
     if (DEMO_MODE) return res.json({ success: true, message: 'Mode démo' });
 
     const client = supabaseClient;
-    const { data: { user }, error: authErr } = await client.auth.getUser(token);
+    const { data: authData, error: authErr } = await client.auth.getUser(token);
+    const user = authData?.user;
     if (authErr || !user) return res.status(401).json({ error: 'Token invalide' });
 
     const { data: existing } = await client.from('profiles').select('id').eq('id', user.id).maybeSingle();
@@ -408,7 +409,7 @@ router.post('/setup-profile', async (req, res) => {
     res.json({ success: true, message: 'Profil créé' });
 });
 
-router.patch('/staff/:id/status', requireAuth, async (req, res) => {
+router.patch('/staff/:id/status', requireAuth, requireStaff, async (req, res) => {
     const { status } = req.body;
     const validStatuses = ['en_ligne', 'occupe', 'deconnecte'];
     if (!validStatuses.includes(status)) return res.status(400).json({ error: 'Statut invalide' });

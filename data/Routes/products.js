@@ -141,20 +141,22 @@ router.post('/stats', async (req, res) => {
 });
 
 router.post('/', requireAuth, requireMinRole('administrateur'), async (req, res) => {
-    const { name, category, img, desc, discount, rating, sales, recommended, date, price, needsServer, serverOptions, idLabel, idPlaceholder, denoms, discount_tiers } = req.body;
+    const { name, category, img, desc, discount, rating, sales, recommended, date, price, needsServer, serverOptions, idLabel, idPlaceholder, denoms, discount_tiers, is_active } = req.body;
     if (!name || !category || !VALID_CATEGORIES.includes(category)) return res.status(400).json({ error: 'Données invalides' });
+
+    const activeBool = is_active !== undefined ? Boolean(is_active) : true;
 
     if (DEMO_MODE) {
         const products = await getProducts();
         const newId = Math.max(...products.map(p => p.id), 0) + 1;
-        const newProduct = { id: newId, name, category, img: img || '', desc: desc || '', discount: discount || '', rating: rating || 5.0, sales: sales || '0', recommended: !!recommended, date: date || new Date().toISOString().split('T')[0], price: price || 0, needsServer: !!needsServer, serverOptions: serverOptions || [], idLabel: idLabel || 'ID', idPlaceholder: idPlaceholder || '', denoms: denoms || [], discount_tiers: discount_tiers || [] };
+        const newProduct = { id: newId, name, category, img: img || '', desc: desc || '', discount: discount || '', rating: rating || 5.0, sales: sales || '0', recommended: !!recommended, date: date || new Date().toISOString().split('T')[0], price: price || 0, needsServer: !!needsServer, serverOptions: serverOptions || [], idLabel: idLabel || 'ID', idPlaceholder: idPlaceholder || '', denoms: denoms || [], discount_tiers: discount_tiers || [], is_active: activeBool };
         demoProducts.push(newProduct);
         await saveProductsToFile(demoProducts);
         await logActivite(req.user.id, req.user.role, `Ajout produit #${newId} — ${name}`, `produit:${newId}`, null, name);
         return res.json({ success: true, product: newProduct });
     }
 
-    const { data, error } = await supabaseAdmin.from('products').insert({ name, category, img, desc, discount, rating, sales, recommended, date, price, needs_server: needsServer, server_options: serverOptions, id_label: idLabel, id_placeholder: idPlaceholder, denoms, discount_tiers }).select().single();
+    const { data, error } = await supabaseAdmin.from('products').insert({ name, category, img, desc, discount, rating, sales, recommended, date, price, needs_server: needsServer, server_options: serverOptions, id_label: idLabel, id_placeholder: idPlaceholder, denoms, discount_tiers, is_active: activeBool }).select().single();
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     await logActivite(req.user.id, req.user.role, `Ajout produit #${data.id} — ${name}`, `produit:${data.id}`, null, name);
     res.json({ success: true, product: data });
@@ -162,7 +164,7 @@ router.post('/', requireAuth, requireMinRole('administrateur'), async (req, res)
 
 router.put('/:id', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     const id = req.params.id;
-    const allowedFields = ['name', 'category', 'img', 'desc', 'discount', 'rating', 'sales', 'recommended', 'date', 'price', 'needsServer', 'serverOptions', 'idLabel', 'idPlaceholder', 'denoms', 'discount_tiers'];
+    const allowedFields = ['name', 'category', 'img', 'desc', 'discount', 'rating', 'sales', 'recommended', 'date', 'price', 'needsServer', 'serverOptions', 'idLabel', 'idPlaceholder', 'denoms', 'discount_tiers', 'is_active'];
     const updates = Object.fromEntries(Object.entries(req.body || {}).filter(([key]) => allowedFields.includes(key)));
     if (!Object.keys(updates).length) return res.status(400).json({ error: 'Aucune modification valide' });
     if (updates.category && !VALID_CATEGORIES.includes(updates.category)) return res.status(400).json({ error: 'Catégorie invalide' });

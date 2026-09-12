@@ -28,7 +28,7 @@ const ROOT_DIR = path.join(__dirname, '..');
 
 const app = express();
 app.set('trust proxy', 1);
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ─── ORIGINES AUTORISÉES ────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
@@ -166,11 +166,27 @@ app.get('/api/events/client', async (req, res) => {
 });
 
 // ─── SSE (Server-Sent Events) ─────────────────────────────────────────────────
-app.get('/api/events', (req, res) => {
-    const token = req.query.token || req.headers.authorization?.replace('Bearer ', '');
-    if (!token || (DEMO_MODE && !token.startsWith('demo-token-'))) return res.status(401).json({ error: 'Token manquant ou invalide' });
-    if (DEMO_MODE && token !== 'demo-token-lootzone-admin') {
-        return res.status(403).json({ error: 'Accès réservé au staff' });
+app.get('/api/events', async (req, res) => {
+    const token = req.query.token || req.headers.authorization?.replace(/^Bearer\s+/i, '');
+    if (!token) return res.status(401).json({ error: 'Token manquant ou invalide' });
+
+    if (DEMO_MODE) {
+        if (!token.startsWith('demo-token-')) return res.status(401).json({ error: 'Token invalide' });
+        if (token !== 'demo-token-lootzone-admin') {
+            return res.status(403).json({ error: 'Accès réservé au staff' });
+        }
+    } else {
+        try {
+            const { data, error } = await supabaseAdmin?.auth.getUser(token) || {};
+            if (error || !data?.user) return res.status(401).json({ error: 'Session invalide' });
+            const { data: profile } = await supabaseAdmin?.from('profiles').select('role').eq('id', data.user.id).single() || {};
+            const staffRoles = ['admin', 'administrateur', 'staff', 'super_admin', 'directeur', 'manager', 'employe', 'helper'];
+            if (!profile || !staffRoles.includes(profile.role)) {
+                return res.status(403).json({ error: 'Accès réservé au staff' });
+            }
+        } catch (_) {
+            return res.status(401).json({ error: 'Échec de vérification du token' });
+        }
     }
 
     res.setHeader('Content-Type', 'text/event-stream');

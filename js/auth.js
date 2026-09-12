@@ -6,6 +6,15 @@
 const SUPABASE_URL = 'https://bdezshjorwdxzojuecja.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_PDxfwtviufPwC92pVHdNaA_G01ZE50h';
 
+// Hydratation synchrone immédiate au chargement du script pour éliminer 100% du clignotement
+try {
+  const _earlyRaw = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+  const _earlyTok = localStorage.getItem('as_token');
+  if (_earlyTok && _earlyRaw && document.documentElement) {
+    document.documentElement.classList.add('user-logged-in');
+  }
+} catch (_) {}
+
 // ─── Rôles utilisateur ───────────────────────────────────────────────────────
 window.USER_ROLES = {
   client: { label: 'Membre', icon: '👤', color: '#6b7280', bg: 'rgba(107,114,128,.25)' },
@@ -461,7 +470,7 @@ function updateNavAccount(user, profile) {
     btn.title = 'Mon profil';
     btn.classList.remove('login-btn');
     btn.classList.add('logged-in');
-    btn.classList.add('guest-only');
+    btn.classList.remove('guest-only');
     btn.onclick = null;
     const avatarUrl = profile?.avatar_url || profile?.avatar;
     const displayName = ((profile?.prenom || '') + ' ' + (profile?.nom || '')).trim() || user?.email?.split('@')[0] || 'Profil';
@@ -606,41 +615,110 @@ function updateMobileNav(isLoggedIn) {
   }
 }
 
+// ─── Résolution de la session stockée en cache (0ms latence) ────────────────
+function getStoredUserSession() {
+  try {
+    const raw = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+    const token = localStorage.getItem('as_token');
+    if (!token && !raw) return null;
+    const u = raw ? JSON.parse(raw) : null;
+    if (u && (u.id || u.email)) {
+      const nom = u.nom || localStorage.getItem('user_nom') || '';
+      const prenom = u.prenom || localStorage.getItem('user_prenom') || u.email?.split('@')[0] || 'Membre';
+      const role = u.role || localStorage.getItem('user_role') || 'client';
+      const user_code = u.user_code || localStorage.getItem('asta_user_code') || '';
+      const avatar = u.avatar || u.avatar_url || null;
+      const points = u.points || 0;
+      const wallet_balance = parseFloat(localStorage.getItem('asta_wallet_balance') || u.wallet_balance || 0);
+
+      const userObj = {
+        id: u.id || 'client',
+        email: u.email || ''
+      };
+
+      const profileObj = {
+        id: u.id || 'client',
+        email: u.email || '',
+        nom,
+        prenom,
+        role,
+        user_code,
+        avatar,
+        avatar_url: avatar,
+        points,
+        wallet_balance
+      };
+
+      return { user: userObj, profile: profileObj, token };
+    }
+  } catch (_) {}
+  return null;
+}
+
+function hydrateFromCache() {
+  const sessionData = getStoredUserSession();
+  if (sessionData && sessionData.user) {
+    if (document.documentElement) document.documentElement.classList.add('user-logged-in');
+    if (document.body) document.body.classList.add('user-logged-in');
+    document.querySelectorAll('header.navbar, header').forEach(h => h.classList.add('user-logged-in'));
+
+    updateNavAccount(sessionData.user, sessionData.profile);
+    updateTopBar(sessionData.user, sessionData.profile);
+    updateHeaderAuthState(true, sessionData.user, sessionData.profile);
+    updateMobileNav(true);
+    return true;
+  } else {
+    if (document.documentElement) document.documentElement.classList.remove('user-logged-in');
+    if (document.body) document.body.classList.remove('user-logged-in');
+    document.querySelectorAll('header.navbar, header').forEach(h => h.classList.remove('user-logged-in'));
+    renderLoggedOutTopBar();
+    updateNavAccount(null, null);
+    updateHeaderAuthState(false, null, null);
+    updateMobileNav(false);
+    return false;
+  }
+}
+
+// ─── Synchronisation d'authentification entre plusieurs onglets ───────────────
+window.addEventListener('storage', (e) => {
+  if (e.key === 'as_user' || e.key === 'as_token' || e.key === 'asta_current_user') {
+    hydrateFromCache();
+  }
+});
+
 // ─── API publique ─────────────────────────────────────────────────────────────
 window.AstaAuth = {
 
   async init() {
+    // 1. Hydratation synchrone immédiate du DOM depuis le cache local (0ms flicker)
+    hydrateFromCache();
+
     let user = null;
     let profile = null;
+    let token = localStorage.getItem('as_token');
 
     try {
       const sb = await getSB();
-      const { data: { session } } = await sb.auth.getSession();
-      if (session?.user) {
-        user = session.user;
-        profile = await fetchProfile(session.user.id);
-        if (session.access_token) refreshDropdownWallet(session.access_token);
+      if (sb?.auth) {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.user) {
+          user = session.user;
+          token = session.access_token || token;
+          profile = await fetchProfile(session.user.id);
+          if (token) refreshDropdownWallet(token);
+        }
       }
     } catch (e) {
-      console.warn('Supabase session check error:', e);
+      console.warn('[AstaAuth] Supabase session check error:', e);
     }
 
-    if (!user) {
-      try {
-        const token = localStorage.getItem('as_token');
-        const userStr = localStorage.getItem('as_user');
-        if (token && userStr) {
-          const u = JSON.parse(userStr);
-          user = { id: u.id || 'admin', email: u.email || 'admin@asta.com' };
-          profile = {
-            nom: u.nom || '',
-            prenom: u.prenom || '',
-            avatar: u.avatar || '',
-            role: u.role || 'administrateur',
-            points: u.points || 0
-          };
-        }
-      } catch (_) {}
+    if (!user && token) {
+      const cached = getStoredUserSession();
+      if (cached) {
+        user = cached.user;
+        profile = cached.profile;
+        if (token) refreshDropdownWallet(token);
+      }
     }
 
     if (user && profile) {
@@ -648,8 +726,8 @@ window.AstaAuth = {
       updateNavAccount(user, profile);
       updateHeaderAuthState(true, user, profile);
       updateMobileNav(true);
-      if (user.email) startClientNotifications(user.email, localStorage.getItem('as_token'));
-    } else {
+      if (user.email) startClientNotifications(user.email, token);
+    } else if (!getStoredUserSession()) {
       renderLoggedOutTopBar();
       updateNavAccount(null, null);
       updateHeaderAuthState(false, null, null);
@@ -661,23 +739,28 @@ window.AstaAuth = {
       if (sb?.auth) {
         sb.auth.onAuthStateChange(async (event, session) => {
           if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') && session?.user) {
-            const profile = await fetchProfile(session.user.id);
-            if (session.access_token && profile && profile.role && profile.role !== 'client') {
+            const prof = await fetchProfile(session.user.id);
+            if (session.access_token && prof) {
               try {
                 localStorage.setItem('as_token', session.access_token);
-                localStorage.setItem('as_user', JSON.stringify({
-                  id: profile.id,
+                const sessionUser = {
+                  id: prof.id || session.user.id,
                   email: session.user.email,
-                  role: profile.role,
-                  nom: profile.nom || '',
-                  prenom: profile.prenom || '',
-                  avatar: profile.avatar_url || null
-                }));
+                  role: prof.role || 'client',
+                  nom: prof.nom || '',
+                  prenom: prof.prenom || '',
+                  avatar: prof.avatar_url || null,
+                  user_code: prof.user_code || ''
+                };
+                localStorage.setItem('as_user', JSON.stringify(sessionUser));
+                localStorage.setItem('asta_current_user', JSON.stringify(sessionUser));
+                if (prof.user_code) localStorage.setItem('asta_user_code', prof.user_code);
+                if (prof.wallet_balance !== undefined) localStorage.setItem('asta_wallet_balance', String(prof.wallet_balance));
               } catch (_) {}
             }
-            updateTopBar(session.user, profile);
-            updateNavAccount(session.user, profile);
-            updateHeaderAuthState(true, session.user, profile);
+            updateTopBar(session.user, prof);
+            updateNavAccount(session.user, prof);
+            updateHeaderAuthState(true, session.user, prof);
             updateMobileNav(true);
             startClientNotifications(session.user.email, session.access_token);
             if (session.access_token) refreshDropdownWallet(session.access_token);
@@ -685,6 +768,7 @@ window.AstaAuth = {
             try {
               localStorage.removeItem('as_token');
               localStorage.removeItem('as_user');
+              localStorage.removeItem('asta_current_user');
               localStorage.removeItem('as_perms');
               localStorage.removeItem('as_level');
               localStorage.removeItem('asta_wallet_balance');
@@ -957,6 +1041,12 @@ window.AstaAuth = {
   getClient: getSB,
   getSB: getSB,
   fetchProfile: fetchProfile,
+  updateTopBar: updateTopBar,
+  updateNavAccount: updateNavAccount,
+  updateHeaderAuthState: updateHeaderAuthState,
+  showClientToast: showClientToast,
+  hydrateFromCache: hydrateFromCache,
+  getStoredUserSession: getStoredUserSession,
 
   VIP_LEVELS: window.VIP_LEVELS,
   getVipLevel: window.getVipLevel,
@@ -968,8 +1058,12 @@ window.generateLootZoneUserCode = window.generateAstaUserCode;
 window.getLootZoneUserCode = window.getAstaUserCode;
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => window.AstaAuth.init());
+  document.addEventListener('DOMContentLoaded', () => {
+    hydrateFromCache();
+    window.AstaAuth.init();
+  });
 } else {
+  hydrateFromCache();
   window.AstaAuth.init();
 }
 

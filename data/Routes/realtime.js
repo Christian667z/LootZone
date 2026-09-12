@@ -14,18 +14,22 @@ export function registerSSEClient(res) {
 }
 
 export function registerClientSSE(email, res) {
-    if (!clientSSEConnections.has(email)) {
-        clientSSEConnections.set(email, new Set());
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    if (!cleanEmail) return;
+    if (!clientSSEConnections.has(cleanEmail)) {
+        clientSSEConnections.set(cleanEmail, new Set());
     }
-    clientSSEConnections.get(email).add(res);
+    clientSSEConnections.get(cleanEmail).add(res);
     res.on('close', () => {
-        const set = clientSSEConnections.get(email);
-        if (set) { set.delete(res); if (set.size === 0) clientSSEConnections.delete(email); }
+        const set = clientSSEConnections.get(cleanEmail);
+        if (set) { set.delete(res); if (set.size === 0) clientSSEConnections.delete(cleanEmail); }
     });
 }
 
 export function broadcastToClientEmail(email, eventName, payload) {
-    const connections = clientSSEConnections.get(email);
+    const cleanEmail = String(email || '').trim().toLowerCase();
+    if (!cleanEmail) return;
+    const connections = clientSSEConnections.get(cleanEmail);
     if (!connections || connections.size === 0) return;
     const data = `event: ${eventName}\ndata: ${JSON.stringify(payload)}\n\n`;
     for (const res of connections) {
@@ -33,12 +37,14 @@ export function broadcastToClientEmail(email, eventName, payload) {
     }
 }
 
-function broadcast(eventName, payload) {
+export function broadcastToStaff(eventName, payload) {
     const data = `event: ${eventName}\ndata: ${JSON.stringify(payload)}\n\n`;
     for (const client of sseClients) {
         try { client.write(data); } catch (_) { sseClients.delete(client); }
     }
 }
+
+export const broadcast = broadcastToStaff;
 
 export function startRealtime() {
     const supabaseUrl = process.env.SUPABASE_URL;

@@ -59,9 +59,39 @@
         return 'Dashboard/dashboard.html';
     }
 
+    function initSupabase() {
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            return window.supabase.createClient(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON);
+        }
+        return null;
+    }
+
     // ── 3. VÉRIFICATION DE SESSION PRÉALABLE ───────────────────────────
     async function checkExistingSession() {
-        const client = await initSupabase();
+        // 1. Vérification via le token d'authentification API backend existant
+        const token = localStorage.getItem('as_token');
+        if (token) {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const role = data.user?.role;
+                    const isStaff = ['admin', 'administrateur', 'staff', 'super_admin', 'directeur', 'manager', 'employe', 'helper'].includes(role);
+                    if (isStaff) {
+                        showAlert('Session active détectée. Redirection vers l\'administration...', 'success');
+                        setTimeout(() => {
+                            window.location.href = getDashboardRedirectUrl();
+                        }, 600);
+                        return;
+                    }
+                }
+            } catch (_) {}
+        }
+
+        // 2. Vérification de session via le client Supabase si disponible
+        const client = initSupabase();
         if (!client) return;
 
         try {

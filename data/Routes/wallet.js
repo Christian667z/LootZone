@@ -2,6 +2,7 @@ import express from 'express';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
 import { requireAuth, requireMinRole } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
+import { broadcastToClientEmail, broadcastToStaff } from './realtime.js';
 
 const router = express.Router();
 
@@ -22,21 +23,31 @@ router.get('/me', requireAuth, async (req, res) => {
         });
     }
 
-    const [profileRes, txRes] = await Promise.all([
-        supabaseAdmin.from('profiles').select('wallet_balance').eq('id', userId).single(),
-        supabaseAdmin.from('wallet_transactions')
-            .select('*')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false })
-            .limit(20)
-    ]);
+    try {
+        const [profileRes, txRes] = await Promise.all([
+            supabaseAdmin.from('profiles').select('wallet_balance').eq('id', userId).maybeSingle(),
+            supabaseAdmin.from('wallet_transactions')
+                .select('*')
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false })
+                .limit(20)
+        ]);
 
-    if (profileRes.error) return res.status(500).json({ error: 'Erreur lors de la récupération du solde.' });
+        const bal = !profileRes.error && profileRes.data?.wallet_balance !== undefined
+            ? parseFloat(profileRes.data.wallet_balance || 0)
+            : parseFloat(req.user?.wallet_balance || 0);
 
-    res.json({
-        balance: parseFloat(profileRes.data?.wallet_balance || 0),
-        transactions: txRes.data || []
-    });
+        res.json({
+            balance: isNaN(bal) ? 0 : bal,
+            transactions: txRes?.data || []
+        });
+    } catch (err) {
+        console.warn('[Wallet /me] Fallback:', err.message);
+        res.json({
+            balance: parseFloat(req.user?.wallet_balance || 0) || 0,
+            transactions: []
+        });
+    }
 });
 
 // ═══════════════════════════════════════════════════════════════
@@ -55,15 +66,23 @@ router.get('/transactions', requireAuth, async (req, res) => {
         return res.json({ transactions: all.slice(offset, offset + limit), total: all.length });
     }
 
-    const { data, error, count } = await supabaseAdmin
-        .from('wallet_transactions')
-        .select('*', { count: 'exact' })
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1);
+    try {
+        const { data, error, count } = await supabaseAdmin
+            .from('wallet_transactions')
+            .select('*', { count: 'exact' })
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
 
-    if (error) return res.status(500).json({ error: 'Erreur lors de la récupération des transactions.' });
-    res.json({ transactions: data || [], total: count || 0 });
+        if (error) {
+            console.warn('[Wallet /transactions] Query error:', error.message);
+            return res.json({ transactions: [], total: 0 });
+        }
+        res.json({ transactions: data || [], total: count || 0 });
+    } catch (err) {
+        console.warn('[Wallet /transactions] Catch fallback:', err.message);
+        res.json({ transactions: [], total: 0 });
+    }
 });
 
 // ═══════════════════════════════════════════════════════════════
@@ -98,6 +117,7 @@ router.post('/recharge', requireAuth, async (req, res) => {
             created_at: new Date().toISOString()
         };
         demoTransactions.unshift(tx);
+        broadcastToStaff('nouvelle_recharge_wallet', { id: tx.id, user_id: userId, montant: amt, methode });
         return res.json({ success: true, transaction: tx, message: 'Demande de recharge soumise. En attente de validation.' });
     }
 
@@ -115,6 +135,8 @@ router.post('/recharge', requireAuth, async (req, res) => {
         .single();
 
     if (error) return res.status(500).json({ error: 'Erreur lors de la création de la demande.' });
+
+    broadcastToStaff('nouvelle_recharge_wallet', { id: tx.id, user_id: userId, montant: amt, methode });
 
     res.json({
         success: true,
@@ -138,7 +160,13 @@ router.patch('/transactions/:id/validate', requireAuth, requireMinRole('employe'
         tx.valide_par = staffId;
         tx.valide_at = new Date().toISOString();
         demoBalances[tx.user_id] = (demoBalances[tx.user_id] || 0) + tx.montant;
-        return res.json({ success: true, new_balance: demoBalances[tx.user_id] });
+        const newBal = demoBalances[tx.user_id];
+
+        broadcastToStaff('recharge_wallet_validee', { id: txId, user_id: tx.user_id, new_balance: newBal });
+        if (req.user?.email) {
+            broadcastToClientEmail(req.user.email, 'wallet_credit', { amount: tx.montant, new_balance: newBal });
+        }
+        return res.json({ success: true, new_balance: newBal });
     }
 
     // Récupérer la transaction
@@ -162,7 +190,7 @@ router.patch('/transactions/:id/validate', requireAuth, requireMinRole('employe'
     // Créditer le solde dans profiles (incrément atomique)
     const { data: profile, error: profErr } = await supabaseAdmin
         .from('profiles')
-        .select('wallet_balance')
+        .select('email, wallet_balance')
         .eq('id', tx.user_id)
         .single();
     if (profErr) return res.status(500).json({ error: 'Erreur récupération profil.' });
@@ -178,6 +206,16 @@ router.patch('/transactions/:id/validate', requireAuth, requireMinRole('employe'
         `Recharge wallet validée — $${tx.montant} via ${tx.methode}`,
         tx.user_id, null, newBalance.toFixed(2)
     );
+
+    // Diffusion SSE instantanée au client et au staff
+    if (profile?.email) {
+        broadcastToClientEmail(profile.email, 'wallet_credit', { amount: tx.montant, new_balance: newBalance });
+        broadcastToClientEmail(profile.email, 'nouvelle_notification', {
+            title: '💰 Recharge validée !',
+            message: `Votre recharge de $${tx.montant} via ${tx.methode} a été validée. Nouveau solde : $${newBalance.toFixed(2)}`
+        });
+    }
+    broadcastToStaff('recharge_wallet_validee', { id: txId, user_id: tx.user_id, new_balance: newBalance });
 
     res.json({ success: true, new_balance: newBalance });
 });
@@ -348,6 +386,18 @@ router.post('/pay-order', requireAuth, async (req, res) => {
         return res.status(500).json({ error: 'Erreur lors du débit du wallet. Commande annulée.' });
     }
 
+    broadcastToStaff('nouvelle_commande', {
+        id: orderId,
+        client_nom: client_nom || `${profile.prenom || ''} ${profile.nom || ''}`.trim() || 'Client',
+        produit_nom,
+        denom_label,
+        eur: amount,
+        statut: 'en_attente',
+        methode_paiement: 'wallet',
+        risk_score: 0,
+        created_at: new Date().toISOString()
+    });
+
     res.json({ success: true, order_id: orderId, new_balance: newBalance });
 });
 
@@ -358,23 +408,29 @@ router.post('/credit-manual', requireAuth, requireMinRole('employe'), async (req
     const staffId = req.user.id;
     const { email, montant, note } = req.body;
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Email invalide.' });
+    const cleanEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: 'Email invalide.' });
     if (!Number.isFinite(Number(montant)) || Number(montant) < 0.01 || Number(montant) > 100000) return res.status(400).json({ error: 'Montant invalide (entre $0.01 et $100000).' });
 
     const amt = parseFloat(parseFloat(montant).toFixed(2));
 
     if (DEMO_MODE) {
-        return res.json({ success: true, new_balance: amt, message: `Démo: $${amt} crédité sur ${email}` });
+        broadcastToClientEmail(cleanEmail, 'wallet_credit', { amount: amt, new_balance: amt });
+        broadcastToClientEmail(cleanEmail, 'nouvelle_notification', {
+            title: '💰 Portefeuille crédité !',
+            message: `Votre portefeuille a été crédité de $${amt}.`
+        });
+        return res.json({ success: true, new_balance: amt, message: `Démo: $${amt} crédité sur ${cleanEmail}` });
     }
 
     // Trouver l'utilisateur par email
     const { data: profile, error: profErr } = await supabaseAdmin
         .from('profiles')
         .select('id, wallet_balance')
-        .eq('email', email)
+        .eq('email', cleanEmail)
         .single();
 
-    if (profErr || !profile) return res.status(404).json({ error: `Aucun compte trouvé pour l'email : ${email}` });
+    if (profErr || !profile) return res.status(404).json({ error: `Aucun compte trouvé pour l'email : ${cleanEmail}` });
 
     const newBalance = parseFloat(profile.wallet_balance || 0) + amt;
 
@@ -401,9 +457,15 @@ router.post('/credit-manual', requireAuth, requireMinRole('employe'), async (req
     if (balErr) return res.status(500).json({ error: 'Erreur mise à jour solde.' });
 
     await logActivite(staffId, req.user.role,
-        `Crédit manuel wallet — $${amt} sur ${email}`,
+        `Crédit manuel wallet — $${amt} sur ${cleanEmail}`,
         profile.id, null, newBalance.toFixed(2)
     );
+
+    broadcastToClientEmail(cleanEmail, 'wallet_credit', { amount: amt, new_balance: newBalance });
+    broadcastToClientEmail(cleanEmail, 'nouvelle_notification', {
+        title: '💰 Portefeuille crédité !',
+        message: `Votre portefeuille a été crédité de $${amt}. Nouveau solde : $${newBalance.toFixed(2)}`
+    });
 
     res.json({ success: true, new_balance: newBalance });
 });

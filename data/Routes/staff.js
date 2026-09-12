@@ -26,12 +26,12 @@ router.patch('/:id/role', requireAuth, requireRole('directeur', 'administrateur'
     const targetId = req.params.id;
     const reqLevel = ROLE_LEVEL[req.user.role] || 0;
     const targetLevel = ROLE_LEVEL[role] || 0;
-    if (targetLevel >= reqLevel && req.user.role !== 'directeur') return res.status(403).json({ error: 'Impossible de promouvoir à un rang égal ou supérieur' });
+    if (targetLevel >= reqLevel && req.user.role !== 'directeur' && req.user.role !== 'super_admin') return res.status(403).json({ error: 'Impossible de promouvoir à un rang égal ou supérieur' });
 
     if (DEMO_MODE) {
         const member = demoStaff.find(s => s.id === targetId);
         if (!member) return res.status(404).json({ error: 'Membre introuvable' });
-        if (member.role === 'directeur' && req.user.role !== 'directeur') return res.status(403).json({ error: 'Impossible de modifier le Directeur' });
+        if (member.role === 'directeur' && req.user.role !== 'directeur' && req.user.role !== 'super_admin') return res.status(403).json({ error: 'Impossible de modifier le Directeur' });
         const old = member.role;
         member.role = role;
         await logActivite(req.user.id, req.user.role, `Modification rôle staff ${member.nom}`, `staff:${targetId}`, old, role);
@@ -39,7 +39,7 @@ router.patch('/:id/role', requireAuth, requireRole('directeur', 'administrateur'
     }
 
     const { data: target } = await supabaseAdmin.from('profiles').select('role, nom').eq('id', targetId).single();
-    if (target?.role === 'directeur' && req.user.role !== 'directeur') return res.status(403).json({ error: 'Impossible de modifier le Directeur' });
+    if (target?.role === 'directeur' && req.user.role !== 'directeur' && req.user.role !== 'super_admin') return res.status(403).json({ error: 'Impossible de modifier le Directeur' });
 
     const { error } = await supabaseAdmin.from('profiles').update({ role }).eq('id', targetId);
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
@@ -47,21 +47,21 @@ router.patch('/:id/role', requireAuth, requireRole('directeur', 'administrateur'
     res.json({ success: true });
 });
 
-router.delete('/:id', requireAuth, requireRole('directeur'), async (req, res) => {
+router.delete('/:id', requireAuth, requireRole('directeur', 'super_admin'), async (req, res) => {
     const targetId = req.params.id;
     if (targetId === req.user.id) return res.status(400).json({ error: 'Impossible de se supprimer soi-même' });
 
     if (DEMO_MODE) {
         const idx = demoStaff.findIndex(s => s.id === targetId);
         if (idx === -1) return res.status(404).json({ error: 'Membre introuvable' });
-        if (demoStaff[idx].role === 'directeur') return res.status(403).json({ error: 'Impossible de supprimer le Directeur' });
+        if (demoStaff[idx].role === 'directeur' && req.user.role !== 'super_admin') return res.status(403).json({ error: 'Impossible de supprimer le Directeur' });
         const [removed] = demoStaff.splice(idx, 1);
         await logActivite(req.user.id, req.user.role, `Révocation accès staff ${removed.nom}`, `staff:${targetId}`, removed.role, null);
         return res.json({ success: true });
     }
 
     const { data: target } = await supabaseAdmin.from('profiles').select('role, nom').eq('id', targetId).single();
-    if (target?.role === 'directeur') return res.status(403).json({ error: 'Impossible de supprimer le Directeur' });
+    if (target?.role === 'directeur' && req.user.role !== 'super_admin') return res.status(403).json({ error: 'Impossible de supprimer le Directeur' });
     await supabaseAdmin.auth.admin.deleteUser(targetId);
     const { error } = await supabaseAdmin.from('profiles').delete().eq('id', targetId);
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
@@ -78,7 +78,7 @@ router.post('/invite', requireAuth, requireMinRole('manager'), async (req, res) 
 
     const reqLevel = ROLE_LEVEL[req.user.role] || 0;
     const targetLevel = ROLE_LEVEL[role] || 0;
-    if (targetLevel >= reqLevel && req.user.role !== 'directeur') {
+    if (targetLevel >= reqLevel && req.user.role !== 'directeur' && req.user.role !== 'super_admin') {
         return res.status(403).json({ error: 'Impossible d\'inviter à un rang égal ou supérieur au vôtre' });
     }
 
@@ -93,7 +93,7 @@ router.post('/invite', requireAuth, requireMinRole('manager'), async (req, res) 
     res.json({ success: true, user_id: data?.user?.id });
 });
 
-router.get('/kpi', requireAuth, requireRole('directeur'), async (req, res) => {
+router.get('/kpi', requireAuth, requireMinRole('administrateur'), async (req, res) => {
     if (DEMO_MODE) {
         return res.json({ kpi: demoStaff.map(s => ({ ...s, commandes_ce_mois: 0, taux_satisfaction: 0, temps_moyen_min: 0 })) });
     }

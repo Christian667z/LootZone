@@ -2058,7 +2058,15 @@
           listEl.innerHTML = orders.map(o => {
             const date = new Date(o.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
             const color = statusColor[o.statut] || '#6b7280';
-            const label = statusLabel[o.statut] || o.statut;
+            const deliveredCodeHtml = o.code_envoye ? `
+              <div style="background:rgba(16,185,129,0.12);border:1px dashed #10b981;border-radius:8px;padding:10px 14px;margin-top:8px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span>🔑</span>
+                  <span style="color:#a7f3d0;font-size:12px;font-weight:600;">Code / Recharge :</span>
+                  <strong style="color:#34d399;font-family:monospace;font-size:14px;letter-spacing:1px;">${o.code_envoye}</strong>
+                </div>
+                <button onclick="navigator.clipboard.writeText('${o.code_envoye}');this.textContent='Copié !';setTimeout(()=>this.textContent='Copier',2000)" style="background:#10b981;border:none;color:#fff;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-weight:700;">Copier</button>
+              </div>` : '';
             return `<div style="background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
               <div style="flex:1;min-width:160px;">
                 <div style="font-weight:700;color:#fff;font-size:15px;">${o.produit_nom || '—'}</div>
@@ -2072,6 +2080,7 @@
                 <span style="background:${color}22;color:${color};border:1px solid ${color}55;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">${label}</span>
                 <div style="color:#666;font-size:12px;margin-top:4px;">${date}</div>
               </div>
+              ${deliveredCodeHtml}
               <div style="color:#555;font-size:11px;width:100%;padding-top:6px;border-top:1px solid #2a2a4a;">Réf: <strong style="color:#888;">${o.id}</strong></div>
             </div>`;
           }).join('');

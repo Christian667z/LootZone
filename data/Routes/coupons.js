@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
-import { requireAuth, requireRole } from '../middleware/auth.js';
+import { requireAuth, requireRole, requireStaff } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
 
 const router = express.Router();
@@ -65,13 +65,33 @@ export let demoCoupons = [
 ];
 
 // Public GET /api/coupons/public - Liste des coupons actifs disponibles pour les clients
-router.get('/public', (req, res) => {
-    const active = demoCoupons.filter(c => c.is_active);
-    res.json(active);
+router.get('/public', async (req, res) => {
+    if (DEMO_MODE) {
+        const active = demoCoupons.filter(c => c.is_active);
+        return res.json(active);
+    }
+    try {
+        const { data, error } = await supabaseAdmin
+            .from('coupons')
+            .select('*')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false });
+
+        if (error || !data) {
+            console.warn('[Coupons public fallback]', error?.message);
+            const active = demoCoupons.filter(c => c.is_active);
+            return res.json(active);
+        }
+        res.json(data);
+    } catch (err) {
+        console.warn('[Coupons public error]', err.message);
+        const active = demoCoupons.filter(c => c.is_active);
+        res.json(active);
+    }
 });
 
 // 1. GET /api/coupons - List all coupons (Staff auth required)
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAuth, requireStaff, async (req, res) => {
     if (DEMO_MODE) return res.json(demoCoupons);
     const { data, error } = await supabaseAdmin.from('coupons').select('*').order('created_at', { ascending: false });
     if (error || !data) {

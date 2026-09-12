@@ -13,7 +13,15 @@
             if (!res.ok) return;
             const data = await res.json();
 
-            const isStaff = !!localStorage.getItem('as_token');
+            let isStaff = false;
+            try {
+                const userStr = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+                if (userStr) {
+                    const u = JSON.parse(userStr);
+                    const staffRoles = ['admin', 'administrateur', 'staff', 'super_admin', 'directeur', 'manager', 'employe', 'helper'];
+                    isStaff = staffRoles.includes(u.role);
+                }
+            } catch (_) {}
 
             if (data.maintenance_mode) {
                 if (isStaff) {

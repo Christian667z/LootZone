@@ -4,7 +4,8 @@ import { randomInt } from 'crypto';
 import { supabaseAdmin, DEMO_MODE } from '../supabase.js';
 import { requireAuth, requireMinRole } from '../middleware/auth.js';
 import { logActivite } from './logs.js';
-import { broadcastToClientEmail } from './realtime.js';
+import { broadcastToClientEmail, broadcastToStaff } from './realtime.js';
+import { autoDeliverCode } from './stock.js';
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ function cleanText(value, maxLength = 200) {
     return typeof value === 'string' ? value.trim().slice(0, maxLength) : value;
 }
 
-let demoOrders = [
+export let demoOrders = [
     {
         id: 'LZ-2026-1001',
         client_id: 'client-1',
@@ -95,15 +96,22 @@ let demoOrders = [
     }
 ];
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function isValidUuid(id) {
+    return typeof id === 'string' && UUID_REGEX.test(id);
+}
+
 function calcRiskScore(order, allOrders) {
     let score = 0;
     const flags = [];
-    const recentSameClient = allOrders.filter(o =>
-        o.client_id === order.client_id &&
-        ['gift-cards', 'payment-cards'].includes(o.categorie) &&
-        new Date(o.created_at) > new Date(Date.now() - RISK_THRESHOLD_WINDOW_MS) &&
-        o.eur >= 15
-    );
+    const recentSameClient = (allOrders || []).filter(o => {
+        const matchesClient = (order.client_id && o.client_id === order.client_id) ||
+            (order.client_email && o.client_email && o.client_email.toLowerCase() === order.client_email.toLowerCase());
+        return matchesClient &&
+            ['gift-cards', 'payment-cards'].includes(o.categorie) &&
+            new Date(o.created_at) > new Date(Date.now() - RISK_THRESHOLD_WINDOW_MS) &&
+            Number(o.eur) >= 15;
+    });
     if (recentSameClient.length >= RISK_THRESHOLD_COUNT) {
         score += 70;
         flags.push(`${recentSameClient.length}+ cartes cadeaux en 2h`);
@@ -140,7 +148,7 @@ router.get('/stats', requireAuth, requireMinRole('employe'), async (req, res) =>
 router.get('/', requireAuth, requireMinRole('employe'), async (req, res) => {
     const { statut } = req.query;
     const page = parsePage(req.query.page, 1, 100000);
-    const limit = parsePage(req.query.limit, 20, 100);
+    const limit = parsePage(req.query.limit, 20, 2000);
     const offset = (page - 1) * limit;
 
     if (DEMO_MODE) {
@@ -194,7 +202,8 @@ router.post('/:id/unlock', requireAuth, requireMinRole('employe'), async (req, r
 });
 
 router.patch('/:id/statut', requireAuth, requireMinRole('employe'), async (req, res) => {
-    const { statut, code_livre } = req.body;
+    const { statut, code_livre, code_envoye } = req.body;
+    let deliveredCode = cleanText(code_envoye || code_livre || '', 500) || null;
     const orderId = req.params.id;
     const validStatuts = ['en_attente', 'en_cours', 'livree', 'annulee', 'risque_eleve'];
     if (!validStatuts.includes(statut)) return res.status(400).json({ error: 'Statut invalide' });
@@ -204,32 +213,72 @@ router.patch('/:id/statut', requireAuth, requireMinRole('employe'), async (req, 
         if (!order) return res.status(404).json({ error: 'Commande introuvable' });
         const old = order.statut;
         order.statut = statut;
-        if (code_livre) order.code_livre = code_livre;
+        if (statut === 'livree' && !deliveredCode && order.produit_id) {
+            try {
+                const auto = await autoDeliverCode(order.produit_id, order.denom_label, orderId);
+                if (auto) deliveredCode = auto;
+            } catch (_) {}
+        }
+        if (deliveredCode) {
+            order.code_envoye = deliveredCode;
+            order.code_livre = deliveredCode;
+        }
         if (statut === 'livree') {
             order.locked_by = null; order.locked_at = null;
+            order.livree_at = new Date().toISOString();
+            order.livree_par = req.user.id;
             if (order.client_email) {
                 broadcastToClientEmail(order.client_email, 'commande_livree', {
-                    id: orderId, produit_nom: order.produit_nom, denom_label: order.denom_label
+                    id: orderId, produit_nom: order.produit_nom, denom_label: order.denom_label, code_envoye: deliveredCode
                 });
             }
         }
-        await logActivite(req.user.id, req.user.role, `Statut commande ${orderId} modifié`, `commande:${orderId}`, old, statut);
-        return res.json({ success: true });
+        broadcastToStaff('commande_update', { id: orderId, statut, locked_by: null });
+        if (order.client_email) {
+            broadcastToClientEmail(order.client_email, 'commande_statut_change', {
+                id: orderId, statut, produit_nom: order.produit_nom, denom_label: order.denom_label, code_envoye: deliveredCode
+            });
+        }
+        await logActivite(req.user.id, req.user.role, `Statut commande ${orderId} modifié (${statut})`, `commande:${orderId}`, old, statut);
+        return res.json({ success: true, order });
+    }
+
+    const { data: old } = await supabaseAdmin.from('commandes').select('*').eq('id', orderId).single();
+    if (statut === 'livree' && !deliveredCode && old?.produit_id) {
+        try {
+            const auto = await autoDeliverCode(old.produit_id, old.denom_label, orderId);
+            if (auto) deliveredCode = auto;
+        } catch (_) {}
     }
 
     const updates = { statut, updated_at: new Date().toISOString() };
-    if (code_livre) updates.code_livre = code_livre;
-    if (statut === 'livree') { updates.locked_by = null; updates.locked_at = null; }
+    if (deliveredCode) {
+        updates.code_envoye = deliveredCode;
+        updates.code_livre = deliveredCode;
+    }
+    if (statut === 'livree') {
+        updates.locked_by = null;
+        updates.locked_at = null;
+        updates.livree_at = new Date().toISOString();
+        updates.livree_par = req.user.id;
+    }
 
-    const { data: old } = await supabaseAdmin.from('commandes').select('statut, client_email, produit_nom, denom_label').eq('id', orderId).single();
     const { error } = await supabaseAdmin.from('commandes').update(updates).eq('id', orderId);
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
-    if (statut === 'livree' && old?.client_email) {
-        broadcastToClientEmail(old.client_email, 'commande_livree', {
-            id: orderId, produit_nom: old.produit_nom, denom_label: old.denom_label
+
+    broadcastToStaff('commande_update', { id: orderId, statut, locked_by: null });
+    if (old?.client_email) {
+        if (statut === 'livree') {
+            broadcastToClientEmail(old.client_email, 'commande_livree', {
+                id: orderId, produit_nom: old.produit_nom, denom_label: old.denom_label, code_envoye: deliveredCode
+            });
+        }
+        broadcastToClientEmail(old.client_email, 'commande_statut_change', {
+            id: orderId, statut, produit_nom: old.produit_nom, denom_label: old.denom_label, code_envoye: deliveredCode
         });
     }
-    await logActivite(req.user.id, req.user.role, `Statut commande ${orderId} modifié`, `commande:${orderId}`, old?.statut, statut);
+
+    await logActivite(req.user.id, req.user.role, `Statut commande ${orderId} modifié (${statut})`, `commande:${orderId}`, old?.statut, statut);
     res.json({ success: true });
 });
 
@@ -238,19 +287,35 @@ router.get('/me', async (req, res) => {
     if (!token) return res.status(401).json({ error: 'Token manquant' });
 
     if (DEMO_MODE) {
-        const email = req.query.email || '';
-        const orders = demoOrders.filter(o => o.client_email === email);
+        const email = (req.query.email || '').trim().toLowerCase();
+        let orders;
+        if (email) {
+            orders = demoOrders.filter(o => (o.client_email || '').toLowerCase() === email);
+        } else {
+            orders = demoOrders.slice(0, 25);
+        }
         return res.json({ orders });
     }
 
-    const { data: { user }, error: authErr } = await supabaseAdmin.auth.getUser(token);
+    const { data: authData, error: authErr } = await supabaseAdmin.auth.getUser(token);
+    const user = authData?.user;
     if (authErr || !user) return res.status(401).json({ error: 'Token invalide' });
 
-    const { data, error } = await supabaseAdmin
+    const safeEmail = user.email ? user.email.toLowerCase() : '';
+    let query = supabaseAdmin
         .from('commandes')
         .select('*')
-        .eq('client_email', user.email)
         .order('created_at', { ascending: false });
+
+    if (user.id && safeEmail) {
+        query = query.or(`client_email.eq.${safeEmail},client_id.eq.${user.id}`);
+    } else if (safeEmail) {
+        query = query.eq('client_email', safeEmail);
+    } else if (user.id) {
+        query = query.eq('client_id', user.id);
+    }
+
+    const { data, error } = await query;
 
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
     res.json({ orders: data || [] });
@@ -291,8 +356,35 @@ router.post('/public', async (req, res) => {
     if (!safeProductName || !safeDenom) return res.status(400).json({ error: 'Produit incomplet' });
 
     const orderId = generateOrderId();
-    const effectiveClientId = client_id || safeEmail;
-    const { score, flags } = calcRiskScore({ client_id: effectiveClientId, eur: eurNum, categorie: safeCategory || 'default' }, demoOrders);
+    const effectiveClientId = isValidUuid(client_id) ? client_id : null;
+
+    let ordersForRisk = demoOrders;
+    if (!DEMO_MODE && supabaseAdmin) {
+        try {
+            const twoHoursAgo = new Date(Date.now() - RISK_THRESHOLD_WINDOW_MS).toISOString();
+            let query = supabaseAdmin
+                .from('commandes')
+                .select('client_id, client_email, categorie, eur, created_at')
+                .gte('created_at', twoHoursAgo);
+
+            if (effectiveClientId) {
+                query = query.or(`client_id.eq.${effectiveClientId},client_email.eq.${safeEmail}`);
+            } else {
+                query = query.eq('client_email', safeEmail);
+            }
+            const { data: dbOrders, error: dbErr } = await query;
+            if (!dbErr && dbOrders) {
+                ordersForRisk = dbOrders;
+            }
+        } catch (err) {
+            console.warn('[Risk score query warning]', err.message);
+        }
+    }
+
+    const { score, flags } = calcRiskScore(
+        { client_id: effectiveClientId, client_email: safeEmail, eur: eurNum, categorie: safeCategory || 'default' },
+        ordersForRisk
+    );
     const statut = score >= 70 ? 'risque_eleve' : 'en_attente';
 
     if (DEMO_MODE) {
@@ -316,6 +408,24 @@ router.post('/public', async (req, res) => {
             updated_at: new Date().toISOString()
         };
         demoOrders.unshift(order);
+
+        // Notifier immédiatement le dashboard staff et le client via SSE
+        broadcastToStaff('nouvelle_commande', {
+            id: orderId,
+            client_nom: order.client_nom || sender_name || 'Client',
+            produit_nom: safeProductName,
+            denom_label: safeDenom,
+            eur: eurNum,
+            statut,
+            methode_paiement,
+            risk_score: score,
+            created_at: order.created_at
+        });
+        broadcastToClientEmail(safeEmail, 'nouvelle_notification', {
+            title: '🎮 Commande transmise !',
+            message: `Votre commande #${orderId} (${safeProductName}) a bien été enregistrée et est en attente.`
+        });
+
         return res.json({ success: true, order_id: orderId, statut });
     }
 
@@ -332,6 +442,24 @@ router.post('/public', async (req, res) => {
         statut, risk_score: score, risk_flags: flags
     }).select().single();
     if (error) { console.warn('[Fallback]', error.message); return res.json(DEMO_MODE ? { fallbacked: true } : { error: 'Database error' }); }
+
+    // Notifier immédiatement le dashboard staff et le client via SSE
+    broadcastToStaff('nouvelle_commande', {
+        id: data.id,
+        client_nom: data.client_nom || cleanText(client_nom, 160) || 'Client',
+        produit_nom: data.produit_nom || safeProductName,
+        denom_label: data.denom_label || safeDenom,
+        eur: data.eur || eurNum,
+        statut: data.statut || statut,
+        methode_paiement: data.methode_paiement || methode_paiement,
+        risk_score: data.risk_score || score,
+        created_at: data.created_at || new Date().toISOString()
+    });
+    broadcastToClientEmail(safeEmail, 'nouvelle_notification', {
+        title: '🎮 Commande transmise !',
+        message: `Votre commande #${data.id} (${safeProductName}) a bien été enregistrée et est en cours de traitement.`
+    });
+
     res.json({ success: true, order_id: data.id, statut });
 });
 

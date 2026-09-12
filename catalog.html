@@ -651,7 +651,42 @@
             // Calculer et mettre à jour les badges
             updateSidebarBadges();
             updateView();
+            syncProductsFromAPI();
         });
+
+        // Synchroniser les produits en direct depuis la base de données / Dashboard
+        async function syncProductsFromAPI() {
+            try {
+                const res = await fetch('/api/products?all=true');
+                if (!res.ok) return;
+                const data = await res.json();
+                const list = data.products || data.data;
+                if (Array.isArray(list) && list.length > 0) {
+                    products = list.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        category: p.category,
+                        img: p.img,
+                        desc: p.desc || '',
+                        discount: p.discount || '',
+                        rating: p.rating || 5.0,
+                        sales: p.sales || '0',
+                        recommended: Boolean(p.recommended),
+                        date: p.date || '',
+                        price: p.price || 0,
+                        needsServer: Boolean(p.needs_server ?? p.needsServer),
+                        serverOptions: p.server_options ?? p.serverOptions ?? [],
+                        idLabel: p.id_label ?? p.idLabel ?? 'ID du joueur',
+                        idPlaceholder: p.id_placeholder ?? p.idPlaceholder ?? 'Ex: 123456789',
+                        denoms: p.denoms || [],
+                        discountTiers: p.discount_tiers ?? p.discountTiers ?? [],
+                        is_active: p.is_active !== undefined ? p.is_active : true
+                    })).filter(p => p.is_active !== false);
+                    updateSidebarBadges();
+                    updateView();
+                }
+            } catch (_) {}
+        }
 
         // Calculer et mettre à jour dynamiquement les badges de la sidebar
         function updateSidebarBadges() {

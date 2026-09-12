@@ -136,6 +136,43 @@
           if (salesEl) salesEl.textContent = formatSalesText(stats.total_sales);
         });
       }
+
+      // Synchronisation dynamique des informations produits depuis le Dashboard / API
+      try {
+        const prodRes = await fetch('/api/products?all=true');
+        if (prodRes.ok) {
+          const pData = await prodRes.json();
+          const pList = pData.products || pData.data;
+          if (Array.isArray(pList)) {
+            const pMap = new Map();
+            pList.forEach(p => pMap.set(String(p.id), p));
+            cards.forEach(card => {
+              const pid = card.getAttribute('data-product-id');
+              if (!pid) return;
+              const live = pMap.get(String(pid));
+              if (live) {
+                if (live.is_active === false) {
+                  card.style.display = 'none';
+                } else {
+                  if (live.name) {
+                    const titleEl = card.querySelector('.card-title');
+                    if (titleEl) titleEl.textContent = live.name;
+                  }
+                  const discEl = card.querySelector('.card-discount');
+                  if (live.discount) {
+                    if (discEl) {
+                      discEl.textContent = live.discount;
+                      discEl.style.display = '';
+                    }
+                  } else if (discEl) {
+                    discEl.style.display = 'none';
+                  }
+                }
+              }
+            });
+          }
+        }
+      } catch (_) {}
     } catch (err) {
       console.warn("[StatsHydrator] Erreur d'hydratation des statistiques :", err);
     }

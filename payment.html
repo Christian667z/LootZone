@@ -1685,11 +1685,52 @@
 
         // ─── Initialisation au Chargement ───
         document.addEventListener('DOMContentLoaded', async () => {
+            updatePaymentUserNav();
             loadCheckoutData();
             await fetchPublicConfig();
             await loadCoupons();
             renderPaymentPage();
+            prefillUserInfo();
         });
+
+        function updatePaymentUserNav() {
+            try {
+                const userStr = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+                const token = localStorage.getItem('as_token');
+                const btn = document.getElementById('lzLoginBtn');
+                if (!btn) return;
+                if (token && userStr) {
+                    const u = JSON.parse(userStr);
+                    const fullName = ((u.prenom || '') + ' ' + (u.nom || '')).trim() || u.email?.split('@')[0] || 'Mon Compte';
+                    const isStaff = ['admin', 'administrateur', 'staff', 'super_admin', 'directeur', 'manager', 'employe', 'helper'].includes(u.role);
+                    btn.href = isStaff ? 'Dashboard/dashboard.html' : 'profile.html';
+                    btn.innerHTML = `<span style="display:inline-flex;align-items:center;gap:6px;">👤 ${escapeHtml(fullName.length > 15 ? fullName.substring(0, 13) + '…' : fullName)}</span>`;
+                    btn.style.background = isStaff ? '#f59e0b' : '#7c3aed';
+                    btn.title = isStaff ? 'Accéder au Dashboard Staff' : 'Accéder à mon Profil';
+                } else {
+                    btn.href = 'index.html';
+                    btn.textContent = 'Connexion';
+                }
+            } catch (_) {}
+        }
+
+        function prefillUserInfo() {
+            try {
+                const rawU = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+                if (!rawU) return;
+                const u = JSON.parse(rawU);
+                const fullName = ((u.prenom || '') + ' ' + (u.nom || '')).trim() || u.email?.split('@')[0] || '';
+                const phone = u.phone || u.telephone || '';
+                const mName = document.getElementById('moncashSenderName');
+                const nName = document.getElementById('natcashSenderName');
+                const mPhone = document.getElementById('moncashSenderPhone');
+                const nPhone = document.getElementById('natcashSenderPhone');
+                if (mName && !mName.value && fullName) mName.value = fullName;
+                if (nName && !nName.value && fullName) nName.value = fullName;
+                if (mPhone && !mPhone.value && phone) mPhone.value = phone;
+                if (nPhone && !nPhone.value && phone) nPhone.value = phone;
+            } catch (_) {}
+        }
 
         // 1. Récupération des données produit
         function loadCheckoutData() {
@@ -2091,9 +2132,20 @@
 
             const tempOrderRef = 'LZ-' + Date.now().toString(36).toUpperCase();
 
+            let loggedInUser = null;
+            try {
+                const rawU = localStorage.getItem('as_user') || localStorage.getItem('asta_current_user');
+                if (rawU) loggedInUser = JSON.parse(rawU);
+            } catch (_) {}
+
+            const resolvedEmail = loggedInUser?.email || 'client@lootzone.com';
+            const resolvedNom = (loggedInUser ? ((loggedInUser.prenom || '') + ' ' + (loggedInUser.nom || '')).trim() : '') || senderName || 'Client LootZone';
+            const resolvedClientId = loggedInUser?.id || null;
+
             const orderPayload = {
-                client_email: 'client@lootzone.com',
-                client_nom: senderName || 'Client LootZone',
+                client_id: resolvedClientId,
+                client_email: resolvedEmail,
+                client_nom: resolvedNom,
                 produit_id: currentItem.productId || 1,
                 produit_nom: currentItem.productName || 'Recharge de Jeu',
                 categorie: currentItem.category || 'jeux',
@@ -2259,5 +2311,6 @@
     <style>
         @keyframes lz-spin { 100% { transform: rotate(360deg); } }
     </style>
+    <script src="js/maintenance-check.js"></script>
 </body>
 </html>

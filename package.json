@@ -7,8 +7,11 @@
   "scripts": {
     "build": "echo 'Build complete'",
     "start": "node data/server.js",
-    "dev": "node data/server.js",
-    "lint": "node --check data/server.js"
+    "dev": "node --watch data/server.js",
+    "lint": "node data/lint.js",
+    "setup": "node data/setup.js",
+    "test": "node data/healthcheck.js",
+    "db:seed": "node data/seed-products.js"
   },
   "keywords": [
     "lootzone",
